@@ -1,1 +1,1 @@
-Don't remove the thisNeedsToRun variable. I don't know why but the programm seems to doesn't read the first line.
+Don't remove the thisNeedsToRun variable. I don't know why but the program seems to doesn't read the first line.
