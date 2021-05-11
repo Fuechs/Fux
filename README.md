@@ -1,4 +1,5 @@
 # Fuxlang
 ## Programming language written in C
 
-* Nothing to see here...
+
+* See Alpha 0.0.1 for further information.
