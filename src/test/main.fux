@@ -1,0 +1,5 @@
+get > core > end
+
+// Console.Output > "Hello World!" > end
+
+#print "Hello World!";
