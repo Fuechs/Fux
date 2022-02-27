@@ -34,9 +34,9 @@ object main {
 
 > Builtin functions are simple and are usually not used in fux, these are just for maintening purposes or for the core/base packages<br>
 > Examples:
-> - #print message // Outputs an message to the console 
-> - #repl string, char1, char2, times // Replaces certain Characters in a string
-> - #sys_c file_dir, \*args; // Compiles and executes a c file with following arguments  
+> - `#print message` outputs an message to the console 
+> - `#repl string, char1, char2, times` replaces certain Characters in a string
+> - `#sys_c file_dir, \*args;` compiles and executes a c file with following arguments  
 
 ```
 #print "message";
@@ -87,8 +87,8 @@ object Class {
 > These are defined as shown here:<br>
 
 ```
-{.args > string < end}
-{.args > string < vars[] < end}
+{.args > string > end}
+{.args > string > vars[] > end}
 ```
 
 > Basic Function: Addition
