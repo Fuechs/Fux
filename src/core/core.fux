@@ -1,0 +1,12 @@
+// FUX CORE PACKAGE
+// USE: 
+// get > core > end
+
+get > base > end
+
+object Core > Base {
+
+   .name > CORE > end
+   .type > PACKAGE > end
+
+}
