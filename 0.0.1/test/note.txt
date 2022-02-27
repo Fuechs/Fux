@@ -1,1 +1,0 @@
-Do not remove the thisNeedsToRun variable. I don't know why, but the program doesn't seem to read the first line.

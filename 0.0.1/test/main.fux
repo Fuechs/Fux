@@ -1,4 +1,0 @@
-var thisNeedsToRun = "dnd";
-var name = "Fuechs";
-
-print(name);
