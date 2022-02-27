@@ -1,7 +1,7 @@
 ## Fux Documentation
 
-- [Hello World!](#hello-world)
-- [Builtin](#builtin-functions)
+- [Hello World](#hello-world)
+- [Builtin Functions](#builtin-functions-and-their-function-calls)
 
 ---
 
@@ -27,7 +27,7 @@ object main {
 
 ---
 
-### Builtin functions and ther function calls
+### Builtin functions and their function calls
 
 > Builtin functions are simple and usually aren't used in fux, these are just for maintening purposes
 > Examples:
