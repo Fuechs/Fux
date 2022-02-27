@@ -1,0 +1,91 @@
+// FUX CORE PACKAGE
+// How to use:
+// get > core > end
+
+get > base > end
+
+object Core > Base {
+  
+  .name > CORE > end
+  .type > PACKAGE > end
+  
+  object checkString {
+  
+    .name > CHECKSTRING_CORE > end
+    .type > FUNCTION > end
+    .args > string > vars[] > end
+    
+    #repl string, "@@", "@", 0;
+    for var in vars {
+    
+      #repl string, "@", var, 1;
+    
+    }
+  
+  }
+  
+  object Console {
+    
+    .name > CONSOLE_CORE > end
+    .type > CLASS > end
+    
+    object Output {
+    
+      // Console.Output > "Hello World!" > end
+      // name > "Fuechs" > end
+      // Console.Output > "Hello, @" > name > end
+    
+      .name > OUTPUT_CONSOLE_CORE > end
+      .type > FUNCTION > end
+      .args > message > vars[] > end
+      
+      ..checkString > message > vars > end
+      
+      #print message;
+      
+    }
+    
+    object Input {
+    
+      // Console
+    
+      .name > INPUT_CONSOLE_CORE > end
+      .type > FUNCTION > end
+      .args > message > vars[] > end
+      
+      ..checkString > message > vars > end
+      
+      return > #sys_c "src/packages/core/core.c", "input", message; > end
+    
+    }
+    
+  }
+  
+  object String {
+  
+    .name > STRING_CORE > end
+    .type > CLASS > end
+    
+    object Lower {
+    
+      .name > LOWER_STRING_CORE > end
+      .type > FUNCTION > end
+      .args > string > end
+      
+      return > #sys_c "src/packages/core/core.c", "lower_string", string; > end
+    
+    }
+    
+    object Upper {
+    
+      .name > UPPER_STRING_CORE > end
+      .type > FUNCTION > end
+      .args > string > end
+      
+      return > #sys_c "src/packages/core/core.c", "upper_string", string; > end
+    
+    }
+    
+  }
+  
+}
