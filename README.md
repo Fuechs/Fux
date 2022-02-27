@@ -1,2 +1,9 @@
-# Fuxlang
-## Programming language written in C
+## Fux
+
+[Image missing](./logo.png)
+
+- [Documentation](./docs/current.md)
+- [License](./LICENSE.md)
+- [Packages](./src/packages/README.md)
+
+### What is Fux?
