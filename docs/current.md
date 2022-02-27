@@ -81,6 +81,12 @@ object Class {
 }
 ```
 
+> Classes can also inherit from other classes:<br>
+
+```
+object Class > AnotherClass {}
+```
+
 #### Functions
 
 > Functions get another keyword, besides `.name` and `.type`: `.args`<br>
