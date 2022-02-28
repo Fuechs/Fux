@@ -106,7 +106,7 @@ object Addition {
   .type > FUNCTIONS > end
   .args > a > b > end
   
-  return > a + b
+  return > a + b > end
 
 }
 
