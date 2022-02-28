@@ -4,7 +4,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/appveyor/build/Fuechs/fuxlang?style=for-the-badge">
-  <img src="https://img.shields.io/github/license/Fuechs/fuxlang?style=for-the-badge">
+  <a href="./LICENSE.md"><img src="https://img.shields.io/github/license/Fuechs/fuxlang?style=flat-aquare"></a>
 </p>
 
 ---
