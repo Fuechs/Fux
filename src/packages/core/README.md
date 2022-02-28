@@ -1,1 +1,0 @@
-## FUX CORE PACKAGE
