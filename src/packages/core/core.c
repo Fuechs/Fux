@@ -11,7 +11,7 @@ char* main(char** argv) {
     
   }
   
-  if (strcmp("lower_string", argv[1]) == 0 {
+  if (strcmp("lower_string", argv[1]) == 0) {
   
     return NULL;
     
