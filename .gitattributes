@@ -1,0 +1,2 @@
+*.fux linguist-language=Fux
+./docs/* linguist-documentation
