@@ -1,39 +1,67 @@
 #include <iostream>
+#include <cstring>
 
 #include "include/std.h"
+#include "include/io.h"
 
 using namespace std;
 
-int name(int argc, char** argv) {
-   
-   if (argc < 2) {
-      print_help();
-      return 1;
-   }
-   
-   else if (argc == 2 && argv[1] != ("version" || "help")) {
-        
-      cout << "Missing argument: source file" << endl;
-      return 1;
-   
-   }
-   
-   cout << "SoonTM" << endl;
-   return 0;
-   
+void print_version() {
+
+    cout << "-- Version --" << endl;
+    cout << version_x << "." << version_y << "." << version_z << version_c << endl;
+
 }
 
 void print_help() {
-   
-   cout << "Fux | Help" << endl;
-   cout << "v" << version_x << "." << version_y << "." << version_z << version_c << endl;
-   cout << "Usage: fux [command] [source file]" << endl;
-   cout << "Commands:" << endl;
-   cout << "compile           compiles the source file in the following argument" << endl;
-   cout << "run               runs the compiled binary file in the following argument" << endl;
-   cout << "execute           compiles and runs the source file in the following argument" << endl;
-   cout << "version           shows current version of fux" << endl;
-   cout << "help              shows this help" << endl;
-   cout << "[source file]:    path to an file" << endl;
+
+    cout << "-- Help --" << endl;
+    cout << "Usage: fux [command] [source]" << endl;
+    cout << "Commands:" << endl;
+    cout << "version            shows the current fux version" << endl;
+    cout << "help               shows this help" << endl;
+    cout << "compile [source]   compiles and runs the source" << endl << endl;
+}
+
+int main(int argc, char** argv) {
+
+    cout << "--- Fux ---" << endl << endl;
+
+    if (argc < 2) {
+        cout << "Missing arguments" << endl << endl;
+        print_help();
+        return 1;
+    } 
+
+    if (argc == 2) {
+
+        if (strcmp(argv[1], "version") == 0) print_version();
+        else if (strcmp(argv[1], "help") == 0) print_help();
+        else if (strcmp(argv[1], "compile") == 0) {
+            cout << "Missing source" << endl; 
+            return 1;
+        }
+        else return 1;
+
+        return 0;
+    }
+
+    if (strcmp(argv[1], "compile") == 0) {
+
+        const char* source_dir = argv[2];
+
+        string source = read_file(source_dir);
+
+        cout << source << endl;
+
+        return 0;
+    }
+
+    cout << "Unknown arguments" << endl << endl;
+    print_help();
+    return 1;
+    
+
+    return 0;
 
 }
