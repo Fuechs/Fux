@@ -1,5 +1,3 @@
-get > core > end
-
-// Console.Output > "Hello World!" > end
-
-#print "Hello World!";
+object 0:Main () {
+    print "Hello World";
+}
