@@ -1,4 +1,6 @@
-*.md linguist-detectable=true
 *.md linguist-vendored=false
 *.md linguist-generated=false
-README.md linguist-detecable=false
+*.md linguist-documentation=false
+*.md linguist-detectable=true
+README.md linguist-detectable=false
+LICENSE.md linguist-detectable=false
