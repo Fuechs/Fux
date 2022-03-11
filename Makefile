@@ -1,24 +1,13 @@
-CC = gcc
-CFLAGS = -c -std=c99 -g
-LDFLAGS = -g
-SRC = ${wildcard src/*c}
-HDR = ${wildcard src/include/*.h}
-OBJ = ${SRC:.c=.o}
-EXEC = urr
+CC = g++
+EXEC = a.out
+MAIN = src/main.cpp src/io.cpp
 
-all: ${SRC} ${OBJ} ${EXEC}
-
-debug: all
-debug: CFLAGS += -DDEBUG
-
-${EXEC}: ${OBJ}
-  ${CC} ${LDFLAGS} $^ -o $@
-  
-$.o: %.c ${HDR}
-  ${CC} ${CFLAGS} $< -o $@
-  
+all:
+	${CC} ${MAIN}
+	
 clean:
-  rm src/*.o ${EXEC}
-  
+	rm ${EXEC}
+
 main:
-  ./fux compile src/test/main.fux
+	./a.out compile ./src/test/main.fux
+	
