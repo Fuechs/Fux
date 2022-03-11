@@ -1,3 +1,4 @@
-./docs/* linguist-documentation
 *.md linguist-detectable=true
+*.md linguist-vendored=false
+*.md linguist-generated=false
 README.md linguist-detecable=false
