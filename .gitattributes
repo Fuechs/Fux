@@ -1,2 +1,2 @@
-*.fux linguist-language=Fux
+*.fux linguist-language=R
 ./docs/* linguist-documentation
