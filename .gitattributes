@@ -1,3 +1,4 @@
-*.md linguist-detectable=true
+*.md *.json linguist-detectable=true
 *.md linguist-documentation=false
-*.json linguist-detectable=true
+./docs/*.md linguist-documentation=true
+README.md LICENSE.md linguist-detectable=false
