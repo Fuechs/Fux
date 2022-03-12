@@ -1,0 +1,45 @@
+&UNLOCK@VITAL // Unlocks vital data for this file
+&VITAL@CPPFUX // Implements CPPFUX (parent class) 
+&VITAL@OBJECT // Implements objects 
+
+object CPPFUX:package instruction (package [&VAR_NAME][ = [&VAR_VALUE]];) -> &VAR@VITAL@PACKAGE;
+// Defines package as a var type with instruction for declaration
+
+object CPPFUX:int {
+    instruction (int [&VAR_NAME][ = [&VAR_VALUE];]) -> &VAR@VITAL@INT
+
+    object str:toString() {
+        &VAR_NAME, "&VAR_VALUE" -> &VAR@VITAL@STR  // Creates variable new
+
+        return &VAR;
+    }
+}
+
+object CPPFUX:str {
+    instruction (str [&VAR_NAME][ = [&VAR_VALUE];]) -> &VAR@VITAL@STR
+
+    object int:toInteger() {
+        &VAR_NAME, &VAR_VALUE -> &VAR@VITAL@INT
+        except {
+            error "'\v' can't be converted to integer\n", &VAR_VALUE;
+            exit 1;
+        }
+        // if last statement didn't execute, it's the only possible error!
+
+        return &VAR;
+    }
+}
+
+object CPPFUX:bool {
+    instruction (bool [&VAR_NAME][ = [&VAR_VALUE];]) -> &VAR@VITAL@BOOL
+
+    object str:toString() {
+        &VAR_NAME, "&VAR_VALUE" -> &VAR@VITAL@STR
+        
+        return &VAR;
+    }
+
+}
+
+&VITAL@PACKAGE // defines the object/class underneath as a package
+object package:int:str:bool:Core
