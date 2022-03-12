@@ -1,5 +1,1 @@
-*.md linguist-detectable=true
-*.md linguist-documentation=false
-./docs/*.md linguist-documentation=true
-README.md LICENSE.md linguist-detectable=false
 *.json linguist-detectable=true
