@@ -4,6 +4,8 @@
 >
 > Output something to the console
 ```ts
+get core;
+
 Console.Output([string]);
 ```
 
@@ -11,6 +13,8 @@ Console.Output([string]);
 > 
 > More to variables: [Variables](variables.md)
 ```ts
+get core;
+
 str name = "Fuechs"; 
 
 Console.Output("Hello, \v\n", name);
@@ -33,10 +37,14 @@ NOTE: Same goes for the Console.Input() function
 
 > Ask for an input from an user
 ```ts
+get core;
+
 Console.Input([string]);
 ```
 > Assign input to a variable
 ```ts
+get core;
+
 str cmd = Console.Input("Number: ");
 Console.NewLine();
 Console.Output(cmd);
