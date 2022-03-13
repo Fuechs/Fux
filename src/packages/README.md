@@ -6,3 +6,6 @@
 
 ### Core
 > [Core](./core) holds many vital functions and classes for fux, this package ist essential for fux
+
+### Math
+> [Math](./math) helps you with variables for math and various functions
