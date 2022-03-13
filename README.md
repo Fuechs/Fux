@@ -7,7 +7,7 @@
 
 ---
 
-- [Documentation](./docs)
+- [Documentation](./docs/)
 - [License](./LICENSE.md)
 - [Packages](./src/packages)
 
