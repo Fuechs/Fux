@@ -28,6 +28,23 @@ object CPPFUX:str {
 
         return &VAR;
     }
+
+    object str:Replace(str old_string, str new_string, int count = 0) {
+        if (count == 0) {
+            for old_string in self {
+                old_string, new_string -> &VITAL@REPL 
+            }
+        }
+        else if (count > 0) {
+            for i in range of count {
+                old_string, new_string -> &VITAL@REPL
+            }
+        }
+        else {
+            error "Count (\v) can't be smaller than 0\n", count;
+            exit 1;
+        }
+    }
 }
 
 object CPPFUX:bool {
@@ -46,5 +63,15 @@ object Core {
 
     implement package;
     implement (int, str, bool);
+
+    object Console {
+
+        object 0:Output(str message, variables[]) {
+
+            for var in variables {message = message.Replace("\v", var, 1);}
+            message -> &VITAL@PRINT  
+
+        }
+    }
 
 }
