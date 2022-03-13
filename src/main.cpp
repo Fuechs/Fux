@@ -6,6 +6,13 @@
 
 using namespace std;
 
+
+/* 
+Copyright (c) 2020-2022 Fuechs
+All rights reserved.
+*/
+
+
 void print_version() {
 
     cout << "-- Version --" << endl;

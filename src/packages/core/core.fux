@@ -24,7 +24,7 @@ object CPPFUX:str {
             error "'\v' can't be converted to integer\n", &VAR_VALUE;
             exit 1;
         }
-        // if last statement didn't execute, it's the only possible error!
+        // if last statement didn't execute, it's the only possible error
 
         return &VAR;
     }
@@ -42,4 +42,9 @@ object CPPFUX:bool {
 }
 
 &VITAL@PACKAGE // defines the object/class underneath as a package
-object package:int:str:bool:Core
+object Core {
+
+    implement package;
+    implement (int, str, bool);
+
+}

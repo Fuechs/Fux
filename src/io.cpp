@@ -2,6 +2,11 @@
 
 #include "include/io.h"
 
+/* 
+Copyright (c) 2020-2022 Fuechs
+All rights reserved.
+*/
+
 std::string read_file(const char* file_dir) {
 
     std::string content;

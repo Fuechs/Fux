@@ -1,11 +1,5 @@
 ##########################################################################################
 #
-#           Easy Setup for fux compiler
-#
-#           Just run this python script and answer the questions
-#
-##########################################################################################
-#
 #           Copyright (c) 2020-2022 Fuechs
 #           All rights reserved.
 #

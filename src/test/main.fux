@@ -1,5 +1,10 @@
 get core;
 
+/* 
+Copyright (c) 2020-2022 Fuechs
+All rights reserved.
+*/
+
 object 0:Main() {
     Console.Output("Hello World!\n");
 }
