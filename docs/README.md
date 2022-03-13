@@ -21,3 +21,9 @@
 ---
 
 - [Unlock](unlock.md)
+    - List of parts to unlock:
+    1. `VITAL` 
+    2. `HEART`
+    3. `CPPFUX`
+    4. `MATH`
+    5. `C`

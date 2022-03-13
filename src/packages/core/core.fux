@@ -21,7 +21,7 @@ object CPPFUX:str {
     object int:toInteger() {
         &VAR_NAME, &VAR_VALUE -> &VAR@VITAL@INT
         except {
-            error "'\v' can't be converted to integer\n", &VAR_VALUE;
+            error "\'\v\' can\'t be converted to integer\n", &VAR_VALUE;
             exit 1;
         }
         // if last statement didn't execute, it's the only possible error
@@ -41,7 +41,7 @@ object CPPFUX:str {
             }
         }
         else {
-            error "Count (\v) can't be smaller than 0\n", count;
+            error "Count (\v) can\'t be smaller than 0\n", count;
             exit 1;
         }
     }
@@ -75,3 +75,4 @@ object Core {
     }
 
 }
+&LOCK@ALL

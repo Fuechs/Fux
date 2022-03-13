@@ -8,7 +8,6 @@
 import os
 clear = lambda: os.system("clear"); clear()
 
-
 def main():
   print("soonTM")
   return 0
