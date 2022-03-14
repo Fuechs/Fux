@@ -1,10 +1,16 @@
-get core;
-
 /* 
 Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
-object 0:Main() {
-    Console.Output("Hello World!\n");
-}
+get core;
+
+object main() {
+
+    core->str name;
+    core->cout << "Name: ";
+    core->cin >> name;
+    core->newl;
+    core->cout << "Hello, " << name << "\n";
+
+} -> void;
