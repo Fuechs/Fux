@@ -2,6 +2,7 @@
 
 ```cpp
 get *core; // Imports all of core (* = everything)
+          // so you won't have to reference to core
 
 /*
 Defines a new object of the function type
