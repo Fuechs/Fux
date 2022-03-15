@@ -13,7 +13,7 @@ The beautiful alternative for C++
 ```cpp
 get *core;
 
-object calc(int num) {
+object calc(<< int num) {
 
     if (num < 1) num++;
     else if (num == 10) {
