@@ -37,4 +37,4 @@ object main() {
 
 } -> void;
 ```
-> Confused? This script is explained [here](./docs/demo.md).
+> Confused? This script is explained [here](./docs/other/demo.md).
