@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstring>
 
-#include "include/std.h"
-#include "include/io.h"
+#include "include/std.hpp"
+#include "include/io.hpp"
 
 using namespace std;
 
