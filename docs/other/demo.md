@@ -9,9 +9,7 @@ Defines a new object of the function type
 called 'calc'
 with one paramter: 'num'
 */
-object calc(<< int num) {  
-// '<<' sets the paramter as something 
-// that will be delivered to the function
+object calc(int num) {  
 
     if (num < 1) num++; 
     // Increments num by one if num is smaller than 1
@@ -57,6 +55,6 @@ object main() {
 
 /*
 '<<' if something is delivered for the function
-'>>' if the function delivers for something
+'>>' if the returned value should be applied to something
 */
 ```
