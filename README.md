@@ -3,7 +3,7 @@
 
 ![Version: 0.0.1a](https://img.shields.io/badge/Version-0.0.1a-informational)
 [![Release: None](https://img.shields.io/badge/Release-None-inactive?logo=airplayaudio)](https://github.com/Fuechs/fuxlang/releases/latest)
-![Platforms: Mac](https://img.shields.io/badge/Platforms-macOS%20|%20Linux-success)
+![Platforms: Mac](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler%20is%20still%20in%20development-blueviolet)](#development-status)
 ---
 ### Fux
