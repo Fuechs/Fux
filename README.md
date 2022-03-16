@@ -1,8 +1,9 @@
-![Image missing](./fux_logo.png)
---- 
-[![Image missing](https://img.shields.io/github/release/fuxlang/_?logo=airplayaudio)](https://github.com/Fuechs/fuxlang/releases/latest)
-[![Image missing](https://img.shields.io/github/license/Fuechs/fuxlang?logo=markdown)](./LICENSE.md)<br>
-![Image missing](https://img.shields.io/badge/Note-Compiler%20is%20still%20in%20development-blueviolet)
+![Image missing](./fux_logo_slim_transparent.png)
+
+
+![Version: 0.0.1a](https://img.shields.io/badge/Version-0.0.1a-informational)
+[![Release: None](https://img.shields.io/badge/Release-None-inactive?logo=airplayaudio)](https://github.com/Fuechs/fuxlang/releases/latest)
+[![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler%20is%20still%20in%20development-blueviolet)](#development-status)
 ---
 ### Fux
 ###### Flawless unambiguous programming
@@ -38,3 +39,31 @@ object main() {
 } -> void;
 ```
 > Confused? This script is explained [here](./docs/other/demo.md).
+
+#### Setup
+
+[![Setup: Currently not available](https://img.shields.io/badge/Setup-Currently_not_available-inactive?logo=python)](.)
+---
+
+> In later releases an easy setup<br> 
+> in form of a python file and/or Makefile<br>
+> will be available for users.
+
+
+#### Development Status
+
+[![Compiler: Early Development](https://img.shields.io/badge/Compiler-Early_Development-inactive?logo=c%2B%2B)](#compiler)
+[![Syntax: Not finished](https://img.shields.io/badge/Syntax-Not_finished-yellow)](#syntax)
+[![Core: Not finished](https://img.shields.io/badge/Core-Not_finished-inactive)](./src/packages/core)
+---
+
+##### Compiler
+
+> The Compiler for Fux is currently in early development.<br>
+> It will probably take a while until it works.
+
+##### Syntax
+
+> Fux is currently in the concept phase.<br>
+> The Syntax is still in development and could change anytime,<br>
+> due to software limitations for example.
