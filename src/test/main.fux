@@ -1,5 +1,5 @@
 /* 
-Copyright (c) 2020-2022 Fuechs
+Copyright (c) 2022 Fuechs
 All rights reserved.
 */
 
@@ -10,7 +10,6 @@ object main() {
     core->str name;
     core->cout << "Name: ";
     core->cin >> name;
-    core->newl;
-    core->cout << "Hello, " << name << "\n";
+    core->cout << "Hello, " << name << endl;
 
 } -> void;

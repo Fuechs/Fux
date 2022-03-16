@@ -1,0 +1,43 @@
+/*
+    CORE PACKAGE
+    STANDARD IO
+    COPYRIGHT (C) 2022 - FUECHS
+*/
+
+package core;
+
+get cppfux;
+implement ./types.fux;
+
+object endl() { 
+
+    cpp->cout << "\n";
+
+} -> void;
+
+object cout(str messages[]) { 
+
+    str full_message_string; 
+
+    if ((length << messages) > 1) {
+        for msg in messages { 
+            if (msg == endl()) msg = "\n"
+    
+            msg >> full_message_string; 
+        }
+        cpp->cout << full_message_string; 
+    }
+    else cpp->cout << messages[0];
+
+} -> void;
+
+object cin(str print_after[]) {
+
+    str input_string;
+
+    cpp->cin >> input_string;
+    cout << print_after;
+
+    return input_string;
+
+} -> str;

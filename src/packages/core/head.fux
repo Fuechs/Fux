@@ -1,0 +1,11 @@
+/*
+    HEAD OF CORE PACKAGE
+    COPYRIGHT (C) 2022 - FUECHS
+*/
+
+package core {
+
+    implement ./types.fux;
+    implement ./io.fux;
+    
+}

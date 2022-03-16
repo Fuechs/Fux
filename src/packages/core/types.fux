@@ -1,0 +1,14 @@
+/*
+    CORE PACKGE
+    STORAGE TYPES
+    COPYRIGHT (C) 2022 - FUECHS
+*/
+
+package core;
+
+get cppfux;
+
+typedef int cpp->integer;
+typedef str cpp->string;
+typedef bool cpp->boolean;
+typedef void cpp->void;
