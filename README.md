@@ -20,7 +20,7 @@
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby)
 -->
 
-### ![Icon](./art/fux_icon.png)Fux
+### Fux
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
 - with better errors (well, better than just `Segmentation fault.`)
