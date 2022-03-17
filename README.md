@@ -20,9 +20,9 @@
 ![Markdown](https://img.shields.io/badge/Markdown-blue?style=for-the-badge&logo=markdown)
 ![JSON](https://img.shields.io/badge/Json-yellow?style=for-the-badge&logo=json)
 <br>
-![Swift](https://img.shields.io/Swift-red?style=for-the-badge&logo=swift)
-![Objective-C](https://img.shields.io/Swift-blue?style=for-the-badge&logo=objective-c)
-![Rust](https://img.shields.io/Rust-red?style=for-the-badge&logo=rust)
+![Swift](https://img.shields.io/badge/Swift-red?style=for-the-badge&logo=swift)
+![Objective-C](https://img.shields.io/badge/Objective--C-blue?style=for-the-badge&logo=objective-c)
+![Rust](https://img.shields.io/badge/Rust-red?style=for-the-badge&logo=rust)
 ---
 
 ### Fux
