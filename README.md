@@ -7,7 +7,7 @@
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
 ---
 ![Made with](https://img.shields.io/badge/Made-with-success?style=for-the-badge)<br>
-![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge)
+![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge&logo=https://github.com/Fuechs/fuxlang/fux_icon.png)
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
 ![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
