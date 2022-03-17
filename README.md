@@ -25,7 +25,7 @@
 The beautiful alternative for C++ 
 - with better errors
 - where `*something` finally has nothing to do with pointers
-- and without any debugging horror
+- and without strict syntax
 
 ```cpp
 get *core;
