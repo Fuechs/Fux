@@ -12,9 +12,9 @@
 ![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
 ![Love](https://img.shields.io/badge/<3-blueviolet?style=for-the-badge)
 <br>
-![Made with Typescript](https://img.shields.io/badge/Typescript-blue?style=for-the-badge&logo=typescript)
+![Made with Typescript](https://img.shields.io/badge/Typescript-lightgrey?style=for-the-badge&logo=typescript)
 ![Made with Java](https://img.shields.io/badge/Java-yellowgreen?style=for-the-badge&logo=java)
-![Made with Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge?logo=ruby)
+![Made with Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge&logo=ruby)
 
 ### Fux
 ###### Flawless unambiguous programming
