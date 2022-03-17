@@ -7,9 +7,10 @@
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
 ---
 ![Made with](https://img.shields.io/badge/Made-with-orange?style=for-the-badge)
-[![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)]()
-[![Made with C](https://forthebadge.com/images/badges/made-with-c.svg)]()
-[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://python.org)
+---
+![C++](https://img.shields.io/badge/C++-_-ff69b4?style=for-the-badge&logo=c%2b%2b)
+![C](https://img.shields.io/badge/C-_-blue?style=for-the-badge&logo=c)
+![Python](https://img.shields.io/badge/Python-_-lightgrey?style=for-the-badge&logo=python)
 ---
 <!--
 <br>
