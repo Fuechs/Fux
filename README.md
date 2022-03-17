@@ -6,6 +6,10 @@
 ![Platforms: Mac](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler%20is%20still%20in%20development-blueviolet)](#development-status)
 ---
+[![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com)
+[![Made with C](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
+[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
+---
 ### Fux
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
@@ -40,11 +44,6 @@ object main() {
 } -> void;
 ```
 > Confused? This script is explained [here](./docs/other/demo.md).
-
-#### Made with
-![C++](https://img.shields.io/badge/-C++-ff69b4?logo=c%2B%2B)
-![C](https://img.shields.io/badge/-C-blue?logo=c)
-![Python](https://img.shields.io/badge/-Python-lightgrey?logo=python)
 
 #### Setup
 
