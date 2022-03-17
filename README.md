@@ -9,19 +9,19 @@
 ![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>
 ![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge)
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
-![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
+![C](https://img.shields.io/badge/C-lightgrey?style=for-the-badge&logo=c&logoColor=white)
+![Python](https://img.shields.io/badge/Python-blue?style=for-the-badge&logo=python&logoColor=white)
 <br>
-![Typescript](https://img.shields.io/badge/Typescript-lightgrey?style=for-the-badge&logo=typescript)
+![Typescript](https://img.shields.io/badge/Typescript-blue?style=for-the-badge&logo=typescript&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-yellowgreen?style=for-the-badge&logo=java)
 ![Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge&logo=ruby)
 <br>
-![Javascript](https://img.shields.io/badge/Javascript-lightgrey?style=for-the-badge&logo=javascript)
+![Javascript](https://img.shields.io/badge/Javascript-yellow?style=for-the-badge&logo=javascript&logoColor=white)
 ![Markdown](https://img.shields.io/badge/Markdown-blue?style=for-the-badge&logo=markdown)
 ![JSON](https://img.shields.io/badge/Json-yellow?style=for-the-badge&logo=json)
 <br>
-![Swift](https://img.shields.io/badge/Swift-lightgrey?style=for-the-badge&logo=swift)
-![Objective-C](https://img.shields.io/badge/Objective--C-blue?style=for-the-badge&logo=c)
+![Swift](https://img.shields.io/badge/Swift-red?style=for-the-badge&logo=swift&logoColor=white)
+![Objective-C](https://img.shields.io/badge/Objective--C-lightgrey?style=for-the-badge&logo=c&logoColor=white)
 ![Rust](https://img.shields.io/badge/Rust-red?style=for-the-badge&logo=rust)
 ---
 
