@@ -72,6 +72,6 @@ object main() {
 
 } -> void;
 ```
-- [Objects](../objects.md)
-- [Variables](../variables.md)
-- [Input and output](../io.md)
+- [Objects](./objects.md)
+- [Variables](./variables.md)
+- [Input and output](./io.md)
