@@ -16,7 +16,6 @@
 [![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 [![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
 -->
-
 ---
 ### Fux
 ###### Flawless unambiguous programming
