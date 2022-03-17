@@ -23,8 +23,9 @@
 ### Fux
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
-- without any debugging horror
-- and where `*something` finally has nothing to do with pointers
+- with better errors
+- where `*something` finally has nothing to do with pointers
+- and without any debugging horror
 
 ```cpp
 get *core;
