@@ -15,6 +15,10 @@
 ![Typescript](https://img.shields.io/badge/Typescript-lightgrey?style=for-the-badge&logo=typescript)
 ![Java](https://img.shields.io/badge/Java-yellowgreen?style=for-the-badge&logo=java)
 ![Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge&logo=ruby)
+<br>
+![Javascript](https://img.shields.io/badge/Javascript-lightgrey?style=for-the-badge&logo=javascript)
+![Markdown](https://img.shields.io/badge/Markdown-blue?style=for-the-badge&logo=markdown)
+![JSON](https://img.shields.io/badge/Json-yellow?style=for-the-badge&logo=json)
 ---
 
 ### Fux
