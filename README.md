@@ -23,7 +23,7 @@
 ### Fux
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
-- with better errors
+- with better errors (well, better than just `Segmentation fault.`)
 - where `*something` finally has nothing to do with pointers
 - and without strict syntax
 
