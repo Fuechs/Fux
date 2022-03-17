@@ -6,6 +6,6 @@
 
 ---
 
-- [Hello World](helloworld.md)
+- [Hello World](helloworld.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
 
 ---
