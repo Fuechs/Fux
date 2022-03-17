@@ -2,8 +2,9 @@
 
 
 ![Version: 0.0.1a](https://img.shields.io/badge/Version-0.0.1a-informational)
-[![Release: None](https://img.shields.io/badge/Release-None-inactive?logo=airplayaudio)](https://github.com/Fuechs/fuxlang/releases/latest)
-![Platforms: Mac](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
+[![Release: None](https://img.shields.io/badge/Release-None-inactive)](https://github.com/Fuechs/fuxlang/releases/latest)
+![Platforms: Mac | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
+![Not on windows](https://img.shields.io/badge/Not_on-Windows-critical)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler%20is%20still%20in%20development-blueviolet)](#development-status)
 ---
 [![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com)
