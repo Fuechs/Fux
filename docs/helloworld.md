@@ -1,5 +1,7 @@
 #### Hello World
 
+![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
+
 ```cpp
 // Hello World program
 get core;
