@@ -58,7 +58,7 @@ With `<<` we deliver a value *to* the function,<br>
 in this case `"Hello World!\n"` (`'\n'` is a newline character).<br>
 
 With `>>` we get a value *of* the function to a variable or another object.<br>
-A good example is the function `cin`.<br>
+A good example is the function `cin`.<br>(It's the same as variable definition or function call, just inverted and cooler)<br>
 We want the user to input his name, so we can greet him:
 ```cpp
 get *core;
