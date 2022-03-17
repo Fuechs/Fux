@@ -10,7 +10,7 @@
 ![C++](https://img.shields.io/badge/C++-ff69b4?style=for-the-badge&logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
 ![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
-![Love](https://img.shields.io/badge/Love-<3-green?style=for-the-badge)
+![Love](https://img.shields.io/badge/<3-blueviolet?style=for-the-badge)
 ---
 <!--
 <br>
