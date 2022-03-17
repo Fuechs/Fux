@@ -6,7 +6,8 @@
 ![Platforms: Mac | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
 ---
-![Made with](https://img.shields.io/badge/Made-with-orange?style=for-the-badge)<br>
+![Made with](https://img.shields.io/badge/Made-with-success?style=for-the-badge)<br>
+![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge)
 ![C++](https://img.shields.io/badge/C++-ff69b4?style=for-the-badge&logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
 ![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
