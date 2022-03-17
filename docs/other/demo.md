@@ -31,7 +31,7 @@ object main() {
 
     int user_num; // Defines new empty variable of the type integer
     cout << "Please input a number: "; // Output into console
-    (int)cin >> user_num; 
+    (int)cin >> user_num; // Same as 'user_num = (int)cin', but looks better
     /* 
     scans console for input, 
     converts the input to integer
