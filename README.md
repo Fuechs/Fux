@@ -9,10 +9,11 @@
 ---
 [![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com)
 [![Made with C](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
-[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)<br>
-[![Made with Typescript](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
-[![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
-[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
+[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
+#<br>
+#[![Made with Typescript](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
+#[![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
+#[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
 ---
 ### Fux
 ###### Flawless unambiguous programming
