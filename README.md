@@ -1,7 +1,7 @@
 ![Image missing](./fux_logo_slim_transparent.png)
 
 
-![Version: 0.0.1a](https://img.shields.io/badge/Version-0.0.1a-informational)
+![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.1a-informational)
 [![Release: None](https://img.shields.io/badge/Release-None-inactive)](https://github.com/Fuechs/fuxlang/releases/latest)
 ![Platforms: Mac | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational)](./docs)
