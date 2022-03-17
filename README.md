@@ -41,6 +41,10 @@ object main() {
 ```
 > Confused? This script is explained [here](./docs/other/demo.md).
 
+#### Made with
+![C++](https://img.shields.io/badge/-C++-ff69b4?logo=c%2B%2B)
+![C](https://img.shields.io/badge/-C-lightgrey?logo=c)
+
 #### Setup
 
 [![Setup: Currently not available](https://img.shields.io/badge/Setup-Currently_not_available-inactive?logo=python)](.)
