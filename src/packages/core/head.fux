@@ -8,5 +8,6 @@ package core {
     implement ./types.fux;
     implement ./io.fux;
     implement ./utility.fux;
+    implement ./error.fux;
     
 }

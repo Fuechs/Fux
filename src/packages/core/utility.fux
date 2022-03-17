@@ -7,14 +7,55 @@
 get cppfux;
 
 implement ./types.fux
+implement ./error.fux
 
-object split(str string)
+object type(var variable) {
+
+    if (variable == (int)variable) {
+        return int;
+        end;
+    } except pass;
+
+    else if (variable == (bool)variable) {
+        return bool;
+        end;
+    } except pass;
+
+    else if (variable == (bool)variable {
+        return bool;
+        end;
+    } except pass;
+
+    else if (variable == (str)variable) {
+        return str;
+        end;
+    } except pass;
+    
+    else {
+        error << "Unknown storage type: '" << variable->name << "'";
+        exit << 0x0001;
+    }
+
+} -> storagetype;
+
+object islist(var variable) {
+
+    if (variable[]) return true;
+    else return false;
+
+} -> bool;
+
+object split(str string) {
+
+    
+
+} -> str;
 
 object enumerate(var list[]) {
     
     var new_list[];
-    count = 0
-    for var obj in list {
+    int count = 0
+    for (var obj) in list {
         obj, count >> new_list;
     }
     return new_list;
@@ -25,11 +66,11 @@ object length(var var_to_calc) {
 
     if (type << var_to_calc == int) return var_to_calc; end;
 
+    if 
+
     int count = 0;
-    var_to_calc = split << var_to_calc;
-    for var obj in var_to_calc {
-        count++;
-    }
+    if (!isList) var_to_calc = split << (str)var_to_calc;
+    for (var obj) in var_to_calc count++;
     return count;
 
 } -> int;

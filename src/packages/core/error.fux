@@ -1,0 +1,11 @@
+/*
+    CORE PACKAGE
+    ERRORS
+    COPYRIGHT (C) 2022 - FUECHS
+*/
+
+package core;
+
+get cppfux;
+
+implement ./types.fux;

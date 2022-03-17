@@ -8,8 +8,10 @@ package core;
 
 get cppfux;
 
+typedef storagetype cpp->storagetype;
+
 typedef int cpp->integer;
 typedef str cpp->string;
 typedef bool cpp->boolean;
 typedef void cpp->void;
-typesed var cpp->variable;
+typedef var cpp->variable;

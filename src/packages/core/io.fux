@@ -7,8 +7,11 @@
 package core;
 
 get cppfux;
+
 implement ./types.fux;
 implement ./utility.fux
+
+object 
 
 object endl() { 
 

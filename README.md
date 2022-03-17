@@ -1,4 +1,4 @@
-![Image missing](./fux_logo_slim_transparent.png)
+![Image missing](./art/fux_logo_slim_transparent.png)
 
 
 ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
