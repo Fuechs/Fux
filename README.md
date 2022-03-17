@@ -8,13 +8,13 @@
 ---
 ![Made with](https://img.shields.io/badge/Made-with-orange?style=for-the-badge)<br>
 ![C++](https://img.shields.io/badge/C++-ff69b4?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
+![C](https://img.shields.io/badge/C-9cf?style=for-the-badge&logo=c)
 ![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
 ![Love](https://img.shields.io/badge/<3-blueviolet?style=for-the-badge)
 ---
 <!--
 <br>
-[![Made with Typescript](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
+![Made with Typescript]()
 [![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 [![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
 -->
