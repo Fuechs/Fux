@@ -66,7 +66,7 @@ object main() {
 
 [![Compiler: Early Development](https://img.shields.io/badge/Compiler-Early_Development-inactive)](#compiler)
 [![Syntax: Not finished](https://img.shields.io/badge/Syntax-Not_finished-yellow)](#syntax)
-[![Core: Not finished](https://img.shields.io/badge/Core-Not_finished-inactive)](./src/packages/core)
+[![Core: Not finished](https://img.shields.io/badge/Core-Not_finished-yellow)](./src/packages/core)
 ---
 
 ##### Compiler
