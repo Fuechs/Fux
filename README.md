@@ -44,7 +44,7 @@ object main() {
 #### Made with
 ![C++](https://img.shields.io/badge/-C++-ff69b4?logo=c%2B%2B)
 ![C](https://img.shields.io/badge/-C-important?logo=c)
-![Pythn](https://img.shields.ip/badge/-Pythom-blue?logo=python)
+![Python](https://img.shields.io/badge/-Python-blue?logo=python)
 
 #### Setup
 
