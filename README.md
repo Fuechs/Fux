@@ -6,18 +6,16 @@
 ![Platforms: Mac | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
 ---
-![Made with](https://img.shields.io/badge/Made-with-success?style=for-the-badge)<br>
-![Fux](https://img.shields.io/badge/-Fux-orange?style=for-the-badge)
-![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
-![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
----
-<!--
+![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>
+![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge)
+![C++](https://img.shields.io/badge/00599C?style=for-the-badge&logo=c%2b%2b)
+![C](https://img.shields.io/badge/blue?style=for-the-badge&logo=c)
+![Python](https://img.shields.io/badge/lightgrey?style=for-the-badge&logo=python)
 <br>
-![Made with Typescript](https://img.shields.io/badge/Typescript-lightgrey?style=for-the-badge&logo=typescript)
-![Made with Java](https://img.shields.io/badge/Java-yellow?style=for-the-badge&logo=java)
-![Made with Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge&logo=ruby)
--->
+![Typescript](https://img.shields.io/badge/lightgrey?style=for-the-badge&logo=typescript)
+![Java](https://img.shields.io/badge/yellowgreen?style=for-the-badge&logo=java)
+![Ruby](https://img.shields.io/badge/red?style=for-the-badge&logo=ruby)
+---
 
 ### Fux
 ###### Flawless unambiguous programming
