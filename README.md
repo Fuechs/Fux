@@ -8,9 +8,9 @@
 ---
 ![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>
 ![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge)
-![C++](https://img.shields.io/badge/-00599C?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/-blue?style=for-the-badge&logo=c)
-![Python](https://img.shields.io/badge/-lightgrey?style=for-the-badge&logo=python)
+![C++](https://img.shields.io/badge/_-00599C?style=for-the-badge&logo=c%2b%2b)
+![C](https://img.shields.io/badge/_-blue?style=for-the-badge&logo=c)
+![Python](https://img.shields.io/badge/_-lightgrey?style=for-the-badge&logo=python)
 <br>
 ![Typescript](https://img.shields.io/badge/-lightgrey?style=for-the-badge&logo=typescript)
 ![Java](https://img.shields.io/badge/-yellowgreen?style=for-the-badge&logo=java)
