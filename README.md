@@ -9,20 +9,20 @@
 ![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>
 ![Fux](https://img.shields.io/badge/Fux-orange?style=for-the-badge)
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/C-lightgrey?style=for-the-badge&logo=c&logoColor=white)
-![Python](https://img.shields.io/badge/Python-blue?style=for-the-badge&logo=python&logoColor=white)
+![C](https://img.shields.io/badge/C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 <br>
-![Typescript](https://img.shields.io/badge/Typescript-blue?style=for-the-badge&logo=typescript&logoColor=white)
-![Java](https://img.shields.io/badge/Java-yellowgreen?style=for-the-badge&logo=java)
-![Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge&logo=ruby)
+![Typescript](https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java)
+![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby)
 <br>
-![Javascript](https://img.shields.io/badge/Javascript-yellow?style=for-the-badge&logo=javascript&logoColor=white)
-![Markdown](https://img.shields.io/badge/Markdown-blue?style=for-the-badge&logo=markdown)
-![JSON](https://img.shields.io/badge/Json-yellow?style=for-the-badge&logo=json)
+![Javascript](https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)
+![Markdown](https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown)
+![JSON](https://img.shields.io/badge/Json-000000?style=for-the-badge&logo=json)
 <br>
-![Swift](https://img.shields.io/badge/Swift-red?style=for-the-badge&logo=swift&logoColor=white)
-![Objective-C](https://img.shields.io/badge/Objective--C-lightgrey?style=for-the-badge&logo=c&logoColor=white)
-![Rust](https://img.shields.io/badge/Rust-red?style=for-the-badge&logo=rust)
+![Swift](https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=swift&logoColor=white)
+![Objective-C](https://img.shields.io/badge/Objective--C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust)
 ---
 
 ### Fux
