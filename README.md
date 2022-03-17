@@ -8,16 +8,13 @@
 ---
 ![Made with](https://img.shields.io/badge/Made-with-orange?style=for-the-badge)<br>
 ![C++](https://img.shields.io/badge/C++-ff69b4?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/C-9cf?style=for-the-badge&logo=c)
+![C](https://img.shields.io/badge/C-blue?style=for-the-badge&logo=c)
 ![Python](https://img.shields.io/badge/Python-lightgrey?style=for-the-badge&logo=python)
 ![Love](https://img.shields.io/badge/<3-blueviolet?style=for-the-badge)
----
-<!--
 <br>
-![Made with Typescript]()
-[![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
-[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
--->
+![Made with Typescript](https://img.shields.io/badge/Typescript-blue?style=for-the-badge&logo=typescript)
+![Made with Java](https://img.shields.io/badge/Java-yellowgreen?style=for-the-badge&logo=java)
+![Made with Ruby](https://img.shields.io/badge/Ruby-red?style=for-the-badge?logo=ruby)
 
 ### Fux
 ###### Flawless unambiguous programming
