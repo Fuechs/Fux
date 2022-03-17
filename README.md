@@ -12,8 +12,7 @@
 [![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)<br>
 [![Made with Typescript](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
 [![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
-[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)<br>
-[![Built with love](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
 ---
 ### Fux
 ###### Flawless unambiguous programming
