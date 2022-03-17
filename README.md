@@ -7,13 +7,16 @@
 ![Not on windows](https://img.shields.io/badge/Not_on-Windows-critical)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler%20is%20still%20in%20development-blueviolet)](#development-status)
 ---
-[![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com)
-[![Made with C](https://forthebadge.com/images/badges/made-with-c.svg)](https://forthebadge.com)
-[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
-#<br>
-#[![Made with Typescript](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
-#[![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
-#[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
+[![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)]()
+[![Made with C](https://forthebadge.com/images/badges/made-with-c.svg)]()
+[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://python.org)
+<!-- 
+<br>
+[![Made with Typescript](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
+[![Made with Java](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
+[![Made with Ruby](https://forthebadge.com/images/badges/made-with-ruby.svg)](https://forthebadge.com)
+-->
+
 ---
 ### Fux
 ###### Flawless unambiguous programming
