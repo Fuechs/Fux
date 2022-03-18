@@ -85,5 +85,5 @@ object main() {
 > due to software limitations for example.
 
 ##### Fux Language Support
-![Powered by JSON](https://img.shields.io/badge/Powered_by-JSON-000000?style=for-the-badge&logo=json)
+![Powered by YO](https://img.shields.io/badge/Powered_by-YO-000000?style=for-the-badge&logo=yocode)
 ---
