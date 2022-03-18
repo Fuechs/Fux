@@ -7,12 +7,14 @@
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational)](./docs)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
 ---
+
 ![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>
 ![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge)
 ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ---
+
 <!--
 <br>
 ![Typescript](https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
