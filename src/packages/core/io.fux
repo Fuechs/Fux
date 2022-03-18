@@ -25,7 +25,7 @@ object cout(str messages[]) {
 
     if ((length << messages) > 1) {
         for msg in messages { 
-            if (msg == endl()) msg = "\n"
+            if (msg == endl()) msg = "\n";
     
             msg >> full_message_string; 
         }
