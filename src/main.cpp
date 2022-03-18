@@ -3,6 +3,7 @@
 
 #include "include/std.hpp"
 #include "include/io.hpp"
+#include "include/utility.hpp"
 
 using namespace std;
 
@@ -12,17 +13,49 @@ Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
+struct _flags {
+    bool run;
+    bool debug;
+    char newline = '\n';
+    char print_spaces = ' ';
+    string version = version_x + "." + version_y + "." + version_z + version_c;
+} fux_flags;
+
+bool check(bool debug) {
+
+}
+
+void repl() {
+
+    fux_flags.run = check(fux_flags.debug);
+
+    while (fux_flags.run) {
+        
+        clear();
+
+        cout << "---[ FUX ]---" << endl << endl;
+
+        cout << "Please input a command: (help for help)" << endl;
+        cin >> string cmd;
+        cout << endl;
+
+        switch (cmd) {
+            
+        }
+    }
+
+}
 
 void print_version() {
 
-    cout << "-- Version --" << endl;
-    cout << version_x << "." << version_y << "." << version_z << version_c << endl;
+    cout << "--- Version ---" << endl;
+    cout << fux_flags.version << endl;
 
 }
 
 void print_help() {
 
-    cout << "-- Help --" << endl;
+    cout << "--- Help ---" << endl;
     cout << "Usage: fux [command] [source]" << endl;
     cout << "Commands:" << endl;
     cout << "version            shows the current fux version" << endl;
@@ -32,43 +65,16 @@ void print_help() {
 
 int main(int argc, char** argv) {
 
-    cout << "--- Fux ---" << endl << endl;
+    if (argc < 2) { // no arguments given
+        repl();
+        return 0;
+    }
 
-    if (argc < 2) {
-        cout << "Missing arguments" << endl << endl;
-        print_help();
-        return 1;
-    } 
-
-    if (argc == 2) {
-
-        if (strcmp(argv[1], "version") == 0) print_version();
-        else if (strcmp(argv[1], "help") == 0) print_help();
-        else if (strcmp(argv[1], "compile") == 0) {
-            cout << "Missing source" << endl; 
-            return 1;
+    for (int i = 0; argv[i] != NULL, i++) {
+        switch (argv[i]) {
+            
         }
-        else return 1;
-
-        return 0;
     }
 
-    if (strcmp(argv[1], "compile") == 0) {
-
-        const char* source_dir = argv[2];
-
-        string source = read_file(source_dir);
-
-        cout << source << endl;
-
-        return 0;
-    }
-
-    cout << "Unknown arguments" << endl << endl;
-    print_help();
     return 1;
-    
-
-    return 0;
-
 }

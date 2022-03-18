@@ -1,16 +1,17 @@
 CC = g++
-EXEC = a.out
-MAIN = src/main.cpp src/io.cpp
+EXEC = fux
+SRC = ${wildcard src/*.cpp}
  
 # Copyright (c) 2020-2022 Fuechs
 # All rights reserved.
 
 all:
-	${CC} ${MAIN}
+	${CC} ${SRC} -o ${EXEC}
 	
 clean:
-	rm ${EXEC}
+	rm ./${EXEC}
 
-main:
-	./a.out compile ./src/test/main.fux
+main: all
+	./${EXEC} compile ./src/test/main.fux
+	rm ./${EXEC}
 	
