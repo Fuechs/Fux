@@ -51,10 +51,7 @@ object main() {
     */
 
 } -> void; //sets return type to void; nothing to return
-
-
-/*
-'<<' if something is delivered for the function
-'>>' if the returned value should be applied to something
-*/
 ```
+
+> What's `<<` & `>>`?
+> Explained [here](../objects.md#function-calls) and [here](../variables.md#definition).
