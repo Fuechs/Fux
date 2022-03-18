@@ -11,11 +11,13 @@
 ![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+---
+<!--
 <br>
 ![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-007396?logo=java)
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
----
+-->
 
 ### Fux
 ###### Flawless unambiguous programming
