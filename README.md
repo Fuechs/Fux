@@ -6,6 +6,7 @@
 ![Platforms: macOS](https://img.shields.io/badge/Platforms-macOS-success)
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational)](./docs)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
+---
 
 ###### Made with
 
