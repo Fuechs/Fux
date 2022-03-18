@@ -86,4 +86,5 @@ object main() {
 
 ##### Fux Language Support
 ![Made in JSON](https://img.shields.io/badge/JSON-000000?logo=json)
+![Version: 1.0](https://img.shields.io/badge/Version-1.0-informational)
 ---
