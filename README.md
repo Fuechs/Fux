@@ -8,8 +8,7 @@
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
 ---
 
-##### Made with
-
+Made with
 <!--![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>-->
 ![Fux](https://img.shields.io/badge/Fux-fcaa68)
 ![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b)
