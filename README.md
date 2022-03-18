@@ -88,7 +88,7 @@ object main() {
 ![Made in JSON](https://img.shields.io/badge/JSON-000000?logo=json)
 ![Version: 1.0](https://img.shields.io/badge/Version-1.0-informational)
 ![Release: None](https://img.shields.io/badge/Release-None-inactive)
-![Platforms: VSC](https://img.shields.io/badge/Platforms-VSC-informational?logo=vscode)
+![Platforms: VSC](https://img.shields.io/badge/Platforms-VSC-informational?logo=visualstudiocode)
 ---
 
 > A Language Support Extensions for VSC is currently in work 
