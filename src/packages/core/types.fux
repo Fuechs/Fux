@@ -13,5 +13,5 @@ typedef storagetype cpp->storagetype;
 typedef int cpp->integer;
 typedef str cpp->string;
 typedef bool cpp->boolean;
-typedef void cpp->void;
+typedef void cpp->void; // 'void' can be used for return types or bools
 typedef var cpp->variable;

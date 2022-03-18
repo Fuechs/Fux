@@ -9,3 +9,21 @@ package core;
 get cppfux;
 
 implement ./types.fux;
+
+object error(var user_msg, int id = -1) {
+
+    str fin_msg;
+
+    if (islist) {
+        for var obj in user_msg {
+            (str)obj >> fin_msg;
+        }
+    } 
+    else fin_msg << (str)user_msg;
+    str error_message;
+    "[" >> id >> "] " >> error_message;
+    fin_msg >> error_message;
+
+    cpp->cout << error_message;
+
+} -> void;
