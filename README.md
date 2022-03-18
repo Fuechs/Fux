@@ -83,3 +83,7 @@ object main() {
 > Fux is currently in the concept phase.<br>
 > The Syntax is still in development and could change anytime,<br>
 > due to software limitations for example.
+
+##### Fux Language Support
+![Powered by JSON](https://img.shields.io/badge/Powered_by-JSON-0&style=for-the-badge&logo=json)
+---
