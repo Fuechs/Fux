@@ -85,6 +85,7 @@ object main() {
 > due to software limitations for example.
 
 ##### Fux Language Support
+
 ![Made in JSON](https://img.shields.io/badge/JSON-000000?logo=json)
 ![Platforms: VSC](https://img.shields.io/badge/Visual_Studio_Code-blue?logo=visualstudiocode)
 ![Version: 1.0](https://img.shields.io/badge/Version-1.0-informational)
