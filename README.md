@@ -5,19 +5,17 @@
 [![Release: None](https://img.shields.io/badge/Release-None-inactive)](https://github.com/Fuechs/fuxlang/releases/latest)
 ![Platforms: macOS](https://img.shields.io/badge/Platforms-macOS-success)
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational)](./docs)
-[![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)<br>
+[![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
+<br>
 ![Fux](https://img.shields.io/badge/Fux-fcaa68)
 ![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
----
-
-<!--
 <br>
-![Typescript](https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java)
-![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby)
--->
+![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?logo=java)
+![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
+---
 
 ### Fux
 ###### Flawless unambiguous programming
