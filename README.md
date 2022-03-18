@@ -6,18 +6,17 @@
 ![Platforms: macOS](https://img.shields.io/badge/Platforms-macOS-success)
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational)](./docs)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
----
-![Made with](https://img.shields.io/badge/Made-with-green?style=for-the-badge)<br>
-![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge)
-![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2b%2b)
-![C](https://img.shields.io/badge/C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+<br>
+![Fux](https://img.shields.io/badge/Fux-fcaa68)
+![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b)
+![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ---
 <!--
 <br>
-![Typescript](https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java)
-![Ruby](https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby)
+![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?logo=java)
+![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
 -->
 
 ### Fux
@@ -83,3 +82,13 @@ object main() {
 > Fux is currently in the concept phase.<br>
 > The Syntax is still in development and could change anytime,<br>
 > due to software limitations for example.
+
+##### Fux Language Support
+
+![Made in JSON](https://img.shields.io/badge/JSON-000000?logo=json)
+![Platforms: VSC](https://img.shields.io/badge/Visual_Studio_Code-blue?logo=visualstudiocode)
+![Version: 1.0](https://img.shields.io/badge/Version-1.0-informational)
+![Release: None](https://img.shields.io/badge/Release-None-inactive)
+---
+
+> A Language Support Extensions for VSC is currently in work 
