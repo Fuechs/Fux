@@ -5,6 +5,8 @@
 ##### Syntax Documentation
 
 - [Hello World](helloworld.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
+- [Objects](objects.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
+- [Variables](variables.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
 
 ##### Other Documentation
 
