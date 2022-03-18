@@ -86,9 +86,9 @@ object main() {
 
 ##### Fux Language Support
 ![Made in JSON](https://img.shields.io/badge/JSON-000000?logo=json)
+![Platforms: VSC](https://img.shields.io/badge/Visual_Studio_Code-blue?logo=visualstudiocode)
 ![Version: 1.0](https://img.shields.io/badge/Version-1.0-informational)
 ![Release: None](https://img.shields.io/badge/Release-None-inactive)
-![Platforms: VSC](https://img.shields.io/badge/Visual_Studio_Code-informational?logo=visualstudiocode)
 ---
 
 > A Language Support Extensions for VSC is currently in work 
