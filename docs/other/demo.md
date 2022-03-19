@@ -31,19 +31,19 @@ object main() {
 
     int user_num; // Defines new empty variable of the type integer
     cout << "Please input a number: "; // Output into console
-    (int)cin >> user_num; // Same as 'user_num = (int)cin', but looks better
+    ((int)cin << endl) >> user_num; // Same as 'user_num = (int)cin << endl;', but looks better
     /* 
     scans console for input, 
     converts the input to integer
     and applies the value to user_num 
     */
     except { 
-        error << "Not a number\n"; // Puts out an error
+        error << "Not a number"; // Puts out an error
         exit << 1; // Exits the program with the error id 1
     }
     // The except statement will be executed 
     // if the last statement could'nt execute
-    cout << (calc << user_num) << "\n";
+    cout << (calc << user_num) << endl;
     /* 
     calls the 'calc' function with the argument 'user_num',
     returned value will be printed to console 
