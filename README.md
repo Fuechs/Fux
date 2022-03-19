@@ -45,12 +45,12 @@ object main() {
 
     int user_num;
     cout << "Please input a number: ";
-    (int)cin >> user_num;
+    ((int)cin << endl) >> user_num;
     except {
-        error << "Not a number\n";
+        error << "Not a number";
         exit << 1;
     }
-    cout << (calc << user_num) << "\n"; 
+    cout << (calc << user_num) << endl; 
 
 } -> void;
 ```
