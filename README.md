@@ -1,19 +1,19 @@
 ![Image missing](./art/fux_logo_slim_transparent.png)
 
-
 ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
 [![Release: None](https://img.shields.io/badge/Release-None-inactive)](https://github.com/Fuechs/fuxlang/releases/latest)
-![Platforms: macOS](https://img.shields.io/badge/Platforms-macOS-success)
+![Platforms: macOS | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)<br>
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational)](./docs)
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet)](#development-status)
-<br>
+---
+
 ![Fux](https://img.shields.io/badge/Fux-fcaa68)
 ![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b)
 ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ---
+
 <!--
-<br>
 ![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-007396?logo=java)
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
@@ -28,33 +28,62 @@ The beautiful alternative for C++
 - and without strict syntax
 
 ```cpp
-get *core;
+get * core;
+get random;
 
-object calc(int num) {
+struct {
 
-    if (num < 1) num++;
-    else if (num == 10) {
-        num++++;
-        num = num*num-num;
+    int x = 0;
+    int y = 0;
+    int z = 2;
+    char c = 'a'; 
+    
+} version;  
+
+bool run;
+int profile = 0;
+
+object choose() -> bool {
+
+    bool return_value;
+    (random->choice << true << false) >> return_value;
+
+    return return_value;
+
+}
+
+object main() -> void {
+
+    clear;
+
+    choose >> run;
+
+    if (!run) cout << "Not running" << endl;
+
+    while (run) {
+
+        switch (profile) {
+            
+            case (-1) profile = profile^2;
+            case (0) profile++++;
+            case (1) profile--; 
+            case (2) profile++;
+            default run = false;
+
+        }
+
+        cout << profile << endl;
+
     }
-    return num;
 
-} -> int;
-
-object main() {
-
-    int user_num;
-    cout << "Please input a number: ";
-    ((int)cin << endl) >> user_num;
-    except {
-        error << "Not a number";
-        exit << 1;
-    }
-    cout << (calc << user_num) << endl; 
-
-} -> void;
+    cout << 'v';
+    cout << version->x << '.' << version->y << '.' << version->z << version->c;
+    endl;
+    
+}   
 ```
-> Confused? This script is explained [here](./docs/other/demo.md).
+> Confused? This script is explained [here](./docs/other/demo.md).<br>
+> Or read and execute the [script in python](./docs/other/demo.py).
 
 #### Setup
 
@@ -83,6 +112,16 @@ object main() {
 > Fux is currently in the concept phase.<br>
 > The Syntax is still in development and could change anytime,<br>
 > due to software limitations for example.
+
+##### Website
+
+![Made with HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![Made with CSS3](https://img.shields.io/badge/CSS3-CC6699?logo=css3&logoColor=white)
+![Made with Javascript](https://img.shields.io/badge/Javascript-F7DF1E?logo=javascript&logoColor=white)
+![Status Unknown](https://img.shields.io/badge/Status-Unknown-inactive)
+---
+
+> A Website for Fux is currently in work
 
 ##### Fux Language Support
 

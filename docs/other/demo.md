@@ -4,53 +4,67 @@
 get *core; // Imports all of core (* = everything)
           // so you won't have to reference to core
 
+get random; // Imports random
+
+
 /*
-Defines a new object of the function type
-called 'calc'
-with one paramter: 'num'
+Defines a struct with following elements:
+integer x equals 0
+integer y equals 0
+integer z equals 2
+character c equals 'a'
 */
-object calc(int num) {  
+struct {
 
-    if (num < 1) num++; 
-    // Increments num by one if num is smaller than 1
-    else if (num == 10) { // if num equals to 10
-        num++++; // increments num by 2
-        num = num*num-num;
-        // multiplies num by num, subtracts num,
-        // and applies new value to num
+    int x = 0;
+    int y = 0;
+    int z = 2;
+    char c = 'a'; 
+    
+} version; // defines version with the struct as its value
+
+bool run; // create boolean run without value
+int profile = 0; // defines integer profile euqals 0
+
+object choose() -> bool {
+
+    bool return_value;
+    (random->choice << true << false) >> return_value;
+
+    return return_value;
+
+}
+
+object main() -> void {
+
+    clear;
+
+    choose >> run;
+
+    if (!run) cout << "Not running" << endl;
+
+    while (run) {
+
+        switch (profile) {
+            
+            case (-1) profile = profile^2;
+            case (0) profile++++;
+            case (1) profile--; 
+            case (2) profile++;
+            default run = false;
+
+        }
+
+        cout << profile << endl;
+
     }
-    return num; // returns the new value of num
 
-} -> int; // sets return type to integer
+    cout << 'v';
+    cout << version->x << '.' << version->y << '.' << version->z << version->c;
+    endl;
+    
+}   
 
-/* 
-Defines main function of the program
-with no paramters
-*/
-object main() {
-
-    int user_num; // Defines new empty variable of the type integer
-    cout << "Please input a number: "; // Output into console
-    ((int)cin << endl) >> user_num; // Same as 'user_num = (int)cin << endl;', but looks better
-    /* 
-    scans console for input, 
-    converts the input to integer
-    and applies the value to user_num 
-    */
-    except { 
-        error << "Not a number"; // Puts out an error
-        exit << 1; // Exits the program with the error id 1
-    }
-    // The except statement will be executed 
-    // if the last statement could'nt execute
-    cout << (calc << user_num) << endl;
-    /* 
-    calls the 'calc' function with the argument 'user_num',
-    returned value will be printed to console 
-    with a newline character
-    */
-
-} -> void; //sets return type to void; nothing to return
 ```
 
 > What's `<<` & `>>`?
