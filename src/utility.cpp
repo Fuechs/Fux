@@ -2,6 +2,11 @@
 
 #include "include/utility.hpp"
 
+/* 
+Copyright (c) 2020-2022 Fuechs
+All rights reserved.
+*/
+
 void clear() {
     #if defined _WIN32
         system("cls");

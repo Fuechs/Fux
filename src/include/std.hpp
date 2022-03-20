@@ -6,9 +6,11 @@ Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
-int version_x = 0;
-int version_y = 0;
-int version_z = 2;
-char version_c = 'a';
+struct {
+    int x = 0;
+    int y = 0;
+    int z = 2;
+    char c = 'a';
+} fux_version;
 
 #endif
