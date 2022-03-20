@@ -1,5 +1,5 @@
 /*
-    CORE PACKGE
+    CORE PACKAGE
     STORAGE TYPES
     COPYRIGHT (C) 2022 - FUECHS
 */
@@ -8,10 +8,65 @@ package core;
 
 get cppfux;
 
-typedef storagetype cpp->storagetype;
+typedef int cpp->integer_type;
+typedef char cpp->character_type;
+typedef str cpp->string_type;
+typedef bool cpp->boolean_type;
+typedef var cpp->undefined_type;
+typedef void cpp->void_type; 
 
-typedef int cpp->integer;
-typedef str cpp->string;
-typedef bool cpp->boolean;
-typedef void cpp->void; // 'void' can be used for return types or bools
-typedef var cpp->variable;
+object cpp->storage_type:_integer_type {
+
+    object _init() -> self {
+        instruction ( int VAR_NAME[=VAR_VALUE]; );
+        super->_init(self);
+        return self;
+    }
+
+    object size() -> self {
+        &UNLOCK@STORAGE
+        &STORAGE@BYTE size = &STORAGE@self->value;
+        &LOCK@STORAGE
+        return (self)size; 
+    }
+
+}
+
+
+object cpp->storage_type:_character_type {
+
+    object _init() -> self {
+        instruction ( char VAR_NAME[=VAR_VALUE]; );
+        super->_init(self);
+        return self;
+    }
+
+}
+
+
+object cpp->storage_type:_string_type {
+
+    object _init() -> self {
+        instruction ( str VAR_NAME[=VAR_VALUE]; );
+        super->_init(self);
+        return self;
+    }
+
+    object split(char character = '') -> self[] {
+        self str_list[] = cpp->cut << self->value << character;
+        return str_list[];
+    }
+
+    object size() -> int {
+        int count = 0;
+        for (char character) in (self->value->split[]) count++;
+        return count;
+    }
+
+}
+
+object cpp->storage_type:_boolean_type;
+
+object cpp->storage_type:_undefined_type;
+
+object cpp->storage_type:_void_type;

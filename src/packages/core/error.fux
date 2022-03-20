@@ -1,6 +1,6 @@
 /*
     CORE PACKAGE
-    ERRORS
+    ERROR
     COPYRIGHT (C) 2022 - FUECHS
 */
 
@@ -8,22 +8,11 @@ package core;
 
 get cppfux;
 
-implement ./types.fux;
+implement "./types.fux"
 
-object error(var user_msg, int id = -1) {
-
-    str fin_msg;
-
-    if (islist) {
-        for var obj in user_msg {
-            (str)obj >> fin_msg;
-        }
-    } 
-    else fin_msg << (str)user_msg;
-    str error_message;
-    "[" >> id >> "] " >> error_message;
-    fin_msg >> error_message;
-
-    cpp->cout << error_message;
-
-} -> void;
+object error(str message = "Unknown Error", int err_id = -1) -> void {
+    str error_string;
+    '[' >> err_id >> '] ' >> error_string;
+    message >> error_string;
+    cpp->cout << error_string;
+}

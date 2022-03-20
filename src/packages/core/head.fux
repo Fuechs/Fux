@@ -5,9 +5,8 @@
 
 package core {
 
-    implement ./types.fux;
-    implement ./io.fux;
-    implement ./utility.fux;
-    implement ./error.fux;
-    
+    implement "./core.c"
+    implement "./types.fux";
+    implement "./error.fux";
+
 }

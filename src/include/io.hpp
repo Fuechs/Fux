@@ -8,6 +8,6 @@ Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
-std::string read_file(const char* file_dir);
+std::string read_file(const std::string file_dir);
 
 #endif

@@ -18,7 +18,7 @@ struct _flags {
     bool debug;
     char newline = '\n';
     char print_spaces = ' ';
-    string version = version_x + "." + version_y + "." + version_z + version_c;
+    string version = (string)version_x + "." + (string)ersion_y + "." + (string)version_z + (string)version_c;
 } fux_flags;
 
 bool check(bool debug) {
@@ -36,20 +36,11 @@ void repl() {
         cout << "---[ FUX ]---" << endl << endl;
 
         cout << "Please input a command: (help for help)" << endl;
-        cin >> string cmd;
+        string cmd;
+        cin >> cmd;
         cout << endl;
 
-        switch (cmd) {
-            
-        }
     }
-
-}
-
-void print_version() {
-
-    cout << "--- Version ---" << endl;
-    cout << fux_flags.version << endl;
 
 }
 
@@ -70,11 +61,17 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    for (int i = 0; argv[i] != NULL, i++) {
-        switch (argv[i]) {
-            
-        }
+    switch (argv[1]) {
+
+        case "version": cout << fux_flags.version << endl; return 0;
+        case "help": print_help(); return 0;
+        case "compile": break;
+        case default: cout << "Unknown argument: " << argv[1] << endl; print_help(); return 1;
+
     }
 
-    return 1;
+    const string source_path = argv[2];
+    string source = read_file(source_path);
+
+    return 0;
 }

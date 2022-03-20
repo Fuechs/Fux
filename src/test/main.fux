@@ -5,11 +5,11 @@ All rights reserved.
 
 get core;
 
-object main() {
+object main() -> core->void {
 
     core->str name;
     core->cout << "Name: ";
     core->cin >> name;
     core->cout << "Hello, " << name << endl;
 
-} -> void;
+}
