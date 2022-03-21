@@ -1,0 +1,13 @@
+/*
+  RANDOM PACKAGE
+  COPYRIGHT (C) 2022 - FUECHS
+*/
+
+package random;
+
+get core;
+
+object choose (var choices[]) -> var {
+
+  int count = choices[]->size;
+}
