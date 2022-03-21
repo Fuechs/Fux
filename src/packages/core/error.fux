@@ -11,8 +11,10 @@ get cppfux;
 implement "./types.fux"
 
 object error(str message = "Unknown Error", int err_id = -1) -> void {
+
     str error_string;
     '[' >> err_id >> '] ' >> error_string;
     message >> error_string;
     cpp->cout << error_string;
+
 }

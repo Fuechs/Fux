@@ -1,4 +1,5 @@
 #### Error ID's
 
-- `0001` -> Unknown storage type
-- `0002` -> ...
+- `-1` -> Unknown Error / No Error ID given
+- `1` -> Unknown storage type
+- `2` -> ...

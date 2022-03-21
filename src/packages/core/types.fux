@@ -23,11 +23,13 @@ object cpp->storage_type:_integer_type {
         return self;
     }
 
-    object size() -> self {
+
+    &UNLOCK@STORAGE
+    object size() -> &STORAGE@BYTE {
         &UNLOCK@STORAGE
         &STORAGE@BYTE size = &STORAGE@self->value;
         &LOCK@STORAGE
-        return (self)size; 
+        return size; 
     }
 
 }
