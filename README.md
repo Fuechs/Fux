@@ -17,7 +17,7 @@
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
 -->
 
-![Fux](https://img.shields.io/badge/Fux-Lang-fcaa68?style=for-the-badge)
+![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge)
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
 - so you don't shoot yourself in the foot (like I did working on Fux)
