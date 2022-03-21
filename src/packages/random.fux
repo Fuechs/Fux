@@ -7,7 +7,8 @@ package random;
 
 get core;
 
-object choose (var choices[]) -> var {
+object choice(var choices[]) -> var {
 
   int count = choices[]->size;
+  
 }
