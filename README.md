@@ -7,7 +7,7 @@
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-informational?style=flat-square)](./LICENSE)<br>
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet?style=flat-square)](#development-status)
 ---
-![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge)
+![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge&logo=github)
 ![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b&style=for-the-badge)
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
 ![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
