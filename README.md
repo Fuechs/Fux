@@ -24,6 +24,7 @@ The beautiful alternative for C++
 - where `*something` finally has nothing to do with pointers
 - and without strict syntax
 
+> [Utilizeable Packages](./src/packages)
 ```cpp
 get * core;
 get random;
