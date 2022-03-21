@@ -2,7 +2,8 @@
 
 ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational?style=flat-square)
 [![Release: None](https://img.shields.io/badge/Release-None-inactive?style=flat-square)](https://github.com/Fuechs/fuxlang/releases/latest)
-![Platforms: macOS | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success?style=flat-square)<br>
+![Platforms: macOS | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success?style=flat-square)
+---
 [![Documentation](https://img.shields.io/badge/Documentation-Markdown-informational?style=flat-square)](./docs)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-informational?style=flat-square)](./LICENSE)<br>
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet?style=flat-square)](#development-status)
