@@ -10,14 +10,12 @@
 ![C++](https://img.shields.io/badge/Made_with-C++-00599C?logo=c%2b%2b&style=for-the-badge)
 ![Python](https://img.shields.io/badge/Made_with-Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
 ![Fux](https://img.shields.io/badge/Made_with-Fux-fcaa68?style=for-the-badge)
+![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
+![Java](https://img.shields.io/badge/Java-007396?logo=java&style=for-the-badge)
+![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby&style=for-the-badge)
 ---
 
-<!--
-![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white)
-![Java](https://img.shields.io/badge/Java-007396?logo=java)
-![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
--->
-
+<!-- FUX COLOR - #fcaa68 -->
 ### Fux
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
@@ -111,23 +109,4 @@ object main() -> void {
 > Fux is currently in the concept phase.<br>
 > The Syntax is still in development and could change anytime,<br>
 > due to software limitations for example.
-
-##### Website
-
-![Made with HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
-![Made with CSS3](https://img.shields.io/badge/CSS3-CC6699?logo=css3&logoColor=white)
-![Made with Javascript](https://img.shields.io/badge/Javascript-F7DF1E?logo=javascript&logoColor=white)
-![Status Unknown](https://img.shields.io/badge/Status-Unknown-inactive)
 ---
-
-> A Website for Fux is currently in work
-
-##### Fux Language Support
-
-![Made in JSON](https://img.shields.io/badge/JSON-000000?logo=json)
-![Platforms: VSC](https://img.shields.io/badge/Visual_Studio_Code-blue?logo=visualstudiocode)
-![Version: 1.0](https://img.shields.io/badge/Version-1.0-informational)
-![Release: None](https://img.shields.io/badge/Release-None-inactive)
----
-
-> A Language Support Extensions for VSC is currently in work 
