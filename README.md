@@ -88,6 +88,7 @@ object main() -> void {
 #### Setup
 
 [![Setup: Currently not available](https://img.shields.io/badge/Setup-Currently_not_available-inactive?style=flat-square)]()
+---
 
 > In later releases an easy setup<br> 
 > in form of a python file and/or Makefile<br>
