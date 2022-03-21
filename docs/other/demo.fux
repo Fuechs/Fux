@@ -1,0 +1,16 @@
+get * core;
+get random;
+
+struct {
+
+  int x = 0;
+  int y = 0;
+  int z = 2;
+  char c = 'a';
+
+} version;
+
+object choose() -> bool {}
+
+
+object main() -> void {}
