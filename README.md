@@ -7,9 +7,9 @@
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-informational?style=flat-square)](./LICENSE)<br>
 [![Note: Compiler is still in development](https://img.shields.io/badge/Note-Compiler_is_still_in_development-blueviolet?style=flat-square)](#development-status)
 ---
-![C++](https://img.shields.io/badge/Made_with-C++-00599C?logo=c%2b%2b&style=for-the-badge)
-![Python](https://img.shields.io/badge/Made_with-Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
-![Fux](https://img.shields.io/badge/Made_with-Fux-fcaa68?style=for-the-badge)
+![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge)
+![C++](https://img.shields.io/badge/C++-00599C?logo=c%2b%2b&style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
 ![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)
 ![Java](https://img.shields.io/badge/Java-007396?logo=java&style=for-the-badge)
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby&style=for-the-badge)
