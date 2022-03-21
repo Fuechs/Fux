@@ -87,8 +87,7 @@ object main() -> void {
 
 #### Setup
 
-[![Setup: Currently not available](https://img.shields.io/badge/Setup-Currently_not_available-inactive)](./setup.py)
----
+[![Setup: Currently not available](https://img.shields.io/badge/Setup-Currently_not_available-inactive&style=flat-square)]()
 
 > In later releases an easy setup<br> 
 > in form of a python file and/or Makefile<br>
@@ -97,9 +96,9 @@ object main() -> void {
 
 #### Development Status
 
-[![Compiler: Early Development](https://img.shields.io/badge/Compiler-Early_Development-inactive)](#compiler)
-[![Syntax: Not finished](https://img.shields.io/badge/Syntax-Not_finished-yellow)](#syntax)
-[![Core: Not finished](https://img.shields.io/badge/Core-Not_finished-yellow)](./src/packages/core)
+[![Compiler: Early Development](https://img.shields.io/badge/Compiler-Early_Development-inactive?style=flat-square)](#compiler)
+[![Syntax: Not finished](https://img.shields.io/badge/Syntax-Not_finished-yellow?style=flat-square)](#syntax)
+[![Core: Not finished](https://img.shields.io/badge/Core-Not_finished-yellow?style=flat-square)](./src/packages/core)
 ---
 
 ##### Compiler
