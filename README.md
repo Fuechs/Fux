@@ -20,11 +20,11 @@
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
 - so you don't shoot yourself in the foot (like I did working on Fux)
-- with better errors (well, better than just `Segmentation fault.`)
-- where `*something` finally has nothing to do with pointers
+- with better errors (well, better than just `Segmentation fault`)
+- where `*` has nothing to do with pointers
 - and without strict syntax
 
-> [Utilizeable Packages](./src/packages)
+> [Utilizable Packages](./src/packages)
 ```cpp
 get * core;
 get random;
