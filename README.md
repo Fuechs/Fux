@@ -9,6 +9,7 @@
 ---
 ![C++](https://img.shields.io/badge/Made_with-C++-00599C?logo=c%2b%2b&style=for-the-badge)
 ![Python](https://img.shields.io/badge/Made_with-Python-3776AB?logo=python&logoColor=white&style=for-the-badge)
+![Fux](https://img.shields.io/badge/Made_with-Fux-fcaa68?style=for-the-badge)
 ---
 
 <!--
@@ -17,7 +18,7 @@
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
 -->
 
-![Fux](https://img.shields.io/badge/Fux-fcaa68?style=for-the-badge)
+### Fux
 ###### Flawless unambiguous programming
 The beautiful alternative for C++ 
 - so you don't shoot yourself in the foot (like I did working on Fux)
