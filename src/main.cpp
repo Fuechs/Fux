@@ -46,8 +46,14 @@ int repl() {
         cout << endl << endl;
 
         if (cmd.compare("exit") == 0) return 0;
-        else if (cmd.compare("help") == 0) {cout << endl; print_help();}
-        else return 1;
+        else if (cmd.compare("help") == 0) print_help();
+        else if (cmd.compare("version") == 0) {
+            cout << 'v' << fux_flags.version << endl << endl;
+        }
+        else {
+            cout << "Unknown command '" << cmd << "'" << endl;
+            return 1;
+        }
     }
 
     return 1;
@@ -86,6 +92,7 @@ int main(int argc, char** argv) {
     if (!argv[2]) {cout << "Source missing" << endl; return 1;}
     const string source_path = argv[2];
     string source = read_file(source_path);
+    // if (!source) return error(102, "Didn't reveive source.");
 
     return 0;
 }

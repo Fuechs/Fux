@@ -7,5 +7,6 @@ All rights reserved.
 */
 
 void clear();
+int error(int id, std::string message);
 
 #endif
