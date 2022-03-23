@@ -7,3 +7,5 @@
 
 - `101` -> Couldn't open file
 - `102` -> Didn't receive source from file
+- `103` -> Unknown command in repl
+- `104` -> Checks failed  
