@@ -4,6 +4,8 @@
 #include "include/std.hpp"
 #include "include/io.hpp"
 #include "include/utility.hpp"
+#include "include/lexer.hpp"
+#include "include/parser.hpp"
 
 using namespace std;
 
@@ -89,12 +91,23 @@ int main(int argc, char** argv) {
     }
 
     if (!argv[2]) {cout << "Source missing" << endl; return 1;}
+    
     const string source_path = argv[2];
     string source = read_file(source_path);
+    
     if (source.compare("") == 0) return error(102, "Didn't receive source");
-    else {
-        debug(201, "Received source; compiling program", fux_flags.debug);
-    }
-
+    
+    debug("Received source; compiling program", fux_flags.debug);
+    
+    typedef lexer_type lex_t; 
+    typedef parser_type parse_t;
+    
+    // lexer
+    lex_t lexed = lexer.init(source);
+    // parser
+    parse_t parsed = parser.init(lexed);
+    // compiler
+    
+    
     return 0;
 }
