@@ -8,5 +8,6 @@ All rights reserved.
 
 void clear();
 int error(int id, std::string message);
+void debug(std::string message, bool debug);
 
 #endif
