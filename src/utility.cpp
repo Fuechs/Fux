@@ -21,3 +21,10 @@ int error(int id, std::string message) {
     std::cout << message << std::endl;
     return id;
 } 
+
+void debug(std::string message, bool debug) {
+    if (debug) {
+        cout << "[DEBUG] ";
+        cout << message << endl;
+    }
+}
