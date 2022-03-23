@@ -2,6 +2,8 @@
 
 #include "include/utility.hpp"
 
+using namespace std;
+
 /* 
 Copyright (c) 2020-2022 Fuechs
 All rights reserved.
@@ -15,16 +17,22 @@ void clear() {
     #endif
 }
 
-int error(int id, std::string message) {
+int error(int id, string message) {
     // id
-    std::cout << '[' << id << "] ";
-    std::cout << message << std::endl;
+    cout << '[' << id << "] ";
+    cout << message << endl;
     return id;
 } 
 
-void debug(std::string message, bool debug) {
+void debug(string message, bool debug) {
     if (debug) {
         cout << "[DEBUG] ";
         cout << message << endl;
     }
+}
+
+void marked_log(string message, bool newline) {
+    cout << "[FUX] ";
+    cout << message;
+    if (newline) cout << endl;
 }

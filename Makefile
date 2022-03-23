@@ -10,9 +10,9 @@ all:
 	${CC} ${SRC} -o ${EXEC} ${VERSION}
 	
 clean:
-	rm ./${EXEC}
+	rm ${EXEC}
 
-main: all
-	./${EXEC} compile ./src/test/main.fux
-	rm ./${EXEC}
+test: all
+	./${EXEC} compile src/test/${f}.fux
+	rm ${EXEC}
 	

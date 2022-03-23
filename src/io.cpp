@@ -9,19 +9,20 @@ Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
-std::string read_file(const std::string file_path) {
+using namespace std;
 
-    std::ifstream file(file_path);
-    
-    std::stringstream content;
-    content << file.rdbuf();
+string read_file(const string file_path) {
+
+    ifstream file(file_path);
 
     if (!file) {
-        std::string error_string = "Can't open file "+file_path;
+        string error_string = "Can't open file "+file_path;
         error(101, error_string);
-        file.close();
         return NULL;
     }
+
+    stringstream content;
+    content << file.rdbuf();
 
     file.close();
 
