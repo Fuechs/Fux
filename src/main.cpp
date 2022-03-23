@@ -12,15 +12,16 @@ Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
-// init flagss
+// init flags
 struct {
-    bool run;
-    bool debug;
+    bool run = false;
+    bool debug = false;
     string version = to_string(fux_version.x)+'.'+to_string(fux_version.y)+'.'+to_string(fux_version.z)+fux_version.c;
 } fux_flags;
 
-bool check(bool debug) {
-    if (debug) cout << "[DEBUG] No checks to perform" << endl;
+bool check() {
+    debug("No checks to perform", fux_flags.debug);
+    if (false) error(103, "Checks failed at ...");
     return true;
 }
 
@@ -36,7 +37,7 @@ void print_help() {
 
 int repl() {
 
-    fux_flags.run = check(fux_flags.debug);
+    fux_flags.run = check();
 
     while (fux_flags.run) {
 
@@ -50,12 +51,10 @@ int repl() {
         else if (cmd.compare("version") == 0) {
             cout << 'v' << fux_flags.version << endl << endl;
         }
-        else {
-            cout << "Unknown command '" << cmd << "'" << endl;
-            return 1;
-        }
+        else return error(104, "Unknown command: "+cmd);
     }
-
+    
+    debug("Run is false; checks propably failed", fux_flags.debug);
     return 1;
 }
 
@@ -65,7 +64,7 @@ int main(int argc, char** argv) {
     cout << "---[ FUX ]---" << endl << endl;
 
     if (argc < 2) { // no arguments given
-        return repl(); // repl() return integer; 0 = success
+        return repl(); // repl() returns integer; 0 = success
     }
 
     string arg(argv[1]);
@@ -92,7 +91,10 @@ int main(int argc, char** argv) {
     if (!argv[2]) {cout << "Source missing" << endl; return 1;}
     const string source_path = argv[2];
     string source = read_file(source_path);
-    // if (!source) return error(102, "Didn't reveive source.");
+    if (source.compare("") == 0) return error(102, "Didn't receive source");
+    else {
+        debug(201, "Received source; compiling program", fux_flags.debug);
+    }
 
     return 0;
 }
