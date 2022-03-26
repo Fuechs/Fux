@@ -1,0 +1,27 @@
+package types;
+
+get cppfux;
+
+object cppfux->storage_type:_string_type {
+    
+    instruction ( object self->name[->str][=self->value]; );
+
+    object split(self, str cut_point) -> str {
+
+        // soon
+        pass;
+        
+    }   
+
+    object length(self) -> int {
+
+        object characters[] -> char = (char)self->value->split << '';
+
+        object count -> int = 0;
+        for (char character) in (characters[]) count++;
+
+        return count;
+
+    }
+
+}

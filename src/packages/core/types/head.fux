@@ -1,0 +1,12 @@
+/*
+    HEAD OF TYPES
+    Copyright (c) 2022 - Fuechs
+*/
+
+object types -> package {
+
+    get * "./integer.fux";
+    get * "./character.fux";
+    get * "./string.fux";
+    get * "./boolean.fux";
+}

@@ -1,12 +1,10 @@
 /*
     HEAD OF CORE PACKAGE
-    COPYRIGHT (C) 2022 - FUECHS
+    Copyright (c) 2022 - Fuechs
 */
 
-package core {
+object core -> package {
 
-    implement "./core.c"
-    implement "./types.fux";
-    implement "./error.fux";
+    get * types;
 
 }

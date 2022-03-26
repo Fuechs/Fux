@@ -1,0 +1,10 @@
+package types;
+
+
+get cppfux;
+
+object cppfux->storage_type:_character_type {
+
+    instruction ( object self->name[->char][=self->value]; );
+    
+}

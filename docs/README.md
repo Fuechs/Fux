@@ -2,13 +2,7 @@
 
 ###### These are the documentations for Fux sorted in a list
 
-##### Syntax Documentation
-
-- [Hello World](helloworld.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
-- [Objects](objects.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
-- [Variables](variables.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
-
-##### Other Documentation
-
-- [Demo explained](other/demo.md) ![All versions](https://img.shields.io/badge/Version-*-informational)
-- [Error ID's](other/errors.md) ![Version: 0.0.2a](https://img.shields.io/badge/Version-0.0.2a-informational)
+- [Hello World](./helloworld.md)
+> Wake you're interests in Fux by going through a Hello World program!
+- [Full Guide](./guide.md)
+> Learn Fux with the full guide

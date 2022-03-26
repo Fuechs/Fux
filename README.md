@@ -11,7 +11,8 @@
 ![Java](https://img.shields.io/badge/Java-007396?logo=java)
 ![Ruby](https://img.shields.io/badge/Ruby-CC342D?&logo=ruby)
 -->
-<!-- FUX COLOR - #fcaa68 -->
+
+<!-- FUX COLORS - #fcaa68 - #ec243c -->
 
 ### Fux
 ###### Flawless unambiguous programming
@@ -26,31 +27,30 @@ get * core;
 
 object main() -> void {
 
-    bool run = true;
-    int profile;
-    
-    while (run) { 
-    
-        cout << "Input a number: ";
-        cin >> profile;
-       
+    object profile -> int;
+    object run << true;
+
+    cout << "Input a number: ";
+    (int)cin >> profile;
+    endl;
+
+    while (run) {
+
         switch (profile) {
-            
-            case (-1) profile = profile^2;
+
+            case (-1) profile *= profile;
             case (0) profile++++;
-            case (1) profile--; 
+            case (1) profile--;
             case (2) profile++;
-            default !run;
+            default run = false;
 
         }
-       
+
         cout << profile << endl;
-       
+
     }
-   
-    cout << "Program ended" << endl;
-   
-}   
+
+}
 ```
 
 #### Why Fux?
