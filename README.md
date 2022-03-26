@@ -28,7 +28,7 @@ get * core;
 object main() -> void {
 
     object profile -> int;
-    object run << true;
+    object run = true;
 
     cout << "Input a number: ";
     (int)cin >> profile;
