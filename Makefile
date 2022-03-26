@@ -1,5 +1,5 @@
 CC = g++
-EXEC = fux
+EXEC = out.fux
 VERSION = -std=c++14
 SRC = ${wildcard src/*.cpp}
  
