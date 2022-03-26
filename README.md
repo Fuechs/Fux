@@ -22,7 +22,7 @@ The beautiful alternative for C++
 - where `*` has nothing to do with pointers
 - and without strict syntax
 
-```dart
+```cpp
 get * core;
 
 object main() -> void {
