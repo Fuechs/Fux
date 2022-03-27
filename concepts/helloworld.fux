@@ -1,0 +1,5 @@
+get * core;
+
+main() -> void {
+    cout << "Hello World!" << endl;
+}
