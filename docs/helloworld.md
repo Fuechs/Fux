@@ -3,7 +3,7 @@
 ```cpp
 get core;
 
-object main() -> void {
+main() -> void {
     core->cout << "Hello World!" << core->endl;
 }
 ```
@@ -19,7 +19,7 @@ To avoid having to reference to the packages import them like here shown:
 get * core;
 ```
 
-Next an `object` with the name `main` is defined, and declared as a function with the parantheses `()`.<br>
+Next an object with the name `main` is defined, and declared as a function with the parantheses `()`.<br>
 The `->` points to the return type of the function, `void` = nothing to return.
 
 Inside the code block, is a simple output. `core->cout` is called with the argument `"Hello World"` and `core->endl` = `'\n'`.<br>

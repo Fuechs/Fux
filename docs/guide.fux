@@ -3,25 +3,25 @@
 
 get * core;
 
-object Animal {
+Animal {
 
-    object init(self, name->str, age->str) -> void {
+    init(self, name->str, age->str) -> void {
         self->name = name;
         self->age = age;
     }
 
 }
 
-object Animal:Fox {
+Animal:Fox {
 
-    object init(self, name->str, species->str) -> void {
+    init(self, name->str, species->str) -> void {
         self->name = name;
-        self->species = self->getSpecies(species);
-        super->init(name, 0);
+        self->species = self->getSpecies << species;
+        super->init << name << 0;
     }
 
-    object getSpecies(self, species->str) -> str {
-        str all_species[] = ["vulpes vulpes"];
+    getSpecies(self, species->str) -> str {
+        all_species[] = ["vulpes vulpes"];
         if (species in all_species) return species;
         else {
             error << "Unknown species: " << species;
@@ -29,7 +29,7 @@ object Animal:Fox {
         }
     }
 
-    object info(self) -> void {
+    info(self) -> void {
         cout << "Info about " << self->name << endl;
         cout << "Age - " << super->age << endl;
         cout << "Species - " << self->species << endl;
@@ -37,19 +37,19 @@ object Animal:Fox {
 
 }
 
-object main() -> void {
+main() -> void {
     clear;
 
-    object name -> str;
-    object species -> str;
+    name -> str;
+    species -> str;
 
     cout << "Input your fox' name: ";
     cin >> name;
 
     cout << endl << "Input your fox' species: ";
     cin >> species;
-
-    object fox = Fox << name << species;
+    
+    fox = Fox << name << species;
 
     fox->info;
 }

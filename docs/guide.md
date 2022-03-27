@@ -6,7 +6,7 @@
 
 1. [Getting started](#getting-started)
 2. [Input and Output](#input-and-output)
-    - [The Core Library](#the-core-library)
+    - [The Core Package](#the-core-package)
     - [Console Out](#console-out)
     - [Console In](#console-in)
 3. [Objects](#objects)
@@ -45,22 +45,22 @@ By now, everything should be ready for programming in Fux.
 
 #### Input and Output
 
-##### The Core Library
+##### The Core Package
 
 ```cpp
-object core -> package;
+core -> package {}
 ```
 
 ##### Console Out
 
 ```cpp
-object cout(str messages[]) -> void;
+cout(str messages[]) -> void {}
 ```
 
 ##### Console In
 
 ```cpp
-object cin() -> str;
+cin() -> str {}
 ```
 
 ---
@@ -70,30 +70,30 @@ object cin() -> str;
 ##### Definition
 
 ```cpp
-object name;
+name;
 ```
 
 ##### Types
 
 ```cpp
-object name -> type;
+name -> type;
 ```
 
 ##### Variables
 
 ```cpp
-object name -> str = "Fuechs";
+name -> str = "Fuechs";
 ```
 
 ##### Functions
 
 ```cpp
-object main() -> void {}
+main() -> void {}
 ```
 
 ##### Classes
 
 ```cpp
-object Animal:Fox {}
+Animal:Fox {}
 ```
 

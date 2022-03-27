@@ -25,10 +25,10 @@ The beautiful alternative for C++
 ```cpp
 get * core;
 
-object main() -> void {
+main() -> void {
 
-    object profile -> int;
-    object run = true;
+    profile -> int;
+    run = true;
 
     cout << "Input a number: ";
     (int)cin >> profile;
@@ -42,8 +42,8 @@ object main() -> void {
             case (0) profile++++;
             case (1) profile--;
             case (2) profile++;
-            default run = false;
-
+            default !run;
+            
         }
 
         cout << profile << endl;
