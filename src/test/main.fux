@@ -5,7 +5,7 @@ All rights reserved.
 
 get core;
 
-object main() -> core->void {
+main() -> core->void {
 
     core->str name;
     core->cout << "Name: ";
