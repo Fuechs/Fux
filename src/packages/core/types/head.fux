@@ -3,7 +3,7 @@
     Copyright (c) 2022 - Fuechs
 */
 
-object types -> package {
+stypes -> package {
 
     get * "./integer.fux";
     get * "./character.fux";
