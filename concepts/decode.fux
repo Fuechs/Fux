@@ -26,5 +26,6 @@ decode(code -> str) -> int {
     decoded_number += num;
   
   }
-}
   
+  return decoded_number;
+}
