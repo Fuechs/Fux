@@ -1,0 +1,19 @@
+get * core;
+
+main() -> void {
+  debug -> bool = true
+  
+  ?debug {
+    cout << "Debug..." << endl;
+  }
+  
+  !debug;
+  
+  ?!debug {
+    cout << "Not debug..." << endl;
+}
+
+/*
+  ?object returns true if object != void and false if object == void || doesn't exist
+  ?!object return false if " and true if "
+*/
