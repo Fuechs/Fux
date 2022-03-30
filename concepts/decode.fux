@@ -1,0 +1,41 @@
+get * core;
+
+*main() -> void {
+
+    clear;
+    num -> str;
+    cout << "Input a number: " << endl;
+    cin >> num;
+    endl;
+
+    num_list[] === (int[])(num_list->split)->reverse;
+
+    decoded -> int = 0;
+
+    for (count -> int, io -> int) in (num_list[]->enumerate) {
+
+        if (io != (0 && 1)) cout << "Not 1 or 0" << endl; exit << 1;
+
+        switch (count) {
+            case (0) io *= 1;
+            case (1) io *= 2;
+            case (2) io *= 4;
+            case (3) io *= 8;
+            case (4) io *= 16;
+            case (5) io *= 32;
+            case (6) io *= 64;
+            case (7) io *= 128;
+            case (8) io *= 256;
+            default {
+                cout << "Too much!" << endl; 
+                exit << 1;
+            }
+        }
+        
+        decoded += io;
+
+    }
+
+    }
+
+}
