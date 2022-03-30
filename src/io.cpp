@@ -9,9 +9,11 @@ Copyright (c) 2020-2022 Fuechs
 All rights reserved.
 */
 
-using namespace std;
+using std::string;
+using std::ifstream;
+using std::stringstream;
 
-string read_file(const string file_path) {
+static string read_file(const string file_path) {
 
     ifstream file(file_path);
 

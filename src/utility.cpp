@@ -2,7 +2,9 @@
 
 #include "include/utility.hpp"
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
 
 /* 
 Copyright (c) 2020-2022 Fuechs

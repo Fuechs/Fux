@@ -5,7 +5,9 @@
 #include "include/io.hpp"
 #include "include/utility.hpp"
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
 
 /* 
 Copyright (c) 2020-2022 Fuechs
@@ -19,7 +21,7 @@ struct {
     string version = to_string(fux_version.x)+'.'+to_string(fux_version.y)+'.'+to_string(fux_version.z)+fux_version.c;
 } fux_flags;
 
-bool check() {
+static bool check() {
     debug("No checks to perform", fux_flags.debug);
     if (false) error(103, "Checks failed at ...");
     return true;
@@ -34,7 +36,7 @@ void print_help() {
     cout << "compile [source]   compiles and runs the source" << endl << endl;
 }
 
-int repl() {
+static int repl() {
 
     fux_flags.run = check();
 
@@ -56,7 +58,7 @@ int repl() {
     return 1;
 }
 
-int main(int argc, char** argv) {
+static int main(int argc, char** argv) {
 
     clear();
 

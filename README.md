@@ -25,7 +25,7 @@ The beautiful alternative for C++
 ```cpp
 get * core;
 
-main() -> void {
+*main() -> void {
 
     profile -> int;
     run = true;
@@ -33,17 +33,17 @@ main() -> void {
     cout << "Input a number: ";
     (int)cin >> profile;
     endl;
-
+    
     while (run) {
-
+        
         switch (profile) {
 
-            case (-1) profile *= profile;
+            case (-1) profile *= -1;
             case (0) profile++++;
             case (1) profile--;
             case (2) profile++;
             default !run;
-            
+
         }
 
         cout << profile << endl;

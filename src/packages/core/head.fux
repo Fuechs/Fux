@@ -3,7 +3,7 @@
     Copyright (c) 2022 - Fuechs
 */
 
-core -> package {
+*core -> package {
 
     get * types;
 
