@@ -6,5 +6,6 @@
 *core -> package {
 
     get * types;
+    get * io;
 
 }

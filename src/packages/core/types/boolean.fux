@@ -1,9 +1,0 @@
-package types;
-
-get cppfux;
-
-cppfux->storage_type:_boolean_type {
-
-    instruction ( self->name[->bool][=self->value]; );
-
-}

@@ -1,12 +1,11 @@
 /*
-    HEAD OF TYPES
+    HEAD OF TYPES PACKAGE
     Copyright (c) 2022 - Fuechs
 */
 
-stypes -> package {
-
-    get * "./integer.fux";
-    get * "./character.fux";
-    get * "./string.fux";
-    get * "./boolean.fux";
+*types -> package {
+    get * "character.fux";
+    get * "string.fux";
+    get * "integer.fux";
+    get * "boolean.fux";
 }

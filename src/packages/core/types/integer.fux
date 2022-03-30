@@ -1,9 +1,0 @@
-package types;
-
-get cppfux;
-
-cppfux->storage_type:_integer_type {
-
-    instruction ( self->name[->int][=self->value]; );
-
-}

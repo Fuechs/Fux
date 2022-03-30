@@ -1,0 +1,9 @@
+/*
+    HEAD OF IO
+    Copyright (c) 2022 - Fuechs
+*/
+
+*io -> package {
+    get * "input.fux";
+    get * "output.fux";
+}
