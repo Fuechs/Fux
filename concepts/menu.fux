@@ -14,11 +14,12 @@ get * core;
         option -> int;
         cout << "Input a number: ";
         (int)cin >> option;
-        endl;
         except {
+            endl;
             error << "Input has to be an integer";
             !run;
         }
+        endl;
         
         switch (option) {
             case (1) cout << "1st option" << endl;
