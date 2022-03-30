@@ -12,7 +12,7 @@ main() -> void {
         cout << "2 - Another option" << endl;
 
         option -> int;
-        cout << "Input a number";
+        cout << "Input a number: ";
         (int)cin >> option;
         endl;
         except {
@@ -23,7 +23,10 @@ main() -> void {
         switch (option) {
             case (1) cout << "1st option" << endl;
             case (2) cout << "2nd option" << endl;
-            default error << "Unknown option"; run = false;
+            default {
+                error << "Unknown option";
+                !run;
+            }
         }
     }
 }

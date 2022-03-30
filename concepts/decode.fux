@@ -1,0 +1,31 @@
+// decode binary to integers
+get * core;
+
+main() -> void {
+  cout << "Input a binary number: ";
+  binary -> str;
+  cin >> binary;
+  endl;
+  cout << (decode << binary) << endl;
+}
+
+decode(code -> str) -> int {
+  
+  code[] = code->split;
+  decoded_number = 0;
+  for (count -> int, num -> int) in ((int)code[]->enumerate) {
+    switch(count) {
+      // case (0) num *= 1;
+      case (1) num *= 2;
+      case (2) num *= 4
+      case (3) num *= 8;
+      case (4) num *= 16;
+      case (5) num *= 32;
+    }
+    
+    decoded_number += num;
+  
+  }
+  
+  return decoded_number;
+}
