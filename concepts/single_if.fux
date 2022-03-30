@@ -11,9 +11,11 @@ main() -> void {
   
   ?!debug {
     cout << "Not debug..." << endl;
+  }
+
 }
 
 /*
-  ?object returns true if object != void and false if object == void || doesn't exist
+  ?object returns true if object != void || false and false if object == void || false
   ?!object return false if " and true if "
 */
