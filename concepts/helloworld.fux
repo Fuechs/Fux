@@ -1,6 +1,6 @@
 get * core;
 
-main() -> void {
+*main() -> void {
     cout << "Hello World!" << endl;
 }
 
@@ -9,7 +9,7 @@ main() -> void {
 
 get core;
 
-main() -> void {
+object *main() -> void {
     core->cout << "Hello World!" << core->endl;
 }
 

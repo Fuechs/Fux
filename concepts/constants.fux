@@ -1,0 +1,17 @@
+get * core;
+
+object name -> str = "Fuechs"; // full defintion
+name = "Fuechs"; // simple defintion
+
+// -> full constant definiton
+object name -> str === "Fuechs"; // with '= = ='
+//  simple constant definition
+*name = "Fuechs"; // with '*' or '= = ='
+// can't be changed later
+
+
+// functions (and classes)
+// only with '*'
+
+*main() -> void {}
+*random_class {}

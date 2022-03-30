@@ -1,7 +1,7 @@
 // decode binary to integers
 get * core;
 
-main() -> void {
+*main() -> void {
   cout << "Input a binary number: ";
   binary -> str;
   cin >> binary;
@@ -9,11 +9,11 @@ main() -> void {
   cout << (decode << binary) << endl;
 }
 
-decode(code -> str) -> int {
+*decode(code -> str) -> int {
   
   code[] = code->split;
   decoded_number = 0;
-  for (count -> int, num -> int) in ((int)code[]->enumerate) {
+  for (*count -> int, num -> int) in ((int)code[]->enumerate) {
     switch(count) {
       // case (0) num *= 1;
       case (1) num *= 2;

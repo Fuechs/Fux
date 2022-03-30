@@ -1,6 +1,6 @@
 get * core;
 
-main() -> void {
+*main() -> void {
     
     run -> bool = true;
 
@@ -17,7 +17,7 @@ main() -> void {
         endl;
         except {
             error << "Input has to be an integer";
-            run = false;
+            !run;
         }
         
         switch (option) {

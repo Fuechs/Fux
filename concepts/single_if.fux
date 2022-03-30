@@ -1,21 +1,16 @@
 get * core;
 
-main() -> void {
-  debug -> bool = true
+*main() -> void {
   
-  ?debug {
-    cout << "Debug..." << endl;
-  }
+  debug -> bool = true
+  ?debug cout << "Debug..." << endl;
   
   !debug;
-  
-  ?!debug {
-    cout << "Not debug..." << endl;
-  }
+  ?!debug cout << "Not debug..." << endl;
 
 }
 
 /*
   ?object returns true if object != void || false and false if object == void || false
-  ?!object return false if " and true if "
+  ?!object return false if " and true if "∏
 */
