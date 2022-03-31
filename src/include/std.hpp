@@ -7,10 +7,8 @@ All rights reserved.
 */
 
 struct {
-    int x = 0;
-    int y = 0;
-    int z = 2;
-    char c = 'a';
+    int year = 22;
+    char sub = 'a';
 } fux_version;
 
 #endif
