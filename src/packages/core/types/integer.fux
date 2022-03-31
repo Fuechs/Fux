@@ -1,7 +1,14 @@
+/*
+  TYPES PACKAGE
+  INTEGER TYPE
+  Copyright (c) 2022 - Fuechs
+*/
+
 package types;
 
 get cppfux;
 get * "base2.fux";
+get * utility;
 
 typedef int cppfux->_integer_type;
 
@@ -23,4 +30,5 @@ typedef int cppfux->_integer_type;
     else return 'self->value';
   }
   (int) warning << "'" << self->value << "' (integer) is already an integer.";
+
 }

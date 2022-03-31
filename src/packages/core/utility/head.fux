@@ -1,0 +1,10 @@
+/*
+    HEAD OF UTILITY PACKAGE
+    Copyright (c) 2022 - Fuechs
+*/
+
+*utility -> package {
+
+    // get * "error.fux";
+
+}
