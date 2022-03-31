@@ -1,0 +1,26 @@
+package types;
+
+get cppfux;
+get * "base2.fux";
+
+typedef int cppfux->_integer_type;
+
+*cppfux->storage_type:_integer_class {
+
+  instruction ( self->name[-> int][=self->value]; );
+  
+  // encode base10 to base2
+  
+  *encode(int_num -> self) -> base2 {}
+  *decode(base2_num -> base2) -> self {}
+  *round(float_num -> self) -> self {}
+  *float(int_num -> self) -> self {}
+  
+  (str) return "self->value";
+  (bool) error << "Converting '" << self->value << "' (integer) to boolean is not possible."; exit << 201;
+  (char) {
+    if (self->value->length > 1) error << "Converting '" << self->value << "' (integer) to character is not possible."; exit << 202;
+    else return 'self->value';
+  }
+  (int) warning << "'" << self->value << "' (integer) is already an integer.";
+}
