@@ -19,7 +19,7 @@ All rights reserved.
 struct {
     bool run = false;
     bool debug = false;
-    string version = to_string(fux_version.x)+'.'+to_string(fux_version.y)+'.'+to_string(fux_version.z)+fux_version.c;
+    string version = to_string(fux_version.year)+'-'+fux_version.sub;
 } fux_flags;
 
 static bool check() {
