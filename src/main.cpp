@@ -8,6 +8,7 @@
 using std::cout;
 using std::endl;
 using std::string;
+using std::to_string;
 
 /* 
 Copyright (c) 2020-2022 Fuechs
