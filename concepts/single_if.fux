@@ -5,10 +5,12 @@ get * core;
   debug -> bool = true
   debug ? {
     cout << "Debug ..." << endl;
-  } 
+  } : {
+    cout << "Not debug ..." << endl;
+  }
  
   !debug;
-  debug ! cout << "Not debug ..." << endl; : exit(1);
+  debug ! cout << "Not debug ..." << endl;
 
 }
 
