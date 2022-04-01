@@ -3,14 +3,16 @@ get * core;
 *main() -> void {
   
   debug -> bool = true
-  ?debug cout << "Debug..." << endl;
-  
+  debug ? {
+    cout << "Debug ..." << endl;
+  } 
+ 
   !debug;
-  ?!debug cout << "Not debug..." << endl;
+  debug ! cout << "Not debug ..." << endl; : exit(1);
 
 }
 
 /*
-  ?object returns true if object != void || false and false if object == void || false
-  ?!object return false if " and true if "∏
+  object ? {} : {} ; returns true if object != void || false and false if object == void || false
+  object ! {} : {} ; returns false if " and true if "∏
 */
