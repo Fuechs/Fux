@@ -1,0 +1,23 @@
+/*
+  HEAD OF COLOR PACKAGE
+  Copyright (c) 2022 - Fuechs
+*/
+
+get * core;
+get cppfux;
+
+
+typedef hex hex_class;
+typedef rgb rgb_class;
+
+*cppfux->custom_storage_type:hex_class {
+  
+  instruction ( var_name[->hex][=var_value]; );
+  if (self->var_value->top != 0x || self->var_value->size > 7) {
+    error << "'" << self->var_value << "' is not a valid hexcode.";
+    exit << 401;
+  }
+
+}
+
+*cppfux->custom_storage_type:rgb_class {}
