@@ -14,7 +14,7 @@ typedef int cppfux->_integer_type;
 
 *cppfux->storage_type:_integer_class {
 
-  instruction ( self->name[-> int][=self->value]; );
+  instruction ( self->name[ -> int][=self->value]; );
   
   // encode base10 to base2
   
