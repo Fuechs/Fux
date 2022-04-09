@@ -2,5 +2,5 @@
 .vscode
 art/old
 ignore
-fux
+out.fux
 decode.py

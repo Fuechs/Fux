@@ -13,7 +13,7 @@ using std::string;
 using std::ifstream;
 using std::stringstream;
 
-static string read_file(const string file_path) {
+string read_file(const string file_path) {
 
     ifstream file(file_path);
 

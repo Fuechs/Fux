@@ -4,9 +4,11 @@
 #include "include/std.hpp"
 #include "include/io.hpp"
 #include "include/utility.hpp"
+#include "include/token.hpp"
 
 using std::cout;
 using std::endl;
+using std::cin;
 using std::string;
 using std::to_string;
 
@@ -22,7 +24,7 @@ struct {
     string version = to_string(fux_version.year)+fux_version.sub;
 } fux_flags;
 
-static bool check() {
+bool check() {
     debug("No checks to perform", fux_flags.debug);
     if (false) error(103, "Checks failed at ...");
     return true;
@@ -37,7 +39,7 @@ void print_help() {
     cout << "compile [source]   compiles and runs the source" << endl << endl;
 }
 
-static int repl() {
+int repl() {
 
     fux_flags.run = check();
 
@@ -59,9 +61,18 @@ static int repl() {
     return 1;
 }
 
-static int main(int argc, char** argv) {
+int main(int argc, char** argv) {
 
     clear();
+
+    Token testTok;
+    testTok.name = "Test";
+    testTok.value = 0;
+    testTok.type = TT_INT;
+
+    cout << testTok.name << endl;
+    cout << testTok.value << endl;
+    cout << as_string(testTok.type) << endl;
 
     if (argc < 2) { // no arguments given
         return repl(); // repl() returns integer; 0 = success
