@@ -1,12 +1,3 @@
-/*
-    HEAD OF CORE PACKAGE
-    Copyright (c) 2022 - Fuechs
-*/
-
-*core -> package {
-
-    get * types;
-    get * io;
-    get * utility;
-
+core -> package {
+    // ...
 }

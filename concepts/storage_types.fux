@@ -1,54 +1,88 @@
-binary_ -> binary = 011; // binary code; (0)11 = 3
+// Initial value of all variables: 0 or null or 0xFF        (char)
+//                                           |  0xFFFF      (wchar)
+//                                           |  0x0000FFFF  (dchar)
+
+// number thingy
+
+binary_ -> binary; // just binary; e.g. 11 = 3
 int_ -> int; // 32-bit integer
 real_ -> real; // 64-bit integer
-float_ -> float; // 64-bit floating point integer
-// or float(32bit) and double(64bit); but everyone would use double ...
 
-char_ -> char // single-character
-fixed_char -> char[5] = "fixed"; 
-// single-character with fixed size (5 characters), can be changed (list of characters?)
-// propably the same as char* in c(++)
-fixed_char = "no"; // value can be smaller than fixed size
-/*
-This is invalid:
-message -> char[] = "hello"; 
-Why would you even? Use 'str'.
-'char[N]' is just for saving memory.
-*/
+// int->size = 4; Length in bytes
 
-fixed_char_constant -> char[5] === "fixed"; // ..., constant -> can't be changed
-str_ -> str; // string / list of characters
+float_ -> float; // 32-bit floating point integer
+double_ -> double; // 64-bit floating point integer
 
-bool_ -> bool;// boolean; true/false
+// increment or decrement
+int_++;
+int_--;
 
-list_[] -> universal; // universal list with unfixed size 
-list_[] << 0 << '1' << true;
+// text thingy
 
-position[2] -> float = [32435.325, 24213.241]; // list of floats with fixed size
-//     size            [    x    ,     y    ];
+char_ -> char; // UTF-8 code unit (single-character?)
+wchar_ -> wchar; // UTF-16 code unit
+dchar_ -> dchar; // UTF-32 code unit; don't use it please...
+fixed_size -> char[5] = "fixed"; // char with fixed size of 5
+//            char[N]          ;
+//                 N = size
+// increment or decrement fixed size
+fixed_size++;
+fixed_size--;
 
-universal_ -> universal; // variable that can hold values of any type
-universal_ = 1;
-universal_ = 'a';
-universal_ = false;
 
-// basic definition of an object in fux
+str_ -> str; // string, just a string 
+str_ = "Hello World!";
 
-object // what is it? an object. (optional)
-myVar  // name
-->     // points to type               (optional)
-char   // type (char)                   "
-[12]   // fixed size (12 characters)    "
-===    // constant ('==='value... or '*'name...), normal would be '=' or without '*'
-"Hello World!" // value, 12 characters
-;      // semicolon; definitione ends here
+// boolean thingy
 
-// what could null look like in fux?
-object null -> void === (void)0; // converting zero to void would be, like, nothing? nothing-er than void?
-// or
-typedef null (void)0;
-// it's not an own type
-typedef null 0;
-// why would it exist then?
-object null -> int === 0;
-// ... but (null == 0) would be true ...
+bool_ -> bool; // true or false and null
+
+// lists
+
+universal_[] -> universal; // universal lists can hold any type of value
+universal_[] << 1 << 'a' << false;
+
+myVar -> universal; // Can hold any type
+myVar = -43434.34;  // float
+myVar = '1';        // char
+myVar = null;       // nothing
+
+// basic defenition
+
+object          // (optional)
+myVar           // name
+->              // points to type
+char            // type (char)
+[12]            // [fixed size] (12) 
+===             // constant ('==='value... or '*'name...), normal would be '='
+"Hello World!"  // value
+;               // end of definition
+
+// null
+
+typedef null (void)0; // converting zero to void would be... nothing-er than void?
+
+// enums; structs; typedef
+
+typedef enum {
+    ONLINE, OFFLINE
+} State;
+
+struct struct_ {
+    int id;
+    State status;
+    str name;
+}
+
+typedef struct_ Something;
+
+Something foo;
+foo->id = 0;
+foo->status = OFFLINE;
+foo->name = "bar";
+
+// pointer
+
+int a;
+int& b = &a; // b points to the adress of a
+// so b++ is a++

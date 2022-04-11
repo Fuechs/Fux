@@ -1,0 +1,19 @@
+get * core;
+
+@debug(function) -> void {
+    cout << function << endl;
+}
+
+@debug
+*add(*x -> float, *y -> float) {
+    return x+y;
+}
+
+*main() {
+    res -> int === add(1.3, 2.7);
+    cout << res << endl;
+}
+
+// output idk: 
+// <function at 0xfoo>
+// 4

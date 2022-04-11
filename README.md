@@ -19,8 +19,8 @@
 The beautiful alternative for C++ 
 - so you don't shoot yourself in the foot (like I did working on Fux)
 - with better errors (well, better than just `Segmentation fault`)
-- where `*` has nothing to do with pointers
-- and without strict syntax
+- easy management of memory
+- large standard library
 
 ```cpp
 get * core;
@@ -38,11 +38,11 @@ get * core;
         
         switch (profile) {
 
-            case (-1) profile *= -1;
-            case (0) profile++++;
-            case (1) profile--;
-            case (2) profile++;
-            default !run;
+            case (-1) profile *= -1; break;
+            case (0) profile++++; break;
+            case (1) profile--; break;
+            case (2) profile++; break;
+            default !run; break;
 
         }
 

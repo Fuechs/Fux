@@ -1,0 +1,10 @@
+get * core;
+
+*main(*argc -> int, *argv[] -> str) {
+    cout << "Amount of arguments: " << argc << endl;
+    cout << "Arguments:" << endl;
+    for (*arg -> str) in (argv[]) {
+        cout << arg << ", ";
+    }
+    endl;
+}
