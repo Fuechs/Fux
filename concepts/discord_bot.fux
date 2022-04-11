@@ -1,0 +1,30 @@
+// Maybe discord api?
+get * core;
+get discord;
+
+*discord.Bot:Client {
+
+    *init(self, token -> str) -> void {
+        super->init << token;
+    }
+
+    *on_ready(self) -> void {
+        cout << self->user << endl;
+        cout << self->user->id << endl;
+        cout << "... Online." << endl;
+    }
+    
+    @discord->command
+    *help(self, ctx) -> void {
+        ctx->send << "Help idk\n...";
+    }
+
+}
+
+*main() -> void {
+
+    bot = Client("...token...");
+
+    bot->run;
+
+}
