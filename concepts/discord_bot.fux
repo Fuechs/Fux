@@ -5,7 +5,7 @@ get discord;
 *discord.Bot:Client {
 
     *init(self, token -> str) -> void {
-        super->init << token;
+        super->init(token);
     }
 
     *on_ready(self) -> void {
@@ -14,7 +14,7 @@ get discord;
         cout << "... Online." << endl;
     }
     
-    @discord->command
+    @discord->command()
     *help(self, ctx) -> void {
         ctx->send << "Help idk\n...";
     }
@@ -25,6 +25,6 @@ get discord;
 
     bot = Client("...token...");
 
-    bot->run;
+    bot->run();
 
 }

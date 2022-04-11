@@ -7,8 +7,8 @@ All rights reserved.
 */
 
 struct {
-    int year = 22;
-    char sub = 'a';
+    const unsigned int year = 22;
+    const char sub = 'b';
 } fux_version;
 
 #endif

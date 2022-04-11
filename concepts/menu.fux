@@ -5,7 +5,7 @@ get * core;
     run -> bool = true;
 
     while (run) {
-        clear;
+        clear();
         
         cout << "Menu" << endl;
         cout << "1 - Option" << endl;
@@ -15,17 +15,17 @@ get * core;
         cout << "Input a number: ";
         (int)cin >> option;
         except {
-            endl;
-            error << "Input has to be an integer";
+            endl();
+            error("Input has to be an integer");
             !run;
         }
-        endl;
+        endl();
         
         switch (option) {
             case (1) cout << "1st option" << endl;
             case (2) cout << "2nd option" << endl;
             default {
-                error << "Unknown option";
+                error("Unknown option");
                 !run;
             }
         }

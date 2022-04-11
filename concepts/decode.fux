@@ -14,7 +14,7 @@ get * core;
 
     for (count -> int, io -> int) in (num_list[]->enumerate) {
 
-        if (io != (0 && 1)) cout << "Not 1 or 0" << endl; exit << 1;
+        if (io != (0 && 1)) cout << "Not 1 or 0" << endl; exit(1);
 
         io *= 2^count;
         

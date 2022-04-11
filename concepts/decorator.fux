@@ -4,7 +4,7 @@ get * core;
     cout << function << endl;
 }
 
-@debug
+@debug()
 *add(*x -> float, *y -> float) {
     return x+y;
 }
