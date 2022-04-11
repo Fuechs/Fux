@@ -1,0 +1,19 @@
+int_ -> int; // 32-bit integer
+real_ -> real; // 64-bit integer
+float_ -> float; // 64-bit floating point integer
+
+char_ -> char // single-character
+fixed_char -> char[5] = "fixed" 
+// single-character with fixed size (5 characters), can be changed (list of characters?)
+// propably the same as char* in c(++)
+fixed_char = "no" // value can be smaller than fixed size
+
+fixed_char_constant -> char[5] === "fixed" // ..., constant -> can't be changed
+str_ -> str // string / list of characters
+
+bool_ -> bool // boolean; true/false
+
+list_[] -> universal; // universal list with unfixed size 
+list_[] << 0 << '1' << true;
+
+position[2] -> int = [0, 0]; // list of integers with fixed size

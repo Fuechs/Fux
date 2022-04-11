@@ -1,6 +1,6 @@
 get * core;
 
-main() -> void {
+*main() -> void {
     name -> str;
     cout << "Name: ";
     cin >> name;
