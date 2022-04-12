@@ -10,7 +10,7 @@ main() -> void {
     name -> str;
     core->cout << "Name: ";
     core->cin >> name;
-    core->endl;
+    core->endl();
     core->cout << "Hello, " << name << core->endl;
 
 }
