@@ -39,7 +39,7 @@ The beautiful alternative for C++
 
 #### Why Fux?
 
-There are many other programming languages out in the wilds, so why should someone use Fux? \
+There are many other programming languages out in the wild, so why should someone use Fux? \
 My main goal creating the syntax of Fux was to make the language useful for experienced programmers and newbies as an introduction. \
 It should be as simple as Python and as complex as Java (or C++ if you wish) at the same time. \
 While having to deal with memory in C(++) and too much simplicity in Python, you could also save your time by using Fux. 
