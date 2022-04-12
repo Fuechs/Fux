@@ -3,14 +3,11 @@ Copyright (c) 2022 Fuechs
 All rights reserved.
 */
 
-get core;
+#get core
 
 main() -> void {
 
     name -> str;
-    core->cout << "Name: ";
-    core->cin >> name;
-    core->endl();
-    core->cout << "Hello, " << name << core->endl;
-
+    name = (int)cin("Name: ");
+    cout("Hello ", name, "!", endl);
 }

@@ -1,20 +1,14 @@
-get * core;
-
-*main() -> void {
-  
-  debug -> bool = true
-  debug ? {
-    cout << "Debug ..." << endl;
-  } : {
-    cout << "Not debug ..." << endl;
-  }
+debug -> bool = true
+debug ? {
+  cout("Debug ...", endl);
+} : {
+  cout("Not debug ...", endl);
+}
  
   !debug;
-  debug ! cout << "Not debug ..." << endl;
-
-}
+  debug ! cout("Not debug ...", endl);
 
 /*
   object ? {} : {} ; returns true if object != void || false and false if object == void || false
-  object ! {} : {} ; returns false if " and true if "∏
+  object ! {} : {} ; returns false if " and true if "
 */

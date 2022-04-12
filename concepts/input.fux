@@ -1,9 +1,8 @@
-get * core;
+#get <core>
 
 *main() -> void {
     name -> str;
-    cout << "Name: ";
-    cin >> name;
-    endl;
-    cout << "Hello, " << name << endl;
+    name = cin("Name: ");
+    endl();
+    cout("Hello, ", name, endl);
 }

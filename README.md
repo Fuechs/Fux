@@ -23,29 +23,17 @@ The beautiful alternative for C++
 - providing large standard library
 
 ```cpp
-get * core;
+#get <core>
+
+*fib(number -> int) -> int {
+    if (number <= 1) return number;
+    else return fib(number-1)+fib(number-2);
+}
 
 *main() -> void {
-    clear();
-
-    profile -> int;
-    run = true;
-
-    cout << "Input a number: ";
-    (int)cin >> profile;
-    endl();
-    
-    while (run) {
-        switch (profile) {
-            case (-1) profile *= -1; break;
-            case (0) profile++++; break;
-            case (1) profile--; break;
-            case (2) profile++; break;
-            default !run; break;
-        }
-
-        cout << profile << endl;
-    }
+    number -> int;
+    number = (int)cin("Fibonacci of: ");
+    cout(fib(number));
 }
 ```
 
@@ -77,11 +65,13 @@ typedef struct {
 } Function;
 
 object function -> Function;
-function->id = 0;
-function->name = "<function>";
-function->position->x = 0.0;
-function->position->y = 1.0;
-function->position->z = 0.0;
+function.id = 0;
+function.name = "<function>";
+function.position.x = 0.0;
+function.position.y = 1.0;
+function.position.z = 0.0;
+
+// please don't define single variables like this. It would be inefficient af.
 ```
 
 > Please be aware of that the syntax is still in development.

@@ -1,16 +1,5 @@
-get * core;
+#get <core>
 
 *main() -> void {
-    cout << "Hello World!" << endl;
+    cout("Hello World!", endl);
 }
-
-/*
-    FORMAL
-
-get core;
-
-object *main() -> void {
-    core->cout << "Hello World!" << core->endl;
-}
-
-*/
