@@ -1,3 +1,4 @@
-core -> package {
-    // ...
-}
+package core;
+
+#get "stdio.fux"
+#get "def.fux"
