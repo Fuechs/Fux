@@ -1,8 +1,0 @@
-#get <core>
-
-*main() -> void {
-    name -> str;
-    name = cin("Name: ");
-    endl();
-    cout("Hello, ", name, endl);
-}
