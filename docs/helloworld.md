@@ -1,10 +1,10 @@
 #### Hello World
 
 ```cpp
-get core;
+#get <core>;
 
-main() -> void {
-    core->cout << "Hello World!" << core->endl;
+*main() -> void {
+    core("Hello World!", endl);
 }
 ```
 As you can see, the syntax of Fux is somewhat similar to C++, so we'll just focus on the new things.
