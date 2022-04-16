@@ -22,7 +22,7 @@ The beautiful alternative for C++
 - having easy management of memory
 - providing large standard library
 
-```d
+```cpp
 #get <core>
 
 fib(number -> int) -> int {
