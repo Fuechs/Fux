@@ -25,12 +25,12 @@ The beautiful alternative for C++
 ```cpp
 #get <core>
 
-*fib(number -> int) -> int {
+fib(number -> int) -> int {
     if (number <= 1) return number;
     else return fib(number-1)+fib(number-2);
 }
 
-*main() -> void {
+main() -> void {
     number -> int;
     number = (int)cin("Fibonacci of: ");
     cout(fib(number));
