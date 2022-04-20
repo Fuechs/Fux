@@ -13,7 +13,6 @@ typedef enum {
 typedef double Value;
 
 typedef struct {
-    std::string name;
     Value value;
     TokenType type;
 } Token;

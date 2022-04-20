@@ -5,10 +5,10 @@
 std::string as_string(TokenType type) {
     
     switch (type) {
-        case TT_INT:    return "Integer";
-        case TT_FLOAT:  return "Float";
-        case TT_MINUS:  return "Minus";
-        case TT_PLUS:   return "Plus";
+        case TT_INT:    return "integer";
+        case TT_FLOAT:  return "float";
+        case TT_MINUS:  return "minus";
+        case TT_PLUS:   return "plus";
     }
 
 }

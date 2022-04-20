@@ -65,14 +65,19 @@ int main(int argc, char** argv) {
 
     clear();
 
-    Token testTok;
-    testTok.name = "Test";
-    testTok.value = 0;
-    testTok.type = TT_INT;
+    // Token token_num;
+    // token_num.type = TT_INT;
+    // token_num.value = 1;
 
-    cout << testTok.name << endl;
-    cout << testTok.value << endl;
-    cout << as_string(testTok.type) << endl;
+    // Token token_op;
+    // token_op.type = TT_PLUS;
+    // token_op.value = '+';
+
+    // Token token_num2;
+    // token_num2.type = TT_INT;
+    // token_num2.value = 1;
+
+    // cout << as_string(token_num.type) << ' ' << as_string(token_op.type) << ' ' << as_string(token_num2.type) << endl;
 
     if (argc < 2) { // no arguments given
         return repl(); // repl() returns integer; 0 = success
