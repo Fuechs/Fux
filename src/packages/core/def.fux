@@ -3,12 +3,10 @@ package core;
 // #define _CPP
 #define _FUX
 
-#ifdef _CPP /* C++ NULL */
+#if _CPP /* C++ NULL */
 #define null ((void&)0)
 
-#elifdef _FUX /* Fux null */
+#elif _FUX /* Fux null */
 #define null ((void)0)
 
-#else /* C NULL (or other) */
-#define null 0  
 #endif

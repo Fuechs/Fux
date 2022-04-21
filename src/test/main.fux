@@ -1,13 +1,5 @@
-/* 
-Copyright (c) 2022 Fuechs
-All rights reserved.
-*/
-
-#get core
+#get <core.io>
 
 main() -> void {
-
-    name -> str;
-    name = (int)cin("Name: ");
-    cout("Hello ", name, "!", endl);
+    io.putln("Hello World!");
 }

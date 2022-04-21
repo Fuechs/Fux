@@ -1,50 +1,53 @@
 package core;
 
-#get <fux_std.h>
+#get "fux_stdio.h"
 
-/* Buffer for output */
-object _buffer[] -> str;
+object io {
 
-object *_flush() -> void {
-    for (obj -> str) in (_buffer[]) {
-        _stdout(obj);
-    }
+    // Buffer for output
+    object _buffer[] -> str;
+    object _flush() -> bool; 
+
+
+    /*
+        * 2022-04-21 
+        * Fuechs
+        Put line function
+        Appends arguments and a newline to buffer + flushes buffer
+        ? Parameters: messages[](string)
+        ? Returns: none
+    */
+    object putln(messages[] -> str) -> void;
+
+    /*
+        * 2022-04-21
+        * Fuechs
+        Put function
+        Appends arguments to buffer
+        ? Parameters: messages[](string)
+        ? Returns: none
+    */
+    object put(messages[] -> str) -> void; 
+
+
+    /*
+        * 2022-04-21
+        * Fuechs
+        Get line function
+        appends arguments to buffer, flushes buffer, reads input until newline
+        ? Parameters: messages[](string)
+        ? Returns: input(string)
+    */
+    object getln(messages[] -> str) -> str;
+
+    /*
+        * 2022-04-21
+        * Fuechs
+        Get character function
+        appends arguments to buffer, flushes buffer, read input as long as on character
+        ? Parameters: messages[](string)
+        ? Returns: input(character)
+    */
+    object getch(messages[] -> str) -> char;
+
 }
-
-object *endl() -> char {
-    @as_call {
-        _buffer << '\n';
-        _flush();
-    } 
-    @as_ref {
-        return '\n'
-    }
-}
-
-object *cout(messages[] -> universal) -> void {
-    object _endl_flush -> bool;
-    for (message -> universal) in (messages[]) {
-        if (message == endl) buffer << '\n'; _endl_flush = true;
-        _buffer << (str)message;
-    }
-    _endl_flush ? _flush();
-}
-
-object *cin(messages[] -> universal) -> str {
-    for (message -> universal) in (messages[]) {
-        if (message == endl) buffer << '\n'; // ignore flush
-        else _buffer << (str)message;
-    }
-    _flush(); // flush buffer before input
-    return _stdin(str);
-}
-
-object *getchar() -> char {
-    _flush();
-    return _stdin(char);
-} 
-
-object *getint() -> double {
-    _flush();
-    return _stdin(double);
-} 

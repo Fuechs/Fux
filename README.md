@@ -19,11 +19,10 @@
 The beautiful alternative for C++ 
 - so you don't shoot yourself in the foot (like I did working on Fux)
 - with better errors (well, better than just `Segmentation fault`)
-- having easy management of memory
-- providing large standard library
+- providing a large standard library
 
 ```cpp
-#get <core>
+#get <core.io>
 
 fib(number -> int) -> int {
     if (number <= 1) return number;
@@ -32,8 +31,8 @@ fib(number -> int) -> int {
 
 main() -> void {
     number -> int;
-    number = (int)cin("Fibonacci of: ");
-    cout(fib(number));
+    number = (int)io.getln("Fibonacci of: ");
+    fib(number) >> io.putln();
 }
 ```
 
