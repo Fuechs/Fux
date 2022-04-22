@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fux - Docs</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/docs.css">
+    <link rel="icon" href="../images/logo.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shorthandcss@1.1.1/dist/shorthand.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:200,300,400,500,600,700,800,900&display=swap" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navigation">
+        <div class="nav-container">
+            <a href="./index.html" class="nav-logo">
+                <img src="../images/logo.png" id="top-logo">
+            </a>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../home/" class="nav-links">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#search" class="nav-links">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-links">Core</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="docs-main">
+        <br><br><br><br>
+        <div class="docs-main-container">
+            <div class="docs-header">
+                <h2>Fux Documentation</h2>
+            </div>
+            <div class="docs-img-container">
+                <img src="../images/think.svg" id="docs-top-img">
+            </div>
+            <div class="search-bar">
+                <form action="../scripts/search.js">
+                <input type="text" placeholder="Search..." class="docs-search" id="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+            </div>
+        </div>
+        <br><br><br><br>
+    </div>
+
+    <div class="documentation">
+        <div class="contents"></div>
+            <ul class="contents-list">
+                <li class="content-item"><a href="#getting-started">
+                    <button class="docs-button">Getting started</button>
+                </a></li>
+                <li class="content-item">
+                    <a class="content-link" href="#hello-world">Hello World!</a>
+                </li>
+            </ul>
+        </div>    
+    </div>
+
+    <!-- javascript -->
+    <script src="../scripts/nav.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>feather.replace()</script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>
