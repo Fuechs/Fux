@@ -1,2 +1,5 @@
 *.json linguist-detectable=false
+web/*.json linguist-detectable=false
+*.css linguist-detectable=false
+*.html linguist-detectable=false
 ./docs linguist-documentation
