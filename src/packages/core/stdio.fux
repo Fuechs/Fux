@@ -6,7 +6,23 @@ object io {
 
     // Buffer for output
     object _buffer[] -> str;
-    object _flush() -> bool; 
+
+    /*
+        * 2022-04-22
+        * Fuechs
+        Flushes buffer (outputs every string in it)
+        ? Parameters: none
+        ? Returns: result(bool)
+    */
+    object _flush() -> bool {
+        for (obj -> str) in (_buffer[])
+            _stdout(obj);
+        return true; 
+        /* 
+            ! No exceptions yet to return
+            * 2022-04-22 20:09 CEST (GMT+2), Fuechs
+        */
+    }
 
 
     /*
@@ -14,20 +30,33 @@ object io {
         * Fuechs
         Put line function
         Appends arguments and a newline to buffer + flushes buffer
-        ? Parameters: messages[](string)
+        ? Parameters: messages[](universal)
         ? Returns: none
     */
-    object putln(messages[] -> str) -> void;
+    object putln(messages[] -> universal) -> void {
+        for (message -> universal) in (messages[])
+            _buffer[] << (str)message;
+        _buffer[] << '\n'; // newline
+        if (!_flush()) // flush buffer, print error then failed
+            error("Couldn't flush output buffer", 301) >> exit();
+            /*  
+                ? i'll make a version that prints out the reason
+                * 2022-04-22 20:05 CEST (GMT+2), Fuechs 
+            */
+    }
 
     /*
         * 2022-04-21
         * Fuechs
         Put function
         Appends arguments to buffer
-        ? Parameters: messages[](string)
+        ? Parameters: messages[](universal)
         ? Returns: none
     */
-    object put(messages[] -> str) -> void; 
+    object put(messages[] -> universal) -> void {
+        for (message -> universal) in (messages[])
+            _buffer[] << (str)message;
+    }
 
 
     /*
@@ -35,19 +64,37 @@ object io {
         * Fuechs
         Get line function
         appends arguments to buffer, flushes buffer, reads input until newline
-        ? Parameters: messages[](string)
+        ? Parameters: messages[](universal)
         ? Returns: input(string)
     */
-    object getln(messages[] -> str) -> str;
+    object getln(messages[] -> universal) -> str {
+        for (message -> universal) in (messages[])
+            _buffer[] << (str)message;
+        if (!_flush()) // flush buffer, print error then failed
+            error("Couldn't flush output buffer", 301) >> exit();
+
+        input = _stdin(STRING);
+        if (input == ((void*)0)) return null;
+        else return input;
+    }
 
     /*
         * 2022-04-21
         * Fuechs
         Get character function
         appends arguments to buffer, flushes buffer, read input as long as on character
-        ? Parameters: messages[](string)
+        ? Parameters: messages[](universal)
         ? Returns: input(character)
     */
-    object getch(messages[] -> str) -> char;
+    object getch(messages[] -> universal) -> char {
+        for (message -> universal) in (messages[])
+            _buffer[] << (str)message;
+        if (!_flush()) // flush buffer, print error then failed
+            error("Couldn't flush output buffer", 301) >> exit();
+            
+        input = _stdin(CHAR);
+        if (input == ((void*)0)) return null;
+        else return input;
+    }
 
 }

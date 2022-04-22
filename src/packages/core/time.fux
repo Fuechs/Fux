@@ -1,0 +1,14 @@
+package core;
+
+#get "fux_time.h"
+
+object time {
+    
+    typedef _time_type TIME;
+    typedef _date_type DATE; 
+
+    object getTime() -> TIME {
+        return (TIME)_currentTime();
+    }
+
+}
