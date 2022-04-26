@@ -7,7 +7,7 @@
 -->
 ![C](https://img.shields.io/badge/C18-A8B9CC?logo=c&logoColor=white)
 ![C++](https://img.shields.io/badge/C++14-00599C?logo=c%2b%2b)
-![Python](https://img.shields.io/badge/Python_3.10.2-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python_3.10.4-3776AB?logo=python&logoColor=white)
 ---
 <!--
 ![Typescript](https://img.shields.io/badge/Typescript-3178C6?logo=typescript&logoColor=white)
