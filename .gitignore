@@ -6,4 +6,4 @@ ignore
 out.fux
 decode.py
 dev_only
-guide.py
+docs/guide.py
