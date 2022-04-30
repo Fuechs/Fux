@@ -14,7 +14,7 @@ html {
 }
 
 @media screen and (max-width: 410px) {
-    .nav-container *, .main, .about *, .name *, .information *, .demonstration, .team, .footer__container * {
+    .nav-container *, .main, .about *, .code-demo, .name *, .information *, .demonstration, .team, .footer__container * {
         display: none;
     }
 
@@ -28,7 +28,7 @@ html {
 }
 
 @media screen and (max-height: 394px) {
-    .navigation *, .main, .about *, .name *, .information *, .demonstration, .team, .footer__container * {
+    .navigation *, .main, .about *, .name *, .code-demo, .information *, .demonstration, .team, .footer__container * {
         display: none;
     }
     .mobile-info {
@@ -600,6 +600,41 @@ html {
 
     .an {
         display: contents;
+    }
+}
+
+/* Code demo */
+
+.code-demo {
+    /* background-color: #a7b4bf; */
+    color: #141414;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.code-demo h1 {
+    text-align: center;
+    padding: 2rem;
+}
+
+#code-demo {
+    height: 70%;
+    width: 70%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 1.5rem;
+}
+
+@media screen and (max-width: 480px) {
+    .code-demo {
+        background-color: #141414;
+        color: #fcaa68;
+    }
+
+    #code-demo {
+        height: 80%;
+        width: 80%;
     }
 }
 
