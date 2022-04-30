@@ -14,7 +14,7 @@ html {
 }
 
 @media screen and (max-width: 410px) {
-    .nav-container *, .main, .about *, .information *, .demonstration, .team, .footer__container * {
+    .nav-container *, .main, .about *, .name *, .information *, .demonstration, .team, .footer__container * {
         display: none;
     }
 
@@ -28,7 +28,7 @@ html {
 }
 
 @media screen and (max-height: 394px) {
-    .navigation *, .main, .about *, .information *, .demonstration, .team, .footer__container * {
+    .navigation *, .main, .about *, .name *, .information *, .demonstration, .team, .footer__container * {
         display: none;
     }
     .mobile-info {
@@ -313,9 +313,8 @@ html {
 }
 
 #main-img {
-    width: 90%;
-    height: 90%;
-    border-radius: 1.5rem;
+    width: 80%;
+    height: 80%;
 }
 
 .main-btn {
