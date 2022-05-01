@@ -1,4 +1,4 @@
-<img src="./art/logo.PNG" alt="logo" width="500"></img><br>
+<img src="./art/logo.png" alt="logo" width="500"></img><br>
 ![Version: 22b](https://img.shields.io/badge/Version-22b-informational)
 [![Release: None](https://img.shields.io/badge/Release-None-inactive)](https://github.com/Fuechs/fuxlang/releases/latest)
 ![Platforms: macOS | Linux](https://img.shields.io/badge/Platforms-macOS_|_Linux-success)<br>
