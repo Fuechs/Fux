@@ -484,6 +484,9 @@ html {
 
     transition: all 0.2s ease;
     border-radius: 1.5rem;
+    max-width: 1500px;
+    margin: 0 auto;
+    box-shadow: 0 0 11px #141414;
 }
 
 .about h1 {
@@ -624,6 +627,7 @@ html {
     margin-left: auto;
     margin-right: auto;
     border-radius: 1.5rem;
+    box-shadow: 0 0 11px #606060;
 }
 
 @media screen and (max-width: 480px) {
@@ -638,6 +642,19 @@ html {
     }
 }
 
+@media screen and (max-height: 795px) {
+    .code-demo {
+        background-color: #141414;
+        color: #fcaa68;
+        max-width: none;
+    }
+
+    #code-demo {
+        height: 60%;
+        width: 60%;
+    }
+}
+
 /* Name */
 
 .name {
@@ -648,6 +665,9 @@ html {
     /* height: 70vh; */
     transition: all 0.2s ease;
     border-radius: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 0 11px #141414;
 }
 
 .name h1 {
@@ -691,6 +711,7 @@ html {
     .name {
         border-radius: 0;
         transition: all 0.2s ease;
+        max-width: none;
     }
 
     .name h1 {
@@ -799,6 +820,7 @@ html {
     margin: 0 auto;
     padding: 0.5rem;
     transition: all 0.3s ease;
+    /* height: 85%; */
 }
 
 .company-logos img:hover {
@@ -837,6 +859,7 @@ html {
         4   members:    2x auto
     */
     grid-template-columns: auto auto auto;
+    max-width: 1300px;
 }
 
 .team-card {
