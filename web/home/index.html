@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuxlang</title>
     <link rel="stylesheet" href="../styles/main.css">
-    <link rel="icon" href="../images/logo.png">
+    <link rel="icon" href="../images/logo.svg">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
 
     <div class="mobile-info">
         <a class="mobile-info-logo" href="#">
-          <img loading="lazy" id="info-logo" src="../images/logo.png">
+          <img loading="lazy" id="info-logo" src="../images/logo.svg">
         </a>
         <p class="mobile-info-message">Please use a larger screen to view this website with all of its contents. <br>(Rotating your device may or may not break the website)</p>
       </div>
@@ -34,7 +34,7 @@
     <div class="navigation">
         <div class="nav-container">
             <a href="./index.html" class="nav-logo">
-                <img loading="lazy" src="../images/logo.png" id="top-logo">
+                <img loading="lazy" src="../images/logo.svg" id="top-logo">
             </a>
             <div class="nav-toggle" id="mobile-menu">
                 <span class="bar"></span>
@@ -49,10 +49,10 @@
                     <a href="#about" class="nav-links">About</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#team" class="nav-links">Team</a>
+                    <a href="#news" class="nav-links">News</a>
                 </li>
                 <li class="nav-item">
-                    <a href="../docs/" class="nav-links">Documentation</a>
+                    <a href="#" class="nav-links">Lorem Ipsum</a>
                 </li>
             </ul>
         </div>
@@ -92,11 +92,12 @@
             </div>
         </div>
         <span class="vl-main"></span>
+        <span id="about"></span>
     </div>
 
     <!-- about section -->
     <div class="border-fill">
-    <div class="about" id="about">
+    <div class="about">
         <span class="vl-about"></span><br><br><br><br>
         <h1>
             A<span class="an">n</span> <span class="beautiful">beautiful</span> alternative for C++
@@ -128,7 +129,6 @@
     </div>
 
     <br id="name-br">
-
     <!-- code demo -->
 
     <div class="code-demo">
@@ -136,12 +136,14 @@
         <img src="../images/demo.png" id="code-demo">
     </div>
 
+    <span id="name"></span>
+
     <br id="name-br">
     <br id="name-br">
     
     <!-- The name -->
 
-    <div class="name" id="name">
+    <div class="name">
         <h1>Why "Fux"?</h1>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -169,6 +171,83 @@
         </div>
     </div>
 
+    <span id="news"></span>
+
+    <!-- news -->
+    <div class="border-fill">
+    <div class="news">
+        <h1 class="news-title">News</h1>
+        <br>
+        <div id="slider-1">
+            <div class="news-card">
+                <h1>First</h1>
+                <br>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+            <div class="news-card">
+                <h1>Second</h1>                
+                <br>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+            <div class="news-card">
+                <h1>Third</h1>
+                <br>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+        </div>
+        <!-- <ul class="absolute list-none w-100pc flex justify-between top-50pc">
+            <li>
+                <button class="prev ml-0 white bg-transparent p-2 border-none flex justify-center items-center">
+                    <i data-feather="chevron-left"></i>
+                </button>
+            </li>
+            <li>
+                <button class="next mr-10 white bg-transparent p-2 border-none flex justify-center items-center">
+                    <i data-feather="chevron-right"></i>
+                </button>
+            </li>
+        </ul> -->
+    </div>
+    <br>
+    </div>
+
+    <!-- <section class="relative bg-indigo-lightest-10">
+        <div id="slider-1" style="background-color: #000;">
+            <div class="p-10 md-p-l10 flex justify-center items-center flex-column text-center">
+                <h2 class="white fs-l3 fw-900">Lorem ipsum dolor sit amet, consectetur</h2>
+                <p class="indigo-lightest fw-600 fs-m1 opacity-30 my-5">Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit, sed do eiusmod tempor </p>
+                <a href="#" class="button-md bg-indigo white fs-s3 br-4 black fw-600 no-underline m-5">BUY NOW</a>
+            </div>
+            <div class="p-10 md-p-l10 flex justify-center items-center flex-column text-center">
+                <h2 class="white fs-l3 fw-900">Lorem ipsum dolor sit amet, consectetur</h2>
+                <p class="indigo-lightest fw-600 fs-m1 opacity-30 my-5">Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit, sed do eiusmod tempor </p>
+                <a href="#" class="button-md bg-indigo white fs-s3 br-4 black fw-600 no-underline m-5">BUY NOW</a>
+            </div>
+            <div class="p-10 md-p-l10 flex justify-center items-center flex-column text-center">
+                <h2 class="white fs-l3 fw-900">Lorem ipsum dolor sit amet, consectetur</h2>
+                <p class="indigo-lightest fw-600 fs-m1 opacity-30 my-5">Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit, sed do eiusmod tempor </p>
+                <a href="#" class="button-md bg-indigo white fs-s3 br-4 black fw-600 no-underline m-5">BUY NOW</a>
+            </div>
+        </div>
+        <ul class="absolute list-none w-100pc flex justify-between top-50pc">
+            <li><button
+                    class="prev ml-10 br-round border-indigo-lightest indigo-lightest  bg-transparent flex justify-center items-center p-2 focus-indigo-lighter outline-none"><i
+                        data-feather="chevron-left"></i></button></li>
+            <li><button
+                    class="next mr-10 br-round border-indigo-lightest indigo-lightest  bg-transparent flex justify-center items-center p-2  focus-indigo-lighter outline-none"><i
+                        data-feather="chevron-right"></i></button></li>
+        </ul>
+    </section> -->
+
     <!-- fux in action -->
 
     <div class="demonstration">
@@ -176,15 +255,33 @@
             <h2>Trusted and used daily</h2>
             <br><br><br>
             <div class="company-logos">
-                <img loading="lazy" src="../images/logo1.svg">
-                <img loading="lazy" src="../images/logo2.svg">
-                <img loading="lazy" src="../images/logo3.svg">
-                <img loading="lazy" src="../images/logo4.svg">
-                <img loading="lazy" src="../images/logo5.svg">
-                <img loading="lazy" src="../images/logo6.svg">
-                <img loading="lazy" src="../images/logo7.svg">
-                <img loading="lazy" src="../images/logo8.svg">
-                <img loading="lazy" src="../images/logo9.svg">
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo1.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo2.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo3.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo4.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo5.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo6.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo7.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo8.svg">
+                </a>
+                <a href="https://logoipsum.com/" class="link">
+                    <img loading="lazy" src="../images/logo9.svg">
+                </a>
             </div>
             <br><br>
             <p>All product names, logos, and brands are property of their respective owners.</p>
@@ -250,7 +347,7 @@
     <!-- footer section -->
 
     <div class="footer__container">
-        <img loading="lazy" src="../images/logo.png" class="w-l5 p-1">
+        <img loading="lazy" src="../images/logo.svg" class="w-l5 p-1">
         <p class="website__rights">Flawless unambiguous programming</p>
         <div class="social__media">
             <div class="social__media--wrap">
@@ -265,20 +362,42 @@
                 </div>
             </div>
         </div>
+        <div class="imprint">
+        <h1>Legal Notice</h1>
+
+        <h2>Information pursuant to &sect; 5 TMG</h2>
+        <p>
+            Max Mustermann<br />
+            Musterstra&szlig;e 111<br />
+            Geb&auml;ude 44<br />
+            90210 Musterstadt</p>
+
+        <h2>Contact</h2>
+        <p>
+            Phone: +49 (0) 123 44 55 66<br />
+            Fax: +49 (0) 123 44 55 99<br />
+            E-Mail: mustermann@musterfirma.de
+        </p>
+        <!-- 
+        <h2>Represented by:</h2>
+        <p>
+            Beate Beispielhaft<br />
+            Musterstra&szlig;e 110<br />
+            90210 Musterstadt
+        </p> 
+        -->
+        </div>
     </div>
 
 
     <!-- javascript -->
     <script src="../scripts/writing.js"></script>
     <script src="../scripts/nav.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <script>feather.replace()</script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://unpkg.com/swup@latest/dist/swup.min.js"></script>  
-    <script>
-        import Swup from 'swup';
-        const swup = new Swup();
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15.0.0/dist/smooth-scroll.polyfills.min.js"></script>
+    <script src="../scripts/common.js"></script>
 </body>
 </html>

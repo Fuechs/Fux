@@ -5,9 +5,9 @@
     font-family: 'Saira', sans-serif;
 }
 
-html {
+/* html {
     scroll-behavior: smooth;
-}
+} */
 
 .link {
     text-decoration: none;
@@ -108,11 +108,13 @@ html {
     font-size: 2rem;
 }
 
+
 #top-logo {
     height: 80%;
     padding: 0.1rem;
     border-radius: 100%;
     transition: all 0.1s ease;
+    /* animation: spinner 10s infinite; */
 }
 
 /* #top-logo:hover {
@@ -317,6 +319,15 @@ html {
     height: 80%;
 }
 
+@keyframes _scale {
+    /* 0% {
+        transform: scale(1);
+    } */
+    50% {
+        transform: scale(1.1);
+    }
+}
+
 .main-btn {
     font-size: 1rem;
     padding: 14px 32px;
@@ -331,13 +342,14 @@ html {
     transition: all 0.35s ease;
     outline: none;
     background-color: #fcaa68;
+    animation: _scale 2s infinite;
 }
 
 
 .main-btn:hover {
     background-color: #141414;
     color: #fff;
-    transform: scale(1.15) rotate(-2deg);
+    /* transform: scale(1.15) rotate(-3deg); */
     box-shadow: 0 0 11px #141414;
     transition: all 0.35s ease;
 }
@@ -786,6 +798,37 @@ html {
 
 
 
+
+/* NEWS */
+
+.news {
+    max-width: 1000px;
+    text-align: center;
+    margin: 0 auto;
+    background-color: #141414;
+    color: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 11px #141414;
+    padding: 2rem;
+}
+
+.news-title {
+    color: #fcaa68;
+}
+
+.news-card {
+    max-width: 500px;
+    padding: 1rem;
+}
+
+
+
+
+
+
+
+
+
 /* demonstration */
 
 .demonstration {
@@ -873,6 +916,7 @@ html {
 .team-card:hover {
     color: #fcaa68;
     transform: scale(1.05);
+    -webkit-transform: scale(1.05, 1.05);
 }
 
 .thanks {
@@ -1057,6 +1101,25 @@ html {
         flex-direction: column;
     }
 }
+
+.imprint {
+    margin: 0 auto;
+    max-width: 1000px;
+    color: #fff;
+    text-align: center;
+    padding: 3rem;
+}
+
+.imprint h1, .imprint p, .imprint h2 {
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+/* .imprint h1:hover, .imprint h2:hover, .imprint p:hover {
+    color: #fcaa68;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+} */
 
 @media screen and (max-width: 480px) {
     .footer__link--items {
