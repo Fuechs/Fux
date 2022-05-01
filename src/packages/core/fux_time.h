@@ -4,7 +4,8 @@
 #include <time.h>
 
 time_t _current_time() {
-    return (time_t time);
+    time_t time;
+    return time;
 }
 
 #endif
