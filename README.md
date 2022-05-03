@@ -25,7 +25,7 @@ The beautiful alternative for C++
 
 <br>
 <!-- ![Demo code](./art/demo.png) -->
-<img src="./art/demo.png" style="border-radius: 1.5rem;">
+<img src="./art/demo.png" style="border-radius: 1.5rem;" width="500">
 <br>
 
 #### Why Fux?
