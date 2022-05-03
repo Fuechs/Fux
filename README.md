@@ -23,20 +23,10 @@ The beautiful alternative for C++
 - with better errors (well, better than just `Segmentation fault`)
 - providing a large standard library
 
-```cpp
-#get <core.io>
-
-fib(number -> int) -> int {
-    if (number <= 1) return number;
-    else return fib(number-1)+fib(number-2);
-}
-
-main() -> void {
-    number -> int;
-    number = (int)io.getln("Fibonacci of: ");
-    fib(number) >> io.putln();
-}
-```
+<br>
+<!-- ![Demo code](./art/demo.png) -->
+<img src="./art/demo.png" style="border-radius: 1.5rem;">
+<br>
 
 #### Why Fux?
 
