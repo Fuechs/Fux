@@ -111,6 +111,42 @@
     transition: all 0.3s ease;
 }
 
+.navbar-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+}
+
+/* #white-mode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    height: 100%;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    background: #fcaa68;
+    color: #fff;
+} */
+
+#white-mode {
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#white-mode:hover {
+    /* background: #141414; */
+    color: #141414;
+    transition: all 0.3s ease;
+}
+
+
 /* main */
 
 .main { background-color: #fcaa68 }
@@ -1024,5 +1060,133 @@
 @media screen and (max-width: 500px) and (max-height: 795px) {
     .main-img-container {
         display: none;
+    }
+}
+
+
+/* -- WHITE MODE -- */
+
+.white-mode .phonetic {
+    color: #fff !important;
+}
+
+.white-mode .phonetic:hover {
+    color: #141414 !important;
+}
+
+.white-mode .main-btn {
+    border-color: #fff;
+    color: #fff;
+}
+
+.white-mode .main-btn:hover {
+    background-color: #fff;
+    color: #fcaa68;
+    box-shadow: 0 0 11px #fff;
+}
+
+.white-mode .vl-main {
+    border-color: #fff;
+}
+
+.white-mode .about {
+    background-color: #fff;
+    box-shadow: 0 0 11px #fff;
+}
+
+.white-mode .code-demo {
+    color: #fff;
+}
+
+.white-mode #code-demo {
+    box-shadow: 0 0 11px #fff;
+}
+
+.white-mode .name {
+    background-color: #fff;
+    box-shadow: 0 0 11px #fff;
+}
+
+.white-mode .name p {
+    color: #141414 !important;
+}
+
+.white-mode .information, .white-mode .information p {
+    color: #fff;
+}
+
+.white-mode .icon-circle {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.white-mode .news {
+    background-color: #fff;
+    color: #141414;
+    box-shadow: 0 0 11px #fff;
+}
+
+.white-mode .demonstration {
+    color: #fff;
+    background-image: linear-gradient(to bottom, #fcaa68 0%, #fff 100%);
+}
+
+.white-mode .demonstration p:hover {
+    color: #141414;
+}
+
+.white-mode .team {
+    background-color: #fff;
+}
+
+.white-mode .team h1 {
+    color: #141414;
+}
+
+.white-mode .team-card h3, .white-mode .team-card p, .white-mode .team-icon {
+    color: #141414;
+    transition: all 0.3s ease;
+}
+
+.white-mode .team-card:hover h3, .white-mode .team-card:hover p {
+    color: #fcaa68;
+    transition: all 0.3s ease;
+}
+
+.white-mode .thanks:hover {
+    color: #141414;
+}
+
+.white-mode .footer-container {
+    background-color: #fff;
+}
+
+.white-mode .footer-container img {
+    display: none;
+}
+
+.white-mode .social-icon-link {
+    transition: all 0.2s ease;
+    color: #141414;
+}
+
+.white-mode .social-icon-link:hover  {
+    transition: all 0.2s ease;
+    color: #fcaa68;
+}
+
+.white-mode .website-rights {
+    color: #141414 !important;
+}
+
+@media screen and (max-width: 480px) {
+    .white-mode .code-demo {
+        background-color: #fff;
+    }
+}
+
+
+@media screen and (max-height: 795px) {
+    .white-mode .code-demo {
+        background-color: #fff;
     }
 }
