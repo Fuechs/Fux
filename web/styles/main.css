@@ -112,12 +112,23 @@
 }
 
 .navbar-btn {
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     padding: 0 1rem;
-    width: 100%;
+    padding: 1rem;
 }
+
+.navbar-btn a {
+    border: none;
+}
+
+/* .navbar-btn a {
+    border: 2px solid #fff;
+    margin: 0 auto;     
+    radius: 100rem;
+    width: fit-content;
+} */
 
 /* #white-mode {
     display: flex;
@@ -755,6 +766,7 @@
         z-index: 99;
         font-size: 1.4rem;
         border-radius: 0 0 2rem 2rem;
+        border-bottom: 2px solid #fff;
     }
 
     .nav-logo {
