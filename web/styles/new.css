@@ -1,0 +1,60 @@
+* {
+    font-family: 'Saira', sans-serif;
+}
+
+:root {
+    --light-black: #181818;
+    --fux-orange: #fcaa68;
+}
+
+.main {
+    background-color: var(--light-black);
+    color: #fff;
+}
+
+@keyframes float {
+    
+}
+
+.header {
+    color: var(--fux-orange);
+    /* writing-mode: vertical-rl; */
+    font-size: 4rem;    
+    text-align: center;
+} 
+
+.header-2 {
+    transform: rotate(5deg);
+    text-align: center;
+    margin-top: 40vh;
+}
+
+.header-3 {
+    text-align: center;
+    margin-top: 50vh;
+}
+
+.welcome {
+
+    height: 35rem;
+    width: 80vw;
+
+    background-color: var(--fux-orange);
+
+    margin: 0 auto;
+    margin-top: 20vh;
+
+    border-radius: 1rem;
+
+    color: var(--light-black);
+
+}
+
+.welcome h1 {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.about {
+    
+}
