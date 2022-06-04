@@ -109,6 +109,7 @@ To use Fux, simply execute [`./setup/setup.py`](./setup/setup.py) or type [`make
 #### Documentation
 
 Resources to learn Fux can be found in [`./docs/`](./docs/).
+<<<<<<< HEAD
 Learning Fux is as easy as following the guide in [`./docs/guide.md`](./docs/guide.md) or using [`./docs/guide.py/`](./docs/guide.py).
 
 ---
@@ -123,3 +124,6 @@ You don't want to. Believe me. Please. I beg you.
 
 ---
 
+=======
+Learning Fux is as easy as following the guide in [`./docs/guide.md`](./docs/guide.md) or using [`./docs/guide.py/`](./docs/guide.py).
+>>>>>>> b0a7f9b689c74d66636999ce44e4aa87a43febdf

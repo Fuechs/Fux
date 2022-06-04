@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:200,300,400,500,600,700,800,900&display=swap" />
     
     <!-- animation on scroll -->
-    <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
@@ -158,14 +158,14 @@
             </h1>
         
             <div class="about-container">
-                <div class="about-card">
+                <div class="about-card" data-aos="fade-right">
                     <h2>Syntax</h2>
                     <p>
                         Fux has a flexible Syntax similar to Python but still preserves the possibilities of C++, 
                         which makes writing code in Fux approximately 40% faster than in C++.
                     </p>
                 </div>
-                <div class="about-card">
+                <div class="about-card" data-aos="fade-top">
                     <h2>Typing</h2>
                     <p>
                         If required, Fux provides several different object types per standard,
@@ -173,7 +173,7 @@
                         And if speed is not your main focus you can ignore types completely.
                     </p>
                 </div>
-                <div class="about-card">
+                <div class="about-card" data-aos="fade-left">
                     <h2>Performance</h2>
                     <p>
                         The average Fux program executes faster than Python and C and has almost equivalent syntax.
@@ -386,6 +386,10 @@
             </div>
         </div>
     </div>
+
+    <script>
+        AOS.init();
+    </script>
 
 </body>
 
