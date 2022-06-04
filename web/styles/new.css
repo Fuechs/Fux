@@ -3,58 +3,148 @@
 }
 
 :root {
-    --light-black: #181818;
+    --black: #202020;
+    --light-black: #23272a;
     --fux-orange: #fcaa68;
+
+    /* discord colors - beautiful */
+    --blurple: #454fbf;
+    --light-blurple: #7289da;
+    --dark-blurple: #4e5d94;
+}
+
+.head {
+    background-color: var(--light-black);
+    padding: 1rem;
+    /* position: sticky; */
+}
+
+@keyframes float {
+    0% {transform: translate(0, 0)}
+    33% {transform: translate(0, 8px) rotate(5deg)}
+    66% {transform: rotate(-1deg) translate(0, -10px)}
+    /* so it looks more realistic idk */
+    100% {transform: translate(0, 0) rotate(0)}
+} 
+
+.header {
+    color: var(--fux-orange);
+    font-size: 4rem;    
+    text-align: center;
+    padding: 1rem;
+    animation: float 6s infinite; 
 }
 
 .main {
+    border-top: 2px solid var(--fux-orange);
+    background-color: var(--light-black);
+    padding: 2rem;
+    color: #fff;
+}
+
+.main h3 {
+    text-align: center;
+}
+
+.headline-sub {
+    transform: scale(1.2);
+    width: max-content;
+    margin: 0 auto;
+}
+
+.features {
+    margin: 0 auto;
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 1rem;
+    gap: 2rem;
+    max-width: 1300px;
+}
+
+.feature-card {
+    margin: 0 auto;
+    background-color: var(--fux-orange);
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+.feature-card h2 {
+    display: flex;
+    align-items: center;
+}
+
+.discord-invite {
+    background-color: var(--light-black);
+    padding: 1rem;
+}
+
+.discord-invite a {
+    text-decoration: none;
+}
+
+.discord-button {
+    border: none;
+    background-color: var(--blurple);
+    color: 	#2C2F33;
+    border-radius: 1rem;
+    padding: .5rem;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+}
+
+.discord-button:hover {
+    background-color: #23272A;
+    color: var(--blurple);
+}
+
+.about {
+    padding: 1rem;
     background-color: var(--light-black);
     color: #fff;
 }
 
-@keyframes float {
-    
+.about-head {
+    text-align: center;
 }
 
-.header {
-    color: var(--fux-orange);
-    /* writing-mode: vertical-rl; */
-    font-size: 4rem;    
+.phonetic {
+    margin-top: .5rem;
     text-align: center;
-} 
-
-.header-2 {
-    transform: rotate(5deg);
-    text-align: center;
-    margin-top: 40vh;
 }
 
-.header-3 {
-    text-align: center;
-    margin-top: 50vh;
+.about-blocks {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 1rem;
 }
 
-.welcome {
-
-    height: 35rem;
+.about-block {
+    background-color: var(--black);
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10rem;
+    padding: 2rem;
     width: 80vw;
-
-    background-color: var(--fux-orange);
-
     margin: 0 auto;
-    margin-top: 20vh;
-
-    border-radius: 1rem;
-
-    color: var(--light-black);
-
+    max-width: 1300px;
 }
 
-.welcome h1 {
-    text-align: center;
-    padding: 1.5rem;
+.about-block-info {
+    /* border: 5px solid white; */
+    width: 20rem;
 }
 
-.about {
-    
+.about-block-info p {
+    margin-top: .5rem;
+}
+
+.about-block img {
+    height: 15rem;
+    /* border: 5px solid white; */
+    width: 20rem;
 }
