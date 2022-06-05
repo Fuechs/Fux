@@ -11,6 +11,10 @@
     --blurple: #454fbf;
     --light-blurple: #7289da;
     --dark-blurple: #4e5d94;
+
+    /* github colors */
+    --git-purple: #6e5494;
+    --git-red: #bd2c00;
 }
 
 .head {
@@ -74,19 +78,27 @@
     align-items: center;
 }
 
-.discord-invite {
+.feature-card:hover {
     background-color: var(--light-black);
-    padding: 1rem;
+    color: var(--fux-orange);
 }
 
-.discord-invite a {
+.button-container {
+    background-color: var(--light-black);
+    padding: 1rem;
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.button-container a {
     text-decoration: none;
 }
 
 .discord-button {
     border: none;
     background-color: var(--blurple);
-    color: 	#2C2F33;
+    color: 	var(--light-black);
     border-radius: 1rem;
     padding: .5rem;
     font-size: larger;
@@ -97,8 +109,26 @@
 }
 
 .discord-button:hover {
-    background-color: #23272A;
+    background-color: var(--light-black);
     color: var(--blurple);
+}
+
+.github-button {
+    border: none;
+    background-color: var(--git-purple);
+    color: var(--light-black);
+    border-radius: 1rem;
+    padding: .5rem;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+}
+
+.github-button:hover {
+    background-color: var(--light-black);
+    color: var(--git-purple);
 }
 
 .about {
@@ -132,6 +162,7 @@
     width: 80vw;
     margin: 0 auto;
     max-width: 1300px;
+    transition: all 0.2s ease-in-out;
 }
 
 .about-block-info {
@@ -145,6 +176,69 @@
 
 .about-block img {
     height: 15rem;
-    /* border: 5px solid white; */
     width: 20rem;
+}
+
+.usage {
+    background-color: var(--light-black);
+    color: #fff;
+    padding: 2rem;
+    justify-content: center;
+}
+
+.usage h1 {
+    text-align: center;
+    padding: 1rem;
+}
+
+.usage p {
+    color: #909090;
+    text-align: center;
+    padding: 3rem;
+    transition: all 0.2s ease;
+}
+
+.usage p:hover {
+    color: #fff;
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.company-logos {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 1300px;
+}
+
+.company-logos img {
+    margin: 0 auto;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.company-logos img:hover {
+    transform: scale(1.1);
+}
+
+/* responsive */
+
+@media screen and (max-width: 1000px) {
+    .about-block {width: 25rem}
+    .about-block img {display: none}
+    .about-block-info {
+        text-align: center;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .features {display: block}
+    .feature-card {margin-top: 1rem}
+    .button-container {
+        display: grid;
+        grid-template-columns: none;
+    }
 }
