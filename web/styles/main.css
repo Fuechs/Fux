@@ -16,6 +16,13 @@
     /* github colors */
     --git-purple: #6e5494;
     --git-red: #bd2c00;
+
+    --ccp-blue: #044f88;
+    --py-yellow: #ffd43b;
+}
+
+body {
+    background-color: var(--light-black) !important;
 }
 
 a {
@@ -113,6 +120,8 @@ a {
     gap: 1rem;
     display: grid;
     grid-template-columns: auto auto auto;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .button-container a {
@@ -214,6 +223,83 @@ a {
     margin: 0 auto;
     border-radius: .3rem;
     box-shadow: 0 0 11px var(--demo-blue);
+}
+
+.comparison {
+    margin: 0 auto;
+    color: #fff;
+    padding: 1rem;
+}
+
+.comparison h2 {
+    text-align: center;
+}
+
+.comparison .disclaimer {
+    text-align: center;
+    margin-top: 1rem;
+    color: #909090;
+    transition: all 0.2s;
+}
+
+.comparison .disclaimer:hover {
+    color: #fff;
+    transform: scale(1.02);
+}
+
+.bars {
+    margin: 0 auto;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+.speed {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.speed h3 {
+    padding: 1rem;
+    text-align: center;
+}
+
+.bar {
+    background-color: var(--black);
+    border-radius: .3rem;
+    width: 30rem;
+    height: 23px;
+    margin: 0 auto;
+    transition: all 0.3s;
+}
+
+.fill {
+    border-radius: .3rem;
+    height: 23px;
+    transition: all 0.3s;
+}
+
+.fill p {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.bar-fux .fill {
+    width: 3.33rem;
+    background-color: var(--fux-orange);
+    color: #000;
+}
+
+.bar-cpp .fill {
+    width: 6.66rem;
+    background-color: var(--ccp-blue);
+}
+
+.bar-py .fill {
+    width: 30rem;
+    background-color: var(--py-yellow);
+    color: #000;
 }
 
 .about {
@@ -357,6 +443,13 @@ a {
         display: grid;
         grid-template-columns: none;
     }
+}
+
+@media screen and (max-width: 600px) {
+    .bar {width: 20rem}
+    .bar-fux .fill {width: 2.22rem}
+    .bar-cpp .fill {width: 4.44rem}
+    .bar-py .fill {width: 20rem}
 }
 
 @media screen and (max-width: 450px) {
