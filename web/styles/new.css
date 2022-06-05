@@ -39,6 +39,12 @@
     animation: float 6s infinite; 
 }
 
+.subber {
+    color: var(--fux-orange);
+    text-align: center;
+    padding: 1rem;
+}
+
 .main {
     border-top: 2px solid var(--fux-orange);
     background-color: var(--light-black);
@@ -88,7 +94,7 @@
     padding: 1rem;
     gap: 1rem;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto;
 }
 
 .button-container a {
@@ -99,7 +105,7 @@
     border: none;
     background-color: var(--blurple);
     color: 	var(--light-black);
-    border-radius: 1rem;
+    /* border-radius: 1rem; */
     padding: .5rem;
     font-size: larger;
     display: flex;
@@ -117,7 +123,7 @@
     border: none;
     background-color: var(--git-purple);
     color: var(--light-black);
-    border-radius: 1rem;
+    /* border-radius: 1rem; */
     padding: .5rem;
     font-size: larger;
     display: flex;
@@ -129,6 +135,24 @@
 .github-button:hover {
     background-color: var(--light-black);
     color: var(--git-purple);
+}
+
+.docs-button {
+    border: none;
+    background-color: #fff;
+    color: var(--light-black);
+    /* border-radius: 1rem; */
+    padding: .5rem;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+}
+
+.docs-button:hover {
+    background-color: var(--light-black);
+    color: #fff;
 }
 
 .about {
@@ -223,6 +247,34 @@
     transform: scale(1.1);
 }
 
+.company-logos * {
+    margin: 0 auto;
+}
+
+.footer {
+    background-color: var(--light-black);
+    border-top: 2px solid var(--fux-orange);
+    color: #fff;
+}
+
+.footer p {
+    padding: 2rem;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    margin: 0 auto;
+    width: max-content;
+    margin-top: 3rem;
+}
+
+.footer h3 {
+    width: max-content;
+    margin-top: 1.4rem;
+    padding: 1rem;
+}
+
 /* responsive */
 
 @media screen and (max-width: 1000px) {
@@ -240,5 +292,16 @@
     .button-container {
         display: grid;
         grid-template-columns: none;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .about-block {width: 22rem}
+    .about-block-info {width: 18rem}
+    .company-logos {grid-template-columns: auto}
+    .footer-container {display: block}
+    .footer h3 {
+        padding: 0;
+        margin: 0 auto;
     }
 }
