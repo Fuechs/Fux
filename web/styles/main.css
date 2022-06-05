@@ -1,6 +1,5 @@
 * {
     font-family: 'Saira', sans-serif;
-    overflow-x: hidden;
 }
 
 :root {
@@ -26,7 +25,6 @@ a {
 .head {
     background-color: var(--light-black);
     padding: 1rem;
-    /* position: sticky; */
 }
 
 @keyframes float {
@@ -193,6 +191,7 @@ a {
     grid-template-rows: auto auto auto;
     gap: 3rem;
     margin: 0 auto;
+    overflow-x: hidden;
 }
 
 .demo-code h1 {
