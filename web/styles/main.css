@@ -17,7 +17,7 @@
     --git-purple: #6e5494;
     --git-red: #bd2c00;
 
-    --ccp-blue: #044f88;
+    --cpp-blue: #044f88;
     --py-yellow: #ffd43b;
 }
 
@@ -107,7 +107,7 @@ a {
     background-color: var(--light-black);
     color: var(--fux-orange) !important;
     box-shadow: none;
-    text-shadow: 0 0 11px var(--fux-orange);
+    /* text-shadow: 0 0 11px var(--fux-orange); */
 }
 
 .feature-card:hover span {
@@ -235,6 +235,12 @@ a {
     text-align: center;
 }
 
+.comparison p:nth-child(4) {
+    text-align: center;
+    margin-top: 1rem;
+    color: #909090;
+}
+
 .comparison .disclaimer {
     text-align: center;
     margin-top: 1rem;
@@ -272,6 +278,7 @@ a {
     height: 23px;
     margin: 0 auto;
     transition: all 0.3s;
+    box-shadow: 0 0 11px var(--black);
 }
 
 .fill {
@@ -288,17 +295,20 @@ a {
 .bar-fux .fill {
     width: 3.33rem;
     background-color: var(--fux-orange);
+    box-shadow: 0 0 11px var(--fux-orange);
     color: #000;
 }
 
 .bar-cpp .fill {
-    width: 6.66rem;
-    background-color: var(--ccp-blue);
+    width: 6.66rem; 
+    background-color: var(--cpp-blue);
+    box-shadow: 0 0 11px var(--cpp-blue);
 }
 
 .bar-py .fill {
     width: 30rem;
     background-color: var(--py-yellow);
+    box-shadow: 0 0 11px var(--py-yellow);
     color: #000;
 }
 
@@ -465,3 +475,14 @@ a {
         margin: 0 auto;
     }
 }
+
+@media screen and (max-width: 400px) {
+    .subber {display: none}
+    .headline-sub {display: none}
+
+    .feature-card {
+        box-shadow: none;
+        color: var(--fux-orange) !important;
+        background-color: transparent !important;
+    }
+}   
