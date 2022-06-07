@@ -299,6 +299,11 @@ a {
     color: #000;
 }
 
+.time-out-bar {
+    color: var(--black) !important;
+    display: none;
+}
+
 .bar-cpp .fill {
     width: 6.66rem; 
     background-color: var(--cpp-blue);
@@ -479,10 +484,33 @@ a {
 @media screen and (max-width: 400px) {
     .subber {display: none}
     .headline-sub {display: none}
-
     .feature-card {
         box-shadow: none;
         color: var(--fux-orange) !important;
         background-color: transparent !important;
     }
+    .discord-button {
+        color: var(--blurple);
+        background-color: var(--light-black);
+        box-shadow: none;
+    }
+    .github-button {
+        color: var(--git-purple);
+        background-color: var(--light-black);
+        box-shadow: none;
+    }
+    .docs-button {
+        color: #fff;
+        background-color: var(--light-black);
+        box-shadow: none;
+    }
+    .bar {width: 15rem}
+    .bar-py .fill {width: 15rem}
+    .bar-cpp .fill {width: 3.33rem}
+    .bar-fux .fill {width: 1.66rem}
+    .time-in-bar {display: none}
+    .time-out-bar {display: block}
+    .about-block {width: 20rem}
+    .about-block-info {width: 16rem}
+
 }   
