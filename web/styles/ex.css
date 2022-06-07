@@ -175,7 +175,7 @@ a {
 
 .bar {
     width: 30rem;
-    height: 1.5rem;
+    height: 1rem;
     background-color: var(--dark-black);
     border-radius: var(--b-rad);
     margin: 0 auto;
@@ -186,7 +186,7 @@ a {
 
 .fill {
     border-radius: var(--b-rad);
-    height: 1.5rem;
+    height: 1rem;
     transition: all 0.2s;
 }
 
@@ -203,6 +203,23 @@ a {
 .fill-fux {
     width: 3.33rem;
     background-color: var(--fux-orange);
+}
+
+/* WORDING */
+
+.wording {
+    background-color: var(--black);
+    margin: 0 auto;
+    margin-top: var(--g-gap);
+    text-align: center;
+    padding: 1rem;
+    color: #fff;
+    border-radius: var(--b-rad);
+}
+
+.wording p {
+    margin: 0 auto;
+    max-width: 500px;
 }
 
 /* USAGE */
@@ -280,11 +297,20 @@ a {
 
 @media screen and (max-width: 550px) {
 
-    /* .buttons {
+    .buttons {
         grid-template-columns: none;
-    } */
+    }
     .company-logos {
         grid-template-columns: none;
     }
 
+}
+
+@media screen and (max-width: 450px) {
+
+    .bar {width: 10rem}
+    .fill-py {width: 10rem}
+    .fill-c {width: 2.22rem}
+    .fill-fux {width: 1.11rem }
+    
 }
