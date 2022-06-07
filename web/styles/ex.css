@@ -1,0 +1,290 @@
+* {
+    font-family: 'Saira', sans-serif;
+}
+
+:root {
+    --dark-black: #151515;
+    --black: #202020;
+    --light-black: #23272a;
+    --fux-orange: #fcaa68;
+    --demo-blue: #253238;
+
+    /* discord colors - beautiful */
+    --blurple: #454fbf;
+    --light-blurple: #7289da;
+    --dark-blurple: #4e5d94;
+
+    /* github colors */
+    --git-purple: #6e5494;
+    --git-red: #bd2c00;
+
+    --cpp-blue: #044f88;
+    --py-yellow: #ffd43b;
+
+    --b-rad: .5rem;
+    --g-gap: 1rem;
+}
+
+body {
+    background-color: var(--light-black) !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* DISCLAIMER */
+
+.disclaimer {
+    color: #808080;
+    transform: scale(0.8);
+    transition: all 0.2s ease-in-out;
+}
+
+.disclaimer:hover {
+    color: #fff;
+    transform: scale(0.85);
+    cursor: pointer;
+}
+
+/* MAIN */
+
+.main {
+    padding: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* HEAD */
+
+.head {
+    color: var(--fux-orange);
+    background-color: var(--black);
+    border-radius: var(--b-rad);
+    text-align: center;
+    padding: 1rem;
+    margin: 0 auto;
+}
+
+/* FEATURES */
+
+.features {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: var(--g-gap);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.feature-card {
+    margin-top: var(--g-gap);
+    background-color: var(--black);
+    color: #fff;
+    border-radius: var(--b-rad);
+    padding: 1rem;
+}
+
+.feature-card h2 {
+    padding: 1rem;
+}
+
+/* CURSOR */
+
+.cursor {
+    background-color: var(--black);
+    margin-top: var(--g-gap);
+    border-radius: var(--b-rad);
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* BUTTONS */
+
+.buttons {
+    background-color: var(--black);
+    margin: 0 auto;
+    margin-top: var(--g-gap);
+    border-radius: var(--b-rad);
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: var(--g-gap);
+    padding: 1rem;
+}
+
+.buttons a {
+    margin: 0 auto;
+}
+
+.buttons button {
+    border: none;
+    border-radius: var(--b-rad);
+    color: var(--black);
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+    padding: .3rem;
+}
+
+.buttons button:hover {
+    background-color: var(--black);
+}
+
+.button-discord {
+    background-color: var(--blurple);
+}
+
+.button-discord:hover {
+    color: var(--blurple);
+}
+
+.button-github {
+    background-color: var(--git-purple);
+}
+
+.button-github:hover {
+    color: var(--git-purple);
+}
+
+.button-docs:hover {
+    color: #fff;
+}
+
+/* COMPARISON */
+
+.comparison {
+    margin: 0 auto;
+    background-color: var(--black);
+    border-radius: var(--b-rad);
+    margin-top: var(--g-gap);
+    padding: 1rem;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: var(--g-gap);
+    color: #fff;
+    text-align: center;
+
+}
+
+.compare {
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.bar {
+    width: 30rem;
+    height: 1.5rem;
+    background-color: var(--dark-black);
+    border-radius: var(--b-rad);
+    margin: 0 auto;
+
+    margin-top: 1rem;
+    transition: all 0.2s;
+}
+
+.fill {
+    border-radius: var(--b-rad);
+    height: 1.5rem;
+    transition: all 0.2s;
+}
+
+.fill-py {
+    width: 30rem;
+    background-color: var(--py-yellow);
+}
+
+.fill-c {
+    width: 6.66rem;
+    background-color: var(--cpp-blue);
+}
+
+.fill-fux {
+    width: 3.33rem;
+    background-color: var(--fux-orange);
+}
+
+/* USAGE */
+
+.usage {
+    background-color: var(--black);
+    margin-top: var(--g-gap);
+    border-radius: var(--b-rad);
+    text-align: center;
+    padding: 1rem;
+    color: #fff;
+}
+
+.usage h2 {
+    padding: 1rem;
+}
+
+.company-logos {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: var(--g-gap);
+    padding: 1rem;
+}
+
+.company-logos a {
+    transition: all 0.3s;
+}
+
+.company-logos a:hover {
+    transform: scale(1.1);
+}
+
+/* MAIN END -> FOOTER */
+
+.footer {
+    margin-top: calc(var(--g-gap)*2);
+    background-color: var(--dark-black);
+    border-top-left-radius: var(--b-rad);
+    border-top-right-radius: var(--b-rad);
+    color: #fff;
+    text-align: center;
+}
+
+.logo-brand {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: fit-content;
+    padding: 2rem;
+}
+
+.logo-brand h1 {
+    padding: 1rem;
+}
+
+.footer .disclaimer {
+    padding: 2rem;
+}
+
+/* WEB END -> RESPONSIVE CODE */
+
+@media screen and (max-width: 600px) {
+
+    .features {
+        grid-template-columns: none;
+        grid-template-rows: auto auto auto;
+        gap: 0;
+    }
+    .bar {width: 20rem}
+    .fill-py {width: 20rem}
+    .fill-c {width: 4.44rem}
+    .fill-fux {width: 2.22rem}
+    
+}
+
+@media screen and (max-width: 550px) {
+
+    /* .buttons {
+        grid-template-columns: none;
+    } */
+    .company-logos {
+        grid-template-columns: none;
+    }
+
+}
