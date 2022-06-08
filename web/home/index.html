@@ -149,16 +149,29 @@
             </div>
         </div>
 
-        <div class="comparison">
+        <div class="comparison" id="return-to-compare">
 
             <div class="compare">
                 <h2>Fux</h2>
                 <p class="desc">
-                    0.375s | 50% faster than C<span class="add-scale"> | 98.9% faster than Python</span>
+                    <span class="fux-c">
+                        C-Style: 0.1875s
+                        <span class="percent"> - 75% faster than C</span>
+                    </span>
+                    |
+                    <span class="fux-p">
+                        P-Style: 0.375s
+                        <span class="percent"> - 50% faster than C</span>
+                    </span>
                 </p>
-                <div class="bar">
-                    <div class="fill fill-fux"></div>
+                <div class="bar bar-fux">
+                    <div class="fill fill-fux">
+                        <div class="fill fill-fux-2"></div>
+                    </div>
                 </div>
+                <a href="../style/">
+                <p class="disclaimer">What is C-Style and P-Style?</p>
+                </a>
             </div>
 
             <div class="compare">

@@ -7,6 +7,7 @@
     --black: #202020;
     --light-black: #23272a;
     --fux-orange: #fcaa68;
+    --fux-red: #ec243c;
     --demo-blue: #253238;
 
     /* discord colors - beautiful */
@@ -244,6 +245,19 @@ a {
     background-color: var(--fux-orange);
 }
 
+.fill-fux-2 {
+    width: 1.665rem;
+    background-color: var(--fux-red);
+}
+
+.fux-c {
+    color: var(--fux-red);
+}
+
+.fux-p {
+    color: var(--fux-orange);
+}
+
 /* WORDING */
 
 .wording {
@@ -289,6 +303,52 @@ a {
 
 .company-logos a:hover {
     transform: scale(1.1);
+}
+
+/* C-STYLE AND P-STYLE DEMO [../style/index.html] */
+
+.demo {
+    background-color: var(--black);
+    margin: 0 auto;
+    margin-top: var(--g-gap);
+    border-radius: var(--b-rad);
+    padding: 1rem;
+    text-align: center;
+    color: #fff;
+}
+
+.demo-card {
+    padding: 1rem;
+}
+
+.demo-card h2 {
+    padding: .5rem;
+}
+
+.demo-cstyle h2 {
+    color: var(--fux-red);
+}
+
+.demo-pstyle h2 {
+    color: var(--fux-orange);
+}
+
+.demo-info {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.demo-info img {
+    width: 50%;
+    border-radius: var(--b-rad) !important;
+}
+
+.demo p {
+    margin: 0 auto;
+    max-width: 500px;
+    padding: .5rem;
 }
 
 /* MAIN END -> FOOTER */
@@ -338,20 +398,18 @@ a {
     .fill-py {width: 20rem}
     .fill-c {width: 4.44rem}
     .fill-fux {width: 2.22rem}
+    .fill-fux-2 {width: 0.8825rem}
     
 }
 
 @media screen and (max-width: 550px) {
 
-    .buttons {
-        grid-template-columns: none;
-    }
-    .news-info img {
-        display: none;
-    }
-    .company-logos {
-        grid-template-columns: none;
-    }
+    .buttons {grid-template-columns: none}
+    .news-info img {display: none}
+    .company-logos {grid-template-columns: none}
+
+    .demo-info {display: block}
+    .demo-info img {width: 70%}
 
 }
 
@@ -360,7 +418,13 @@ a {
     .bar {width: 10rem}
     .fill-py {width: 10rem}
     .fill-c {width: 2.22rem}
-    .fill-fux {width: 1.11rem }
+    .fill-fux {width: 1.11rem}
+    .fill-fux-2 {
+        width: 0.44125rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .percent {display: none !important}
     
 }
 
@@ -368,11 +432,12 @@ a {
 
     .feature-card h2 {display: none}
     .feature-card h3 {display: contents}
-    .add-scale {display: none !important}
     .logo-brand  {
         transform: scale(0.75);
         padding: 1rem;
     }
     .footer .disclaimer {padding: 1rem}
+
+    .demo-info img {width: 100%}
 
 }
