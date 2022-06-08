@@ -4,7 +4,7 @@
 
 
 <head>
-
+    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,202 +54,198 @@
 
 <body>
 
-    <div class="head">
-        <h1 class="header" data-aos="fade-down">Fux</h1>
-        <h4 class="subber" data-aos="fade-up">Fawless unambiguous programming</h4>
-    </div>
-
     <div class="main">
-        <h3 class="headline">
-            <span 
-                class="txt-rotate"
-                data-period="800"
-                data-rotate='["Safe.", "Fast.", "Simple.", "Complex.", "Dynamic.", "Easy."]'
-            ></span>
-        </h3>
-        <h3 class="headline-sub">Whatever you want.</h3>
-        <!-- seperator -->
+        
+        <div class="head">
+            <h1>Fux</h1>
+            <h3>Flawless Unambiguous Programming</h3>
+        </div>
 
         <div class="features">
-
-            <a href="#syntax">
             <div class="feature-card">
                 <h2>
                     <i data-feather="edit-2"></i>
-                    <pre> </pre>Syntax
+                    Syntax
                 </h2>
+                <h3>Syntax</h3>
                 <p>
                     Fux has a flexible Syntax similar to Python 
                     but still preserves the possibilities of C++
-                    <br><span>(Link to Demo)</span>
                 </p>
             </div>
-            </a>
-
-            <a href="#typing">
             <div class="feature-card">
                 <h2>
                     <i data-feather="help-circle"></i>
-                    <pre> </pre>Typing
+                    Typing
                 </h2>
+                <h3>Typing</h3>
                 <p>
                     Fux provides several different object types per standard,
                     and if speed is not your main focus you can ignore them completely
-                    <br><span>(Link to Demo)</span>
                 </p>
             </div>
-            </a>
-
             <div class="feature-card">
                 <h2>
-                   <i data-feather="wind"></i>
-                    <pre> </pre>Performance
+                    <i data-feather="wind"></i>
+                    Performance
                 </h2>
+                <h3>Performance</h3>
                 <p>
                     The average Fux program executes faster than Python and C
                     and has almost equivalent syntax
                 </p>
             </div>
         </div>
-    </div>
 
-    <div class="button-container">
-        <a href="https://discord.com/">
-            <button class="discord-button">
-                <i data-feather="external-link"></i>
-                <pre> </pre>Join our Discord
-            </button>
-        </a>
-        <a href="http://github.com/Fuechs/Fux">
-            <button class="github-button">
-                <i data-feather="github"></i>
-                <pre> </pre>Download Fux
-            </button>
-        </a>
-        <a href="../docs/index.html">
-            <button class="docs-button">
-                <i data-feather="layout"></i>
-                <pre> </pre>Documentation
-            </button>
-        </a>
-    </div>
-
-    <div class="demo-code">
-        <h1>Code in Fux</h1>
-        <div class="demo" id="syntax">
-            <p>Syntax</p>
-            <img src="../images/fib-demo.png" loading="lazy">
+        <div class="cursor">
+            <h2>
+                <span 
+                    class="txt-rotate"
+                    data-period="800"
+                    data-rotate='["Safe.", "Fast.", "Simple.", "Complex.", "Dynamic.", "Easy."]'
+                ></span>
+            </h2>
+            <h4>Whatever you want.</h4>
         </div>
-        <div class="demo" id="typing">
-            <p>Typing</p>
-            <img src="../images/type-demo.png" loading="lazy">
-        </div>
-    </div>
 
-    <div class="comparison">
-        <h2>Compared Speed</h2>
-        <p class="disclaimer">Lower is better</p>
-        <div class="bars">
-        <div class="speed speed-fux">
-            <h3>Fux</h3>
-            <h5>98.9% faster than Python*</h5>
-            <h5>50% faster than C</h5>
-            <div class="bar bar-fux">
-                <div class="fill">
-                    <p class="time-in-bar">.38s</p>
-                    <p class="time-out-bar">.4s</p>
+        <div class="buttons">
+            <a href="https://discord.com/">
+                <button class="button-discord">
+                    <i data-feather="external-link"></i>
+                    <pre> </pre>
+                    Discord
+                </button>
+            </a>
+            <a href="https://github.com/Fuechs/Fux">
+                <button class="button-github">
+                    <i data-feather="github"></i>
+                    <pre> </pre>
+                    Github
+                </button>
+            </a>
+            <a href="../docs/">
+                <button class="button-docs">
+                    <i data-feather="layout"></i>
+                    <pre> </pre>
+                    Documentation
+                </button>
+            </a>
+        </div>
+
+        <div class="news">
+            <div class="news-top">
+                <h2>Major update</h2>
+                <h3>Version 22b</h3>
+            </div>
+            <div class="news-info">
+                <img src="../images/activity.svg">
+                <p>
+                    Lorem ipsum dolor sit amet, 
+                    consectetur adipiscing elit, 
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam, 
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                </p>
+            </div>
+        </div>
+
+        <div class="comparison">
+
+            <div class="compare">
+                <h2>Fux</h2>
+                <p class="desc">
+                    0.375s | 50% faster than C<span class="add-scale"> | 98.9% faster than Python</span>
+                </p>
+                <div class="bar">
+                    <div class="fill fill-fux"></div>
                 </div>
             </div>
-        </div>
-        <div class="speed speed-cpp">
-            <h3>C / C++</h3>
-            <h5>97.8% faster than Python*</h5>
-            <div class="bar bar-cpp">
-                <div class="fill">
-                    <p>.75s</p>
-                </div>
-            </div>
-        </div>
-        <div class="speed speed-py">
-            <h3>Python</h3>
-            <div class="bar bar-py">
-                <div class="fill"><p>34s</p></div>
-            </div>
-        </div>
-        </div>
-        <p>* execution after compiling</p>
-    </div>
 
-    <div class="about">
-        <h2 class="about-head">The better alternative for C++</h2>
-        <h1 class="phonetic">/ fʊks /</h1>
-        <div class="about-blocks">
-            <div class="about-block">
-                <img src="../images/files.svg" loading="lazy">
-                <div class="about-block-info">
-                    <h3>Rich Core Library</h3>
-                    <p>
-                        Fux ships with a large core library
-                        to satisfy your needs
-                    </p>
+            <div class="compare">
+                <h2>C</h2>
+                <p class="desc">
+                    0.75s | 97.8% faster than Python
+                </p>
+                <div class="bar">
+                    <div class="fill fill-c"></div>
                 </div>
             </div>
-            <div class="about-block">
-                <img src="../images/activity.svg" loading="lazy">
-                <div class="about-block-info">
-                    <h3>Frequent Updates</h3>
-                    <p>Our team works constantly to ensure that Fux works properly</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="usage">
-        <h1>Trusted and used</h1>
-        <div class="company-logos">
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo1.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo2.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo3.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo4.svg">
-            </a>
-            <a href="https://logoipsum.com/" >
-                <img loading="lazy" src="../images/logo5.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo6.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo7.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo8.svg">
-            </a>
-            <a href="https://logoipsum.com/">
-                <img loading="lazy" src="../images/logo9.svg">
-            </a>
+            <div class="compare">
+                <h2>Python</h2>
+                <p class="desc">
+                    34s
+                 </p>
+                <div class="bar">
+                    <div class="fill fill-py"></div>
+                </div>
+            </div>
+
+            <p class="disclaimer">                 
+                    The shown languages were tested with generic programs.
+                    The values<br>
+                    (1) are not exact<br>
+                    (2) do not represent the durations of the tests<br>
+                    (3) are just for demonstration purposes
+            </p>
+
         </div>
-        <p>
-            All product names, logos, and brands are property of their respective owners.
-        </p>
+
+        <div class="wording">
+            <h2>It works. Everywhere.</h2>
+            <p>Fux runs on all common operating systems, including macOS, Windows and most Linux Distros.</p>
+        </div>
+
+        <div class="usage">
+            <h2>Trusted and used by</h2>
+            <div class="company-logos">
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo1.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo2.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo3.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo4.svg">
+                </a>
+                <a href="https://logoipsum.com/" >
+                    <img loading="lazy" src="../images/logo5.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo6.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo7.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo8.svg">
+                </a>
+                <a href="https://logoipsum.com/">
+                    <img loading="lazy" src="../images/logo9.svg">
+                </a>
+            </div>
+            <p class="disclaimer">
+                All product names, logos, and brands are property of their respective owners.
+            </p>
+        </div>
+        
     </div>
 
     <div class="footer">
-        <div class="footer-container">
+
+        <div class="logo-brand">
             <img src="../images/logo.svg" width="100">
-            <h3>Fuxlang</h3>
+            <h1>Fuxlang</h1>
         </div>
 
-        <p>Copyright (c) 2020-2022, Fuechs. All rights reserved.</p>
+        <p class="disclaimer">
+            Copyright (c) 2020-2022, Fuechs. All rights reserved.
+        </p>
+
     </div>
-    
-    <script>AOS.init()</script>
 
 </body>
 

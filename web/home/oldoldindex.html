@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fuxlang</title>
+
+    <!-- Logo -->
+    <link rel="logo" href="../images/logo.svg"> 
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <!-- Shorthand CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shorthandcss@1.1.1/dist/shorthand.min.css"> 
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:200,300,400,500,600,700,800,900&display=swap" />
+    
+    <!-- animation on scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Ubuntu Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Saira (Used) -->
+    <link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- javascript -->
+
+    <!-- writing animation -->
+    <script src="../scripts/writing.js"></script>
+    <!-- feather icons, jquery, smooth scroll, carousel, aos-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15.0.0/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- common: slider, scroll animation, feather icons -->
+    <script src="../scripts/common.js"></script>
+
+</head>
+
+
+<body>
+
+    <div class="head">
+        <h1 class="header" data-aos="fade-down">Fux</h1>
+        <h4 class="subber" data-aos="fade-up">Fawless unambiguous programming</h4>
+    </div>
+
+    <div class="main">
+        <h3 class="headline">
+            <span 
+                class="txt-rotate"
+                data-period="800"
+                data-rotate='["Safe.", "Fast.", "Simple.", "Complex.", "Dynamic.", "Easy."]'
+            ></span>
+        </h3>
+        <h3 class="headline-sub">Whatever you want.</h3>
+        <!-- seperator -->
+
+        <div class="features">
+
+            <a href="#syntax">
+            <div class="feature-card">
+                <h2>
+                    <i data-feather="edit-2"></i>
+                    <pre> </pre>Syntax
+                </h2>
+                <p>
+                    Fux has a flexible Syntax similar to Python 
+                    but still preserves the possibilities of C++
+                    <br><span>(Link to Demo)</span>
+                </p>
+            </div>
+            </a>
+
+            <a href="#typing">
+            <div class="feature-card">
+                <h2>
+                    <i data-feather="help-circle"></i>
+                    <pre> </pre>Typing
+                </h2>
+                <p>
+                    Fux provides several different object types per standard,
+                    and if speed is not your main focus you can ignore them completely
+                    <br><span>(Link to Demo)</span>
+                </p>
+            </div>
+            </a>
+
+            <div class="feature-card">
+                <h2>
+                   <i data-feather="wind"></i>
+                    <pre> </pre>Performance
+                </h2>
+                <p>
+                    The average Fux program executes faster than Python and C
+                    and has almost equivalent syntax
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <a href="https://discord.com/">
+            <button class="discord-button">
+                <i data-feather="external-link"></i>
+                <pre> </pre>Join our Discord
+            </button>
+        </a>
+        <a href="http://github.com/Fuechs/Fux">
+            <button class="github-button">
+                <i data-feather="github"></i>
+                <pre> </pre>Download Fux
+            </button>
+        </a>
+        <a href="../docs/index.html">
+            <button class="docs-button">
+                <i data-feather="layout"></i>
+                <pre> </pre>Documentation
+            </button>
+        </a>
+    </div>
+
+    <div class="demo-code">
+        <h1>Code in Fux</h1>
+        <div class="demo" id="syntax">
+            <p>Syntax</p>
+            <img src="../images/fib-demo.png" loading="lazy">
+        </div>
+        <div class="demo" id="typing">
+            <p>Typing</p>
+            <img src="../images/type-demo.png" loading="lazy">
+        </div>
+    </div>
+
+    <div class="comparison">
+        <h2>Compared Speed</h2>
+        <p class="disclaimer">Lower is better</p>
+        <div class="bars">
+        <div class="speed speed-fux">
+            <h3>Fux</h3>
+            <h5>98.9% faster than Python*</h5>
+            <h5>50% faster than C</h5>
+            <div class="bar bar-fux">
+                <div class="fill">
+                    <p class="time-in-bar">.38s</p>
+                    <p class="time-out-bar">.4s</p>
+                </div>
+            </div>
+        </div>
+        <div class="speed speed-cpp">
+            <h3>C / C++</h3>
+            <h5>97.8% faster than Python*</h5>
+            <div class="bar bar-cpp">
+                <div class="fill">
+                    <p>.75s</p>
+                </div>
+            </div>
+        </div>
+        <div class="speed speed-py">
+            <h3>Python</h3>
+            <div class="bar bar-py">
+                <div class="fill"><p>34s</p></div>
+            </div>
+        </div>
+        </div>
+        <p>* execution after compiling</p>
+    </div>
+
+    <div class="about">
+        <h2 class="about-head">The better alternative for C++</h2>
+        <h1 class="phonetic">/ fʊks /</h1>
+        <div class="about-blocks">
+            <div class="about-block">
+                <img src="../images/files.svg" loading="lazy">
+                <div class="about-block-info">
+                    <h3>Rich Core Library</h3>
+                    <p>
+                        Fux ships with a large core library
+                        to satisfy your needs
+                    </p>
+                </div>
+            </div>
+            <div class="about-block">
+                <img src="../images/activity.svg" loading="lazy">
+                <div class="about-block-info">
+                    <h3>Frequent Updates</h3>
+                    <p>Our team works constantly to ensure that Fux works properly</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="usage">
+        <h1>Trusted and used</h1>
+        <div class="company-logos">
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo1.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo2.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo3.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo4.svg">
+            </a>
+            <a href="https://logoipsum.com/" >
+                <img loading="lazy" src="../images/logo5.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo6.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo7.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo8.svg">
+            </a>
+            <a href="https://logoipsum.com/">
+                <img loading="lazy" src="../images/logo9.svg">
+            </a>
+        </div>
+        <p>
+            All product names, logos, and brands are property of their respective owners.
+        </p>
+    </div>
+
+    <div class="footer">
+        <div class="footer-container">
+            <img src="../images/logo.svg" width="100">
+            <h3>Fuxlang</h3>
+        </div>
+
+        <p>Copyright (c) 2020-2022, Fuechs. All rights reserved.</p>
+    </div>
+    
+    <script>AOS.init()</script>
+
+</body>
+
+
+</html>

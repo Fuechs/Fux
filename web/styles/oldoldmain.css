@@ -1,0 +1,516 @@
+* {
+    font-family: 'Saira', sans-serif;
+}
+
+:root {
+    --black: #202020;
+    --light-black: #23272a;
+    --fux-orange: #fcaa68;
+    --demo-blue: #253238;
+
+    /* discord colors - beautiful */
+    --blurple: #454fbf;
+    --light-blurple: #7289da;
+    --dark-blurple: #4e5d94;
+
+    /* github colors */
+    --git-purple: #6e5494;
+    --git-red: #bd2c00;
+
+    --cpp-blue: #044f88;
+    --py-yellow: #ffd43b;
+}
+
+body {
+    background-color: var(--light-black) !important;
+}
+
+a {
+    text-decoration: none;
+}
+
+.head {
+    background-color: var(--light-black);
+    padding: 1rem;
+}
+
+@keyframes float {
+    0% {transform: translate(0, 0)}
+    33% {transform: translate(0, 8px) rotate(5deg)}
+    66% {transform: rotate(-1deg) translate(0, -10px)}
+    /* so it looks more realistic idk */
+    100% {transform: translate(0, 0) rotate(0)}
+} 
+
+.header {
+    color: var(--fux-orange);
+    font-size: 4rem;    
+    text-align: center;
+    padding: 1rem;
+    animation: float 6s infinite; 
+}
+
+.subber {
+    color: var(--fux-orange);
+    text-align: center;
+    padding: 1rem;
+}
+
+.main {
+    border-top: 2px solid var(--fux-orange);
+    background-color: var(--light-black);
+    padding: 2rem;
+    color: #fff;
+}
+
+.main h3 {
+    text-align: center;
+}
+
+.headline-sub {
+    transform: scale(1.2);
+    width: max-content;
+    margin: 0 auto;
+}
+
+.features {
+    margin: 0 auto;
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 1rem;
+    gap: 2rem;
+    max-width: 1300px;
+}
+
+.feature-card {
+    margin: 0 auto;
+    background-color: var(--fux-orange);
+    padding: 2rem;
+    color: #fff !important;
+    transition: all 0.3s;
+    height: max-content;
+    border-radius: .3rem;
+    box-shadow: 0 0 11px var(--fux-orange);
+}
+
+.feature-card h2 {
+    display: flex;
+    align-items: center;
+}
+
+.feature-card span {
+    display: none;
+}
+
+.feature-card:hover {
+    background-color: var(--light-black);
+    color: var(--fux-orange) !important;
+    box-shadow: none;
+    /* text-shadow: 0 0 11px var(--fux-orange); */
+}
+
+.feature-card:hover span {
+    display: contents;
+}
+
+.button-container {
+    background-color: var(--light-black);
+    padding: 1rem;
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.button-container a {
+    text-decoration: none;
+}
+
+.button-container button {
+    border-radius: .3rem !important;
+}
+
+.discord-button {
+    border: none;
+    background-color: var(--blurple);
+    color: 	var(--light-black);
+    padding: .5rem;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 11px var(--blurple);
+}
+
+.discord-button:hover {
+    background-color: var(--light-black);
+    color: var(--blurple);
+    box-shadow: none;
+    text-shadow: 0 0 11px var(--blurple);
+}
+
+.github-button {
+    border: none;
+    background-color: var(--git-purple);
+    color: var(--light-black);
+    padding: .5rem;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 11px var(--git-purple);
+}
+
+.github-button:hover {
+    background-color: var(--light-black);
+    color: var(--git-purple);
+    box-shadow: none;
+    text-shadow: 0 0 11px var(--git-purple);
+}
+
+.docs-button {
+    border: none;
+    background-color: #fff;
+    color: var(--light-black);
+    padding: .5rem;
+    font-size: larger;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 11px #fff;
+}
+
+.docs-button:hover {
+    background-color: var(--light-black);
+    color: #fff;
+    box-shadow: none;
+    text-shadow: 0 0 11px #fff;
+}
+
+.demo-code {
+    background-color: var(--light-black);
+    padding: 7rem;
+    color: #fff;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 3rem;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+.demo-code h1 {
+    text-align: center;
+    padding: 2rem;
+}
+
+.demo {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 2rem;
+}
+
+.demo p {
+    text-align: center;
+    transform: scale(1.2);
+}
+
+.demo img {
+    margin: 0 auto;
+    border-radius: .3rem;
+    box-shadow: 0 0 11px var(--demo-blue);
+}
+
+.comparison {
+    margin: 0 auto;
+    color: #fff;
+    padding: 1rem;
+}
+
+.comparison h2 {
+    text-align: center;
+}
+
+.comparison p:nth-child(4) {
+    text-align: center;
+    margin-top: 1rem;
+    color: #909090;
+}
+
+.comparison .disclaimer {
+    text-align: center;
+    margin-top: 1rem;
+    color: #909090;
+    transition: all 0.2s;
+}
+
+.comparison .disclaimer:hover {
+    color: #fff;
+    transform: scale(1.02);
+}
+
+.bars {
+    margin: 0 auto;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+.speed {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.speed h3 {
+    padding: 1rem;
+    text-align: center;
+}
+
+.bar {
+    background-color: var(--black);
+    border-radius: .3rem;
+    width: 30rem;
+    height: 23px;
+    margin: 0 auto;
+    transition: all 0.3s;
+    box-shadow: 0 0 11px var(--black);
+}
+
+.fill {
+    border-radius: .3rem;
+    height: 23px;
+    transition: all 0.3s;
+}
+
+.fill p {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.bar-fux .fill {
+    width: 3.33rem;
+    background-color: var(--fux-orange);
+    box-shadow: 0 0 11px var(--fux-orange);
+    color: #000;
+}
+
+.time-out-bar {
+    color: var(--black) !important;
+    display: none;
+}
+
+.bar-cpp .fill {
+    width: 6.66rem; 
+    background-color: var(--cpp-blue);
+    box-shadow: 0 0 11px var(--cpp-blue);
+}
+
+.bar-py .fill {
+    width: 30rem;
+    background-color: var(--py-yellow);
+    box-shadow: 0 0 11px var(--py-yellow);
+    color: #000;
+}
+
+.about {
+    padding: 1rem;
+    background-color: var(--light-black);
+    color: #fff;
+}
+
+.about-head {
+    text-align: center;
+}
+
+.phonetic {
+    margin-top: .5rem;
+    text-align: center;
+}
+
+.about-blocks {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 1rem;
+}
+
+.about-block {
+    background-color: var(--black);
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10rem;
+    padding: 2rem;
+    width: 80vw;
+    margin: 0 auto;
+    max-width: 1300px;
+    transition: all 0.2s ease-in-out;
+    border-radius: .3rem;
+    box-shadow: 0 0 11px var(--black);
+}
+
+.about-block-info {
+    width: 20rem;
+    height: fit-content;
+    margin-top: 4rem;
+}
+
+.about-block-info p {
+    margin-top: .5rem;
+}
+
+.about-block img {
+    height: 15rem;
+    width: 20rem;
+}
+
+.usage {
+    background-color: var(--light-black);
+    color: #fff;
+    padding: 2rem;
+    justify-content: center;
+}
+
+.usage h1 {
+    text-align: center;
+    padding: 1rem;
+}
+
+.usage p {
+    color: #909090;
+    text-align: center;
+    padding: 3rem;
+    transition: all 0.2s ease;
+}
+
+.usage p:hover {
+    color: #fff;
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+.company-logos {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 1300px;
+}
+
+.company-logos img {
+    margin: 0 auto;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.company-logos img:hover {
+    transform: scale(1.1);
+}
+
+.company-logos * {
+    margin: 0 auto;
+}
+
+.footer {
+    background-color: var(--light-black);
+    border-top: 2px solid var(--fux-orange);
+    color: #fff;
+}
+
+.footer p {
+    padding: 2rem;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    margin: 0 auto;
+    width: max-content;
+    margin-top: 3rem;
+}
+
+.footer h3 {
+    width: max-content;
+    margin-top: 1.4rem;
+    padding: 1rem;
+}
+
+/* responsive */
+
+@media screen and (max-width: 1000px) {
+    .about-block {width: 25rem}
+    .about-block img {display: none}
+    .about-block-info {
+        text-align: center;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .features {display: block}
+    .feature-card {margin-top: 1rem}
+    .button-container {
+        display: grid;
+        grid-template-columns: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .bar {width: 20rem}
+    .bar-fux .fill {width: 2.22rem}
+    .bar-cpp .fill {width: 4.44rem}
+    .bar-py .fill {width: 20rem}
+}
+
+@media screen and (max-width: 450px) {
+    .feature-card {cursor: pointer}
+    .feature-card:hover span {display: none !important}
+    .demo-code {display: none}
+    .about-block {width: 22rem}
+    .about-block-info {width: 18rem}
+    .company-logos {grid-template-columns: auto}
+    .footer-container {display: block}
+    .footer h3 {
+        padding: 0;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .subber {display: none}
+    .headline-sub {display: none}
+    .feature-card {
+        box-shadow: none;
+        color: var(--fux-orange) !important;
+        background-color: transparent !important;
+    }
+    .discord-button {
+        color: var(--blurple);
+        background-color: var(--light-black);
+        box-shadow: none;
+    }
+    .github-button {
+        color: var(--git-purple);
+        background-color: var(--light-black);
+        box-shadow: none;
+    }
+    .docs-button {
+        color: #fff;
+        background-color: var(--light-black);
+        box-shadow: none;
+    }
+    .bar {width: 15rem}
+    .bar-py .fill {width: 15rem}
+    .bar-cpp .fill {width: 3.33rem}
+    .bar-fux .fill {width: 1.66rem}
+    .time-in-bar {display: none}
+    .time-out-bar {display: block}
+    .about-block {width: 20rem}
+    .about-block-info {width: 16rem}
+
+}   
