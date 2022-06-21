@@ -19,6 +19,10 @@
 a {
     text-decoration: none;
     color: none;
+
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
 }
 
 .downer {
