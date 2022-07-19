@@ -201,12 +201,12 @@ a {
 
 .fill-fux {
     background-color: var(--fux-red);
-    width: 3.33rem;
+    width: 0.33rem;
 }
 
 .fill-c {
     background-color: var(--cpp-blue);
-    width: 6.66rem;
+    width: 0.66rem;
 }
 
 .fill-py {
