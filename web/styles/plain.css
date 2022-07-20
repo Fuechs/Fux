@@ -13,7 +13,7 @@
     --blurple: #454fbf;
 
     --cpp-blue: #044f88;
-    --py-yellow: #ffd43b;
+    --java-orange: #f89820;
 }
 
 a {
@@ -192,25 +192,27 @@ a {
     height: 1rem;
     width: 30rem;
     border-radius: .5rem;
+    transition: all 0.3s;
 }
 
 .fill {
     height: 1rem;
     border-radius: .5rem;
+    transition: all 0.3s;
 }
 
 .fill-fux {
     background-color: var(--fux-red);
-    width: 0.33rem;
+    width: 8.5032rem;
 }
 
 .fill-c {
     background-color: var(--cpp-blue);
-    width: 0.66rem;
+    width: 17.715rem;
 }
 
-.fill-py {
-    background-color: var(--py-yellow);
+.fill-java {
+    background-color: var(--java-orange);
     width: 30rem;
 }
 
@@ -218,3 +220,10 @@ a {
     text-align: center;
     padding: 3rem;
 }
+
+@media screen and (max-width: 600px) {
+    .bar {width: 20rem;}
+    .fill-fux {width: 5.6688rem;}
+    .fill-c {width: 11.81rem;}
+    .fill-java {width: 20rem;}
+}   
