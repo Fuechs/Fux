@@ -1,0 +1,40 @@
+package core;
+
+#get "fux_fileio.h"
+
+object fileio {
+
+    object _read_buffer[] -> str;
+    object _write_buffer[] -> str;
+
+    typedef enum {
+        READ,
+        WRITE,
+        APPEND
+    } fileop;
+
+    typedef enum {
+        TEXT,
+        OTHER
+    } filetype;
+
+    typedef struct {
+        object mode -> fileop;
+        object path -> str;
+        object type -> filetype;
+    } file;
+
+    object open(path -> str) -> file {
+        __ = _file_open(path); // le file au chocolat
+        _file_content(_file) >> _read_buffer[]; // load buffer
+        return __; // return file pointer 
+    }
+
+    object readbuf(_file -> file*) -> str {
+        object contents -> str;
+        for (obj -> str) in (_read_buffer[])
+            contents += obj;
+        return contents;
+    }
+
+}
