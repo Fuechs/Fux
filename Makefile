@@ -15,4 +15,9 @@ clean:
 test: all
 	./${EXEC} compile src/test/${f}.fux
 	rm ${EXEC}
+
+llvm:
+	clang++ -g -O3 ./src/iamtrying.cpp `llvm-config --cxxflags`
+	./a.out
+	rm ./a.out
 	
