@@ -1,5 +1,1 @@
-#get <core>
-
-main(): void {
-    io.putln("Hello Fux!");
-}
+1 + 2

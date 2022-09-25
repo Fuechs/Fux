@@ -11,7 +11,9 @@ std::string token_to_string(Token token) {
         case LBRACE:        type_str = "LBRACE";        break;         
         case RBRACE:        type_str = "RBRACE";        break;        
         case COLON:         type_str = "COLON";         break;  
-        case DOT:           type_str = "DOT";           break;         
+        case DOT:           type_str = "DOT";           break;
+        case PLUS:          type_str = "PLUS";          break; 
+        case INTEGER:       type_str = "INTEGER";       break;    
         case STRING:        type_str = "STRING";        break;     
         case SEMICOLON:     type_str = "SEMICOLON";     break; 
         case IDENTIFIER:    type_str = "IDENTIFIER";    break;
@@ -30,7 +32,9 @@ std::string token_type_to_value(TokenType type) {
         case LBRACE:        type_str = "{";             break;         
         case RBRACE:        type_str = "}";             break;        
         case COLON:         type_str = ":";             break;  
-        case DOT:           type_str = ".";             break;         
+        case DOT:           type_str = ".";             break; 
+        case PLUS:          type_str = "+";             break;
+        case INTEGER:       type_str = "Integer";       break;        
         case STRING:        type_str = "String";        break;     
         case SEMICOLON:     type_str = ";";             break; 
         case IDENTIFIER:    type_str = "Identifier";    break;

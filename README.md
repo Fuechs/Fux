@@ -20,12 +20,12 @@
 ```cpp
 #get <core.io>
 
-fib(num -> int) -> int {
-    return num ? < 2 : fib(num-1) + fib(num-2);
+fib(num: int): int {
+    return num < 2 ? num : fib(num-1) + fib(num-2);
 }
 
-main() -> void {
-    number -> int;
+main(): void {
+    number: int;
     number = io.getln("Fibonacci of: ");
     fib(number) >> io.putln();
 }

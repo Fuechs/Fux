@@ -17,9 +17,10 @@ public:
 
 private:
     std::string source;
+    size_t line = 1; // error tracking
     size_t idx = 0; // char idx in source
     std::vector<Token> tokens;
-
+    
     char peek(int offset = 1) {
         return source[idx+offset];
     }
