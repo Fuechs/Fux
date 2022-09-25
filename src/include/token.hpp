@@ -1,22 +1,31 @@
-#ifndef FUX_TOKEN_H
-#define FUX_TOKEN_H
+#ifndef TOKEN_FUX_H
+#define TOKEN_FUX_H
 
+#include <string>
+
+// All tokens we need to lex Hello World for now
 typedef enum {
-
-    TT_INT,
-    TT_FLOAT,
-    TT_PLUS,
-    TT_MINUS
-
-} TokenType;
-
-typedef double Value;
+    HASH,           // #
+    LESST,          // <
+    GREATERT,       // >
+    LPAREN,         // (
+    RPAREN,         // )
+    LBRACE,         // {
+    RBRACE,         // }
+    COLON,          // :
+    DOT,            // .
+    SEMICOLON,      // ;
+    STRING,         // "STRING"
+    IDENTIFIER,     // IDENTIFIER
+} TokenType; 
 
 typedef struct {
-    Value value;
     TokenType type;
+    std::string value;
 } Token;
 
-std::string as_string(TokenType type);
+std::string token_to_string(Token token);
+
+std::string token_type_to_value(TokenType type);
 
 #endif

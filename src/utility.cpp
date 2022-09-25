@@ -1,15 +1,4 @@
-#include <iostream>
-
 #include "include/utility.hpp"
-
-using std::cout;
-using std::endl;
-using std::string;
-
-/* 
-Copyright (c) 2020-2022 Fuechs
-All rights reserved.
-*/
 
 void clear() {
     #if defined _WIN32
@@ -19,22 +8,22 @@ void clear() {
     #endif
 }
 
-int error(int id, string message) {
+int error(int id, std::string message) {
     // id
-    cout << '[' << id << "] ";
-    cout << message << endl;
+    std::cout << '[' << id << "] ";
+    std::cout << message << std::endl;
     return id;
 } 
 
-void debug(string message, bool debug) {
+void debug(std::string message, bool debug) {
     if (debug) {
-        cout << "[DEBUG] ";
-        cout << message << endl;
+        std::cout << "[DEBUG] ";
+        std::cout << message << std::endl;
     }
 }
 
-void marked_log(string message, bool newline) {
-    cout << "[FUX] ";
-    cout << message;
-    if (newline) cout << endl;
+void marked_log(std::string message, bool newline) {
+    std::cout << "[FUX] ";
+    std::cout << message;
+    if (newline) std::cout << std::endl;
 }
