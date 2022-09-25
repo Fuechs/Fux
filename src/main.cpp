@@ -1,21 +1,25 @@
+// Created by Fuechs on 2022-09-25
+
 #include <iostream>
+#include <vector>
 
 #include "include/io.hpp"
-#include "include/token.hpp"
-#include "include/lexer.hpp"
-#include "include/parser.hpp"
+#include "include/tokenizer.hpp"
 
-int main(int argc, const char** argv) {
-    std::string source = read_file("src/test/main.fux");
+using fux::Token, fux::Tokenizer;
 
-    Lexer lexer = Lexer(source);
-    std::vector<Token> tokens = lexer.lex();
+int main() {
+    std::cout << "Fux 0.1\n" << std::endl;
 
-    for (Token token : tokens)
-        std::cout << token_to_string(token) << "\n";
+    std::string fileContents = read_file("src/test/main.fux");
 
-    Parser parser = Parser(tokens);
-    auto root = parser.parse();
+    // std::cout << fileContents << std::endl;
+
+    Tokenizer tokenizer;
+    std::vector<Token> tokens = tokenizer.parse(fileContents);
+
+    for (Token currToken : tokens)
+        currToken.debugPrint();
 
     return 0;
 }
