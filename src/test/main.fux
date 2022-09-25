@@ -1,6 +1,4 @@
-#get <core.io>
-
-main(): void {
+main(argc: u32, argv[]: str): void {
     num: float = 1.5;
-    io.putf("Hello Fux: %d\n", 2022-2020);
+    // io.putf("Hello Fux: %d\n", 2022-2020);
 }

@@ -5,8 +5,9 @@
 
 #include "include/io.hpp"
 #include "include/tokenizer.hpp"
+#include "include/parser.hpp"
 
-using fux::Token, fux::Tokenizer;
+using fux::Token, fux::Tokenizer, fux::Parser;
 
 int main() {
     std::cout << "Fux 0.1\n" << std::endl;
@@ -20,6 +21,9 @@ int main() {
 
     for (Token currToken : tokens)
         currToken.debugPrint();
+
+    Parser parser;
+    parser.parse(tokens);
 
     return 0;
 }

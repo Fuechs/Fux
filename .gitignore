@@ -3,7 +3,8 @@
 art/old
 web/old
 ignore
-out.fux
+fux
 decode.py
 dev_only
 docs/guide.py
+fux.dSYM
