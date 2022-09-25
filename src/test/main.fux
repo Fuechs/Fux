@@ -1,5 +1,5 @@
 #get <core.io>
 
-main() -> void {
+main() : void {
     io.putln("Hello World!");
 }
