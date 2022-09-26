@@ -3,8 +3,9 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
-#include "parser.hpp"
+#include "types.hpp"
 
 namespace fux {
 
@@ -13,8 +14,10 @@ namespace fux {
         ParamterDefinition(std::string name = "", Type type = Type("void", VOID))
         : mName(name), mType(type) {}
 
-        std::string mName;
+        std::string mName; 
         Type mType;
+
+        void debugPrint() const;
     };
     
     class FunctionDefinition {
@@ -24,6 +27,8 @@ namespace fux {
 
         std::string mName;
         std::vector<ParamterDefinition> mParameters;
+
+        void debugPrint() const;
     };
 
 }

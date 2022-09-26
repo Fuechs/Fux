@@ -19,11 +19,13 @@ int main() {
     Tokenizer tokenizer;
     std::vector<Token> tokens = tokenizer.parse(fileContents);
 
-    for (Token currToken : tokens)
-        currToken.debugPrint();
+    // for (Token currToken : tokens)
+    //     currToken.debugPrint();
 
     Parser parser;
     parser.parse(tokens);
+
+    parser.debugPrint();
 
     return 0;
 }

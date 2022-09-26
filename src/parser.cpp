@@ -19,29 +19,37 @@ namespace fux {
         // for error backtracking
         std::vector<Token>::iterator parseStart = mCurrentToken;
         
-        std::optional<Token> possibleName = expectIdentifier();
+        optional<Token> possibleName = expectIdentifier();
         if (possibleName.has_value()) { // We have a name
-            std::optional<Token> possibleOperator = expectOperator("(");
-
+            optional<Token> possibleOperator = expectOperator("(");
             if (possibleOperator.has_value()) { // We have a function
-                while (expectOperator(")") == std::nullopt) {
-                    std::optional<Token> possibleName = expectIdentifier();
+                FunctionDefinition func;
+                while (!expectOperator(")").has_value()) {
+                    optional<Token> possibleName = expectIdentifier();
+                    ParamterDefinition param;
 
                     if (possibleName.has_value()) {
+                        param.mName = possibleName->mText;
+
                         if (expectOperator(":").has_value()) {
-                            std::optional<Type> possibleType = expectType();
+                            optional<Type> possibleType = expectType();
 
                             if (possibleType.has_value()) {
                                 // parse parameter with type
+                                param.mType = possibleType->mName;
+                                func.mParameters.push_back(param);
                             }
                         } else {
                             // TODO: parse parameter without type
                             throw std::runtime_error("Automatic types not implemented yet.");
                         }
 
-                        if (expectOperator(",") == std::nullopt
-                        &&  expectOperator(")") == std::nullopt) {
-                            throw std::runtime_error("Expected ',' to seperate parameters or ')' to indicate end of parameter defenition.");
+                        if (expectOperator(")").has_value()) {
+                            break;
+                        }
+
+                        if (!expectOperator(",").has_value()) {
+                            throw std::runtime_error("Expected ',' to seperate parameters.");
                         }
                     } else {
                         throw std::runtime_error("Expected ')' to indicate no parameters.");
@@ -49,16 +57,21 @@ namespace fux {
                 }
 
                 if (expectOperator(":").has_value()) {
-                    std::optional<Type> possibleType = expectType();
+                    optional<Type> possibleType = expectType();
                     if (possibleType.has_value()) {
                         // parse function with type
+                        func.mName = possibleName->mText;
                     }
                 } else {
-                    // parse function without type
+                    // TODO: parse function without type
+                    throw std::runtime_error("Automatic types not implemented yet.");
                 }
 
                 parseFunctionBody();
 
+                mFunctions[func.mName] = func;
+
+                return true;
             } else {
                 mCurrentToken = parseStart;
             }
@@ -84,7 +97,7 @@ namespace fux {
         }
     }
 
-    std::optional<Token> Parser::expectIdentifier(const std::string &name) {
+    optional<Token> Parser::expectIdentifier(const std::string &name) {
         if (mCurrentToken == mEndToken) { return std::nullopt; }
         if (mCurrentToken->mType != IDENTIFIER) { return std::nullopt; }
         if (!name.empty() && mCurrentToken->mText != name) { return std::nullopt; }
@@ -94,7 +107,7 @@ namespace fux {
         return returnToken;
     }
 
-    std::optional<Token> Parser::expectOperator(const std::string &name) {
+    optional<Token> Parser::expectOperator(const std::string &name) {
         if (mCurrentToken == mEndToken) { return std::nullopt; }
         if (mCurrentToken->mType != OPERATOR) { return std::nullopt; }
         if (!name.empty() && mCurrentToken->mText != name) { return std::nullopt; }
@@ -104,7 +117,7 @@ namespace fux {
         return returnToken;
     }
 
-    std::optional<Type> Parser::expectType() {
+    optional<Type> Parser::expectType() {
         std::optional<Token> possibleType = expectIdentifier();
         if (!possibleType) { return std::nullopt; }
         
@@ -118,7 +131,12 @@ namespace fux {
     }
 
     void Parser::parseFunctionBody() {
+        // wooosh
+    }
 
+    void Parser::debugPrint() const {
+        for (auto funcPair : mFunctions)
+            funcPair.second.debugPrint(); 
     }
     
 }

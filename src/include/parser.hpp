@@ -4,42 +4,16 @@
 
 #include <optional>
 #include <map>
+#include <vector>
+#include <string>
 
 #include "tokenizer.hpp"
+#include "types.hpp"
+#include "function.hpp"
 
 namespace fux {
 
-    enum BUILTIN_TYPE {
-        VOID,       // void, nothing, nada
-        BOOL,       // boolean
-        I8,         // 8-bit integer
-        U8,         // unsigned 8-bit integer
-        I16,        // 16-bit integer
-        U16,        // unsigned 16-bit integer
-        I32,        // 32-bit integer
-        U32,        // unsigned 32-bit integer
-        FLOAT,      // 32-bit floating point integer
-        I64,        // 64-bit integer
-        U64,        // unsigned 64-bit integer
-        DOUBLE,     // 64-bit floating point integer
-        STR,        // string
-        STRUCT,     // struct
-        ENUM,       // TODO: enum
-    };
-
-    /**
-     * @brief Individual type in fux
-     * Examples: i32, bool, str
-     */
-    class Type {
-    public:
-        Type(const std::string name = "", enum BUILTIN_TYPE type = VOID) 
-        : mName(name), mType(type) {}
-
-        std::string mName;
-        enum BUILTIN_TYPE mType;
-        std::vector<Type> mFields; // for STRUCT only
-    };
+    using std::optional;
 
     class Parser {
     public:
@@ -66,18 +40,21 @@ namespace fux {
          * @param tokens : vector of tokens to parse
          */
         void parse(std::vector<Token> &tokens);
+
+        void debugPrint() const;
     
     private:
         std::vector<Token>::iterator mEndToken;
         std::vector<Token>::iterator mCurrentToken;
         std::map<std::string, Type> mTypes;
+        std::map<std::string, FunctionDefinition> mFunctions;
 
         /**
          * @brief expects a type 
          * 
          * @return std::optional<Type> : optional token that is detected
          */
-        std::optional<Type> expectType();
+        optional<Type> expectType();
 
         /**
          * @brief expects an identifier with value of name
@@ -85,9 +62,9 @@ namespace fux {
          * @param name : identifier value to expect 
          * @return std::optional<Token> : optional token that is detected
          * 
-         * ! empty string (name) means match any identifier
+         * ! ~ empty string (name) means match any identifier
          */
-        std::optional<Token> expectIdentifier(const std::string &name = std::string());
+        optional<Token> expectIdentifier(const std::string &name = std::string());
 
         /**
          * @brief expects an operator with value of name
@@ -95,9 +72,9 @@ namespace fux {
          * @param name : operator value to expect
          * @return std::optional<Token> : optional token that is detected
          * 
-         * ! empty string (name) means match any operator
+         * ! ~ empty string (name) means match any operator
          */
-        std::optional<Token> expectOperator(const std::string &name = std::string());
+        optional<Token> expectOperator(const std::string &name = std::string());
     
         /**
          * @brief expects a function definition
