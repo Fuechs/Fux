@@ -1,4 +1,3 @@
-main(argc: u32, argv[]: str): void {
+main(): void {
     num: float = 1.5;
-    printf("Hello Fux, it's been %d years!", 2022-2020);
 }
