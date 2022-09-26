@@ -92,6 +92,7 @@ namespace fux {
             } else {
                 std::cerr << "Unknown identifier '" << mCurrentToken->mText << "'.\n";
                 mCurrentToken += 2;
+                break;
             }
             
         }
@@ -126,17 +127,47 @@ namespace fux {
             --mCurrentToken;
             return std::nullopt; 
         }
-        
+
         return foundType->second;
     }
 
-    void Parser::parseFunctionBody() {
-        // wooosh
+    bool Parser::parseFunctionBody() {
+        if (!expectOperator("{").has_value())
+            return false;
+
+        parseOneStatement();
+
+        if (!expectOperator("}").has_value())
+            throw std::runtime_error("Unbalanceed '{'.");
+        
+        return true;
     }
 
     void Parser::debugPrint() const {
         for (auto funcPair : mFunctions)
             funcPair.second.debugPrint(); 
+    }
+
+    optional<Statement> Parser::parseOneStatement() {
+        std::vector<Token>::iterator startToken = mCurrentToken;
+        optional<Token> possibleName = expectIdentifier();
+        if (!possibleName.has_value()) {
+            mCurrentToken = startToken;
+            return std::nullopt;
+        }
+
+        optional<Token> possibleOperator = expectOperator(":");
+        if (possibleName.has_value()) {
+            optional<Type> possibleType = expectType();
+            if (!possibleType.has_value()) {
+                mCurrentToken = startToken;
+                return std::nullopt;
+            }
+            // parse variable with type
+        } 
+        
+        // continue to parse variable
+        
     }
     
 }

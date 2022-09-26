@@ -1,10 +1,10 @@
 .DS_Store
 .vscode
 art/old
-web/old
 ignore
 fux
 decode.py
 dev_only
 docs/guide.py
 fux.dSYM
+web

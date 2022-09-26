@@ -32,6 +32,8 @@ namespace fux {
             mTypes["i64"] =     Type("i64", I64);
             mTypes["u64"] =     Type("u64", U64);
             mTypes["double"] =  Type("u32", DOUBLE);
+            mTypes["str"] =     Type("str", STR);
+            mTypes["struct"] =  Type("struct", STRUCT);
         }
 
         /**
@@ -87,8 +89,17 @@ namespace fux {
         /**
          * @brief parses function body
          * 
+         * @return true : parsed function body
+         * @return false : didn't parse function body (error, . . .)
          */
-        void parseFunctionBody();
+        bool parseFunctionBody();
+
+        /**
+         * @brief parses one statement
+         * 
+         * @return std::optional<Statement> : parsed statement
+         */
+        optional<Statement> Parser::parseOneStatement();
     };
 
 }
