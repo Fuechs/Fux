@@ -5,11 +5,24 @@
 #include <fstream>
 #include <sstream>
 
-#include "include/lexer.hpp"
+#include "include/BaseLex.hpp"
 
-using fux::Lexer, fux::Token;
+using BaseLex::Lexer, BaseLex::Token, BaseLex::TokenList;
+using std::string;
 
-std::string read_file(const std::string file_path) {
+std::string read_file(const string file_path);
+
+int main(int argc, char** argv) {
+    string source = read_file("src/test/main.fux");
+
+    Lexer lexer = Lexer(source);
+    TokenList tokens = lexer.lex();
+    
+    for (Token token : tokens)
+        token.debugPrint();
+}
+
+string read_file(const string file_path) {
 
     std::ifstream file(file_path);
 
@@ -24,18 +37,5 @@ std::string read_file(const std::string file_path) {
     file.close();
 
     return content.str();
-
-}
-
-
-int main(int argc, char** argv) {
-
-    std::string source = read_file("src/test/main.fux");
-
-    Lexer lexer = Lexer(source);
-    std::vector<Token> tokens = lexer.lex();
-    
-    for (Token token : tokens)
-        token.debugPrint();
 
 }
