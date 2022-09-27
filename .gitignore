@@ -8,3 +8,5 @@ dev_only
 docs/guide.py
 fux.dSYM
 web
+main
+main.dSYM

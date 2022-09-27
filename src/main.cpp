@@ -1,4 +1,15 @@
-// Created by Fuechs on 2022-09-26
+/**
+ * @file main.cpp
+ * @author fuechs (fuechsss@gmail.com)
+ * @brief main file of fux
+ * @version 0.1
+ * @date 2022-09-26
+ * 
+ * @copyright Copyright (c) 2020-2022, Fuechs. 
+ *            All rights reserved.
+ *            BSD 3-Clause License
+ * 
+ */
 
 #include <iostream>
 #include <string>
@@ -6,29 +17,34 @@
 #include <sstream>
 
 #include "include/BaseLex.hpp"
+#include "include/parser.hpp"
 
 using BaseLex::Lexer, BaseLex::Token, BaseLex::TokenList;
 using std::string;
+using fux::Parser;
 
-std::string read_file(const string file_path);
+const string read_file(const string file_path);
 
 int main(int argc, char** argv) {
-    string source = read_file("src/test/main.fux");
+    const string source = read_file("/Users/fuechs/Documents/GitHub/Fux/src/test/main.fux");
 
     Lexer lexer = Lexer(source);
     TokenList tokens = lexer.lex();
+
+    // for (Token token : tokens)
+    //     token.debugPrint();
+    Parser parser = Parser(tokens);
+    parser.parse();
     
-    for (Token token : tokens)
-        token.debugPrint();
 }
 
-string read_file(const string file_path) {
+const string read_file(const string file_path) {
 
     std::ifstream file(file_path);
 
     if (!file) {
         std::cerr << "Can't open file '" << file_path << "'" << std::endl;
-        return NULL;
+        exit(1);
     }
 
     std::stringstream content;

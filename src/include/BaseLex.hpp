@@ -113,6 +113,27 @@ namespace BaseLex {
         "EOS", "EOL", "UNKNOWN",        
     };
 
+    static const char *TokenTypeValue[] = {
+        "(", ")", "{", "}", "[", "]",
+
+        "<", ">", ":", "::", ";", ".",
+        ",", "=", "==", "!=", "+", "++", 
+        "-", "--", "*", "**", "/", "+=", 
+        "-=", "/=", "*=", "!",  
+
+        "?", "\\", "|", "||", "#", 
+        "&", "&&", "@", "^",          
+
+        "->", "<-", "<<", ">>",  
+        "<<<", ">>>",    
+
+        "char", "str",       
+        "int", "float",          
+        "ident",    
+
+        "EOS", "\\n", "unknown", 
+    };
+
     class Token {
     public:
         Token(TokenType type = UNKNOWN, string value = "") 
@@ -746,6 +767,10 @@ namespace BaseLex {
                 case '^':
                 case '\'':
                 case '"':
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
                     return false;
 
                 default: {
