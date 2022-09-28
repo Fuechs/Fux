@@ -15,18 +15,20 @@
 
 namespace fux {
 
-    void Parser::parse() {
-        
-        while (currentToken->type != EOS) {
-
-            if (!parseFunctionDefinition() && !parseFunctionCall()) {
-                exit(0);
-            }
-
-        }
+    AST Parser::parse() {
+        AST root = AST("root");
+        Statement decl;
+        decl.kind = DECLARATION;
+        Expression expr;
+        expr.kind = INTEGER;
+        expr.value = "1";
+        decl.expr = expr;
+        decl.value = "a";
+        root.stmts.push_back(decl);
+        return root;
     }
 
-    Token Parser::expectType(TokenType type) {
+    /* Token Parser::expectTokenType(TokenType type) {
         if (currentToken->type != type) {
             ParserError(
                 "Unexpected Token '"
@@ -46,34 +48,18 @@ namespace fux {
         return *returnToken;
     }
 
-    bool Parser::matchType(TokenType type) {
+    bool Parser::matchTokenType(TokenType type) {
         return currentToken->type == type;
     }
 
-    bool Parser::parseFunctionDefinition() {
-        Token functionName = expectType(IDENTIFIER);
-        expectType(LPAREN); // TODO: implement paramaters
-        expectType(RPAREN);
-        expectType(COLON);
-        Type functionType = parseType();
-        // std::cout << "Function " << functionName.value << " of type " << functionType.value << ".\n";
-        parseBlock();
-
-        return false;
-    }
-
-    bool Parser::parseFunctionCall() {return false;}
-
     Type Parser::parseType() {
-        Token typeIdent = expectType(IDENTIFIER);
+        Token typeIdent = expectTokenType(IDENTIFIER);
         if (types.find(typeIdent.value) == types.end())
             ParserError(
                 "Unknown type '"+typeIdent.value+"'.",
                 *currentToken
             );
         return types[typeIdent.value];
-    }
-
-    bool parseBlock() {return false;}
+    } */
 
 }

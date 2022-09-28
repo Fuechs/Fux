@@ -18,10 +18,12 @@
 
 #include "include/BaseLex.hpp"
 #include "include/parser.hpp"
+#include "include/ast.hpp"
 
 using BaseLex::Lexer, BaseLex::Token, BaseLex::TokenList;
 using std::string;
 using fux::Parser;
+using fux::AST;
 
 const string read_file(const string file_path);
 
@@ -34,8 +36,7 @@ int main(int argc, char** argv) {
     // for (Token token : tokens)
     //     token.debugPrint();
     Parser parser = Parser(tokens);
-    parser.parse();
-    
+    AST root = parser.parse();
 }
 
 const string read_file(const string file_path) {

@@ -18,6 +18,7 @@
 
 #include "BaseLex.hpp"
 #include "type.hpp"
+#include "ast.hpp"
 
 namespace fux {
 
@@ -53,24 +54,22 @@ namespace fux {
             types["u64"] =      Type(U64, "u64");
         }
 
-        void parse();
+        AST parse();
 
     private:
         TokenList tokens;
         TokenList::iterator currentToken = tokens.begin();
         TypeMap types;
 
-        Token expectType(TokenType type);
+     /*
+        Token expectTokenType(TokenType type);
        
         Token peek();
 
-        bool matchType(TokenType type);
-
-        bool parseFunctionDefinition();
-
-        bool parseFunctionCall();
+        bool matchTokenType(TokenType type);
 
         Type parseType();
+    */
     };
 
 }
