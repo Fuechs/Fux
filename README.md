@@ -4,7 +4,6 @@
 
 # Fux
 
-
 **`Flawless Unambiguous Programming`**
 
 ###### Warning: Fux is still in early development.
