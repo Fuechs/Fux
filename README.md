@@ -36,7 +36,7 @@ main(): void {
 
 ## Why Fux?
 
-Because.
+Because. (Just kidding, didn't finish it yet.)
 
 ## Roadmap
 
