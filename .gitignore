@@ -7,6 +7,7 @@ decode.py
 dev_only
 docs/guide.py
 fux.dSYM
-web
+web/
 main
 main.dSYM
+docs/
