@@ -2,7 +2,7 @@
  * @file baselex.hpp
  * @author fuechs (fuechsss@gmail.com)
  * @brief Basic C++ Lexer
- * @version 1.1
+ * @version 1.1 (modified)
  * @date 2022-09-26
  * 
  * @copyright Copyright (c) 2022-present Fuechs
