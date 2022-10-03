@@ -4,7 +4,7 @@
 
 <statement>             ::= <if-statement> 
                         |   <while-statement> 
-                        |   <assignment 
+                        |   <assignment>
                         |   <block>
 <assignment>            ::= <variable>:=<expression>
                         |   <variable>:<type>

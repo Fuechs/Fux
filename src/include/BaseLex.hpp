@@ -5,8 +5,13 @@
  * @version 1.1 (modified)
  * @date 2022-09-26
  * 
- * @copyright Copyright (c) 2022-present Fuechs
+ * @copyright Copyright (c) 2022 Fuechs
  *            MIT LICENSE
+ *            
+ *            Copyright (c) 2020-2022 Fuechs.
+ *            All rights reserved.
+ *            BSD 3-Clause License
+ *            MODIFIED FOR FUX
  * 
  */
 
@@ -43,6 +48,7 @@ namespace BaseLex {
         COMMA,          // ,
         EQUALS,         // =
         EQUALS_EQUALS,  // ==
+        TRIPLE_EQUALS,  // ===
         NOT_EQUALS,     // !=
         PLUS,           // +
         PLUS_PLUS,      // ++
@@ -80,6 +86,25 @@ namespace BaseLex {
         FLOAT,          // 0.0
         IDENTIFIER,     // identifier  
 
+        KEY_IF,         // if
+        KEY_ELSE,       // else
+        KEY_FOR,        // for
+        KEY_IN,         // in
+        KEY_WHILE,      // while
+        KEY_DO,         // do
+        KEY_SWITCH,     // switch
+        KEY_CASE,       // case
+        KEY_BREAK,      // break
+        KEY_CONTINUE,   // continue
+        KEY_RETURN,     // return
+        KEY_LABEL,      // label
+        KEY_GOTO,       // goto
+        KEY_TRY,        // try
+        KEY_CATCH,      // catch
+        KEY_SELF,       // self
+        KEY_USING,      // using
+        KEY_TYPEDEF,    // typedef
+
         EOS,            // end of source
         EOL,            // end of line
         UNKNOWN,        // initial type
@@ -91,11 +116,11 @@ namespace BaseLex {
 
         "LESSTHAN", "GREATERTHAN", "COLON",
         "COLON_COLON", "SEMICOLON", "DOT",
-        "COMMA", "EQUALS", "EQUALS_EQUALS",  
-        "NOT_EQUALS", "PLUS", "PLUS_PLUS", 
-        "MINUS", "MINUS_MINUS", "ASTERISK", 
-        "ASTERISK_ASTERISK", "SLASH", "PLUS_EQUALS", 
-        "MINUS_EQUALS", "SLASH_EQUALS", 
+        "COMMA", "EQUALS", "EQUALS_EQUALS", 
+        "TRIPLE_EQUALS", "NOT_EQUALS", "PLUS", 
+        "PLUS_PLUS", "MINUS", "MINUS_MINUS", 
+        "ASTERISK", "ASTERISK_ASTERISK", "SLASH", 
+        "PLUS_EQUALS", "MINUS_EQUALS", "SLASH_EQUALS", 
         "ASTERISK_EQUALS", "EXCLAMATION",  
 
         "QUESTION", "BACKSLASH", "VERTICAL",      
@@ -108,7 +133,14 @@ namespace BaseLex {
 
         "CHARACTER", "STRING",       
         "INTEGER", "FLOAT",          
-        "IDENTIFIER",    
+        "IDENTIFIER", 
+
+        "KEY_IF", "KEY_ELSE", "KEY_FOR", "KEY_IN",         
+        "KEY_WHILE", "KEY_DO", "KEY_SWITCH",     
+        "KEY_CASE", "KEY_BREAK", "KEY_CONTINUE",   
+        "KEY_RETURN", "KEY_LABEL", "KEY_GOTO",    
+        "KEY_TRY", "KEY_CATCH", "KEY_SELF",      
+        "KEY_USING", "KEY_TYPEDEF",      
 
         "EOS", "EOL", "UNKNOWN",        
     };
@@ -117,9 +149,9 @@ namespace BaseLex {
         "(", ")", "{", "}", "[", "]",
 
         "<", ">", ":", "::", ";", ".",
-        ",", "=", "==", "!=", "+", "++", 
-        "-", "--", "*", "**", "/", "+=", 
-        "-=", "/=", "*=", "!",  
+        ",", "=", "==", "===", "!=", "+", 
+        "++", "-", "--", "*", "**", "/", 
+        "+=", "-=", "/=", "*=", "!",  
 
         "?", "\\", "|", "||", "#", 
         "&", "&&", "@", "^",          
@@ -129,7 +161,14 @@ namespace BaseLex {
 
         "char", "str",       
         "int", "float",          
-        "ident",    
+        "identifer", 
+
+        "if", "else", "for", "in",         
+        "while", "do", "switch",     
+        "case", "break", "continue",   
+        "return", "label", "goto",    
+        "try", "catch", "self",      
+        "using", "typedef",  
 
         "EOS", "\\n", "unknown", 
     };
@@ -195,11 +234,30 @@ namespace BaseLex {
 
                 switch (currentToken.type) {
                     
-                    // TODO: implement special types
-
                     case IDENTIFIER: {
                         while (lex_identifier(currentToken) && idx < source.length())
                             advance();
+
+                        // check for keywords
+                        if (currentToken.value == "if")             currentToken.type = KEY_IF;
+                        else if (currentToken.value == "else")      currentToken.type = KEY_ELSE;
+                        else if (currentToken.value == "for")       currentToken.type = KEY_FOR;
+                        else if (currentToken.value == "in")        currentToken.type = KEY_IN;
+                        else if (currentToken.value == "while")     currentToken.type = KEY_WHILE;
+                        else if (currentToken.value == "do")        currentToken.type = KEY_DO;
+                        else if (currentToken.value == "switch")    currentToken.type = KEY_SWITCH;
+                        else if (currentToken.value == "case")      currentToken.type = KEY_CASE;
+                        else if (currentToken.value == "break")     currentToken.type = KEY_BREAK;
+                        else if (currentToken.value == "continue")  currentToken.type = KEY_CONTINUE;
+                        else if (currentToken.value == "return")    currentToken.type = KEY_RETURN;
+                        else if (currentToken.value == "label")     currentToken.type = KEY_LABEL;
+                        else if (currentToken.value == "goto")      currentToken.type = KEY_GOTO;
+                        else if (currentToken.value == "try")       currentToken.type = KEY_TRY;
+                        else if (currentToken.value == "catch")     currentToken.type = KEY_CATCH;
+                        else if (currentToken.value == "self")      currentToken.type = KEY_SELF;
+                        else if (currentToken.value == "using")     currentToken.type = KEY_USING;
+                        else if (currentToken.value == "typedef")   currentToken.type = KEY_TYPEDEF;
+
                         endToken(currentToken, tokens);
                         currentToken.col = col;
                         currentToken.line = line;
@@ -470,6 +528,13 @@ namespace BaseLex {
 
                     case '=': {
                         if (peek() == '=') {
+                            if (peek(2) == '=') {
+                                token.type = TRIPLE_EQUALS;
+                                token.value = "===";
+                                advance(3);
+                                break;
+                            }
+
                             token.type = EQUALS_EQUALS;
                             token.value = "==";
                             advance(2);

@@ -1,11 +1,11 @@
 /**
  * @file type.hpp
- * @author your name (you@domain.com)
+ * @author fuechs (fuechsss@gmail.com)
  * @brief fux type header
  * @version 0.1
  * @date 2022-09-27
  * 
- * @copyright Copyright (c) 2022, Fuechs.
+ * @copyright Copyright (c) 2020-2022, Fuechs.
  *            All rights reserved.
  *            BSD 3-Clause License
  */
