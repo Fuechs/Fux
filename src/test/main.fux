@@ -1,3 +1,3 @@
 main(): void {
-    print("It's been so long.");
+    print("something");
 }

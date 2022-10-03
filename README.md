@@ -1,19 +1,20 @@
-<img src="./art/logo.svg" width=300></img>
-
-![forthebadge](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)
----
-
 <!-- FUX COLORS - #fcaa68 - #ec243c -->
 
-### Fux
+<img src="./art/logo.svg" width=50%></img>
 
-###### Flawless unambiguous programming
+# Fux
 
- *Fast. Safe. Simple. Whatever you want.* 
 
-#### The beautiful alternative for C++ 
-- so you don't shoot yourself in the foot (like I did working on Fux)
-- with better errors (well, better than just `Segmentation fault`)
+**`Flawless Unambiguous Programming`**
+
+###### Warning: Fux is still in early development.
+
+> Fux uses [`BaseLex`](https://github.com/Fuechs/BaseLex/), and you can too!
+
+## The beautiful alternative for C++ 
+
+- so you don't shoot yourself in the foot (like I do working on Fux)
+- with better errors (well, better than just `Segmentation fault`) 
 - providing a large standard library
 
 
@@ -25,101 +26,130 @@ fib(num: int): int {
 }
 
 main(): void {
-    number: int;
-    number = io.getln("Fibonacci of: ");
-    fib(number) >> io.putln();
+    num := io.getint("Fibonacci of: ");
+    fib(num) >> io.putln();
 }
 ```
 
-#### Why Fux?
+> More examples [`here`](#examples).
 
-You wan't it simple? 
+## Why Fux?
 
-```cpp
-name = "Fuechs";
-```
+Because.
 
-Object-Oriented?
+## Roadmap
+
+- [&check;] `Lexer`
+- [...] `Parser`
+- [&cross;] `AST Analysis & IR`
+- [&cross;] `Optimization`
+- [&cross;] `Code Generation`
+- [&cross;] `Virtual Machine`
+- [&cross;] `Runtime`
+- [&cross;] `Standard Library`
+
+## Examples
+
+<details>
+    <summary>Hello World</summary>
+
+<br>
 
 ```cpp
 #get <core.io>
 
-:Main {
+main(): void { 
+    io.println("Hello World!");
+}
+```
 
-    main(argc -> int, argv -> str[]) -> void {
-        io.putf("%i/5 arguments", argc);
-    }
+</details>
+
+<details>
+    <summary>Reading Files</summary>
+
+<br>
+
+```cpp
+#get <core.file>
+
+main(): void { 
+    filePath := "path/file.txt";
+    contents := file.read(filePath);
+}
+```
+
+</details>
+
+<details>
+    <summary>Vectors</summary>
+
+<br>
+
+```cpp
+#get <core.vector>
+
+using vector;
+
+main(): void { 
+    someArray: vector<int>;
+    someArray.push(1);
+}
+```
+
+</details>
+
+<details>
+    <summary>Formatted Print</summary>
+
+<br>
+
+```cpp
+#get <core.io>
+
+main(): void {
+    res := 1;
+    io.printf("Result: %i", res);
+}
+```
+
+</details>
+
+<details>
+    <summary>Loops</summary>
+
+<br>
+
+```cpp
+main(): void {
+
+    string := "Some String";
+
+    /// For-In Loop
+
+    for (c: char) in (string) // {
+        doSomething();
+    // }
+
+    /// For Loop
+
+    for (i: u8; i < 10; ++i) // {
+        doSomething();
+    // }
+
+    /// While Loop
+
+    while (true) // {
+        doSomething();
+    // }
 
 }
 ```
 
-Low-Level? (x86 and Arm)
-
-```cpp
-#get <core.asm>
-
-main() -> void {
-    "
-    org 0x100
-    mov dx, msg
-    mov ah, 9
-    int 0x21
-    mov ah, 0x4c
-    int 0x21
-    msg db 'Goodbye World!', 0x0d, 0x0a, '$
-    ", 0 >> assembly();
-}
-```
-
-Whatever this is?
-
-```cpp
-typedef struct Position {
-    x -> double;
-    y -> double;
-    z -> double;
-} Position;
-
-typedef struct Cube {
-    title -> char[10];
-    width -> double;
-    height -> double;
-    depth -> double;
-    position -> Position;
-} Cube;
-
-cube -> Cube;
-cube.title = "tutorial";
-cube.width = 2;
-cube.height = 2;
-cube.depth  2;
-cube.position.x = 0;
-cube.position.y = 2.5;
-cube.position.z = 0;
-```
-
-Well, you can use Fux however you want (Even though I do not recommend the Assembly one).
-
-
-#### Setup
-
-To use Fux, simply execute [`./setup/setup.py`](./setup/setup.py) or type [`make setup`](./Makefile) into the terminal after pulling the repository.
-
-
-#### Documentation
-
-Resources to learn Fux can be found in [`./docs/`](./docs/).
-Learning Fux is as easy as following the guide in [`./docs/guide.md`](./docs/guide.md) or using [`./docs/guide.py/`](./docs/guide.py).
+</details>
 
 ---
 
-##### Disclaimers
-
-![forthebadge](https://forthebadge.com/images/badges/contains-technical-debt.svg)
-![forthebadge](https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg)
-
-Oh, and don't read the code.
-You don't want to. Believe me. Please. I beg you.
-
----
-
+![forthebadge](
+    https://forthebadge.com/images/badges/made-with-c-plus-plus.svg
+) 

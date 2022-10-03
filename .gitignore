@@ -2,11 +2,8 @@
 .vscode
 art/old
 ignore
-fux
-decode.py
+fux*
 dev_only
-docs/guide.py
-fux.dSYM
 web/
 main
 main.dSYM
