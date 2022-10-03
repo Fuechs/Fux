@@ -2,7 +2,7 @@
  * @file baselex.hpp
  * @author fuechs (fuechsss@gmail.com)
  * @brief Basic C++ Lexer
- * @version 1.0
+ * @version 1.1
  * @date 2022-09-26
  * 
  * @copyright Copyright (c) 2022-present Fuechs
@@ -221,9 +221,13 @@ namespace BaseLex {
 
                     case FLOAT:
                     case INTEGER: {
-                        while (isdigit(current())) {
-                            currentToken.value.push_back(current());
-                            advance();
+                        while (isdigit(current()) || current() == '_') {
+                            if (current() == '_')
+                                advance();
+                            else {
+                                currentToken.value.push_back(current());
+                                advance();
+                            }
                         }
                         if (current() == '.') {
                             if (peek() == '.') {
@@ -738,47 +742,13 @@ namespace BaseLex {
          */
         bool lex_identifier(Token &token) {
 
-            switch (current()) {
-
-                case '(':
-                case ')':
-                case '{':
-                case '}':
-                case '[':
-                case ']':
-                case '<':
-                case '>':
-                case ':':
-                case ';':
-                case '.':
-                case ',':
-                case '=':
-                case '+':
-                case '-':
-                case '*':
-                case '/':
-                case '!':
-                case '?':
-                case '\\':
-                case '|':
-                case '#':
-                case '&':
-                case '@':
-                case '^':
-                case '\'':
-                case '"':
-                case ' ':
-                case '\t':
-                case '\r':
-                case '\n':
-                    return false;
-
-                default: {
-                    token.value.push_back(current());
-                    return true;
-                }
-                
-            }
+            if (isalpha(current())
+            ||  isdigit(current())
+            ||  current() == '_') {
+                token.value.push_back(current());
+                return true;
+            } else 
+                return false;
 
         }
 
