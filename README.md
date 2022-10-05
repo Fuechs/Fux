@@ -40,7 +40,10 @@ Because. (Just kidding, didn't finish it yet.)
 
 ## Roadmap
 
-- [&check;] `Lexer`
+- [...] `Lexer`
+    - [&check;] `Tokens`
+    - [...] `Keywords`
+- [...] `Preprocessor`
 - [...] `Parser`
 - [&cross;] `AST Analysis & IR`
 - [&cross;] `Optimization`
