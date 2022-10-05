@@ -1,17 +1,15 @@
 /**
  * @file parser.cpp
- * @author your name (you@domain.com)
+ * @author fuechs
  * @brief fux parser 
  * @version 0.1
  * @date 2022-09-27
  * 
- * @copyright Copyright (c) 2020-2022, Fuechs.
- *            All rights reserved.
- *            BSD 3-Clause License
+ * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
  * 
  */
 
-#include "include/parser.hpp"
+#include "parser.hpp"
 
 namespace fux {
 

@@ -1,18 +1,13 @@
 /**
  * @file baselex.hpp
- * @author fuechs (fuechsss@gmail.com)
+ * @author fuechs 
  * @brief Basic C++ Lexer
  * @version 1.1 (modified)
  * @date 2022-09-26
  * 
- * @copyright Copyright (c) 2022 Fuechs
- *            MIT LICENSE
- *            
- *            Copyright (c) 2020-2022 Fuechs.
- *            All rights reserved.
- *            BSD 3-Clause License
- *            MODIFIED FOR FUX
+ * @copyright Copyright (c) 2020-2022 Fuechs. All rights reserved.
  * 
+ * ! MODIFIED !
  */
 
 

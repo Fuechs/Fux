@@ -1,17 +1,15 @@
 /**
  * @file preprocessor.cpp
- * @author fuechs (fuechsss@gmail.com)
+ * @author fuechs
  * @brief fux preprocessor
  * @version 0.1
  * @date 2022-10-05
  * 
- * @copyright Copyright (c) 2020-2022, Fuechs.
- *            All rights reserved.
- *            BSD 3-Clause License
+ * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
  * 
  */
 
-#include "include/preprocessor.hpp"
+#include "preprocessor.hpp"
 
 namespace fux {
 

@@ -1,9 +1,5 @@
 #get <core.io>
-#get <core.vector>
 
-1
-"ok"
-'aa'
-cool
-
-#get <core.something>
+main(): void {
+    io.putln("Hello Fux!");
+}

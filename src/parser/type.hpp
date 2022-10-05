@@ -1,14 +1,13 @@
 /**
  * @file type.hpp
- * @author fuechs (fuechsss@gmail.com)
+ * @author fuechs
  * @brief fux type header
  * @version 0.1
  * @date 2022-09-27
  * 
- * @copyright Copyright (c) 2020-2022, Fuechs.
- *            All rights reserved.
- *            BSD 3-Clause License
- */
+ * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
+ * 
+*/
 
 #pragma once
 

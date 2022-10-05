@@ -1,7 +1,7 @@
 CC = g++
 EXEC = fux
-FLAGS = -std=c++17 -g -Wall -Werror
-SRC = ${wildcard src/*.cpp}
+FLAGS = -std=c++20 -g -Wall -Werror
+SRC = ${wildcard src/*.cpp src/parser/*.cpp src/preprocessor/*.cpp src/vm/*.cpp} 
  
 # Copyright (c) 2020-2022 Fuechs
 # All rights reserved.
