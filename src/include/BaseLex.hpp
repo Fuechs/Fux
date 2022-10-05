@@ -104,6 +104,7 @@ namespace BaseLex {
         KEY_SELF,       // self
         KEY_USING,      // using
         KEY_TYPEDEF,    // typedef
+        KEY_GET,        // (#)get
 
         EOS,            // end of source
         EOL,            // end of line
@@ -140,7 +141,7 @@ namespace BaseLex {
         "KEY_CASE", "KEY_BREAK", "KEY_CONTINUE",   
         "KEY_RETURN", "KEY_LABEL", "KEY_GOTO",    
         "KEY_TRY", "KEY_CATCH", "KEY_SELF",      
-        "KEY_USING", "KEY_TYPEDEF",      
+        "KEY_USING", "KEY_TYPEDEF", "KEY_GET",    
 
         "EOS", "EOL", "UNKNOWN",        
     };
@@ -168,7 +169,7 @@ namespace BaseLex {
         "case", "break", "continue",   
         "return", "label", "goto",    
         "try", "catch", "self",      
-        "using", "typedef",  
+        "using", "typedef", "get",
 
         "EOS", "\\n", "unknown", 
     };
@@ -257,6 +258,7 @@ namespace BaseLex {
                         else if (currentToken.value == "self")      currentToken.type = KEY_SELF;
                         else if (currentToken.value == "using")     currentToken.type = KEY_USING;
                         else if (currentToken.value == "typedef")   currentToken.type = KEY_TYPEDEF;
+                        else if (currentToken.value == "get")       currentToken.type = KEY_GET;
 
                         endToken(currentToken, tokens);
                         currentToken.col = col;

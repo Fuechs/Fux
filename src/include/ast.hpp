@@ -1,6 +1,6 @@
 /**
  * @file ast.hpp
- * @author fuechsss (fuechsss@gmail.com)
+ * @author fuechs (fuechsss@gmail.com)
  * @brief fux ast header
  * @version 0.1
  * @date 2022-09-28

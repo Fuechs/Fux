@@ -19,11 +19,17 @@
 #include "include/BaseLex.hpp"
 #include "include/parser.hpp"
 #include "include/ast.hpp"
+#include "include/preprocessor.hpp"
 
-using BaseLex::Lexer, BaseLex::Token, BaseLex::TokenList;
-using std::string;
-using fux::Parser;
-using fux::AST;
+using 
+    BaseLex::Lexer, 
+    BaseLex::Token, 
+    BaseLex::TokenList,
+    fux::Parser,
+    fux::AST,
+    fux::PreProcessor,
+    std::string
+;
 
 const string read_file(const string file_path);
 
@@ -33,8 +39,12 @@ int main(int argc, char** argv) {
     Lexer lexer = Lexer(source);
     TokenList tokens = lexer.lex();
 
-    // for (Token token : tokens)
-    //     token.debugPrint();
+    PreProcessor preProcessor = PreProcessor(tokens);
+    tokens = preProcessor.process();
+
+    for (Token token : tokens)
+        token.debugPrint();
+
     Parser parser = Parser(tokens);
     AST root = parser.parse();
 }

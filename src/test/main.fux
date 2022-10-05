@@ -1,3 +1,9 @@
-main(): void {
-    print("Hello Fux");
-}
+#get <core.io>
+#get <core.vector>
+
+1
+"ok"
+'aa'
+cool
+
+#get <core.something>
