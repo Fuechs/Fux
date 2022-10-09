@@ -8,7 +8,7 @@
 
 ###### Warning: Fux is still in early development.
 
-> Fux uses [`BaseLex`](https://github.com/Fuechs/BaseLex/), and you can too!
+> *Fux uses [BaseLex](https://github.com/Fuechs/BaseLex) for tokenization, and you can too!*
 
 ## The beautiful alternative for C++ 
 
@@ -36,7 +36,23 @@ main(): void {
 
 ## Why Fux?
 
-Because. (Just kidding, didn't finish it yet.)
+To be a valid alternative to C++ to experienced developers and the go-to language for newbies looking into learning their first programming language, Fux is very flexible.
+
+While it is possible to program in a pythonic style,
+
+```cpp
+name := "Fuechs"; // automatic typing
+```
+
+Legacy C developers can find strict typing and already known features like pointers very useful.
+
+```cpp
+number: float = 1.0;
+address -> float = &number;
+```
+
+> As already mentioned above, Fux ships with a large standard library, ready to use.
+> It includes, but is not limited to, (File) IO, Vectors and Maths. 
 
 ## Roadmap
 
