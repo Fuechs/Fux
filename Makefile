@@ -8,7 +8,7 @@ SRC = ${wildcard src/*/*.cpp}
 
 all: clean
 	${CC} ${SRC} -o ${EXEC} ${FLAGS}
-	./&{EXEC}
+	./${EXEC}
 	
 clean:
 	-rm ${EXEC}
