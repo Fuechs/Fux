@@ -14,16 +14,17 @@
 namespace fux {
 
     AST Parser::parse() {
-        AST root = AST("root");
-        Statement decl;
-        decl.kind = DECLARATION;
-        Expression expr;
-        expr.kind = INTEGER;
-        expr.value = "1";
-        decl.expr = expr;
-        decl.value = "a";
-        root.stmts.push_back(decl);
-        return root;
+        // AST root = AST("root");
+        // Statement decl;
+        // decl.kind = DECLARATION;
+        // Expression expr;
+        // expr.kind = INTEGER;
+        // expr.value = "1";
+        // decl.expr = expr;
+        // decl.value = "a";
+        // root.stmts.push_back(decl);
+        // return root;
+        return AST("root");
     }
 
     /* Token Parser::expectTokenType(TokenType type) {

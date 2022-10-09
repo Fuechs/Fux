@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @author fuechs (fuechsss@gmail.com)
+ * @author fuechs
  * @brief main file of fux
  * @version 0.1
  * @date 2022-09-26
@@ -28,20 +28,21 @@ namespace fux {
         const string source = read_file("/Users/fuechs/Documents/GitHub/Fux/src/test/main.fux");
 
         Chunk chunk;
-        chunk.writeCode(OP_RETURN);
-        chunk.disassembleChunk("test chunk");
 
-        // Lexer lexer = Lexer(source);
-        // TokenList tokens = lexer.lex();
+        Lexer lexer = Lexer(source);
+        TokenList tokens = lexer.lex();
 
-        // PreProcessor preProcessor = PreProcessor(tokens);
-        // tokens = preProcessor.process();
+        PreProcessor preProcessor = PreProcessor(tokens);
+        tokens = preProcessor.process();
 
-        // for (Token token : tokens)
-        //     token.debugPrint();
+        for (Token token : tokens)
+            token.debugPrint();
 
-        // Parser parser = Parser(tokens);
-        // AST root = parser.parse();
+        Parser parser = Parser(tokens);
+        AST root = parser.parse();
+
+        // analyse ast and generate opcodes ...
+        // chunk = opcodes ...
 
         return 0;
     }

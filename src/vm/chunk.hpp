@@ -21,25 +21,15 @@ namespace fux {
 
     using 
         std::string,
-        std::cout
+        std::cout,
+        std::vector
     ;
 
     typedef enum OpCode_ENUM {
         OP_RETURN,
     } OpCode;
 
-    class Chunk {
-    public:
-        Chunk();
-
-        std::vector<u8> code = {};
-
-        void writeCode(u8 byte);
-        void freeChunk();
-        void disassembleChunk(string name);
-        int disassembleInstruction(int offset);
-
-    };
+    typedef vector<OpCode> Chunk;
     
 }
 
