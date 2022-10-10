@@ -15,8 +15,6 @@
 #include <string>
 #include <iostream>
 
-#include "../common.hpp"
-
 namespace fux {
 
     using 
@@ -25,11 +23,19 @@ namespace fux {
         std::vector
     ;
 
+    typedef uint8_t u8;
+
     typedef enum OpCode_ENUM {
-        OP_RETURN,
+        OP_HALT,            // stops the program
+        OP_CONST,           // pushes const onto the stack
     } OpCode;
 
-    typedef vector<OpCode> Chunk;
+    static const char *OpCodeString[] = {
+        "OP_HALT",
+        "OP_CONST"
+    };
+
+    typedef vector<u8> Chunk;
     
 }
 

@@ -8,7 +8,7 @@
 
 ###### Warning: Fux is still in early development.
 
-> *Fux uses [BaseLex](https://github.com/Fuechs/BaseLex) for tokenization, and you can too!*
+> *Fux uses [`BaseLex`](https://github.com/Fuechs/BaseLex) for tokenization, and you can too!*
 
 ## The beautiful alternative for C++ 
 
@@ -64,7 +64,7 @@ address -> float = &number;
 - [&cross;] `AST Analysis & IR`
 - [&cross;] `Optimization`
 - [&cross;] `Code Generation`
-- [&cross;] `Virtual Machine`
+- [...] `Virtual Machine`
 - [&cross;] `Runtime`
 - [&cross;] `Standard Library`
 

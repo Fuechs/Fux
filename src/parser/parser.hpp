@@ -27,7 +27,7 @@ namespace fux {
     public:
         ParserError(string message, Token token = Token()) {
             cerr
-            << "[Parser] Error occured at Line "
+            << "[Parser] Error occurred at Line "
             << token.line << ":" << token.col
             << " : " << message << endl;
             exit(1);

@@ -21,7 +21,7 @@ namespace fux {
     public:
         PreProcessorError(string message, Token token = Token()) {
             std::cerr
-            << "[PreProcessor] Error occured at Line "
+            << "[PreProcessor] Error occurred at Line "
             << token.line << ":" << token.col
             << " : " << message << std::endl;
             exit(1);

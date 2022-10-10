@@ -19,30 +19,37 @@
 #include "parser/ast.hpp"
 #include "preprocessor/preprocessor.hpp"
 #include "vm/chunk.hpp"
+#include "vm/vm.hpp"
+#include "vm/value.hpp"
 
 namespace fux {
 
     const string read_file(const string file_path);
 
     int main(int argc, char** argv) {
-        const string source = read_file("/Users/fuechs/Documents/GitHub/Fux/src/test/main.fux");
+        // const string source = read_file("/Users/fuechs/Documents/GitHub/Fux/src/test/main.fux");
+
+        // Lexer lexer = Lexer(source);
+        // TokenList tokens = lexer.lex();
+
+        // PreProcessor preProcessor = PreProcessor(tokens);
+        // tokens = preProcessor.process();
+
+        // for (Token token : tokens)
+        //     token.debugPrint();
+
+        // Parser parser = Parser(tokens);
+        // AST root = parser.parse();
 
         Chunk chunk;
-
-        Lexer lexer = Lexer(source);
-        TokenList tokens = lexer.lex();
-
-        PreProcessor preProcessor = PreProcessor(tokens);
-        tokens = preProcessor.process();
-
-        for (Token token : tokens)
-            token.debugPrint();
-
-        Parser parser = Parser(tokens);
-        AST root = parser.parse();
-
         // analyse ast and generate opcodes ...
         // chunk = opcodes ...
+        VM vm;
+        vm.constants.push_back(I32(42));
+        chunk = {OP_CONST, 0, OP_HALT};
+        cout << "PROGRAM\n";
+        vm.exec(chunk);
+        cout << "END" << endl;
 
         return 0;
     }
@@ -66,3 +73,6 @@ namespace fux {
     }
 
 }
+
+// dumbass c++ doesn't recognize main in namespace
+int main(int argc, char** argv) { return fux::main(argc, argv); } 
