@@ -28,11 +28,19 @@ namespace fux {
     typedef enum OpCode_ENUM {
         OP_HALT,            // stops the program
         OP_CONST,           // pushes const onto the stack
+        OP_ADD,
+        OP_SUB,
+        OP_MUL,
+        OP_DIV,
     } OpCode;
 
     static const char *OpCodeString[] = {
         "OP_HALT",
-        "OP_CONST"
+        "OP_CONST",
+        "OP_ADD",
+        "OP_SUB",
+        "OP_MUL",
+        "OP_DIV",
     };
 
     typedef vector<u8> Chunk;

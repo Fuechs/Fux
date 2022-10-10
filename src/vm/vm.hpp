@@ -22,6 +22,12 @@
 #define READ_BYTE() *ip++
 #define GET_CONST() constants[READ_BYTE()]
 #define STACK_LIMIT 512
+#define BINARY_OP(op) \
+    do { \
+        auto op2 = AS_I32(pop()); \
+        auto op1 = AS_I32(pop()); \
+        push(I32(op1 op op2)); \
+    } while(false);
 
 namespace fux {
 
@@ -88,7 +94,7 @@ namespace fux {
          */
         Value exec(Chunk &chunk);
 
-        void push(Value value);
+        void push(const Value &value);
         
         Value pop();
 

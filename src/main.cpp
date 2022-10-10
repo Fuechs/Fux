@@ -45,11 +45,20 @@ namespace fux {
         // analyse ast and generate opcodes ...
         // chunk = opcodes ...
         VM vm;
-        vm.constants.push_back(I32(42));
-        chunk = {OP_CONST, 0, OP_HALT};
+        vm.constants.push_back(I32(10));
+        vm.constants.push_back(I32(3));
+        vm.constants.push_back(I32(10));
+        chunk = {
+            OP_CONST, 0, 
+            OP_CONST, 1, 
+            OP_MUL, 
+            OP_CONST, 2, 
+            OP_SUB, 
+            OP_HALT
+        };
         cout << "PROGRAM\n";
-        vm.exec(chunk);
-        cout << "END" << endl;
+        Value result = vm.exec(chunk);
+        cout << "END\n" << AS_I32(result) << endl;
 
         return 0;
     }

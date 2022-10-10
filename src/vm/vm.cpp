@@ -16,25 +16,42 @@ namespace fux {
     Value VM::exec(Chunk &chunk) {
         // set instruction pointer to the beginning
         ip = &chunk[0];
+        sp = &stack[0];
 
         for (;;) {
             debugInstruction(*ip);
             switch (READ_BYTE()) {
 
-                case OP_HALT:   return pop();
+                case OP_HALT:   
+                    return pop();
 
                 case OP_CONST:
-                    auto constIndex = READ_BYTE();
-                    auto constant = constants[constIndex];
                     push(GET_CONST());
                     break;
 
-                default:        UnknownInstError(*--ip);            
+                case OP_ADD:
+                    BINARY_OP(+);
+                    break;
+                
+                case OP_SUB:
+                    BINARY_OP(-);
+                    break;
+                
+                case OP_MUL:
+                    BINARY_OP(*);
+                    break;
+                
+                case OP_DIV:
+                    BINARY_OP(/);
+                    break;
+
+                default:        
+                    UnknownInstError(*--ip);            
             } 
         }
     }
 
-    void VM::push(Value value) {
+    void VM::push(const Value &value) {
         if ((size_t)(sp - stack.begin()) == STACK_LIMIT)
             RuntimeError("push(): Stack overflow.");
         *sp = value;
@@ -53,7 +70,7 @@ namespace fux {
         cout 
             << "|   "
             << OpCodeString[code] << " "
-            << code
+            << std::to_string(code)
             << '\n';
     }
 

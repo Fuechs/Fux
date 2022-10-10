@@ -18,8 +18,14 @@ enum class ValueType {
 struct Value {
     ValueType type;
     union {
-        int i32;
+        int _i32;
     };
 };
 
-#define I32(value) ((Value)({ValueType::I32, .i32 = value}))
+// Constructors
+
+#define I32(value) ((Value) {ValueType::I32, ._i32 = value})
+
+// Accessors
+
+#define AS_I32(value) ((int)(value)._i32)
