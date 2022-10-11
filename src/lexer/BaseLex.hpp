@@ -67,6 +67,7 @@ namespace BaseLex {
         AND,            // &&
         AT,             // @
         CARET,          // ^
+        PERCENT,        // %
 
         LPOINTER,       // <-
         RPOINTER,       // ->
@@ -121,7 +122,7 @@ namespace BaseLex {
 
         "QUESTION", "BACKSLASH", "VERTICAL",      
         "OR", "HASH", "AMPERSAND", 
-        "AND", "AT", "CARET",          
+        "AND", "AT", "CARET", "PERCENT",      
 
         "LPOINTER", "RPOINTER",
         "LSHIFT", "RSHIFT",  
@@ -150,7 +151,7 @@ namespace BaseLex {
         "+=", "-=", "/=", "*=", "!",  
 
         "?", "\\", "|", "||", "#", 
-        "&", "&&", "@", "^",          
+        "&", "&&", "@", "^", "%",        
 
         "->", "<-", "<<", ">>",  
         "<<<", ">>>",    
@@ -669,8 +670,8 @@ namespace BaseLex {
                         if (peek() == '|') {
                             token.type = OR;
                             token.value = "||";
-                            break;
                             advance(2);
+                            break;
                         }
 
                         token.type = VERTICAL;
@@ -710,6 +711,13 @@ namespace BaseLex {
                     case '^': {
                         token.type = CARET;
                         token.value = "^";
+                        advance();
+                        break;
+                    }
+
+                    case '%': {
+                        token.type = PERCENT;
+                        token.value = "%";
                         advance();
                         break;
                     }
