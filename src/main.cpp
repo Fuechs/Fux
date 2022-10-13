@@ -13,54 +13,92 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <vector>
+#include <cstring>
 
 #include "lexer/BaseLex.hpp"
 #include "parser/parser.hpp"
 #include "parser/ast.hpp"
 #include "preprocessor/preprocessor.hpp"
-#include "vm/chunk.hpp"
+#include "vm/instruction.hpp"
 #include "vm/vm.hpp"
-#include "vm/value.hpp"
 
 namespace fux {
 
+    using
+        std::cout,
+        std::cerr,
+        std::endl,
+        std::string,
+        std::vector
+    ;
+
+    void print_help();
     const string read_file(const string file_path);
 
     int main(int argc, char** argv) {
-        // const string source = read_file("/Users/fuechs/Documents/GitHub/Fux/src/test/main.fux");
 
-        // Lexer lexer = Lexer(source);
-        // TokenList tokens = lexer.lex();
+        if (argc < 2) {
+            cerr << "Missing arguments: command, source.\n"; 
+            print_help();
+        } else if (strcmp(argv[1], "generate") == 0) {
+            if (argc < 3) {
+                cerr << "Missing arguments: source.\n";
+                print_help();
+            } else {
+                const string source = read_file(string(argv[2]));
 
-        // PreProcessor preProcessor = PreProcessor(tokens);
-        // tokens = preProcessor.process();
+                Lexer lexer = Lexer(source);
+                TokenList tokens = lexer.lex();
 
-        // for (Token token : tokens)
-        //     token.debugPrint();
+                PreProcessor preProcessor = PreProcessor(tokens);
+                tokens = preProcessor.process();
 
-        // Parser parser = Parser(tokens);
-        // AST root = parser.parse();
+                // for (Token token : tokens)
+                    // token.debugPrint();
+                
+                Parser parser = Parser(tokens);
+                AST root = parser.parse();
 
-        Chunk chunk;
-        // analyse ast and generate opcodes ...
-        // chunk = opcodes ...
-        VM vm;
-        vm.constants.push_back(I32(10));
-        vm.constants.push_back(I32(3));
-        vm.constants.push_back(I32(10));
-        chunk = {
-            OP_CONST, 0, 
-            OP_CONST, 1, 
-            OP_MUL, 
-            OP_CONST, 2, 
-            OP_SUB, 
-            OP_HALT
-        };
-        cout << "PROGRAM\n";
-        Value result = vm.exec(chunk);
-        cout << "END\n" << AS_I32(result) << endl;
+                // TODO: generate bytecode
+            }
+        } else if (strcmp(argv[1], "vm") == 0) {
+            if (argc < 3) {
+                cerr << "Missing arguments: source.\n";
+                print_help();
+            } else {
+                // const string source = read_file(string(argv[2]));
+                // convert string to bytecode
+
+                vector<Instruction> code = {
+                    Instruction{ PUSH_I32, 0, 4000 },
+                    Instruction{ PUSH_I32, 0, 1042 },
+                    Instruction{ ADD_I32, 0, 0 },
+                    Instruction{ PRINT_I32, 0, 0 },
+                    Instruction{ EXIT, 0, 0 }
+                };
+                
+                VM vm;
+                vm.code = code;
+                vm.run();
+            }
+        } else {
+            cerr << "Unknown command: " << string(argv[1]) << '\n';
+            print_help();
+        }
 
         return 0;
+    }
+
+    void print_help() {
+        cout
+            << "--- Fux --- Help ---\n"
+            << "Version 0.1\n"
+            << "Usage: fux [command] [argument]\n- - - -\n"
+            << "help                            shows this message\n"
+            << "generate    [source_path]       generates bytecode\n"
+            << "vm          [bytecode_path]     interprets bytecode\n- - - -\n"
+        ;
     }
 
     const string read_file(const string file_path) {

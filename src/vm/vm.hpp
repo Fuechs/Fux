@@ -1,9 +1,9 @@
 /**
  * @file vm.hpp
- * @author fuechs
- * @brief fux virtual machine header
+ * @author fuechs 
+ * @brief fux vm header
  * @version 0.1
- * @date 2022-10-10
+ * @date 2022-10-13
  * 
  * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
  * 
@@ -11,95 +11,42 @@
 
 #pragma once
 
-#include <string>
+#include <cstdint>
 #include <vector>
-#include <iostream>
-#include <array>
 
-#include "chunk.hpp"
-#include "value.hpp"
-    
-#define READ_BYTE() *ip++
-#define GET_CONST() constants[READ_BYTE()]
-#define STACK_LIMIT 512
-#define BINARY_OP(op) \
-    do { \
-        auto op2 = AS_I32(pop()); \
-        auto op1 = AS_I32(pop()); \
-        push(I32(op1 op op2)); \
-    } while(false);
+#include "instruction.hpp"
 
 namespace fux {
 
-
-    using
-        std::string,
-        std::vector,
-        std::cerr,
-        std::array
+    using 
+        std::vector
     ;
-
-    class RuntimeError {
-    public:
-        RuntimeError(string message) {
-            cerr 
-                << "[RuntimeError occurred at Line ?:?]: " 
-                << message
-                << '\n';
-            exit(1);
-        }
-    };
-
-    class UnknownInstError {
-    public:
-        UnknownInstError(u8 instruction) {
-            cerr
-                << "[UnknownInstError]: "
-                << std::hex 
-                << instruction 
-                << '\n';
-            exit(1);
-        }
-    };
 
     class VM {
     public:
-        VM() {}
+        vector<Instruction> code;
+        vector<uint32_t> stack;
+        Instruction *currentInstruction;
 
-        /**
-         * @brief instruction pointer
-         * 
-         */
-        u8* ip;
+        void run() {
 
-        /**
-         * @brief stack pointer
-         * 
-         */
-        Value* sp;
+            while (currentInstruction != nullptr) {
+                switch (currentInstruction->opcode) {
+                    
+                    case EXIT: 
+                        currentInstruction = nullptr;
+                        break;
 
-        /**
-         * @brief operands stack
-         * 
-         */
-        array<Value, STACK_LIMIT> stack;
+                    case ADD_I32: 
+                        stack.push_back(currentInstruction->p2);
+                        break;
+                    case PUSH_I32: break;
+                    case PRINT_I32: break;
+                    
+                }
+            }
 
-
-        vector<Value> constants;
-
-        /**
-         * @brief executes a program
-         * 
-         * @param chunk : bytecodes 
-         */
-        Value exec(Chunk &chunk);
-
-        void push(const Value &value);
-        
-        Value pop();
-
+        }
     };
 
-    void debugInstruction(u8 code);
-    
 }
