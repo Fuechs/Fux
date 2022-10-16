@@ -61,12 +61,12 @@ address -> float = &number;
     - [...] `Keywords`
 - [...] `Preprocessor`
 - [...] `Parser`
-- [&cross;] `AST Analysis & IR`
+- [&cross;] `AST Analysis`
 - [&cross;] `Optimization`
 - [&cross;] `Code Generation`
 - [...] `Virtual Machine`
 - [&cross;] `Runtime`
-- [&cross;] `Standard Library`
+- [...] `Standard Library`
 
 ## Examples
 
