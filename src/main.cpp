@@ -36,7 +36,7 @@ namespace fux {
     void print_help();
     const string read_file(const string file_path);
 
-    int main(int argc, char** argv) {
+    int main(int argc, char **argv) {
 
         if (argc < 2) {
             cerr << "Missing arguments: command, source.\n"; 
@@ -105,8 +105,8 @@ namespace fux {
 
         std::ifstream file(file_path);
 
-        if (!file) {
-            std::cerr << "Can't open file '" << file_path << "'" << std::endl;
+        if (!file.is_open()) {
+            cerr << "Can't open file '" << file_path << "'" << endl;
             exit(1);
         }
 

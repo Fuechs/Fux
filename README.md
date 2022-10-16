@@ -52,7 +52,7 @@ address -> float = &number;
 ```
 
 > As already mentioned above, Fux ships with a large standard library, ready to use.
-> It includes, but is not limited to, (File) IO, Vectors and Maths. 
+> It includes, but is not limited to, Utility, (File) IO and Maths. 
 
 ## Roadmap
 
@@ -102,18 +102,15 @@ main(): void {
 </details>
 
 <details>
-    <summary>Vectors</summary>
+    <summary>Arrays</summary>
 
 <br>
 
 ```cpp
-#get <core.vector>
-
-using vector;
-
 main(): void { 
-    someArray: vector<int>;
-    someArray.push(1);
+    someArray: int[];
+    someArray[] << 1; // someArray = {1}
+    someArray[] << 3; // someArray = {1, 3}
 }
 ```
 

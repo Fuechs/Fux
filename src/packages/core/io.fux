@@ -1,0 +1,43 @@
+package core;
+
+io {
+
+    // output
+
+    buffer: str[];
+    
+    flush(): void;
+
+    put(args: var, ...): void;
+
+    putln(args: var, ...): void;
+
+    putch(arg: char): void;
+
+    putint(arg: i8|u8|i16|u16|i32|u32|i64|u64): void;
+
+    /*
+        Examples:
+            putf("Hello %s\n", "World");
+            putf("RES: %i\n_: %f\n", res, _);
+    */
+    putf(format: str, args: var, ...): void;
+
+    // input
+
+    getln(args: var, ...): str;
+
+    getch(args: var, ...): char;
+
+    getint(args: var, ...): i32;
+
+    /*
+        Examples:
+            getf("Number: %i");
+            --> input: "Number: 23"
+            --> return: "23"
+    */
+
+    getf(format: str): str;
+
+}
