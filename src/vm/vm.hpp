@@ -13,13 +13,16 @@
 
 #include <cstdint>
 #include <vector>
+#include <iostream>
 
 #include "instruction.hpp"
 
 namespace fux {
 
     using 
-        std::vector
+        std::vector,
+        std::cout,
+        std::endl
     ;
 
     class VM {
@@ -28,25 +31,7 @@ namespace fux {
         vector<uint32_t> stack;
         Instruction *currentInstruction;
 
-        void run() {
-
-            while (currentInstruction != nullptr) {
-                switch (currentInstruction->opcode) {
-                    
-                    case EXIT: 
-                        currentInstruction = nullptr;
-                        break;
-
-                    case ADD_I32: 
-                        stack.push_back(currentInstruction->p2);
-                        break;
-                    case PUSH_I32: break;
-                    case PRINT_I32: break;
-                    
-                }
-            }
-
-        }
+        void run();
     };
 
 }

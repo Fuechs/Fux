@@ -6,16 +6,16 @@ SRC = ${wildcard src/*.cpp src/*/*.cpp}
 # Copyright (c) 2020-2022 Fuechs
 # All rights reserved.
 
-all: clean
+all:
 	${CC} ${SRC} -o ${EXEC} ${FLAGS}
-	./${EXEC}
-	
-clean:
-	-rm ${EXEC}
 
 f = main
 
-test: all
-	./${EXEC} compile src/test/${f}.fux
-	rm ${EXEC}
+gen: 
+	./${EXEC} generate src/test/${f}.fux
+
+code: 
+	./${EXEC} vm src/test/${f}.ifux
 	
+clean:
+	-rm ${EXEC}
