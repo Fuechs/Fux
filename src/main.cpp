@@ -54,8 +54,8 @@ namespace fux {
                 PreProcessor preProcessor = PreProcessor(tokens);
                 tokens = preProcessor.process();
 
-                // for (Token token : tokens)
-                    // token.debugPrint();
+                for (Token token : tokens)
+                    token.debugPrint();
                 
                 Parser parser = Parser(tokens);
                 AST root = parser.parse();

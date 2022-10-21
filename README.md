@@ -56,9 +56,9 @@ address -> float = &number;
 
 ## Roadmap
 
-- [...] `Lexer`
+- [&check;] `Lexer`
     - [&check;] `Tokens`
-    - [...] `Keywords`
+    - [&check;] `Keywords`
 - [...] `Preprocessor`
 - [...] `Parser`
 - [&cross;] `AST Analysis`

@@ -100,7 +100,27 @@ namespace BaseLex {
         KEY_SELF,       // self
         KEY_USING,      // using
         KEY_TYPEDEF,    // typedef
+        KEY_DELETE,     // delete
+
         KEY_GET,        // (#)get
+        KEY_DEFINE,     // (#)define
+
+        KEY_VOID,       // void
+        KEY_BOOL,       // bool
+        KEY_I8,         // i8
+        KEY_U8,         // u8
+        KEY_CHAR,       // char
+        KEY_I16,        // i16
+        KEY_U16,        // u16
+        KEY_WCHAR,      // wchar
+        KEY_I32,        // i32
+        KEY_U32,        // u32
+        KEY_FLOAT,      // float
+        KEY_I64,        // i64
+        KEY_U64,        // u64
+        KEY_DOUBLE,     // double
+        KEY_ENUM,       // enum
+        KEY_STRUCT,     // struct
 
         EOS,            // end of source
         EOL,            // end of line
@@ -137,7 +157,16 @@ namespace BaseLex {
         "KEY_CASE", "KEY_BREAK", "KEY_CONTINUE",   
         "KEY_RETURN", "KEY_LABEL", "KEY_GOTO",    
         "KEY_TRY", "KEY_CATCH", "KEY_SELF",      
-        "KEY_USING", "KEY_TYPEDEF", "KEY_GET",    
+        "KEY_USING", "KEY_TYPEDEF", "KEY_DELETE",
+
+        "KEY_GET", "KEY_DEFINE",   
+
+        "KEY_VOID", "KEY_BOOL",
+        "KEY_I8", "KEY_U8", "KEY_CHAR",      
+        "KEY_I16", "KEY_U16", "KEY_WCHAR",  
+        "KEY_I32", "KEY_U32", "KEY_FLOAT",  
+        "KEY_I64", "KEY_U64", "KEY_DOUBLE",
+        "KEY_ENUM", "KEY_STRUCT",
 
         "EOS", "EOL", "UNKNOWN",        
     };
@@ -165,7 +194,16 @@ namespace BaseLex {
         "case", "break", "continue",   
         "return", "label", "goto",    
         "try", "catch", "self",      
-        "using", "typedef", "get",
+        "using", "typedef", "delete",
+
+        "get", "define",
+
+        "void", "bool",
+        "i8", "u8", "char",      
+        "i16", "u16", "wchar",  
+        "i32", "u32", "float",  
+        "i64", "u64", "double",
+        "enum", "struct",
 
         "EOS", "\\n", "unknown", 
     };
@@ -236,7 +274,7 @@ namespace BaseLex {
                             advance();
 
                         // check for keywords
-                        if (currentToken.value == "if")             currentToken.type = KEY_IF;
+                        if      (currentToken.value == "if")        currentToken.type = KEY_IF;
                         else if (currentToken.value == "else")      currentToken.type = KEY_ELSE;
                         else if (currentToken.value == "for")       currentToken.type = KEY_FOR;
                         else if (currentToken.value == "in")        currentToken.type = KEY_IN;
@@ -254,7 +292,27 @@ namespace BaseLex {
                         else if (currentToken.value == "self")      currentToken.type = KEY_SELF;
                         else if (currentToken.value == "using")     currentToken.type = KEY_USING;
                         else if (currentToken.value == "typedef")   currentToken.type = KEY_TYPEDEF;
+                        else if (currentToken.value == "delete")    currentToken.type = KEY_DELETE;
+
                         else if (currentToken.value == "get")       currentToken.type = KEY_GET;
+                        else if (currentToken.value == "define")    currentToken.type = KEY_DEFINE;
+
+                        else if (currentToken.value == "void")      currentToken.type = KEY_VOID;
+                        else if (currentToken.value == "bool")      currentToken.type = KEY_BOOL;
+                        else if (currentToken.value == "i8")        currentToken.type = KEY_I8;
+                        else if (currentToken.value == "u8")        currentToken.type = KEY_U8;
+                        else if (currentToken.value == "char")      currentToken.type = KEY_CHAR;
+                        else if (currentToken.value == "i16")       currentToken.type = KEY_I16;
+                        else if (currentToken.value == "u16")       currentToken.type = KEY_U16;
+                        else if (currentToken.value == "wchar")     currentToken.type = KEY_WCHAR;
+                        else if (currentToken.value == "i32")       currentToken.type = KEY_I32;
+                        else if (currentToken.value == "u32")       currentToken.type = KEY_U32;
+                        else if (currentToken.value == "float")     currentToken.type = KEY_FLOAT;
+                        else if (currentToken.value == "i64")       currentToken.type = KEY_I64;
+                        else if (currentToken.value == "u64")       currentToken.type = KEY_U64;
+                        else if (currentToken.value == "double")    currentToken.type = KEY_DOUBLE;
+                        else if (currentToken.value == "enum")      currentToken.type = KEY_ENUM;
+                        else if (currentToken.value == "struct")    currentToken.type = KEY_STRUCT;
 
                         endToken(currentToken, tokens);
                         currentToken.col = col;

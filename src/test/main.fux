@@ -1,5 +1,5 @@
 #get <core.io>
 
 main(): void {
-    io.putln("Hello Fux!");
+    io.putln("Hello World!");
 }

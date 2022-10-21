@@ -37,7 +37,6 @@ io {
             --> input: "Number: 23"
             --> return: "23"
     */
-
     getf(format: str): str;
 
 }
