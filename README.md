@@ -60,7 +60,11 @@ address -> float = &number;
     - [&check;] `Tokens`
     - [&check;] `Keywords`
 - [...] `Preprocessor`
+    - [...] `#get`
+    - [&cross;] `#define`
 - [...] `Parser`
+    - [...] `AST`
+    - [...] `Parsing`
 - [&cross;] `AST Analysis`
 - [&cross;] `Optimization`
 - [&cross;] `Code Generation`
