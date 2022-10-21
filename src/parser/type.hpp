@@ -20,6 +20,7 @@ namespace fux {
 
     typedef enum BuiltInType_ENUM {
         VOID,
+        BOOL,
         I8,
         U8,
         I16,
@@ -30,6 +31,9 @@ namespace fux {
         I64,
         U64,
         DOUBLE,
+        ENUM,
+        STRUCT,
+        VECTOR,
     } BuiltInType;
 
     class Type {

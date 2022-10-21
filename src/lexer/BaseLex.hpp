@@ -40,6 +40,7 @@ namespace BaseLex {
         COLON_COLON,    // ::
         SEMICOLON,      // ;
         DOT,            // .
+        TRIPLE_DOT,     // ...
         COMMA,          // ,
         EQUALS,         // =
         EQUALS_EQUALS,  // ==
@@ -101,6 +102,7 @@ namespace BaseLex {
         KEY_USING,      // using
         KEY_TYPEDEF,    // typedef
         KEY_DELETE,     // delete
+        KEY_PACKAGE,    // package
 
         KEY_GET,        // (#)get
         KEY_DEFINE,     // (#)define
@@ -132,7 +134,7 @@ namespace BaseLex {
         "RBRACE", "LBRACKET", "RBRACKET",
 
         "LESSTHAN", "GREATERTHAN", "COLON",
-        "COLON_COLON", "SEMICOLON", "DOT",
+        "COLON_COLON", "SEMICOLON", "DOT", "TRIPLE_DOT",
         "COMMA", "EQUALS", "EQUALS_EQUALS", 
         "TRIPLE_EQUALS", "NOT_EQUALS", "PLUS", 
         "PLUS_PLUS", "MINUS", "MINUS_MINUS", 
@@ -158,6 +160,7 @@ namespace BaseLex {
         "KEY_RETURN", "KEY_LABEL", "KEY_GOTO",    
         "KEY_TRY", "KEY_CATCH", "KEY_SELF",      
         "KEY_USING", "KEY_TYPEDEF", "KEY_DELETE",
+        "KEY_PACKAGE",
 
         "KEY_GET", "KEY_DEFINE",   
 
@@ -174,7 +177,7 @@ namespace BaseLex {
     static const char *TokenTypeValue[] = {
         "(", ")", "{", "}", "[", "]",
 
-        "<", ">", ":", "::", ";", ".",
+        "<", ">", ":", "::", ";", ".", "...",
         ",", "=", "==", "===", "!=", "+", 
         "++", "-", "--", "*", "**", "/", 
         "+=", "-=", "/=", "*=", "!",  
@@ -195,6 +198,7 @@ namespace BaseLex {
         "return", "label", "goto",    
         "try", "catch", "self",      
         "using", "typedef", "delete",
+        "package",
 
         "get", "define",
 
@@ -293,6 +297,7 @@ namespace BaseLex {
                         else if (currentToken.value == "using")     currentToken.type = KEY_USING;
                         else if (currentToken.value == "typedef")   currentToken.type = KEY_TYPEDEF;
                         else if (currentToken.value == "delete")    currentToken.type = KEY_DELETE;
+                        else if (currentToken.value == "package")   currentToken.type = KEY_PACKAGE;
 
                         else if (currentToken.value == "get")       currentToken.type = KEY_GET;
                         else if (currentToken.value == "define")    currentToken.type = KEY_DEFINE;
@@ -569,6 +574,12 @@ namespace BaseLex {
                     }
 
                     case '.': {
+                        if (peek() == '.' && peek(2) == '.') {
+                            token.type = TRIPLE_DOT;
+                            token.value = "...";
+                            advance(3);
+                            break;
+                        }
                         token.type = DOT;
                         token.value = ".";
                         advance();

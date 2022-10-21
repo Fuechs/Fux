@@ -38,7 +38,8 @@ namespace fux {
     class Parser {
     public:
         Parser(TokenList tokens) : tokens(tokens) {
-            types["void"] =     Type();
+            types["void"] =     Type(); // standard is VOID, "void"
+            types["bool"] =     Type(BOOL, "bool");
             types["i8"] =       Type(I8, "i8");
             types["u8"] =       Type(U8, "u8");
             types["char"] =     Type(U8, "char");
@@ -50,24 +51,19 @@ namespace fux {
             types["float"] =    Type(FLOAT, "float");
             types["i64"] =      Type(I64, "i64");
             types["u64"] =      Type(U64, "u64");
+            types["double"] =   Type(DOUBLE, "double");
+            types["enum"] =     Type(ENUM, "enum");
+            types["struct"] =   Type(STRUCT, "struct");
+            types["vector"] =   Type(VECTOR, "vector");
         }
 
-        AST parse();
+        Block parse();
 
     private:
         TokenList tokens;
         TokenList::iterator currentToken = tokens.begin();
         TypeMap types;
-
-     /*
-        Token expectTokenType(TokenType type);
-       
-        Token peek();
-
-        bool matchTokenType(TokenType type);
-
-        Type parseType();
-    */
+        Block root = Block("root");
     };
 
 }

@@ -13,47 +13,70 @@
 
 #include <vector>
 #include <string>
-#include <iostream>
+// #include <iostream>
 
 namespace fux {
 
-    using std::vector, std::string;
+    using 
+        std::vector, 
+        std::string
+    ;
 
-    
+    typedef enum BinaryOperator_ENUM {
+        ADD,
+        SUB,
+        MUL,
+        DIV,
+        NOP,
+    } BinaryOperator;
 
-    typedef enum ExpressionKind_ENUM {
-        INTEGER,
-    } ExpressionKind;
+    typedef enum AssignmentOperator_ENUM {
+        EQUALS,
+        PLUS_EQUALS,
+        MINUS_EQUALS,
+        // ...
+    } AssignmentOperator;
 
-    class Expression {
-    public:
+    class Expression {};
 
-        ExpressionKind kind;
-        string value;
-    };
-
-    typedef vector<Expression> ExpressionList;
-
-    typedef enum StatementKind_ENUM {
-        DECLARATION,
-    } StatementKind;
+    typedef std::shared_ptr<Expression> ExpressionPtr;
 
     class Statement {
     public:
+        Statement(string name = "untitled") : name(name) {}
 
-        StatementKind kind;
-        Expression expr;
-        string value;
+        string name;
     };
 
     typedef vector<Statement> StatementList;
 
-    class AST {
+    class Block : public Statement {
     public:
-        AST(string type) : type(type) {}
+        Block(string name = "untitled") : name(name) {}
 
-        string type;
+        string name;
         StatementList stmts;
     };
 
+    class Assignment : public Statement {
+    public:
+        Assignment(AssignmentOperator aOp, string name, Expression value) 
+        : aOp(aOp), name(name), value(value) {}
+
+        AssignmentOperator aOp;
+        string name;
+        Expression value;
+
+    };
+
+    class BinaryOperation : public Expression {
+    public:
+        BinaryOperation(BinaryOperator op, ExpressionPtr LHS, ExpressionPtr RHS) 
+        : op(op), LHS(LHS), RHS(RHS) {}
+
+        BinaryOperator op = NOP;
+        ExpressionPtr LHS {};
+        ExpressionPtr RHS {};
+    };
+    
 }

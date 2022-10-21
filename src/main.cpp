@@ -58,7 +58,7 @@ namespace fux {
                     token.debugPrint();
                 
                 Parser parser = Parser(tokens);
-                AST root = parser.parse();
+                Block root = parser.parse();
 
                 // TODO: generate bytecode
             }
@@ -68,7 +68,7 @@ namespace fux {
                 print_help();
             } else {
                 // const string source = read_file(string(argv[2]));
-                // convert string to bytecode
+                // TODO: read bytecode
 
                 vector<Instruction> code = {
                     Instruction{ PUSH_I32, 0, 4000 },
