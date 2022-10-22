@@ -23,7 +23,9 @@
 using io;
 
 fib(num: int): int {
-    return num < 2 ? num : fib(num-1) + fib(num-2);
+    if (num < 2) 
+        return num;
+    return fib(num - 1) + fib(num - 2);
 }
 
 main(): void {
