@@ -1,3 +1,51 @@
 package core;
 
+/*      
+    ----< Fux - Inbuilt Core Package >----
+
+    @version: 0.1
+    @author: Fuechs
+    @copyright: Copyright (c) 2022, Fuechs. All rights reserved.
+
+    @description: 
+
+    io (module)
+    ->  buffer: str[];
+    ->  flush(): void;
+    ->  put(args: var, ...): void;
+    ->  putln(args: var, ...): void;
+    ->  putch(arg: char): void;
+    ->  putint(arg: int|uint): void;
+    ->  putf(format: str, args: var, ...): void;
+    ->  clear(): void;
+    ->  getln(args: var, ...): str;
+    ->  getch(args: var, ...): char;
+    ->  getint(args: var, ...): i32;
+    ; (io)
+
+    math (module)
+    ->  allInt (typedef) (int|uint|float|double);
+    ->  root(exponent: allInt, number: allInt): double;
+    ->  sqrt(number: uint|float|double): double;
+    ->  sin(number: allInt): double;
+    ->  cos(number: allInt): double;
+    ->  tan(number: allInt): double;
+    ; (math)
+
+    file (module)
+    ->  File (class)
+        ->  File(path: str, mode: str): self;
+        ->  readBuffer: str[];      (optional! depending on mode)
+        ->  writeBuffer: str[];     (optional! depending on mode)
+        ->  read(): str;
+        ->  write(data: var, ...): void;
+        ->  close(): void;
+        ; (File)
+    ; (file)
+
+    ----< Fux - Inbuilt Core Package >---- 
+*/
+
 #get "io.fux"
+#get "math.fux"
+#get "file.fux"

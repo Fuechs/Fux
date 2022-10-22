@@ -103,10 +103,16 @@ main(): void {
 
 ```cpp
 #get <core.file>
+#get <core.io>
+
+using file;
 
 main(): void { 
     filePath := "path/file.txt";
-    contents := file.read(filePath);
+    file := File(filePath, 'r');
+    if (!?file) // check if file does not (-> !) exist (-> ?)
+        io.err("Could not open "+filePath);
+    contents := file.read();
 }
 ```
 

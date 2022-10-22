@@ -1,0 +1,22 @@
+package core;
+
+file {
+
+    :File {
+        ::(self, path: str, mode: str): self {
+            if (?mode["r"])
+                self.readBuffer: str[];
+            if (?mode["w"])
+                self.writeBuffer: str[];
+
+            return self;
+        }
+
+        read(self): str;
+
+        write(self, data: var, ...): void;
+
+        close(self): void;
+    }
+
+}

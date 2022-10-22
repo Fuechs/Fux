@@ -1,0 +1,21 @@
+package core
+
+math {
+
+    typedef int|uint|float|double allInt;
+
+    root(exponent: allInt, number: allInt): double {
+        return number ^ (1/exponent);
+    }
+
+    sqrt(number: uint|float|double): double {
+        return root(2, number);
+    }
+
+    sin(number: allInt): double;
+     
+    cos(number: allInt): double;
+
+    tan(number: allInt): double;
+
+}
