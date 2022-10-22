@@ -4,6 +4,11 @@
 
 # Fux
 
+![Total Lines](https://img.shields.io/tokei/lines/github.com/Fuechs/Fux?style=for-the-badge)
+![BSD 3-Clause](https://img.shields.io/github/license/Fuechs/Fux?style=for-the-badge)
+![Top Language](https://img.shields.io/github/languages/top/Fuechs/Fux?style=for-the-badge)
+---
+
 **`Flawless Unambiguous Programming`**
 
 ###### Warning: Fux is still in early development.
@@ -172,7 +177,3 @@ main(): void {
 </details>
 
 ---
-
-![forthebadge](
-    https://forthebadge.com/images/badges/made-with-c-plus-plus.svg
-) 
