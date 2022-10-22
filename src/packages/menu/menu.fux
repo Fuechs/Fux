@@ -10,9 +10,11 @@ package menu;
 
     @description:
 
+    menu (module)
     ->  Menu (class)
         ->  Menu(title: str): self;
-    ; (Menu)
+        ; (Menu)
+    ; (menu)
 
     ---< Fux - Inbuilt Menu Package >---
 */
