@@ -33,7 +33,7 @@ namespace fux {
         DOUBLE,
         ENUM,
         STRUCT,
-        VECTOR,
+        ARRAY,
     } BuiltInType;
 
     class Type {

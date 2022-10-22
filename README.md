@@ -85,7 +85,7 @@ address -> float = &number;
 #get <core.io>
 
 main(): void { 
-    io.println("Hello World!");
+    io.putln("Hello World!");
 }
 ```
 

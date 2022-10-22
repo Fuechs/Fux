@@ -54,7 +54,7 @@ namespace fux {
             types["double"] =   Type(DOUBLE, "double");
             types["enum"] =     Type(ENUM, "enum");
             types["struct"] =   Type(STRUCT, "struct");
-            types["vector"] =   Type(VECTOR, "vector");
+            types["array"] =    Type(ARRAY, "array");
         }
 
         Block parse();
