@@ -2,7 +2,7 @@ package core;
 
 io {
     // output 
-    buffer: str[];
+    [buffer: str[];]
     
     flush(): void;
 

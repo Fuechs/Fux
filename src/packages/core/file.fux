@@ -4,11 +4,10 @@ file {
 
     :File {
         ::(self, path: str, mode: str): self {
-            if (?mode["r"])
+            [if (?mode["r"])
                 self.readBuffer: str[];
             if (?mode["w"])
-                self.writeBuffer: str[];
-
+                self.writeBuffer: str[];]
             return self;
         }
 

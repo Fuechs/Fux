@@ -1,0 +1,26 @@
+package menu;
+
+/*
+    ---< Fux - Inbuilt Menu Package >---
+
+    @version: 0.1
+    @author: fuechs
+    @copyright: Copyright (c) 2022, Fuechs. All rights reserved.
+    @brief: Package for creating menus in a console
+
+    @description:
+
+    ->  Menu (class)
+        ->  Menu(title: str): self;
+    ; (Menu)
+
+    ---< Fux - Inbuilt Menu Package >---
+*/
+
+menu {
+
+    :Menu {
+        ::(self, title: str): self;
+    }
+
+}

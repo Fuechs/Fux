@@ -6,11 +6,11 @@ package core;
     @version: 0.1
     @author: Fuechs
     @copyright: Copyright (c) 2022, Fuechs. All rights reserved.
+    @brief: Core package of Fux with essential features
 
     @description: 
 
     io (module)
-    ->  buffer: str[];
     ->  flush(): void;
     ->  put(args: var, ...): void;
     ->  putln(args: var, ...): void;
@@ -35,8 +35,6 @@ package core;
     file (module)
     ->  File (class)
         ->  File(path: str, mode: str): self;
-        ->  readBuffer: str[];      (optional! depending on mode)
-        ->  writeBuffer: str[];     (optional! depending on mode)
         ->  read(): str;
         ->  write(data: var, ...): void;
         ->  close(): void;
