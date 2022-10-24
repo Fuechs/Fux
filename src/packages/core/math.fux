@@ -15,7 +15,7 @@ math {
     }
 
     sin(number: allInt): double;
-     
+    
     cos(number: allInt): double;
 
     tan(number: allInt): double;

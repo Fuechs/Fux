@@ -22,6 +22,7 @@ package core;
     ->  getln(args: var, ...): str;
     ->  getch(args: var, ...): char;
     ->  getint(args: var, ...): i32;
+    ->  getf(format: str): str;
     ; (io)
 
     math (module)
