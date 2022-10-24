@@ -4,6 +4,8 @@ math {
 
     typedef int|uint|float|double allInt;
 
+    pi: double === 3.141592653589793115997963468544185161590576171875;
+
     root(exponent: allInt, number: allInt): double {
         return number ^ (1/exponent);
     }

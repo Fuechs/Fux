@@ -26,6 +26,7 @@ package core;
 
     math (module)
     ->  allInt (typedef) (int|uint|float|double);
+    ->  (const) pi: double;
     ->  root(exponent: allInt, number: allInt): double;
     ->  sqrt(number: uint|float|double): double;
     ->  sin(number: allInt): double;
