@@ -17,9 +17,14 @@
 
 
 #include "lexer/BaseLex.hpp"
+
+#include "preprocessor/preprocessor.hpp"
+
 #include "parser/parser.hpp"
 #include "parser/ast.hpp"
-#include "preprocessor/preprocessor.hpp"
+
+#include "generator/generator.hpp"
+
 #include "vm/instruction.hpp"
 #include "vm/vm.hpp"
 
@@ -60,7 +65,11 @@ namespace fux {
                 Parser parser = Parser(tokens);
                 Block root = parser.parse();
 
+                // TODO: ast analysis
+                
                 // TODO: generate bytecode
+                // Generator generator = Generator(root);
+                // auto bytecode = generator.generate();
             }
         } else if (strcmp(argv[1], "vm") == 0) {
             if (argc < 3) {

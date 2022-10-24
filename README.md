@@ -76,7 +76,6 @@ address -> float = &number;
 - [&cross;] `Optimization`
 - [&cross;] `Code Generation`
 - [...] `Virtual Machine`
-- [&cross;] `Runtime`
 - [...] `Syntax`
 - [...] `Standard Library`
     - [...] `core`
