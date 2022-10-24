@@ -11,9 +11,16 @@ package menu;
     @description:
 
     menu (module)
+    ->  MenuItemType (typedef) (enum)
+    ->  MenuItem (class)
+        ->  MenuItem(type: MenuItemType): self;
+        ->  (const) type: MenuItemType;
+        ; (MenuItem)
     ->  Menu (class)
-        ->  Menu(title: str): self;
-        ->  (safe) title: str;
+        ->  Menu(title: str, items: MenuItem[]): self;
+        ->  (const) title: str;
+        ->  (safe) items: MenuItem[];
+        ->  addItem(item: MenuItem): void;
         ; (Menu)
     ; (menu)
 
@@ -22,11 +29,29 @@ package menu;
 
 menu {
 
-    :Menu {
-        ::(self, title: str): self {
-            safe self.title = title;
+    typedef enum MenuItemType_ENUM {
+        DEFAULT,
+    } MenuItemType;
 
+    :MenuItem {
+        ::(self, type: MenuItemType = DEFAULT): self {
+            self.type :=== type;
+            switch (self.type) {
+                case (DEFAULT) break;
+            }
             return self;
+        }
+    }
+
+    :Menu {
+        ::(self, title: str, items: MenuItem[]): self {
+            self.title :=== title;
+            safe self.items := items;
+            return self;
+        }
+
+        addItem(item: MenuItem): void {
+            self.items[] << item;
         }
     }
 

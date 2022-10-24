@@ -27,7 +27,7 @@
 
 using io;
 
-fib(num: int): int {
+fib(num: i32): i32 {
     if (num < 2) 
         return num;
     return fib(num - 1) + fib(num - 2);
@@ -77,11 +77,13 @@ address -> float = &number;
 - [&cross;] `Code Generation`
 - [...] `Virtual Machine`
 - [&cross;] `Runtime`
+- [...] `Syntax`
 - [...] `Standard Library`
     - [...] `core`
         - [...] `io`
         - [...] `math`
         - [...] `file`
+        - [&cross;] `algorithm`
     - [...] `menu`
 
 ## Examples
@@ -130,7 +132,7 @@ main(): void {
 
 ```cpp
 main(): void { 
-    someArray: int[];
+    someArray: i32[];
     someArray[] << 1; // someArray = {1}
     someArray[] << 3; // someArray = {1, 3}
 }

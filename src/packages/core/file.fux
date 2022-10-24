@@ -4,13 +4,15 @@ file {
 
     :File {
         ::(self, path: str, mode: str): self {
-            safe self.path = path;
-            safe self.mode = mode;
+            self.path :=== path;
+            self.mode :=== mode;
 
             if (?mode["r"])
                 safe self.readBuffer: str[];
             if (?mode["w"])
                 safe self.writeBuffer: str[];
+
+            // open file
                 
             return self;
         }

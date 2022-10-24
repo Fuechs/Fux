@@ -36,8 +36,8 @@ package core;
     file (module)
     ->  File (class)
         ->  File(path: str, mode: str): self;
-        ->  (safe) path: str;
-        ->  (safe) mode: str;
+        ->  (const) path: str;
+        ->  (const) mode: str;
         ->  (safe) readBuffer: str[]; (optional)
         ->  (safe) writeBuffer: str[]; (optional)
         ->  read(): str;
@@ -46,9 +46,14 @@ package core;
         ; (File)
     ; (file)
 
+    algorithm (module)
+    ->  ...
+    ; (algorithm)
+
     ----< Fux - Inbuilt Core Package >---- 
 */
 
 #get "io.fux"
 #get "math.fux"
 #get "file.fux"
+#get "algorithm.fux"
