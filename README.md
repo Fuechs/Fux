@@ -61,6 +61,10 @@ address -> float = &number;
 > As already mentioned above, Fux ships with a large standard library, ready to use.
 > It includes, but is not limited to, Utility, (File) IO and Maths. 
 
+## Setup
+
+Since Fux is still in an early development stage, there are no setup methods yet.
+
 ## Roadmap
 
 - [&check;] `Lexer`
