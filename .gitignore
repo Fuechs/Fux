@@ -1,0 +1,11 @@
+.DS_Store
+.vscode
+art/old
+ignore
+fux*
+dev_only
+web/
+main
+main.dSYM
+docs/
+grammar.bnf
