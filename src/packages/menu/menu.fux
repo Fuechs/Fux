@@ -12,9 +12,12 @@ package menu;
 
     menu (module)
     ->  MenuItemType (typedef) (enum)
+    ->  MenuItemColor (typedef) (enum)
     ->  MenuItem (class)
-        ->  MenuItem(type: MenuItemType): self;
+        ->  MenuItem(type: MenuItemType, text: str, color: MenuItemColor): self;
         ->  (const) type: MenuItemType;
+        ->  text: str;
+        ->  color: MenuItemColor;
         ; (MenuItem)
     ->  Menu (class)
         ->  Menu(title: str, items: MenuItem[]): self;
@@ -30,15 +33,25 @@ package menu;
 menu {
 
     typedef enum MenuItemType_ENUM {
+        SELECTION,
+        SUB_MENU,
         DEFAULT,
     } MenuItemType;
 
+    typedef enum MenuItemColor_ENUM {
+        WHITE,
+        RED,
+        GREEN,
+        BLUE,
+        YELLOW,
+        GREY,
+    } MenuItemColor;
+
     :MenuItem {
-        ::(self, type: MenuItemType = DEFAULT): self {
+        ::(self, type: MenuItemType = DEFAULT, text: str, color: MenuItemColor = WHITE): self {
             self.type :=== type;
-            switch (self.type) {
-                case (DEFAULT) break;
-            }
+            self.text := text;
+            self.color := color;
             return self;
         }
     }

@@ -21,7 +21,12 @@
 namespace fux {
 
     using namespace BaseLex;
-    using std::string, std::cerr, std::endl;
+    using 
+        std::string, 
+        std::cerr, 
+        std::endl,
+        std::make_unique
+    ;
 
     class ParserError {
     public:
@@ -57,13 +62,13 @@ namespace fux {
             types["array"] =    Type(ARRAY, "array");
         }
 
-        Block parse();
+        unique_ptr<ExprAST> parse();
 
     private:
         TokenList tokens;
         TokenList::iterator currentToken = tokens.begin();
         TypeMap types;
-        Block root = Block("root");
+        unique_ptr<ExprAST> root = Block("root");
     };
 
 }

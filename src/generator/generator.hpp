@@ -17,10 +17,10 @@ namespace fux {
     
     class Generator {
     public:
-        Generator(Block root = {}) 
+        Generator(int root = 0) 
         : root(root) {}
 
-        Block root;
+        int root;
     };
 
 }

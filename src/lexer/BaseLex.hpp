@@ -96,13 +96,18 @@ namespace BaseLex {
         KEY_RETURN,     // return
         KEY_LABEL,      // label
         KEY_GOTO,       // goto
-        KEY_TRY,        // try
-        KEY_CATCH,      // catch
         KEY_SELF,       // self
         KEY_USING,      // using
         KEY_TYPEDEF,    // typedef
         KEY_DELETE,     // delete
         KEY_PACKAGE,    // package
+        KEY_EXCEPT,     // except
+        KEY_EXIT,       // exit
+        KEY_SUPER,      // super
+
+        KEY_TRUE,       // true
+        KEY_FALSE,      // false
+        KEY_NULL,       // null
 
         KEY_GET,        // (#)get
         KEY_DEFINE,     // (#)define
@@ -121,6 +126,10 @@ namespace BaseLex {
         KEY_I64,        // i64
         KEY_U64,        // u64
         KEY_DOUBLE,     // double
+        KEY_INT,        // int
+        KEY_UINT,       // uint
+        KEY_VAR,        // var
+        KEY_STR,        // str
         KEY_ENUM,       // enum
         KEY_STRUCT,     // struct
 
@@ -158,9 +167,11 @@ namespace BaseLex {
         "KEY_WHILE", "KEY_DO", "KEY_SWITCH",     
         "KEY_CASE", "KEY_BREAK", "KEY_CONTINUE",   
         "KEY_RETURN", "KEY_LABEL", "KEY_GOTO",    
-        "KEY_TRY", "KEY_CATCH", "KEY_SELF",      
-        "KEY_USING", "KEY_TYPEDEF", "KEY_DELETE",
-        "KEY_PACKAGE",
+        "KEY_SELF", "KEY_USING", "KEY_TYPEDEF", 
+        "KEY_DELETE", "KEY_PACKAGE", "KEY_EXCEPT",
+        "KEY_EXIT", "KEY_SUPER",
+
+        "KEY_TRUE", "KEY_FALSE", "KEY_NULL",
 
         "KEY_GET", "KEY_DEFINE",   
 
@@ -169,6 +180,7 @@ namespace BaseLex {
         "KEY_I16", "KEY_U16", "KEY_WCHAR",  
         "KEY_I32", "KEY_U32", "KEY_FLOAT",  
         "KEY_I64", "KEY_U64", "KEY_DOUBLE",
+        "KEY_INT", "KEY_UINT", "KEY_VAR", "KEY_STR",      
         "KEY_ENUM", "KEY_STRUCT",
 
         "EOS", "EOL", "UNKNOWN",        
@@ -196,9 +208,11 @@ namespace BaseLex {
         "while", "do", "switch",     
         "case", "break", "continue",   
         "return", "label", "goto",    
-        "try", "catch", "self",      
-        "using", "typedef", "delete",
-        "package",
+        "self", "using", "typedef", 
+        "delete", "package", "except",
+        "exit", "super",
+
+        "true", "false", "null",
 
         "get", "define",
 
@@ -207,6 +221,7 @@ namespace BaseLex {
         "i16", "u16", "wchar",  
         "i32", "u32", "float",  
         "i64", "u64", "double",
+        "int", "uint", "var", "str"
         "enum", "struct",
 
         "EOS", "\\n", "unknown", 
@@ -291,13 +306,18 @@ namespace BaseLex {
                         else if (currentToken.value == "return")    currentToken.type = KEY_RETURN;
                         else if (currentToken.value == "label")     currentToken.type = KEY_LABEL;
                         else if (currentToken.value == "goto")      currentToken.type = KEY_GOTO;
-                        else if (currentToken.value == "try")       currentToken.type = KEY_TRY;
-                        else if (currentToken.value == "catch")     currentToken.type = KEY_CATCH;
                         else if (currentToken.value == "self")      currentToken.type = KEY_SELF;
                         else if (currentToken.value == "using")     currentToken.type = KEY_USING;
                         else if (currentToken.value == "typedef")   currentToken.type = KEY_TYPEDEF;
                         else if (currentToken.value == "delete")    currentToken.type = KEY_DELETE;
                         else if (currentToken.value == "package")   currentToken.type = KEY_PACKAGE;
+                        else if (currentToken.value == "except")    currentToken.type = KEY_EXCEPT;
+                        else if (currentToken.value == "exit")      currentToken.type = KEY_EXIT;
+                        else if (currentToken.value == "super")     currentToken.type = KEY_SUPER;
+
+                        else if (currentToken.value == "true")      currentToken.type = KEY_TRUE;
+                        else if (currentToken.value == "false")     currentToken.type = KEY_FALSE;
+                        else if (currentToken.value == "null")      currentToken.type = KEY_NULL;
 
                         else if (currentToken.value == "get")       currentToken.type = KEY_GET;
                         else if (currentToken.value == "define")    currentToken.type = KEY_DEFINE;
@@ -316,6 +336,10 @@ namespace BaseLex {
                         else if (currentToken.value == "i64")       currentToken.type = KEY_I64;
                         else if (currentToken.value == "u64")       currentToken.type = KEY_U64;
                         else if (currentToken.value == "double")    currentToken.type = KEY_DOUBLE;
+                        else if (currentToken.value == "int")       currentToken.type = KEY_INT;
+                        else if (currentToken.value == "uint")      currentToken.type = KEY_UINT;
+                        else if (currentToken.value == "var")       currentToken.type = KEY_VAR;
+                        else if (currentToken.value == "str")       currentToken.type = KEY_STR;
                         else if (currentToken.value == "enum")      currentToken.type = KEY_ENUM;
                         else if (currentToken.value == "struct")    currentToken.type = KEY_STRUCT;
 

@@ -63,7 +63,7 @@ namespace fux {
                     token.debugPrint();
                 
                 Parser parser = Parser(tokens);
-                Block root = parser.parse();
+                auto root = parser.parse();
 
                 // TODO: ast analysis
                 

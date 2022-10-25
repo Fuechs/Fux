@@ -13,70 +13,85 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 // #include <iostream>
 
 namespace fux {
 
     using 
         std::vector, 
-        std::string
+        std::string,
+        std::unique_ptr,
+        std::move
     ;
 
-    typedef enum BinaryOperator_ENUM {
-        ADD,
-        SUB,
-        MUL,
-        DIV,
-        NOP,
-    } BinaryOperator;
+    class ExprAST {
+    // public:
+        // virtual ~ExprAST() {}
+    };
 
-    typedef enum AssignmentOperator_ENUM {
-        EQUALS,
-        PLUS_EQUALS,
-        MINUS_EQUALS,
-        // ...
-    } AssignmentOperator;
-
-    class Expression {};
-
-    typedef std::shared_ptr<Expression> ExpressionPtr;
-
-    class Statement {
+    class NumberExprAST : public ExprAST {
     public:
-        Statement(string name = "untitled") : name(name) {}
+        NumberExprAST(double value) : value(value) {}
+    private:
+        double value;
+    };
 
+    class VariableExprAST : public ExprAST {
+    public:
+        VariableExprAST(const string &name) : name(name) {}
+    private:
         string name;
     };
 
-    typedef vector<Statement> StatementList;
-
-    class Block : public Statement {
+    class BinaryExprAST : public ExprAST {
     public:
-        Block(string name = "untitled") : name(name) {}
-
-        string name;
-        StatementList stmts;
+        BinaryExprAST(
+            char op,
+            unique_ptr<ExprAST> LHS,
+            unique_ptr<ExprAST> RHS
+        ) : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
+    private:
+        char op;
+        unique_ptr<ExprAST> LHS, RHS;
     };
 
-    class Assignment : public Statement {
+    class CallExprAST : public ExprAST {
     public:
-        Assignment(AssignmentOperator aOp, string name, Expression value) 
-        : aOp(aOp), name(name), value(value) {}
-
-        AssignmentOperator aOp;
-        string name;
-        Expression value;
-
+        CallExprAST(
+            const string &callee,
+            vector<unique_ptr<ExprAST>> args
+        ) : callee(callee), args(move(args)) {}
+    private:
+        string callee;
+        vector<unique_ptr<ExprAST>> args;
     };
 
-    class BinaryOperation : public Expression {
+    class PrototypeAST {
     public:
-        BinaryOperation(BinaryOperator op, ExpressionPtr LHS, ExpressionPtr RHS) 
-        : op(op), LHS(LHS), RHS(RHS) {}
+        PrototypeAST(
+            const string &name, 
+            vector<string> args
+        ) : name(name), args(std::move(args)) {}
 
-        BinaryOperator op = NOP;
-        ExpressionPtr LHS {};
-        ExpressionPtr RHS {};
+        const string &getName() const { return name; }
+
+    private:
+        string name;
+        vector<string> args;
+    };
+
+    class FunctionAST {
+
+    public:
+        FunctionAST(
+            unique_ptr<PrototypeAST> proto,
+            unique_ptr<ExprAST> body
+        ) : proto(move(proto)), body(move(body)) {}
+    
+    private:
+        unique_ptr<PrototypeAST> proto;
+        unique_ptr<ExprAST> body;
     };
     
 }

@@ -13,8 +13,13 @@
 
 namespace fux {
 
-    Block Parser::parse() {
-        return root;
+    unique_ptr<ExprAST> Parser::parse() {
+        // 7 + 3 * 4
+        // (+ 7 (* 3 4))
+        auto LHS = make_unique<NumberExprAST>(1);
+        auto RHS = make_unique<NumberExprAST>(2);
+        root = make_unique<BinaryExprAST>('+', move(LHS), move(RHS)); 
+        return NULL; // FIXME: deleted function?
     }
 
 }
