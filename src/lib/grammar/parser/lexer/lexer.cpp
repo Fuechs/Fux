@@ -1,13 +1,10 @@
 /**
- * @file main.cpp
+ * @file lexer.cpp
  * @author fuechs
- * @brief main file of fux
+ * @brief fux runtime
  * @version 0.1
- * @date 2022-09-26
+ * @date 2022-10-30
  * 
  * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
  * 
  */
-
-
-int main(int argc, char **argv) {return 0;}

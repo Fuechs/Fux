@@ -13,8 +13,6 @@
 
 ###### Warning: Fux is still in early development.
 
-> *Fux uses [`BaseLex`](https://github.com/Fuechs/BaseLex) for tokenization, and you can too!*
-
 ## The beautiful alternative for C++ 
 
 - so you don't shoot yourself in the foot (like I do working on Fux)
@@ -23,7 +21,7 @@
 
 
 ```cpp
-#get <core.io>
+get core.io
 
 using io;
 
@@ -67,27 +65,16 @@ Since Fux is still in an early development stage, there are no setup methods yet
 
 ## Roadmap
 
-- [&check;] `Lexer`
-    - [&check;] `Tokens`
-    - [&check;] `Keywords`
-- [...] `Preprocessor`
-    - [...] `#get`
-    - [&cross;] `#define`
-- [...] `Parser`
-    - [...] `AST`
-    - [...] `Parsing`
+- [...] `Error`
+- [...] `Lexer`
+- [&cross;] `Preprocessor`
+- [&cross;] `Parser`
 - [&cross;] `AST Analysis`
 - [&cross;] `Optimization`
 - [&cross;] `Code Generation`
-- [...] `Virtual Machine`
+- [&cross;] `Virtual Machine`
 - [...] `Syntax`
-- [...] `Standard Library`
-    - [...] `core`
-        - [...] `io`
-        - [...] `math`
-        - [...] `file`
-        - [&cross;] `algorithm`
-    - [...] `menu`
+- [&cross;] `Standard Library`
 
 ## Examples
 
@@ -97,7 +84,7 @@ Since Fux is still in an early development stage, there are no setup methods yet
 <br>
 
 ```cpp
-#get <core.io>
+get core.io
 
 main(): void { 
     io.putln("Hello World!");
@@ -112,8 +99,8 @@ main(): void {
 <br>
 
 ```cpp
-#get <core.file>
-#get <core.io>
+get core.file
+get core.io
 
 using file;
 
@@ -149,7 +136,7 @@ main(): void {
 <br>
 
 ```cpp
-#get <core.io>
+get core.io
 
 main(): void {
     res := 1;

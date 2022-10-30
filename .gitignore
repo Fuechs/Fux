@@ -2,10 +2,10 @@
 .vscode
 art/old
 ignore
-fux*
+fux
 dev_only
 web/
 main
-main.dSYM
 docs/
 grammar.bnf
+*.dSYM

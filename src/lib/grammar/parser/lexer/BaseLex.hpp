@@ -8,8 +8,9 @@
  * @copyright Copyright (c) 2020-2022 Fuechs. All rights reserved.
  * 
  * ! MODIFIED !
+ * 
+ * unused for now
  */
-
 
 #pragma once
 
@@ -17,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+
 
 namespace BaseLex {
 
