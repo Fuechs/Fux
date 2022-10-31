@@ -111,6 +111,10 @@ public:
         warning = pe.warning;
     }
 
+    void free() {
+        error.clear();
+    }
+
     ErrorType id;
     string error;
     int line;
@@ -118,7 +122,7 @@ public:
     bool warning;
 };
 
-class AST;
+class AST {};
 
 class ErrorManager {
 public:
@@ -155,7 +159,7 @@ public:
     void pass();
 
     void free();
-    string getline(int line);
+    string getLine(int line);
 
 private:
     keypair<ErrorType, string> getErrorID(ErrorType);
@@ -170,11 +174,13 @@ private:
     ParseError lastError;
     ParseError lastCheckedError;
     bool _err, cm, asis, aggressive;
+    // cm: error check mode
     string filename;
 
     bool shouldReport(TokenEntity *token, const ParseError &last_err, const ParseError &e) const;
     string getErrors(list<ParseError> *errors);
     void printError(ParseError &err);
     bool hasError(list<ParseError> *e, const ParseError &parseerror1) const;
-    bool shouldReportWarning(TokenEntity *token, const ParseError &last_err, const ParseError &e) const; 
+    bool shouldReportWarning(TokenEntity *token, const ParseError &last_err, const ParseError &e) const;
+    keypair<ErrorType, string> getErrorByID(ErrorType err);
 };

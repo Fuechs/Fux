@@ -67,10 +67,11 @@ enum TokenType {
         BIT_AND,        // &
     
         // objects
-        CHARACTER,      // 'c'
-        STRING,         // "string"
+        SINGLE_QUOTE,   // '
+        DOUBLE_QUOTE,   // "
         NUMBER,         // 0
-        IDENTIFIER,     // identifier  
+        LETTER,         // a
+        UNDERSCORE,     // _
         COLON_COLON,    // ::
         TRIPLE_DOT,     // ...
 
