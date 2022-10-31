@@ -148,7 +148,7 @@ public:
     uint64_t getErrorCount() { return errors->size(); }
     uint64_t getWarningCount() { return unfilteredErrors->size(); }
     int createNewError(ErrorType err, TokenEntity token, string xcmts = "");
-    int createNewError(ErrorType err, AST *pAst, string xcmts = "");
+    int createNewError(ErrorType err, AST *pAST, string xcmts = "");
     void createNewError(ErrorType err, int line, int col, string xcmts);
     void createNewWarning(ErrorType err, int line, int col, string xcmts);
     void createNewWarning(ErrorType err, AST *pAST, string xcmts);

@@ -352,7 +352,7 @@ bool ErrorManager::hasError(list<ParseError> *e, const ParseError &perror) const
     return false;
 }
 
-void ErrorManager::createNewError(ErrorType err, AST *pAST, string xcmts) {
+int ErrorManager::createNewError(ErrorType err, AST *pAST, string xcmts) {
     keypair<ErrorType, string> kp = getErrorByID(err);
     ParseError e(kp, pAST->line, pAST->col, xcmts);
     ParseError lastError = cm ? lastCheckedError : lastError;
@@ -363,13 +363,34 @@ void ErrorManager::createNewError(ErrorType err, AST *pAST, string xcmts) {
         else if (cm) {
             getPossibleErrorList()->push_back(e);
             lastCheckedError = e;
-            return;
+            return 1;
         }
 
         _err = true;
         errors->push_back(e);
         unfilteredErrors->push_back(e);
         this->lastError = e;
+        return 1;
     } else 
         unfilteredErrors->push_back(e);
+    
+    return 0;
+}
+
+void ErrorManager::createNewWarning(ErrorType err, AST *pAST, string xcmts) {
+    keypair<ErrorType, string> kp = getErrorByID(err);
+    ParseError e(kp, pAST->line, pAST->col, xcmts);
+    ParseError lastError;
+
+    if (warnings->size() > 0)
+        lastError = *next(warnings->begin(), warnings->size() - 1);
+    else
+        lastError = cm ? lastCheckedError : lastError;
+
+    if (warnings->size() == 0 || shouldReportWarning(NULL, lastError, e)) {
+        if (asis)
+            printError(e);
+
+        warnings->push_back(e);
+    }
 }
