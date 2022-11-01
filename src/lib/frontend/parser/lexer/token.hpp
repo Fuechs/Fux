@@ -217,9 +217,6 @@ public:
     Token(TokenType type = NONE, string value = "")
     : type(type), value(value), line(0), col(0) {}
 
-    Token(TokenType type = NONE, string value = "", size_t line = 0, size_t col = 0)
-    : type(type), value(value), line(line), col(col) {}
-
     ~Token() { value.clear(); }
 
     TokenType type;
