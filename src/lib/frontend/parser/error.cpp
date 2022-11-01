@@ -156,7 +156,7 @@ void ErrorManager::printErrors() {
     }
 }
 
-int ErrorManager::createNewError(ErrorType err, TokenEntity token, string xcmts) {
+int ErrorManager::createNewError(ErrorType err, Token token, string xcmts) {
     keypair<ErrorType, string> kp = getErrorByID(err);
     ParseError e(kp, token, xcmts);
     ParseError lastError = cm ? lastCheckedError : lastError;
@@ -181,18 +181,17 @@ int ErrorManager::createNewError(ErrorType err, TokenEntity token, string xcmts)
     return 0;
 }
 
-bool ErrorManager::shouldReport(TokenEntity *token, const ParseError &lastError, const ParseError &e) const {
+bool ErrorManager::shouldReport(Token *token, const ParseError &lastError, const ParseError &e) const {
     if (lastError.error != e.error 
     && lastError.line != e.line 
     && lastError.col != e.col
     && lastError.error.find(e.error) == string::npos
     && !hasError(errors, e)) {
         if (token != NULL
-        && token->getID() != SINGLE
-        && token->getID() != CHAR_LITERAL
-        && token->getID() != STRING_LITERAL
-        && token->getID() != INTEGER_LITERAL)
-            return (lastError.error.find(token->getToken()) == string::npos) 
+        && token->type != CHAR
+        && token->type != STRING
+        && token->type != NUMBER)
+            return (lastError.error.find(token->value) == string::npos) 
                     && ((lastError.line-e.line) != -1);
 
         return true;
@@ -201,18 +200,17 @@ bool ErrorManager::shouldReport(TokenEntity *token, const ParseError &lastError,
     return false;
 }
 
-bool ErrorManager::shouldReportWarning(TokenEntity *token, const ParseError &lastError, const ParseError &e) const {
+bool ErrorManager::shouldReportWarning(Token *token, const ParseError &lastError, const ParseError &e) const {
     if (lastError.error != e.error 
     && lastError.line != e.line 
     && lastError.col != e.col
     && lastError.error.find(e.error) == string::npos
     && !hasError(errors, e)) {
         if (token != NULL
-        && token->getID() != SINGLE
-        && token->getID() != CHAR_LITERAL
-        && token->getID() != STRING_LITERAL
-        && token->getID() != INTEGER_LITERAL)
-            return (lastError.error.find(token->getToken()) == string::npos) 
+        && token->type != CHAR
+        && token->type != STRING
+        && token->type != NUMBER)
+            return (lastError.error.find(token->value) == string::npos) 
                     && ((lastError.line-e.line) != -1);
 
         return true;

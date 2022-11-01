@@ -13,7 +13,7 @@
 
 #include "../../../include.hpp"
 #include "../../util/keypair.hpp"
-#include "lexer/tokenentity.hpp"
+#include "lexer/token.hpp"
 #include "../list.hpp"
 
 enum ErrorType {
@@ -93,13 +93,13 @@ public:
 
     ParseError(
         keypair<ErrorType, string> err,
-        TokenEntity token,
+        Token token,
         string addon = ""
     ) {
         id = err.key;
         error = err.value + addon;
-        line = token.getLine();
-        col = token.getColumn();
+        line = token.line;
+        col = token.col;
         this->warning = warning;
     }
 
@@ -147,7 +147,7 @@ public:
     void printErrors();
     uint64_t getErrorCount() { return errors->size(); }
     uint64_t getWarningCount() { return unfilteredErrors->size(); }
-    int createNewError(ErrorType err, TokenEntity token, string xcmts = "");
+    int createNewError(ErrorType err, Token token, string xcmts = "");
     int createNewError(ErrorType err, AST *pAST, string xcmts = "");
     void createNewError(ErrorType err, int line, int col, string xcmts);
     void createNewWarning(ErrorType err, int line, int col, string xcmts);
@@ -177,10 +177,10 @@ private:
     // cm: error check mode
     string filename;
 
-    bool shouldReport(TokenEntity *token, const ParseError &last_err, const ParseError &e) const;
+    bool shouldReport(Token *token, const ParseError &last_err, const ParseError &e) const;
     string getErrors(list<ParseError> *errors);
     void printError(ParseError &err);
     bool hasError(list<ParseError> *e, const ParseError &parseerror1) const;
-    bool shouldReportWarning(TokenEntity *token, const ParseError &last_err, const ParseError &e) const;
+    bool shouldReportWarning(Token *token, const ParseError &last_err, const ParseError &e) const;
     keypair<ErrorType, string> getErrorByID(ErrorType err);
 };

@@ -12,7 +12,7 @@
 #pragma once
 
 #include <list>
-#include "lexer/tokenentity.hpp"
+#include "lexer/token.hpp"
 #include "../list.hpp"
 
 enum AstType {
@@ -122,10 +122,10 @@ public:
     bool hasEntity(TokenType t);
     void freeSubASTS();
     long getEntityCount();
-    TokenEntity getEntity(long at);
-    TokenEntity getEntity(TokenType t);
+    Token getEntity(long at);
+    Token getEntity(TokenType t);
 
-    void addEntity(TokenEntity entity);
+    void addEntity(Token entity);
     void addAST(AST _ast);
     void free();
 
@@ -141,5 +141,5 @@ private:
     AstType type;
     AST *parent;
     List<AST> subASTs;
-    List<TokenEntity> entities;
+    List<Token> entities;
 };

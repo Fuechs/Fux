@@ -1,7 +1,7 @@
 cc = g++
 exec = fux
 clags = -std=c++20 -g -Wall
-src = $(wildcard src/*.cpp src/*/*.cpp)
+src = $(wildcard src/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp)
 ex = src/examples
  
 # Copyright (c) 2020-2022 Fuechs
