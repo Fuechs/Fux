@@ -21,7 +21,7 @@
 
 
 ```cpp
-get core.io
+get core.io;
 
 using io;
 
@@ -84,7 +84,7 @@ Since Fux is still in an early development stage, there are no setup methods yet
 <br>
 
 ```cpp
-get core.io
+get core.io;
 
 main(): void { 
     io.putln("Hello World!");
@@ -99,8 +99,8 @@ main(): void {
 <br>
 
 ```cpp
-get core.file
-get core.io
+get core.file;
+get core.io;
 
 using file;
 
@@ -136,7 +136,7 @@ main(): void {
 <br>
 
 ```cpp
-get core.io
+get core.io;
 
 main(): void {
     res := 1;

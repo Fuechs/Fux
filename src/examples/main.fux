@@ -1,4 +1,4 @@
-get core.io
+get core.io;
 
 main(): void {
     io.putln("Hello World!");

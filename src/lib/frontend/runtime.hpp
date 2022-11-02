@@ -32,4 +32,13 @@ public:
 };
 
 int bootstrap(int argc, char **argv);
+void rtError(string message);
+void printVersion();
+string toLower(string s);
+bool allIntegers(string intString);
+void execRuntime(string fileName);
 int help();
+
+extern options cOptions;
+
+#define opt(s) (strcmp(argv[i], s) == 0)

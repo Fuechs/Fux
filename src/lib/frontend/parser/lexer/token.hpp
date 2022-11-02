@@ -72,7 +72,9 @@ enum TokenType {
     COLON_COLON,    // ::
     TRIPLE_DOT,     // ...
     IDENTIFIER,     // identifier
-    NUMBER,         // 0, 0.0, .0
+    NUMBER,         // 0
+    FLOAT,          // 0.0 or .0
+    HEXADECIMAL,    // 0x0
     STRING,         // "string"
     CHAR,           // 'c'
 
@@ -139,6 +141,8 @@ static const char *TokenTypeString[] = {
     "TRIPLE_DOT",     // ...
     "IDENTIFIER",     // identifier
     "NUMBER",         // 0, 0.0, .0
+    "FLOAT",
+    "HEXADECIMAL",    // 0x0
     "STRING",         
     "CHAR",
 
@@ -203,10 +207,12 @@ static const char *TokenTypeValue[] = {
     // object
     "::",    // ::
     "...",     // ...
-    "identifier",     // identifier
-    "number",         // 0, 0.0, .0
-    "string",
-    "char",
+    "ident",     // identifier
+    "0",         // 0
+    "0.0",  // .0 or 0.0
+    "0x0",    // 0x0
+    "\"string\"",
+    "'c'",
 
     "eof",           // end of file
     "none",

@@ -24,10 +24,23 @@ public:
         errors = new ErrorManager(lines, fileName, false, false);
     }
 
+    ~Lexer() {
+        idx = 0;
+        col = 0;
+        line = 0;
+        tokens.clear();
+        currentToken.~Token();
+        lines.free();
+        errors->free();
+        delete errors;
+        errors = NULL;
+        source.clear();
+    }
+
     TokenList lex();
 
 private:
-    const string source;
+    string source;
     List<string> lines;
     TokenList tokens;
     Token currentToken;
@@ -45,4 +58,10 @@ private:
     void getString();
     void getNumber();
     bool skipComment();
+
+    /* 
+        from https://stackoverflow.com/a/3418285
+        replace all substrings in a string
+    */
+    void replaceAll(std::string &str, const std::string &from, const std::string &to);
 };

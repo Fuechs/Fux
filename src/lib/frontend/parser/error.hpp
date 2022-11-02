@@ -49,7 +49,7 @@ enum ErrorType {
 };
 
 static list<keypair<ErrorType, string>> predefinedErrors;
-void initialzeErrors();
+void initializeErrors();
 
 class ParseError {
 public:
