@@ -44,4 +44,5 @@ private:
     bool getIdent();
     void getString();
     void getNumber();
+    bool skipComment();
 };
