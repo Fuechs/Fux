@@ -67,14 +67,14 @@ Since Fux is still in an early development stage, there are no setup methods yet
 
 - [...] `Error`
 - [...] `Lexer`
-- [&cross;] `Preprocessor`
-- [&cross;] `Parser`
+- [...] `Parser`
 - [&cross;] `AST Analysis`
 - [&cross;] `Optimization`
 - [&cross;] `Code Generation`
 - [&cross;] `Virtual Machine`
+- [...] `Runtime`
 - [...] `Syntax`
-- [&cross;] `Standard Library`
+- [...] `Standard Library`
 
 ## Examples
 
