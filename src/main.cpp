@@ -12,6 +12,8 @@
 #include "fux.hpp"
 // #include "frontend/error/error.hpp"
 
+__fux_struct fux;
+
 int main(int argc, char **argv) {
 
     // initializeErrors();
@@ -104,7 +106,7 @@ int printHelp() {
 
 int printVersion() {
     cout
-        << "Fux Version '" << fux.latest << "'";
+        << "Fux Version '" << fux.latest << "'\n";
     return 1;
 }
 

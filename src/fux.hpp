@@ -75,7 +75,7 @@ struct __fux_struct {
      * @brief enumeration of all supported fux version; can be targeted through compiler flags
      * 
      */
-    static enum version_enum {
+    enum version {
 
         /*  
             -+- ALPHA -+-
@@ -84,7 +84,7 @@ struct __fux_struct {
             still in development
         */
         ALPHA = 0,
-    } version;
+    };
      
     __options_struct options;  
 
