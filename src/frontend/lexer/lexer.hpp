@@ -12,9 +12,9 @@
 
 #pragma once
 
-#include "../../../../include.hpp"
+#include "../../fux.hpp"
 #include "token.hpp"
-#include "../error.hpp"
+#include "../error/error.hpp"
 
 class Lexer {
 public:

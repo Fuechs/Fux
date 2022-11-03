@@ -12,6 +12,9 @@
 #pragma once
 
 #include <algorithm>
+#include <sstream>
+
+using namespace std;
 
 template <class T>
 class List {
@@ -188,7 +191,7 @@ public:
      * @warning programmer responsible for freeing data
      * 
      */
-    void replace(unsigned long _V, T repl) {
+    void replace(unsigned long _X, T repl) {
         if (_X >= len || _X < 0) {
             stringstream ss;
             ss 

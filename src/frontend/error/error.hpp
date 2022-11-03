@@ -11,10 +11,8 @@
 
 #pragma once
 
-#include "../../../include.hpp"
-#include "../../util/keypair.hpp"
-#include "lexer/token.hpp"
-#include "../list.hpp"
+#include "../../fux.hpp"
+#include "../lexer/token.hpp"
 
 enum ErrorType {
     UNEXPECTED_SYMBOL,

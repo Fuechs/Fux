@@ -14,7 +14,7 @@
 
 template<class K, class T>
 struct keypair {
-    keypair(K key, T value) : key(k), value(v) {}
+    keypair(K key, T value) : key(key), value(value) {}
     keypair() {}
     
     void set(K k, T val) {

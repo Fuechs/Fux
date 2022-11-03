@@ -12,8 +12,7 @@
 #pragma once
 
 #include <list>
-#include "lexer/token.hpp"
-#include "../list.hpp"
+#include "../lexer/token.hpp"
 
 enum AstType {
     ast_class_decl,
