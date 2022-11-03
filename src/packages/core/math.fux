@@ -9,9 +9,7 @@ math {
     }
 
     sqrt(number: double): double {
-        if (number < 0) 
-            return null;
-        return root(2, number);
+        return number < 0 ? null : root(2, number);
     }
 
     log(base: double, number: double): double;
