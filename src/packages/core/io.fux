@@ -1,0 +1,41 @@
+package core;
+
+#get "string.fux"
+
+io {
+
+    safe buffer: str[];
+
+    intern flush(): void {
+        for (obj: str in buffer) 
+            __stdout(obj);
+    }
+
+    put(args: var, ...): void {
+        for (obj: var in args)
+            buffer[] << (str) obj;
+    }
+
+    putln(args: var, ...): void {
+        put(args);
+        buffer[] << "\n";
+        flush();
+    }
+
+    putf(data: str, args: var, ...): void {
+        format(data, args);
+        put(data);
+    }
+
+    getln(args: var, ...): str {
+        put(args);
+        flush();
+        return __stdin(0, '\n');
+    }
+
+    getch(args: var, ...): char {
+        put(args);
+        flush();
+        return __stdin(1);
+    }
+}

@@ -1,0 +1,7 @@
+package core;
+
+string {
+
+    format(&data: str, args: var, ...): void;
+
+}

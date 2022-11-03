@@ -1,0 +1,5 @@
+package core;
+
+#get "string.fux"
+#get "io.fux"
+#get "math.fux"
