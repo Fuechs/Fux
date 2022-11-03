@@ -1,6 +1,6 @@
 package core;
 
-#get "string.fux"
+get string;
 
 io {
 
