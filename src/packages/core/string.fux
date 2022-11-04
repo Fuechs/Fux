@@ -2,6 +2,6 @@ package core;
 
 string {
 
-    format(&data: str, args: var, ...): void;
+    format(data -> str, args: var, ...): void;
 
 }

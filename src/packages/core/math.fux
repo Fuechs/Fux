@@ -2,7 +2,7 @@ package core;
 
 math {
 
-    pi: double ===  3.14159265358979323846;
+    pi: double === 3.14159265358979323846;
 
     root(base: double, number: double): double {
         return (number ^ (1 / base));
