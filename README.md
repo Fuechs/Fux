@@ -1,11 +1,8 @@
 <!-- FUX COLORS - #fcaa68 - #ec243c -->
 
-<img src="./art/logo.svg" width=50%></img>
-
-# Fux
+<img src="./art/fux-material-icon.svg" width=50%></img>
 
 ![Total Lines](https://img.shields.io/tokei/lines/github.com/Fuechs/Fux?style=for-the-badge)
-![BSD 3-Clause](https://img.shields.io/github/license/Fuechs/Fux?style=for-the-badge)
 ![Top Language](https://img.shields.io/github/languages/top/Fuechs/Fux?style=for-the-badge)
 ---
 
