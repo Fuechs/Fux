@@ -1,0 +1,14 @@
+package core;
+
+sys {
+
+    enum Platform {
+        DARWIN,
+        LINUX,
+        WIN,
+        UNIX,
+    };
+
+    platform: Platform === (Platform) __platform;
+
+}

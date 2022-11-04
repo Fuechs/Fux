@@ -1,0 +1,53 @@
+package menu;
+
+/*
+    --< FUX - INBUILT MENU PACKAGE >--
+    AUTHOR Fuechs
+    COPYRIGHT (c) 2020-2022, Fuechs. All rights reserved.
+*/
+
+get core.io;
+get core.string;
+get core.sys;
+
+using string;
+
+menu {
+
+    enum FontColor {
+        INHERIT,
+        BLACK,
+        WHITE,
+        RED,
+        YELLOW,
+        BLUE,
+        GREEN,
+        // ...
+    };
+
+    :MenuItem;
+
+    MenuItem:TextItem::(content: str = "", color: FontColor = INHERIT);
+
+    :Menu {
+        ::(final title: str) {
+            if (sys.platform == WIN)
+                intern newLine := "\r\n";
+            else
+                intern newLine := "\n";
+
+            safe color := WHITE;
+            safe items: MenuItem[] = {};
+        }
+
+        setFontColor(color: FontColor) {
+            if (color != self.color)
+                self.color = color;
+        }
+
+        addItem(item: MenuItem) {
+            items[] << item;
+        }
+    }
+
+}

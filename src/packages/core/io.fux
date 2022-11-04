@@ -38,5 +38,10 @@ io {
         flush();
         return __stdin(1);
     }
+
+    clear(): void {
+        flush();
+        __stdout("clear", 1);
+    }
     
 }
