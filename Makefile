@@ -1,7 +1,7 @@
 cc = g++
 exec = fux
 cflags = -std=c++20 -g -Wall
-src = $(wildcard src/main.cpp)
+src = $(wildcard src/main.cpp src/frontend/error/error.cpp)
 ex = src/examples
  
 # Copyright (c) 2020-2022 Fuechs
@@ -10,13 +10,13 @@ ex = src/examples
 all:
 	$(cc) $(src) -o $(exec) $(cflags)
 
-f = main
+# f = main
 
-gen: 
-	./$(exec) generate $(ex)/$(f).fux
+# gen: 
+# 	./$(exec) gen $(ex)/$(f).fux
 
-code: 
-	./$(exec) vm $(ex)/$(f).fux
+# code: 
+# 	./$(exec) vm $(ex)/$(f).fux
 
 clean:
 	-rm $(exec)

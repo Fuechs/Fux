@@ -10,16 +10,24 @@
  */
 
 #include "fux.hpp"
-// #include "frontend/error/error.hpp"
+#include "frontend/error/error.hpp"
 
 __fux_struct fux;
 
 int main(int argc, char **argv) {
-
-    // initializeErrors();
     
     int result = bootstrap(argc, argv);
-    if (result != 0) return result;
+    if (result != 0) 
+        return result;
+
+    vector<string> lines = {"num: float = 43f;", "("};
+    ErrorManager *error = new ErrorManager(fux.options.fileName, lines);
+    error->createError(ILLEGAL_NUMBER_FORMAT, 1, 16, "invalid character found: 'f'");
+    error->createWarning(MISSING_BRACKET, 2, 1, "missing lparen ')'");
+    error->reportAll();
+    error->free();
+
+    // do compiling stuff here
 
     return result;
 }
@@ -85,16 +93,16 @@ int printHelp() {
         << "Usage: fux [options] <source file>\n"
         << "[options]\n\n"
         << "    -V                  print version and exit\n"
-        << "    -o <file>           set output object file\n"
+        << "    -o <file>           set output object file name\n"
         << "    -c                  compile only\n"
         << "    -a                  aggressive errors\n"
         << "    -s                  strip debugging info\n"
         << "    -O                  optimize executable\n"
         << "    -w                  disable all warnings\n"
         << "    -v <version>        set application version\n"      
-        << "    -unsafe -u          compile unsage code\n"
-        << "    -objdump            create dump file for asm\n"
-        << "    -target             specify targeted platform\n"
+        << "    -unsafe -u          compile unsafe code\n"
+        << "    -objdump            create dump object dump file\n"
+        << "    -target <target>    specify targeted platform\n"
         << "    -werror -werr       treat warnings as errors\n"
         << "    -release -r         generate a release build\n"
         << "    -debug -d           turn debug mode on\n"

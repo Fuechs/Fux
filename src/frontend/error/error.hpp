@@ -46,139 +46,88 @@ enum ErrorType {
     NO_ERR,
 };
 
-static list<keypair<ErrorType, string>> predefinedErrors;
-void initializeErrors();
+// standard messages for each error type
+static const char *ErrorTypeString[] = {
+    "unexpected symbol",
+    "illegal number format mismatch",
+    "unexpected end of file",
+    "expected string literal before end of file",
+    "illegal string format",
+    "expected character literal before end of file",
+    "illegal character literal format",
+    "",
+    "illegal specification of access specifier(s)",
+    "illegal symbol mismatch, unexpected bracket",
+    "missing bracket",
+    "invalid access specifier",
+    "",
+    "duplicate class",
+    "redundant token",
+    "internal runtime error",
+    "could not resolve symbol",
+    "expected reference of type",
+    "invalid cast of type",
+    "redundant cast of type",
+    "redundant self import of package",
+    "unexpected token",
+    "invalid access of",
+    "",
+    "invalid param of type",
+    "incompatible types",
+    "duplicate declaration of",
+    "",
+};
 
 class ParseError {
 public:
-    ParseError() {
-        error = "";
-        id = NO_ERR;
-        line = 0;
-        col = 0;
-    }
+    ParseError();
+    ParseError(const ParseError &pe);
+    ParseError(ErrorType type, size_t line, size_t col, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
+    ParseError(ErrorType type, Token token, string fileName, string lienContent, string comment = "", bool warning = false, bool aggressive = false);
 
-    ParseError(const ParseError &pe) {
-        operator=(pe);
-    }
+    void operator=(const ParseError &pe);
 
-    ParseError(
-        keypair<ErrorType, string> err,
-        int l,
-        int c, 
-        string addon = ""
-    ) {
-        id = err.key;
-        error = err.value + addon;
-        line = l;
-        col = c;
-        warning = false;
-    } 
+    void free();
+    void report();
 
-    ParseError(
-        bool warning,
-        keypair<ErrorType, string> err,
-        int l,
-        int c, 
-        string addon = ""
-    ) {
-        id = err.key;
-        error = err.value + addon;
-        line = l;
-        col = c;
-        this->warning = warning;
-    }
+    bool warning, aggressive;
+    ErrorType type;
+    string message, fileName, lineContent;
+    size_t line, col;
 
-    ParseError(
-        keypair<ErrorType, string> err,
-        Token token,
-        string addon = ""
-    ) {
-        id = err.key;
-        error = err.value + addon;
-        line = token.line;
-        col = token.col;
-        this->warning = warning;
-    }
-
-    void operator=(const ParseError &pe) {
-        error = pe.error;
-        id = pe.id;
-        line = pe.line;
-        col = pe.col;
-        warning = pe.warning;
-    }
-
-    void free() {
-        error.clear();
-    }
-
-    ErrorType id;
-    string error;
-    int line;
-    int col;
-    bool warning;
+private:
+    bool reported;
 };
 
-class AST {};
+typedef vector<ParseError> ErrorList;
+
+// ast needs error -> fake class 
+class AST {public: size_t line = 1, col = 1;};
 
 class ErrorManager {
 public:
-    ErrorManager(
-        List<string> &lines, 
-        string file_name, 
-        bool asis, 
-        bool aggressiveReporting
-    ) 
-    :   lines(), teCursor(-1), _err(false), cm(false), 
-        filename(file_name), asis(asis), aggressive(aggressiveReporting) 
-    {
-        this->lines.addAll(lines);
-        errors = new list<ParseError>();
-        warnings = new list<ParseError>();
-        unfilteredErrors = new list<ParseError>();
-        possibleErrors = new list<list<ParseError>*>();
-        lastError = ParseError();
-        lastCheckedError = ParseError();
-    }
+    ErrorManager(string fileName, vector<string> lines) : fileName(fileName), lines(lines) {}
 
-    void printErrors();
-    uint64_t getErrorCount() { return errors->size(); }
-    uint64_t getWarningCount() { return unfilteredErrors->size(); }
-    int createNewError(ErrorType err, Token token, string xcmts = "");
-    int createNewError(ErrorType err, AST *pAST, string xcmts = "");
-    void createNewError(ErrorType err, int line, int col, string xcmts);
-    void createNewWarning(ErrorType err, int line, int col, string xcmts);
-    void createNewWarning(ErrorType err, AST *pAST, string xcmts);
+    size_t errorCount();
+    size_t warningCount();
+
     bool hasErrors();
-    bool hasWarnings() { return warnings; }
-    void enableErrorCheckMode();
-    void fail();
-    void pass();
+    bool hasWarnings();
 
+    void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
+    void createError(ErrorType type, Token token, string comment = "", bool aggressive = false);
+    void createError(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
+
+    void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
+    void createWarning(ErrorType type, Token token, string comment = "", bool aggressive = false);
+    void createWarning(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
+
+    void reportAll();
+    
     void free();
-    string getLine(int line);
 
 private:
-    keypair<ErrorType, string> getErrorID(ErrorType);
-    list<ParseError>* getPossibleErrorList();
-    void addPossibleErrorList();
-    void removePossibleErrorList();
-
-    List<string> lines;
-    list<ParseError> *errors, *unfilteredErrors, *warnings;
-    list<list<ParseError>*> *possibleErrors;
-    int64_t teCursor;
-    ParseError lastError;
-    ParseError lastCheckedError;
-    bool _err, cm, asis, aggressive;
-    // cm: error check mode
-    string filename;
-
-    bool shouldReport(Token *token, const ParseError &last_err, const ParseError &e) const;
-    string getErrors(list<ParseError> *errors);
-    void printError(ParseError &err);
-    bool hasError(list<ParseError> *e, const ParseError &parseerror1) const;
-    bool shouldReportWarning(Token *token, const ParseError &last_err, const ParseError &e) const;
-    keypair<ErrorType, string> getErrorByID(ErrorType err);
+    ErrorList errors;
+    string fileName;
+    vector<string> lines;
 };

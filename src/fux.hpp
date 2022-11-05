@@ -17,23 +17,24 @@
 #include <stdexcept>
 #include <algorithm>
 #include <list>
+#include <sstream>
 
 #include <cstdio>
 #include <cstring>
 #include <cstdint>
+#include <cstdlib>
 
-// #include "util/list.hpp"
+#include "util/color.hpp"
+
 // #include "util/keypair.hpp"
+// #include "util/list.hpp"
 // #include "util/time.hpp"
 
 #define FUX_DEV_DEBUG
 
 using namespace std;
 
-/**
- * @brief compiler options / flags
- * 
- */
+// compiler options / flags
 struct __options_struct {
 
     ~__options_struct() { out.clear(); }
@@ -65,24 +66,14 @@ struct __options_struct {
     int target              = 0; // targeted fux version 
 };
 
-/**
- * @brief Fux metadata for the compiler
- * 
- */
+// fux metadata for the compiler
 struct __fux_struct {
 
-    /**
-     * @brief enumeration of all supported fux version; can be targeted through compiler flags
-     * 
-     */
+    // enumeration of all supported fux versions; can be targeted through compiler flags
     enum version {
 
-        /*  
-            -+- ALPHA -+-
-            id: 0
-            time: ~2020-present 
-            still in development
-        */
+        // current version in development
+        // ~2020-present
         ALPHA = 0,
     };
      
