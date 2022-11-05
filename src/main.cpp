@@ -30,18 +30,20 @@ int main(int argc, char **argv) {
 
     error->setFileName(fux.options.fileName);
 
-    Lexer lexer = Lexer("print(0);", fux.options.fileName);
-    // TokenList tokens = lexer.lex();
+    Lexer *lexer = new Lexer("print(0);", fux.options.fileName, error);
+    TokenList tokens = lexer->lex();
 
-    // delete &lexer;
+    for (auto token : tokens)
+        token.debugPrint();
+
+    delete lexer;
 
     // do compiling stuff here
 
-    // error->reportAll();
-    // delete error;
+    error->reportAll();
+    delete error;
 
-
-    return 0;
+    return result;
 }
 
 int bootstrap(int argc, char **argv) {

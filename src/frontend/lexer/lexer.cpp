@@ -17,8 +17,10 @@ TokenList Lexer::lex() {
 
         switch (currentToken.type) {
             case IDENTIFIER:
-                while (getIdent())
+                do
                     advance();
+                while (getIdent());
+                hasLetter = false;
                 break;
 
             case STRING:
@@ -426,8 +428,6 @@ void Lexer::endToken() {
 }
 
 bool Lexer::getIdent() {
-    bool hasLetter = false;
-
     if ((isalpha(current())
     ||  isdigit(current())
     ||  current() == '_')
@@ -439,7 +439,7 @@ bool Lexer::getIdent() {
     }
 
     if (!hasLetter)
-        error->createError(GENERIC, line, col, "expected at least one character in identifier '"+currentToken.value+"'");
+        error->createError(GENERIC, currentToken, "expected at least one character in identifier '"+currentToken.value+"'");
     
     return false;
 }
@@ -525,7 +525,8 @@ void Lexer::getNumber() {
                     return;
                 }
                 advance();
-            }
+            } else
+                return;
 
         }
 

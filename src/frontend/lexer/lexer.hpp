@@ -18,18 +18,16 @@
 
 class Lexer {
 public:
-    Lexer(const string source = "", const string fileName = "") 
-    : source(source), tokens({}), currentToken(Token()), idx(0), col(0), line(0) {
+    Lexer(const string source, const string fileName, ErrorManager *error) 
+    : source(source), tokens({}), currentToken(Token()), idx(0), col(1), line(1), error(error) {
         parseLines();
         error->setLines(this->lines);
     }
 
     ~Lexer() {
-        delete &currentToken;
         tokens.clear();
         lines.clear();
         source.clear();
-        delete error;
     }
 
     TokenList lex();
@@ -41,6 +39,8 @@ private:
     Token currentToken;
     size_t idx, col, line;
     ErrorManager *error;
+
+    bool hasLetter = false; // identifier error
 
     void parseLines();
     char peek(int offset = 1);
