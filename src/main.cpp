@@ -11,25 +11,37 @@
 
 #include "fux.hpp"
 #include "frontend/error/error.hpp"
+#include "frontend/lexer/lexer.hpp"
+#include "frontend/lexer/token.hpp"
 
 __fux_struct fux;
 
 int main(int argc, char **argv) {
     
-    int result = bootstrap(argc, argv);
-    if (result != 0) 
-        return result;
+    ErrorManager *error = new ErrorManager(string(""), vector<string>());
 
-    vector<string> lines = {"num: float = 43f;", "("};
-    ErrorManager *error = new ErrorManager(fux.options.fileName, lines);
-    error->createError(ILLEGAL_NUMBER_FORMAT, 1, 16, "invalid character found: 'f'");
-    error->createWarning(MISSING_BRACKET, 2, 1, "missing lparen ')'");
-    error->reportAll();
-    error->free();
+    int result = 0;
+
+    // int result = bootstrap(argc, argv);
+    // if (result != 0) 
+    //     return result;
+
+    fux.options.fileName = "main.fux";
+
+    error->setFileName(fux.options.fileName);
+
+    Lexer lexer = Lexer("print(0);", fux.options.fileName);
+    // TokenList tokens = lexer.lex();
+
+    // delete &lexer;
 
     // do compiling stuff here
 
-    return result;
+    // error->reportAll();
+    // delete error;
+
+
+    return 0;
 }
 
 int bootstrap(int argc, char **argv) {

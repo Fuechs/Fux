@@ -108,6 +108,8 @@ class ErrorManager {
 public:
     ErrorManager(string fileName, vector<string> lines) : fileName(fileName), lines(lines) {}
 
+    ~ErrorManager();
+
     size_t errorCount();
     size_t warningCount();
 
@@ -123,9 +125,10 @@ public:
     void createWarning(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
 
     void reportAll();
-    
-    void free();
 
+    void setFileName(string fileName) {this->fileName = fileName;}
+    void setLines(vector<string> lines) {this->lines = lines;}
+    
 private:
     ErrorList errors;
     string fileName;

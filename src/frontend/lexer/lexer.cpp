@@ -51,20 +51,20 @@ void Lexer::parseLines() {
 
     for (int i = 0; i < source.length(); i++) {
         if (source[i] == '\n') {
-            lines.add(line.str());
+            lines.push_back(line.str());
             line.str("");
         } else
             line << source[i];
     }
 
     if (!line.str().empty())
-        lines.add(line.str());
+        lines.push_back(line.str());
 }
 
 char Lexer::peek(int offset) {
     if ((idx + offset - 1) < source.length())
         return source[idx+offset];
-    return NULL;
+    return '\0';
 }
 
 void Lexer::advance(int steps) {
@@ -333,7 +333,7 @@ void Lexer::getToken() {
                 break;
             }
 
-            if (peek() == '|=') {
+            if (peek() == '=') {
                 currentToken.type = OR_EQUALS;
                 currentToken.value = "|=";
                 advance(2);
@@ -391,12 +391,12 @@ void Lexer::getToken() {
         case '\'':
             currentToken.type = CHAR;
             if (!isalpha(peek()))
-                errors->createNewError(EXPECTED_CHAR_LITERAL_EOF, line, col, "expected actual character");
+                error->createError(EXPECTED_CHAR_LITERAL_EOF, line, col, "expected actual character");
             else {
                 advance();
                 currentToken.value = current();
                 if (peek() != '\'')
-                    errors->createNewError(ILLEGAL_CHAR_LITERAL_FORMAT, line, col, "expected ending quote");
+                    error->createError(ILLEGAL_CHAR_LITERAL_FORMAT, line, col, "expected ending quote");
                 else
                     advance();
             }
@@ -409,7 +409,7 @@ void Lexer::getToken() {
         
         default:
             if (!isalpha(current()) && currentToken.value != "_")
-                errors->createNewError(UNEXPECTED_SYMBOL, line, col, "unknown character '"+currentToken.value+"'");
+                error->createError(UNEXPECTED_SYMBOL, line, col, "unknown character '"+currentToken.value+"'");
             else
                 currentToken.type = IDENTIFIER;
             break;
@@ -439,7 +439,7 @@ bool Lexer::getIdent() {
     }
 
     if (!hasLetter)
-        errors->createNewError(GENERIC, line, col, "expected at least one character in identifier '"+currentToken.value+"'");
+        error->createError(GENERIC, line, col, "expected at least one character in identifier '"+currentToken.value+"'");
     
     return false;
 }
@@ -448,16 +448,16 @@ void Lexer::getString() {
     advance();
 
     if (idx >= source.length())
-        errors->createNewError(EXPECTED_STRING_LITERAL_EOF, line, col, "unterminated string");
+        error->createError(EXPECTED_STRING_LITERAL_EOF, line, col, "unterminated string");
     
     while (current() != '"') {
         if (current() == '\n') {
-            errors->createNewError(ILLEGAL_STRING_FORMAT, line, col, "expected \" before end of line");
+            error->createError(ILLEGAL_STRING_FORMAT, line, col, "expected \" before end of line");
             return;
         }
 
         if (current() == '\\' & peek() != '\\' && !isalpha(peek())) {
-            errors->createNewError(ILLEGAL_STRING_FORMAT, line, col, "invalid escape sequence");
+            error->createError(ILLEGAL_STRING_FORMAT, line, col, "invalid escape sequence");
             return;
         }
 
@@ -465,7 +465,7 @@ void Lexer::getString() {
         advance();
 
         if (idx >= source.length()) {
-            errors->createNewError(EXPECTED_STRING_LITERAL_EOF, line, col, "unterminated string");
+            error->createError(EXPECTED_STRING_LITERAL_EOF, line, col, "unterminated string");
             return;
         }
     } 
@@ -479,14 +479,14 @@ void Lexer::getNumber() {
 
     if (currentToken.value == "0" && peek() == 'x') {
         currentToken.type = HEXADECIMAL;
-        currentToken.value == "0x";
+        currentToken.value = "0x";
         advance();
         // extra if for error tracking and not allowing '0x_'
         if (isdigit(current()) && idx < source.length()) {
             currentToken.value.push_back(current());
             advance();
         } else
-            errors->createNewError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit after '0x'");
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit after '0x'");
         
         while ((isdigit(current()) || current() == '_') && idx < source.length()) {
             if (current() != '_')
@@ -496,7 +496,7 @@ void Lexer::getNumber() {
     } else {
 
         bool eFound = false;
-        bool postESignFound = false;
+        // bool postESignFound = false;
 
         while (idx < source.length()) {
             if (isdigit(current())) {
@@ -506,7 +506,7 @@ void Lexer::getNumber() {
                 advance();
             else if (tolower(current()) == 'e') {
                 if (eFound) {
-                    errors->createNewError(ILLEGAL_NUMBER_FORMAT, line, col, "duplicate 'e' in number");
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "duplicate 'e' in number");
                     return;
                 }
 
@@ -514,14 +514,14 @@ void Lexer::getNumber() {
                 eFound = true;
                 
                 if (!isdigit(peek()) && peek() != '+' && peek() != '-') {
-                    errors->createNewError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit or sign after 'e'");
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit or sign after 'e'");
                     return;
                 }
 
                 advance();
                 currentToken.value.push_back(current());
                 if ((current() == '+' || current() == '-') && !isdigit(peek())) {
-                    errors->createNewError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least on digit after 'e"+ to_string(current()) +"' in number");
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least on digit after 'e"+ to_string(current()) +"' in number");
                     return;
                 }
                 advance();
@@ -536,10 +536,10 @@ void Lexer::getNumber() {
             advance();
 
             if (idx >= source.length()) {
-                errors->createNewError(ILLEGAL_NUMBER_FORMAT, line, col, "character '.' in number with no following digits");
+                error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "character '.' in number with no following digits");
                 return;
             } else if (current() == '.') {
-                errors->createNewError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected character '.' in float");
+                error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected character '.' in float");
                 return;
             } else
                 currentToken.value.push_back('.');
@@ -578,7 +578,7 @@ bool Lexer::skipComment() {
         }
         
         if (idx >= source.length())
-            errors->createNewError(UNEXPECTED_EOF, line, col, "expected multi-line comment to end");
+            error->createError(UNEXPECTED_EOF, line, col, "expected multi-line comment to end");
         else
             advance(2);
         
@@ -588,11 +588,11 @@ bool Lexer::skipComment() {
     return false;
 }
 
-void replaceAll(std::string &str, const std::string &from, const std::string &to) {
-    if(from.empty())
+void Lexer::replaceAll(std::string &str, const std::string &from, const std::string &to) {
+    if (from.empty())
         return;
     size_t start_pos = 0;
-    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
         str.replace(start_pos, from.length(), to);
         start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }

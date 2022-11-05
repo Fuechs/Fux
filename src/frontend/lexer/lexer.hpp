@@ -21,31 +21,26 @@ public:
     Lexer(const string source = "", const string fileName = "") 
     : source(source), tokens({}), currentToken(Token()), idx(0), col(0), line(0) {
         parseLines();
-        errors = new ErrorManager(lines, fileName, false, false);
+        error->setLines(this->lines);
     }
 
     ~Lexer() {
-        idx = 0;
-        col = 0;
-        line = 0;
+        delete &currentToken;
         tokens.clear();
-        currentToken.~Token();
-        lines.free();
-        errors->free();
-        delete errors;
-        errors = NULL;
+        lines.clear();
         source.clear();
+        delete error;
     }
 
     TokenList lex();
 
 private:
     string source;
-    List<string> lines;
+    vector<string> lines;
     TokenList tokens;
     Token currentToken;
     size_t idx, col, line;
-    ErrorManager *errors;
+    ErrorManager *error;
 
     void parseLines();
     char peek(int offset = 1);

@@ -108,6 +108,16 @@ void ParseError::report() {
 
 // * ErrorManager
 
+ErrorManager::~ErrorManager() {
+    fileName.clear();
+    for (ParseError &error : errors)
+        error.free();
+    errors.clear();
+    for (string &line : lines)
+        line.clear();
+    lines.clear();
+}
+
 size_t ErrorManager::errorCount() {
     if (fux.options.werrors) 
         return errors.size();
@@ -181,14 +191,4 @@ void ErrorManager::createWarning(ErrorType type, AST &ast, string comment, bool 
 void ErrorManager::reportAll() {
     for (ParseError &error : errors)
         error.report();
-}
-
-void ErrorManager::free() {
-    fileName.clear();
-    for (ParseError &error : errors)
-        error.free();
-    errors.clear();
-    for (string &line : lines)
-        line.clear();
-    lines.clear();
 }
