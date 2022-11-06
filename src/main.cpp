@@ -18,24 +18,24 @@ __fux_struct fux;
 
 int main(int argc, char **argv) {
     
-    ErrorManager *error = new ErrorManager(string(""), vector<string>());
-
     int result = 0;
 
     // int result = bootstrap(argc, argv);
     // if (result != 0) 
     //     return result;
+    
+    fux.options.fileName = "src/examples/main.fux";
 
-    fux.options.fileName = "main.fux";
-
+    ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
     error->setFileName(fux.options.fileName);
 
-    Lexer *lexer = new Lexer("print(0);", fux.options.fileName, error);
+    const string source = readFile(fux.options.fileName);
+
+    Lexer *lexer = new Lexer(source, fux.options.fileName, error);
     TokenList tokens = lexer->lex();
 
     for (auto token : tokens)
         token.debugPrint();
-
     delete lexer;
 
     // do compiling stuff here
@@ -90,14 +90,16 @@ int bootstrap(int argc, char **argv) {
             fux.options.strip = true;
         }
         else if (cmp("-debug") || cmp("-d"))    fux.options.userDebug = true;
-        else if (cmp("-h") || cmp("-?"))        return printHelp();
+        else if (cmp("-h") || cmp("-help"))        return printHelp();
 
         else if (argv[i][0] == '-')             cerr << "invalid option '"+string(argv[i])+"'\n";
         else                                    fux.options.fileName = argv[i];
     }
 
-    if (fux.options.fileName.empty())   
+    if (fux.options.fileName.empty()) {   
+        cerr << "source file missing\n";
         return printHelp();
+    }
 
     return 0;
 }
@@ -120,7 +122,7 @@ int printHelp() {
         << "    -werror -werr       treat warnings as errors\n"
         << "    -release -r         generate a release build\n"
         << "    -debug -d           turn debug mode on\n"
-        << "    -h -?               show this message and exit"
+        << "    -h -help            show this message and exit"
     << endl;
 
     return 1;
@@ -136,4 +138,15 @@ int printVersion() {
 string toLower(string data) {
     transform(data.begin(), data.end(), data.begin(), [](unsigned char c){ return std::tolower(c); });
     return data;
+}
+
+const string readFile(const string path) {
+    ifstream file(path);
+    if (!file.is_open()) {
+        cerr << "Could not open file '" << path << "'\n";
+        exit(1);
+    }
+    stringstream buffer;
+    buffer << file.rdbuf();
+    return buffer.str();
 }

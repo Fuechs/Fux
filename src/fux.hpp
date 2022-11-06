@@ -16,8 +16,11 @@
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
-#include <list>
 #include <sstream>
+#include <fstream>
+
+// #include <list>
+// #include <regex>
 
 #include <cstdio>
 #include <cstring>
@@ -88,5 +91,6 @@ int bootstrap(int argc, char **argv);
 int printHelp();
 int printVersion();
 string toLower(string data);
+const string readFile(const string path);
 
 #define cmp(s) (strcmp(argv[i], s) == 0)

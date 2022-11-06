@@ -412,8 +412,11 @@ void Lexer::getToken() {
         default:
             if (!isalpha(current()) && currentToken.value != "_")
                 error->createError(UNEXPECTED_SYMBOL, line, col, "unknown character '"+currentToken.value+"'");
-            else
+            else {
+                if (isalpha(current()))
+                    hasLetter = true;
                 currentToken.type = IDENTIFIER;
+            }
             break;
 
     }
@@ -452,7 +455,7 @@ void Lexer::getString() {
     
     while (current() != '"') {
         if (current() == '\n') {
-            error->createError(ILLEGAL_STRING_FORMAT, line, col, "expected \" before end of line");
+            error->createError(ILLEGAL_STRING_FORMAT, line, col, "expected '\"' before end of line");
             return;
         }
 
@@ -470,8 +473,6 @@ void Lexer::getString() {
         }
     } 
 
-    // transform \\ to \, \\n to \n, etc. 
-    replaceAll(currentToken.value, "\\\\", "\\");
     advance();
 }
 
@@ -496,7 +497,6 @@ void Lexer::getNumber() {
     } else {
 
         bool eFound = false;
-        // bool postESignFound = false;
 
         while (idx < source.length()) {
             if (isdigit(current())) {
@@ -525,10 +525,11 @@ void Lexer::getNumber() {
                     return;
                 }
                 advance();
-            } else
-                return;
-
+            } else 
+                break;
         }
+
+        eFound = false;
 
         if (currentToken.type == FLOAT || idx >= source.length())
             return;
@@ -547,8 +548,15 @@ void Lexer::getNumber() {
             
             currentToken.type = FLOAT;
             
-            while ((isdigit(current()) || current() == '_') && idx < source.length()) {
-                if (current() != '_')
+            while ((isdigit(current()) || current() == '_' || tolower(current()) == 'e') && idx < source.length()) {
+                if (tolower(current()) == 'e') {
+                    if (eFound) {
+                        error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "duplicate 'e' found");
+                        return;
+                    }
+                    eFound = true;
+                    currentToken.value.push_back(current());
+                } else if (current() != '_')
                     currentToken.value.push_back(current());
                 advance();
             }
@@ -587,14 +595,4 @@ bool Lexer::skipComment() {
     }
 
     return false;
-}
-
-void Lexer::replaceAll(std::string &str, const std::string &from, const std::string &to) {
-    if (from.empty())
-        return;
-    size_t start_pos = 0;
-    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
 }

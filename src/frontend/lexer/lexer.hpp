@@ -22,12 +22,14 @@ public:
     : source(source), tokens({}), currentToken(Token()), idx(0), col(1), line(1), error(error) {
         parseLines();
         error->setLines(this->lines);
+        error->setFileName(fileName);
     }
 
     ~Lexer() {
         tokens.clear();
         lines.clear();
         source.clear();
+        error->setFileName(fux.options.fileName);
     }
 
     TokenList lex();
@@ -54,9 +56,4 @@ private:
     void getNumber();
     bool skipComment();
 
-    /* 
-        from https://stackoverflow.com/a/3418285
-        replace all substrings in a string
-    */
-    void replaceAll(std::string &str, const std::string &from, const std::string &to);
 };

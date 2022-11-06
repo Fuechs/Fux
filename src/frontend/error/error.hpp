@@ -126,8 +126,15 @@ public:
 
     void reportAll();
 
-    void setFileName(string fileName) {this->fileName = fileName;}
-    void setLines(vector<string> lines) {this->lines = lines;}
+    void setFileName(string fileName) {
+        if (this->fileName != fileName)
+            this->fileName = fileName;
+    }
+    
+    void setLines(vector<string> lines) {
+        if (this->lines != lines)
+            this->lines = lines;
+    }
     
 private:
     ErrorList errors;

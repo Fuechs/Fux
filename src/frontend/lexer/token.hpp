@@ -221,7 +221,7 @@ static const char *TokenTypeValue[] = {
 class Token {
 public:
     Token(TokenType type = NONE, string value = "")
-    : type(type), value(value), line(0), col(0) {}
+    : type(type), value(value), line(1), col(1) {}
 
     ~Token() { value.clear(); }
 

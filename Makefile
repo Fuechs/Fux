@@ -1,6 +1,6 @@
 cc = g++
 exec = fux
-cflags = -std=c++20 -g -Wall
+cflags = -std=c++20 -g
 src = $(wildcard src/main.cpp src/frontend/error/error.cpp src/frontend/lexer/lexer.cpp)
 ex = src/examples
  

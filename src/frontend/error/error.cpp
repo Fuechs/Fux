@@ -85,7 +85,7 @@ void ParseError::report() {
 
     stringstream errorMessage;
     
-    errorMessage << fileName << ":" << line << ":" << col << ": ";
+    errorMessage << StyleCode::BOLD << fileName << ":" << line << ":" << col << ": ";
     
     if (warning)
         errorMessage << ColorCode::MAGENTA << "warning: ";
@@ -94,7 +94,7 @@ void ParseError::report() {
     
     errorMessage 
         << ColorCode::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
-        << lineContent << "\n\t";
+        << StyleCode::SLIM << lineContent << "\n\t";
     
     for (size_t i = 0; i < (col - 1); i++) // -1 so arrow points at exact position
         errorMessage << " ";

@@ -1,5 +1,5 @@
 get core.io;
 
-main(): void {
+main(argc: u32, argv: str[]): void {
     io.putln("Hello World!");
 }
