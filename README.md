@@ -2,8 +2,9 @@
 
 <img src="./art/fux-material-icon.svg" width=50%></img>
 
-![Total Lines](https://img.shields.io/tokei/lines/github.com/Fuechs/Fux?style=for-the-badge)
-![Top Language](https://img.shields.io/github/languages/top/Fuechs/Fux?style=for-the-badge)
+![total lines](https://img.shields.io/tokei/lines/github/fuechs/fux?color=fcaa68&logo=github&style=for-the-badge)
+![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&logo=github&style=for-the-badge)
+![versiob](https://img.shields.io/badge/version-alpha-red?logo=github&style=for-the-badge)
 ---
 
 **`Flawless Unambiguous Programming`**
