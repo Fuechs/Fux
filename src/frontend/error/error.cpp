@@ -77,7 +77,7 @@ void ParseError::free() {
 // includes checks for aggressive and warnings and werror
 // errormanager has to free error when it's freed
 void ParseError::report() {
-    if ((aggressive && !fux.options.aggressiveErrors) || (warning && !fux.options.warnings)) 
+    if ((aggressive && !fux.options.aggressiveErrors) || (warning && !fux.options.warnings) || reported) 
         return;
 
     if (fux.options.werrors)
