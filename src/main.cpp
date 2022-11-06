@@ -13,6 +13,8 @@
 #include "frontend/error/error.hpp"
 #include "frontend/lexer/lexer.hpp"
 #include "frontend/lexer/token.hpp"
+#include "frontend/parser/parser.hpp"
+#include "frontend/parser/ast.hpp"
 
 __fux_struct fux;
 
@@ -24,26 +26,49 @@ int main(int argc, char **argv) {
     // if (result != 0) 
     //     return result;
     
-    fux.options.fileName = "src/examples/main.fux";
+    // setting file manually for debugging reasons
+    fux.options.fileName = "src/examples/main.fux"; 
+
+    fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
 
     ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
-    error->setFileName(fux.options.fileName);
 
     const string source = readFile(fux.options.fileName);
 
     Lexer *lexer = new Lexer(source, fux.options.fileName, error);
+    vector<string> lines = lexer->getLines();
     TokenList tokens = lexer->lex();
-
-    for (auto token : tokens)
-        token.debugPrint();
+    
     delete lexer;
 
-    // do compiling stuff here
+    if (fux.options.debugMode)
+        for (Token token : tokens)
+            token.debugPrint();
 
-    error->reportAll();
-    delete error;
+    if (error->hasErrors())
+        goto end;
+    
+    {   // own scope so it can be skipped by goto
+        Parser *parser = new Parser(tokens, error, fux.options.fileName, lines);
+        AST *root = parser->parse();
 
-    return result;
+        // root->debugPrint();
+        
+        delete parser; 
+
+        if (error->hasErrors())
+            goto end;
+    }
+    
+    {
+        // continue compilation
+    }
+
+    end: 
+        error->reportAll();
+        delete error;
+
+        return result;
 }
 
 int bootstrap(int argc, char **argv) {
@@ -63,7 +88,24 @@ int bootstrap(int argc, char **argv) {
         else if (cmp("-a"))     fux.options.aggressiveErrors = true;
         else if (cmp("-s"))     fux.options.strip = true;
         else if (cmp("-O"))     fux.options.optimize = true;
+        else if (cmp("-L")) {
+            if ((i + 1) >= argc)
+                cerr << "path required after option '-L'\n";
+            else 
+                fux.options.libraries.push_back(string(argv[++i]));
+        } 
         else if (cmp("-w"))     fux.options.warnings = true;
+        else if (cmp("-errlmt")) {
+            if ((i + 1) >= argc)
+                cerr << "count required after option '-errlmt'\n";
+            else {
+                try {
+                    fux.options.errorLimit = (uint64_t) atoll(argv[++i]);
+                } catch (exception e) {
+                    cerr << "invalid error limit count '" << string(argv[i]) << "'\n";
+                }
+            }
+        }
         else if (cmp("-v")) {
             if ((i + 1) >= argc)
                 cerr << "file version required after option '-v'\n";
@@ -114,7 +156,9 @@ int printHelp() {
         << "    -a                  aggressive errors\n"
         << "    -s                  strip debugging info\n"
         << "    -O                  optimize executable\n"
+        << "    -L <path>           add library path\n"
         << "    -w                  disable all warnings\n"
+        << "    -errlmt <count>     set an error limit for the compiler\n"
         << "    -v <version>        set application version\n"      
         << "    -unsafe -u          compile unsafe code\n"
         << "    -objdump            create dump object dump file\n"
@@ -138,15 +182,4 @@ int printVersion() {
 string toLower(string data) {
     transform(data.begin(), data.end(), data.begin(), [](unsigned char c){ return std::tolower(c); });
     return data;
-}
-
-const string readFile(const string path) {
-    ifstream file(path);
-    if (!file.is_open()) {
-        cerr << "Could not open file '" << path << "'\n";
-        exit(1);
-    }
-    stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
 }

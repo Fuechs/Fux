@@ -28,6 +28,7 @@
 #include <cstdlib>
 
 #include "util/color.hpp"
+#include "util/io.hpp"
 
 // #include "util/keypair.hpp"
 // #include "util/list.hpp"
@@ -45,7 +46,7 @@ struct __options_struct {
     string fileName; // file to compile
     string out              = "a.out"; // output binary file
     string version          = "0.1";
-    // vector<string> libraries; // user defined library paths
+    vector<string> libraries = {"/usr/local/include/fux/"}; // library paths
 
     bool aggressiveErrors   = false;
     bool compileOnly        = false;
@@ -91,6 +92,5 @@ int bootstrap(int argc, char **argv);
 int printHelp();
 int printVersion();
 string toLower(string data);
-const string readFile(const string path);
 
 #define cmp(s) (strcmp(argv[i], s) == 0)

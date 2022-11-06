@@ -165,30 +165,44 @@ bool ErrorManager::hasWarnings() {
 }
 
 void ErrorManager::createError(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    errors.push_back(ParseError(type, line, col, fileName, lines[line - 1], comment, false, aggressive));
+    addError(ParseError(type, line, col, fileName, lines[line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createError(ErrorType type, Token token, string comment, bool aggressive) {
-    errors.push_back(ParseError(type, token, fileName, lines[token.line - 1], comment, false, aggressive));
+    addError(ParseError(type, token.line, token.col, fileName, lines[token.line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createError(ErrorType type, AST &ast, string comment, bool aggressive) {
-    errors.push_back(ParseError(type, ast.line, ast.col, fileName, lines[ast.line - 1], comment, false, aggressive));
+    addError(ParseError(type, ast.line, ast.col, fileName, lines[ast.line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    errors.push_back(ParseError(type, line, col, fileName, lines[line - 1], comment, true, aggressive));
+    addError(ParseError(type, line, col, fileName, lines[line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, Token token, string comment, bool aggressive) {
-    errors.push_back(ParseError(type, token, fileName, lines[token.line - 1], comment, true, aggressive));
+    addError(ParseError(type, token.line, token.col, fileName, lines[token.line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, AST &ast, string comment, bool aggressive) {
-    errors.push_back(ParseError(type, ast.line, ast.col, fileName, lines[ast.line - 1], comment, true, aggressive));
+    addError(ParseError(type, ast.line, ast.col, fileName, lines[ast.line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::reportAll() {
     for (ParseError &error : errors)
         error.report();
+}
+
+void ErrorManager::addError(ParseError error) {
+    errors.push_back(error);
+
+    if (errorCount() >= fux.options.errorLimit) {
+        cerr 
+            << ColorCode::RED << StyleCode::BOLD 
+            << "Hit error limit of " << fux.options.errorLimit << ".\n"
+            << ColorCode::DEFAULT << StyleCode::SLIM
+            << endl;
+        reportAll();
+        exit(error.type);
+    }
 }

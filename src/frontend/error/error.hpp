@@ -135,9 +135,17 @@ public:
         if (this->lines != lines)
             this->lines = lines;
     }
+
+    // literally self destruct because of a fatal error
+    void panic() {
+        reportAll();
+        delete this;
+    }
     
 private:
     ErrorList errors;
     string fileName;
     vector<string> lines;
+
+    void addError(ParseError error);
 };

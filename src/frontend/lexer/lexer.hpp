@@ -34,6 +34,8 @@ public:
 
     TokenList lex();
 
+    vector<string> getLines() { return this->lines; }
+
 private:
     string source;
     vector<string> lines;

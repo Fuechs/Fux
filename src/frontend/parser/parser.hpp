@@ -11,9 +11,27 @@
 
 #pragma once
 
-#include "../../../include.hpp"
+#include "../../fux.hpp"
 #include "ast.hpp"
-#include "../list.hpp"
-#include "../../util/keypair.hpp"
+#include "../error/error.hpp"
+#include "../lexer/lexer.hpp"
+#include "../lexer/token.hpp"
 
-class Parser {};
+class Parser {
+public:
+    Parser(TokenList tokens, ErrorManager *error, string fileName, vector<string> lines) 
+    : tokens(tokens), error(error) {
+        error->setFileName(fileName);
+        error->setLines(lines);
+    }
+
+    ~Parser();
+
+    AST *parse();
+
+private:
+    TokenList tokens;
+    ErrorManager *error;
+
+    void parseGet();
+};

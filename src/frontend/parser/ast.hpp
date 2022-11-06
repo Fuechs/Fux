@@ -11,8 +11,9 @@
 
 #pragma once
 
-#include <list>
+#include "../../fux.hpp"
 #include "../lexer/token.hpp"
+#include "../error/error.hpp"
 
 enum AstType {
     ast_class_decl,
@@ -96,19 +97,11 @@ class AST {
 public:
     AST(AST *parent, AstType type, int line, int col)
     : type(type), parent(parent), line(line), col(col), 
-    numEntities(0), numASTs(0) 
-    {  
-        subASTs.init();
-        entities.init();
-    }
+    numEntities(0), numASTs(0), subs({}), tokens({}) {}
 
     AST()
-    : type(ast_none), parent(NULL), line(0), col(0), 
-    numEntities(0), numASTs(0)
-    {
-        subASTs.init();
-        entities.init();
-    }
+    : type(ast_none), parent(NULL), line(1), col(1), 
+    numEntities(0), numASTs(0), subs({}), tokens({}) {}
 
     void encapsulate(AstType at);
     AstType getType();
@@ -120,7 +113,7 @@ public:
     bool hasSubAST(AstType at);
     bool hasEntity(TokenType t);
     void freeSubASTS();
-    long getEntityCount();
+    size_t getEntityCount();
     Token getEntity(long at);
     Token getEntity(TokenType t);
 
@@ -133,12 +126,12 @@ public:
     void freeLastEntity();
     void setASTType(AstType type);
 
-    int line, col;
+    size_t line, col;
     long numEntities, numASTs;
 
 private:
     AstType type;
     AST *parent;
-    List<AST> subASTs;
-    List<Token> entities;
+    vector<AST> subs; // sub ASTs;
+    TokenList tokens;
 };
