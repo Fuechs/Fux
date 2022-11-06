@@ -65,8 +65,7 @@ int main(int argc, char **argv) {
     }
 
     end: 
-        error->reportAll();
-        delete error;
+        error->panic();
 
         return result;
 }
