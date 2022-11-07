@@ -43,5 +43,12 @@ io {
         flush();
         __stdout("clear", 1);
     }
+
+    err(code: int, args: var, ...): void {
+        put(args);
+        flush();
+        if (code != 0)
+            exit code;
+    }
     
 }

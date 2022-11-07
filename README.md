@@ -1,10 +1,18 @@
-<!-- FUX COLORS - #fcaa68 - #ec243c -->
+<!--    colors 
+
+"orange":   #fcaa68 (sandy brown)
+"red":      #ec243c (imperial red)
+"grey":     #595959 (davys grey)
+"white":    #e0f2e9 (honeydew)
+"purple":   #a390e4 (lavender floral)
+
+-->
 
 <img src="./art/fux-material-icon.svg" width=50%></img>
 
-![total lines](https://img.shields.io/tokei/lines/github/fuechs/fux?color=fcaa68&logo=github&style=for-the-badge)
+![total lines](https://img.shields.io/tokei/lines/github/fuechs/fux?color=a390e4&logo=github&style=for-the-badge)
 ![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&logo=github&style=for-the-badge)
-![versiob](https://img.shields.io/badge/version-alpha-ec243c?logo=github&style=for-the-badge)
+![version](https://img.shields.io/badge/version-alpha-ec243c?logo=github&style=for-the-badge)
 ---
 
 **`Flawless Unambiguous Programming`**
@@ -106,7 +114,7 @@ main(): void {
     filePath := "path/file.txt";
     file := File(filePath, 'r');
     if (!?file) // check if file does not (-> !) exist (-> ?)
-        io.err("Could not open "+filePath);
+        io.err(1, "Could not open "+filePath);
     contents := file.read();
 }
 ```
