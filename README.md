@@ -63,8 +63,8 @@ Since Fux is still in an early development stage, there are no setup methods yet
 
 ## Roadmap
 
-- [...] `Error`
-- [...] `Lexer`
+- [&check;] `Error`
+- [&check;] `Lexer`
 - [...] `Parser`
 - [&cross;] `AST Analysis`
 - [&cross;] `Optimization`
