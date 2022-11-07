@@ -21,15 +21,16 @@ public:
     Lexer(const string source, const string fileName, ErrorManager *error) 
     : source(source), tokens({}), currentToken(Token()), idx(0), col(1), line(1), error(error) {
         parseLines();
-        error->setLines(this->lines);
-        error->setFileName(fileName);
+        error->lines = lines;
+        error->fileName = fileName;
     }
 
     ~Lexer() {
         tokens.clear();
         lines.clear();
         source.clear();
-        error->setFileName(fux.options.fileName);
+        error->fileName = fux.options.fileName;
+        error->lines = fux.options.fileLines;
     }
 
     TokenList lex();

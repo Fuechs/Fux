@@ -126,26 +126,17 @@ public:
 
     void reportAll();
 
-    void setFileName(string fileName) {
-        if (this->fileName != fileName)
-            this->fileName = fileName;
-    }
-    
-    void setLines(vector<string> lines) {
-        if (this->lines != lines)
-            this->lines = lines;
-    }
-
     // literally self destruct because of a fatal error
     void panic() {
         reportAll();
         delete this;
     }
     
-private:
-    ErrorList errors;
     string fileName;
     vector<string> lines;
+    
+private:
+    ErrorList errors;
 
     void addError(ParseError error);
 };

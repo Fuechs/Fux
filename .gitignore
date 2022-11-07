@@ -9,3 +9,4 @@ main
 docs/
 grammar.bnf
 *.dSYM
+old*

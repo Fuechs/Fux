@@ -19,19 +19,28 @@
 
 class Parser {
 public:
-    Parser(TokenList tokens, ErrorManager *error, string fileName, vector<string> lines) 
-    : tokens(tokens), error(error) {
-        error->setFileName(fileName);
-        error->setLines(lines);
+    Parser(ErrorManager *error, string fileName, bool mainFile = false) 
+    : error(error) {
+        lexer = new Lexer(readFile(fileName), fileName, error);
+        if (mainFile)
+            fux.options.fileLines = lexer->getLines();
     }
 
-    ~Parser();
+    ~Parser() {
+        delete lexer;
+        for (Token &token : tokens)
+            delete &token;
+        tokens.clear();
+    }
 
     AST *parse();
 
 private:
     TokenList tokens;
     ErrorManager *error;
+    Lexer *lexer;
 
-    void parseGet();
+    bool notEOF() {
+        return tokens[0].type != EOF;
+    }
 };

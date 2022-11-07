@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <memory>
 
 // #include <list>
 // #include <regex>
@@ -43,7 +44,8 @@ struct __options_struct {
 
     ~__options_struct() { out.clear(); }
 
-    string fileName; // file to compile
+    string fileName; // file to compile (main)
+    vector<string> fileLines; // lines of that file (main)
     string out              = "a.out"; // output binary file
     string version          = "0.1";
     vector<string> libraries = {"/usr/local/include/fux/"}; // library paths

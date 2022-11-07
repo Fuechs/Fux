@@ -10,3 +10,22 @@
  */
 
 #include "ast.hpp"
+
+void AST::operator=(AST &cpy) {
+    this->type = cpy.type;
+    this->line = cpy.line;
+    this->col = cpy.col;
+    this->body = cpy.body;
+    this->tokens = cpy.tokens;
+}
+
+AST *AST::encapsulate(AstType at) {
+    AST *branch = new AST(*this);
+    branch->type = at;
+
+    delete &body;
+    delete &tokens;
+
+    body.push_back(branch);
+    return branch;
+}

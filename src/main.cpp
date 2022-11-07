@@ -32,25 +32,10 @@ int main(int argc, char **argv) {
     fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
 
     ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
-
-    const string source = readFile(fux.options.fileName);
-
-    Lexer *lexer = new Lexer(source, fux.options.fileName, error);
-    vector<string> lines = lexer->getLines();
-    TokenList tokens = lexer->lex();
-    
-    delete lexer;
-
-    if (fux.options.debugMode)
-        for (Token token : tokens)
-            token.debugPrint();
-
-    if (error->hasErrors())
-        goto end;
     
     {   // own scope so it can be skipped by goto
-        Parser *parser = new Parser(tokens, error, fux.options.fileName, lines);
-        AST *root = parser->parse();
+        Parser *parser = new Parser(error, fux.options.fileName, true);
+        auto root = parser->parse();
 
         // root->debugPrint();
         

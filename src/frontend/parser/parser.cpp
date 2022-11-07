@@ -10,3 +10,7 @@
  */
 
 #include "parser.hpp"
+
+AST *Parser::parse() {
+    tokens = lexer->lex();
+}
