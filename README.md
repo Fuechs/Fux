@@ -8,7 +8,11 @@
 
 -->
 
-<img src="./art/fux-material-icon.svg" width=50%></img>
+<p align="center">
+    <img src="./art/fux-material-icon.svg" width=25% />
+</p>
+
+###### &cross; Warning - Fux is still in early development &cross;
 
 ![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4&style=for-the-badge)
 ![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&style=for-the-badge)
@@ -17,7 +21,6 @@
 
 **`Flawless Unambiguous Programming`**
 
-###### Warning: Fux is still in early development.
 
 ## The beautiful alternative for C++ 
 
