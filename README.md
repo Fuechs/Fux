@@ -10,9 +10,9 @@
 
 <img src="./art/fux-material-icon.svg" width=50%></img>
 
-![total lines](https://img.shields.io/tokei/lines/github/fuechs/fux?color=a390e4&logo=github&style=for-the-badge)
-![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&logo=github&style=for-the-badge)
-![version](https://img.shields.io/badge/version-alpha-ec243c?logo=github&style=for-the-badge)
+![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4&style=for-the-badge)
+![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&style=for-the-badge)
+![version](https://img.shields.io/badge/version-alpha-ec243c?style=for-the-badge)
 ---
 
 **`Flawless Unambiguous Programming`**
