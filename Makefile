@@ -1,7 +1,7 @@
 cc = g++
 exec = fux
-cflags = -std=c++20 -g
-src = $(wildcard src/main.cpp src/frontend/error/error.cpp src/frontend/lexer/lexer.cpp)
+cflags = -g -std=c++20
+src = $(wildcard src/main.cpp src/util/io.cpp src/frontend/*/*.cpp)
 ex = src/examples
  
 # Copyright (c) 2020-2022 Fuechs

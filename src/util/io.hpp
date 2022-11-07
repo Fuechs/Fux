@@ -18,20 +18,6 @@
 
 using namespace std;
 
-const string readFile(const string path) {
-    ifstream file(path);
-    if (!file.is_open()) {
-        cerr << "could not open file '" << path << "'\n";
-        exit(1);
-    }
-    stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
-}
+const string readFile(const string path);
 
-const string getDirectory(const string path) {
-    string directory;
-    const size_t lastSlashIdx = path.rfind('/');
-    if (lastSlashIdx != string::npos)
-        directory = path.substr(0, lastSlashIdx);
-}
+const string getDirectory(const string path);

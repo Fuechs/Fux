@@ -11,8 +11,6 @@
 
 #include "fux.hpp"
 #include "frontend/error/error.hpp"
-#include "frontend/lexer/lexer.hpp"
-#include "frontend/lexer/token.hpp"
 #include "frontend/parser/parser.hpp"
 #include "frontend/parser/ast.hpp"
 

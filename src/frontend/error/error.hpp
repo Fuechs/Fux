@@ -13,6 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
+#include "../parser/ast.hpp"
 
 enum ErrorType {
     UNEXPECTED_SYMBOL,
@@ -102,7 +103,6 @@ private:
 typedef vector<ParseError> ErrorList;
 
 // ast needs error -> fake class 
-class AST {public: size_t line = 1, col = 1;};
 
 class ErrorManager {
 public:

@@ -13,4 +13,10 @@
 
 AST *Parser::parse() {
     tokens = lexer->lex();
+    
+    if (fux.options.debugMode)
+        for (Token token : tokens)
+            token.debugPrint();
+
+    return new AST();
 }

@@ -13,7 +13,6 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
-#include "../error/error.hpp"
 
 enum AstType {
     ast_class_decl,

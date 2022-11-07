@@ -28,8 +28,6 @@ public:
 
     ~Parser() {
         delete lexer;
-        for (Token &token : tokens)
-            delete &token;
         tokens.clear();
     }
 

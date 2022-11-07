@@ -58,5 +58,6 @@ private:
     void getString();
     void getNumber();
     bool skipComment();
+    void checkKeyword();
 
 };

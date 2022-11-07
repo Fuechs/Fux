@@ -71,12 +71,65 @@ enum TokenType {
     // object
     COLON_COLON,    // ::
     TRIPLE_DOT,     // ...
+    ARRAY_BRACKET,  // []
     IDENTIFIER,     // identifier
     NUMBER,         // 0
     FLOAT,          // 0.0 or .0
     HEXADECIMAL,    // 0x0
     STRING,         // "string"
     CHAR,           // 'c'
+
+    KEY_GET,
+    KEY_PACKAGE,
+    KEY_IF,
+    KEY_ELSE,
+    KEY_WHILE,
+    KEY_DO,
+    KEY_FOR,
+    KEY_IN,
+    KEY_RETURN,
+    KEY_EXCEPT,
+    KEY_SWITCH,
+    KEY_CASE,
+    KEY_DEFAULT,
+    KEY_BREAK,
+    KEY_LABEL,
+    KEY_GOTO,
+    KEY_DELETE,
+    KEY_EXIT,
+    
+    KEY_SAFE,
+    KEY_INTERN,
+    KEY_STATIC,
+    KEY_FINAL,
+
+    KEY_USING,
+    KEY_TYPEDEF,
+    
+    KEY_TRUE,
+    KEY_FALSE,
+    KEY_NULL,
+
+    KEY_VOID,
+    KEY_BOOL,
+    KEY_I8,
+    KEY_U8,
+    KEY_CHAR,
+    KEY_I16,
+    KEY_U16,
+    KEY_WCHAR,
+    KEY_I32,
+    KEY_U32,
+    KEY_FLOAT,
+    KEY_I64,
+    KEY_U64,
+    KEY_DOUBLE,
+    KEY_INT,
+    KEY_UINT,
+    KEY_STR,
+    KEY_VAR,
+    KEY_ENUM,
+    KEY_STRUCT,
 
     _EOF,           // end of file
     NONE,
@@ -139,12 +192,65 @@ static const char *TokenTypeString[] = {
     // object
     "COLON_COLON",    // ::
     "TRIPLE_DOT",     // ...
+    "ARRAY_BRACKET",  // []
     "IDENTIFIER",     // identifier
     "NUMBER",         // 0, 0.0, .0
     "FLOAT",
     "HEXADECIMAL",    // 0x0
     "STRING",         
     "CHAR",
+
+    "KEY_GET",
+    "KEY_PACKAGE",
+    "KEY_IF",
+    "KEY_ELSE",
+    "KEY_WHILE",
+    "KEY_DO",
+    "KEY_FOR",
+    "KEY_IN",
+    "KEY_RETURN",
+    "KEY_EXCEPT",
+    "KEY_SWITCH",
+    "KEY_CASE",
+    "KEY_DEFAULT",
+    "KEY_BREAK",
+    "KEY_LABEL",
+    "KEY_GOTO",
+    "KEY_DELETE",
+    "KEY_EXIT",
+    
+    "KEY_SAFE",
+    "KEY_INTERN",
+    "KEY_STATIC",
+    "KEY_FINAL",
+
+    "KEY_USING",
+    "KEY_TYPEDEF",
+    
+    "KEY_TRUE",
+    "KEY_FALSE",
+    "KEY_NULL",
+
+    "KEY_VOID",
+    "KEY_BOOL",
+    "KEY_I8",
+    "KEY_U8",
+    "KEY_CHAR",
+    "KEY_I16",
+    "KEY_U16",
+    "KEY_WCHAR",
+    "KEY_I32",
+    "KEY_U32",
+    "KEY_FLOAT",
+    "KEY_I64",
+    "KEY_U64",
+    "KEY_DOUBLE",
+    "KEY_INT",
+    "KEY_UINT",
+    "KEY_STR",
+    "KEY_VAR",
+    "KEY_ENUM",
+    "KEY_STRUCT",
 
     "EOF",           // end of file
     "NONE",
@@ -207,12 +313,65 @@ static const char *TokenTypeValue[] = {
     // object
     "::",    // ::
     "...",     // ...
+    "[]",   
     "ident",     // identifier
     "0",         // 0
     "0.0",  // .0 or 0.0
     "0x0",    // 0x0
     "\"string\"",
     "'c'",
+
+    "get",
+    "package",
+    "if",
+    "else",
+    "while",
+    "do",
+    "for",
+    "in",
+    "return",
+    "except",
+    "switch",
+    "case",
+    "default",
+    "break",
+    "label",
+    "goto",
+    "delete",
+    "exit",
+    
+    "safe",
+    "intern",
+    "static",
+    "final",
+
+    "using",
+    "typedef",
+    
+    "true",
+    "false",
+    "null",
+
+    "void",
+    "bool",
+    "i8",
+    "u8",
+    "char",
+    "i16",
+    "u16",
+    "wchar",
+    "i32",
+    "u32",
+    "float",
+    "i64",
+    "u64",
+    "double",
+    "int",
+    "uint",
+    "str",
+    "var",
+    "enum",
+    "struct",
 
     "eof",           // end of file
     "none",
