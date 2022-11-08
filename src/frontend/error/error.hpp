@@ -62,6 +62,7 @@ static const char *ErrorTypeString[] = {
     "missing bracket",
     "invalid access specifier",
     "",
+    "previously defined",
     "duplicate class",
     "redundant token",
     "internal runtime error",

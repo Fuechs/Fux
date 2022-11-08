@@ -94,5 +94,6 @@ int bootstrap(int argc, char **argv);
 int printHelp();
 int printVersion();
 string toLower(string data);
+int repl();
 
 #define cmp(s) (strcmp(argv[i], s) == 0)

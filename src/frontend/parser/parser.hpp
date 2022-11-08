@@ -19,11 +19,12 @@
 
 class Parser {
 public:
-    Parser(ErrorManager *error, string fileName, bool mainFile = false) 
+    Parser(ErrorManager *error, string fileName, string source, bool mainFile = false) 
     : error(error) {
-        lexer = new Lexer(readFile(fileName), fileName, error);
+        lexer = new Lexer(source, fileName, error);
         if (mainFile)
             fux.options.fileLines = lexer->getLines();
+        root = new AST(nullptr, AST_ROOT);
     }
 
     ~Parser() {
@@ -37,8 +38,16 @@ private:
     TokenList tokens;
     ErrorManager *error;
     Lexer *lexer;
+    AST *root;
 
-    bool notEOF() {
-        return tokens[0].type != EOF;
-    }
+    AST *parseStmt(AST* parent);
+    AST *parseExpr(AST* parent);
+    AST *parsePrimaryExpr(AST* parent);
+    
+    int64_t parseNumber(string str);
+
+    Token eat();
+
+    bool notEOF();
+    void removeFirstToken();
 };

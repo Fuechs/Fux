@@ -25,26 +25,24 @@ int main(int argc, char **argv) {
     //     return result;
     
     // setting file manually for debugging reasons
-    fux.options.fileName = "src/examples/main.fux"; 
+    fux.options.fileName = "src/examples/test.fux"; 
 
     fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
+
+    return repl();
 
     ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
     
     {   // own scope so it can be skipped by goto
-        Parser *parser = new Parser(error, fux.options.fileName, true);
+        Parser *parser = new Parser(error, fux.options.fileName, readFile(fux.options.fileName), true);
         auto root = parser->parse();
 
-        // root->debugPrint();
+        root->debugPrint();
         
         delete parser; 
 
         if (error->hasErrors())
             goto end;
-    }
-    
-    {
-        // continue compilation
     }
 
     end: 
@@ -164,4 +162,19 @@ int printVersion() {
 string toLower(string data) {
     transform(data.begin(), data.end(), data.begin(), [](unsigned char c){ return std::tolower(c); });
     return data;
+}
+
+int repl() { 
+    string input;
+    for (;;) {
+        cin >> input;
+        ErrorManager *error = new ErrorManager("<stdin>", {});
+        Parser *parser = new Parser(error, "<stdin>", input, true);
+        AST *root = parser->parse();
+        delete parser;
+        root->debugPrint();
+        delete root;
+        error->reportAll();
+    }
+    return 1;
 }
