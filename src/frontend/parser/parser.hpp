@@ -40,14 +40,15 @@ private:
     Lexer *lexer;
     AST *root;
 
-    AST *parseStmt(AST* parent);
-    AST *parseExpr(AST* parent);
-    AST *parsePrimaryExpr(AST* parent);
+    AST *parseStmt(AST *parent);
+    AST *parseExpr(AST *parent);
+    AST *parseAdditiveExpr(AST *parent);
+    AST *parseMultiplicativExpr(AST *parent);
+    AST *parsePrimaryExpr(AST *parent);
     
-    int64_t parseNumber(string str);
+    // int64_t parseNumber(string str);
 
     Token eat();
-
+    Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
     bool notEOF();
-    void removeFirstToken();
 };

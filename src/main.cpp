@@ -169,17 +169,20 @@ int repl() {
     string input = "";
     for (;;) {
         cout << "> ";
-        getline(cin, input);
+        // getline(cin, input);
+        input = "10 * (20 % 5) - 3";
+        cout << input << endl;
+
         if (input.empty()) 
             continue;
         else if (input == "exit" || input == "exit;")
             break;
+            
         ErrorManager *error = new ErrorManager("<stdin>", {});
         Parser *parser = new Parser(error, "<stdin>", input, true);
         AST *root = parser->parse();
-        delete parser;
         root->debugPrint();
-        delete root;
+        root->debugLiteral();
         error->panic();
     }
     return 1;

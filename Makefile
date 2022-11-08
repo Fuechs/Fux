@@ -7,8 +7,7 @@ ex = src/examples
 # Copyright (c) 2020-2022 Fuechs
 # All rights reserved.
 
-all:
-	$(cc) $(src) -o $(exec) $(cflags)
+all: comp
 
 # f = main
 
@@ -17,6 +16,12 @@ all:
 
 # code: 
 # 	./$(exec) vm $(ex)/$(f).fux
+
+comp:
+	$(cc) $(src) -o $(exec) $(cflags)
+
+run: comp
+	./$(exec)
 
 clean:
 	-rm $(exec)

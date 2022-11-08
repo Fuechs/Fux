@@ -294,7 +294,7 @@ void Lexer::getToken() {
             }
 
             currentToken.type = ASTERISK;
-            advance(2);
+            advance();
             break;
         
         case '/':
@@ -419,8 +419,10 @@ void Lexer::getToken() {
             break;
         
         default:
-            if (!isalpha(current()) && currentToken.value != "_")
+            if (!isalpha(current()) && currentToken.value != "_") {
                 error->createError(UNEXPECTED_SYMBOL, line, col, "unknown character '"+currentToken.value+"'");
+                advance();
+            }
             else {
                 if (isalpha(current()))
                     hasLetter = true;

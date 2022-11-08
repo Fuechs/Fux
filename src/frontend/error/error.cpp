@@ -181,7 +181,7 @@ void ErrorManager::createError(ErrorType type, Token token, string comment, bool
 }
 
 void ErrorManager::createError(ErrorType type, AST &ast, string comment, bool aggressive) {
-    addError(ParseError(type, ast.line, ast.col, ast.col, fileName, lines[ast.line - 1], comment, false, aggressive));
+    addError(ParseError(type, ast.line, ast.start, ast.end, fileName, lines[ast.line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
@@ -193,7 +193,7 @@ void ErrorManager::createWarning(ErrorType type, Token token, string comment, bo
 }
 
 void ErrorManager::createWarning(ErrorType type, AST &ast, string comment, bool aggressive) {
-    addError(ParseError(type, ast.line, ast.col, ast.col, fileName, lines[ast.line - 1], comment, true, aggressive));
+    addError(ParseError(type, ast.line, ast.start, ast.end, fileName, lines[ast.line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::reportAll() {
@@ -205,12 +205,12 @@ void ErrorManager::addError(ParseError error) {
     errors.push_back(error);
 
     if (errorCount() >= fux.options.errorLimit) {
+        reportAll();
         cerr 
             << ColorCode::RED << StyleCode::BOLD 
-            << "Hit error limit of " << fux.options.errorLimit << ".\n"
+            << "Hit error limit of " << fux.options.errorLimit << "."
             << ColorCode::DEFAULT << StyleCode::SLIM
             << endl;
-        reportAll();
         exit(error.type);
     }
 }
