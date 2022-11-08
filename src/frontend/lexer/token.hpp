@@ -380,13 +380,13 @@ static const char *TokenTypeValue[] = {
 class Token {
 public:
     Token(TokenType type = NONE, string value = "")
-    : type(type), value(value), line(1), col(1) {}
+    : type(type), value(value), line(1), start(1), end(1) {}
 
     ~Token() { value.clear(); }
 
     TokenType type;
     string value;
-    size_t line, col;
+    size_t line, start, end;
 
     void debugPrint() {
         cout    
@@ -398,7 +398,7 @@ public:
             << "Line "
             << line
             << ":"
-            << col
+            << start
             << ">\n";
     }
 };

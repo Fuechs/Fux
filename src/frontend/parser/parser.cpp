@@ -20,9 +20,8 @@ AST *Parser::parse() {
             token.debugPrint();
 
     // parsing 
-    while (notEOF()) {
+    while (notEOF())
         root->addSub(parseStmt(root));
-    }
 
     return root;
 }
@@ -39,13 +38,15 @@ AST *Parser::parsePrimaryExpr(AST* parent) {
     Token curTok = eat();
     switch (curTok.type) {
         case IDENTIFIER:    
-            return new AST(parent, AST_IDENTIFIER, curTok.line, curTok.col, curTok.value);
+            return new AST(parent, AST_IDENTIFIER, curTok.line, curTok.start, curTok.value);
 
         case NUMBER:        
-            return new AST(parent, AST_NUMERIC_LITERAL, curTok.line, curTok.col, curTok.value);
+            return new AST(parent, AST_NUMERIC_LITERAL, curTok.line, curTok.start, curTok.value);
         
         default:            
-            error->createError(UNEXPECTED_TOKEN, curTok, "unexpected token found during parsing");
+            stringstream err;
+            err << TokenTypeString[curTok.type] << " '" << curTok.value << "'";
+            error->createError(UNEXPECTED_TOKEN, curTok, err.str());
             return new AST(parent);
     }
 }

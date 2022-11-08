@@ -29,6 +29,7 @@ int main(int argc, char **argv) {
 
     fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
 
+    // just repl for testing
     return repl();
 
     ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
@@ -165,16 +166,21 @@ string toLower(string data) {
 }
 
 int repl() { 
-    string input;
+    string input = "";
     for (;;) {
-        cin >> input;
+        cout << "> ";
+        getline(cin, input);
+        if (input.empty()) 
+            continue;
+        else if (input == "exit" || input == "exit;")
+            break;
         ErrorManager *error = new ErrorManager("<stdin>", {});
         Parser *parser = new Parser(error, "<stdin>", input, true);
         AST *root = parser->parse();
         delete parser;
         root->debugPrint();
         delete root;
-        error->reportAll();
+        error->panic();
     }
     return 1;
 }

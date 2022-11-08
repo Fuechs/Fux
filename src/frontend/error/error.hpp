@@ -84,7 +84,7 @@ class ParseError {
 public:
     ParseError();
     ParseError(const ParseError &pe);
-    ParseError(ErrorType type, size_t line, size_t col, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
+    ParseError(ErrorType type, size_t line, size_t start, size_t end, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
     ParseError(ErrorType type, Token token, string fileName, string lienContent, string comment = "", bool warning = false, bool aggressive = false);
 
     void operator=(const ParseError &pe);
@@ -95,7 +95,7 @@ public:
     bool warning, aggressive;
     ErrorType type;
     string message, fileName, lineContent;
-    size_t line, col;
+    size_t line, start, end;
 
 private:
     bool reported;

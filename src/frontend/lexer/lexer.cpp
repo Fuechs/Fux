@@ -36,9 +36,10 @@ TokenList Lexer::lex() {
             default: break;
         }
 
+        currentToken.end = col - 1;
         endToken();
         // update line and column for next token
-        currentToken.col = col;
+        currentToken.start = col;
         currentToken.line = line; 
     }
 

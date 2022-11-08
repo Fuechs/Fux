@@ -22,18 +22,20 @@ ParseError::ParseError() {
     message = "";
     fileName = "";
     lineContent = "";
-    line = 0;
-    col = 0;
+    line = 1;
+    start = 1;
+    end = 1;
 }
 
 ParseError::ParseError(const ParseError &pe) {
     operator=(pe);
 }
 
-ParseError::ParseError(ErrorType type, size_t line, size_t col, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
+ParseError::ParseError(ErrorType type, size_t line, size_t start, size_t end, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
     this->type = type;
     this->line = line;
-    this->col = col;
+    this->start = start;
+    this->end = end;
     this->message = string(ErrorTypeString[type])+": "+comment;
     this->fileName = fileName;
     this->lineContent = lineContent;
@@ -45,7 +47,8 @@ ParseError::ParseError(ErrorType type, size_t line, size_t col, string fileName,
 ParseError::ParseError(ErrorType type, Token token, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
     this->type = type;
     this->line = token.line;
-    this->col = token.col;
+    this->start = token.start;
+    this->end = token.end;
     this->message = string(ErrorTypeString[type])+": "+comment;
     this->fileName = fileName;
     this->lineContent = lineContent;
@@ -64,7 +67,8 @@ void ParseError::operator=(const ParseError &pe) {
     fileName = pe.fileName;
     lineContent = pe.lineContent;
     line = pe.line;
-    col = pe.col;
+    start = pe.start;
+    end = pe.end;
 }
 
 void ParseError::free() {
@@ -85,7 +89,7 @@ void ParseError::report() {
 
     stringstream errorMessage;
     
-    errorMessage << StyleCode::BOLD << fileName << ":" << line << ":" << col << ": ";
+    errorMessage << StyleCode::BOLD << fileName << ":" << line << ":" << start << ": ";
     
     if (warning)
         errorMessage << ColorCode::MAGENTA << "warning: ";
@@ -96,10 +100,14 @@ void ParseError::report() {
         << ColorCode::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
         << StyleCode::SLIM << lineContent << "\n\t";
     
-    for (size_t i = 0; i < (col - 1); i++) // -1 so arrow points at exact position
+    size_t i;
+    for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
         errorMessage << " ";
-    errorMessage << "^" << endl;
-
+    errorMessage << ColorCode::GREEN << StyleCode::BOLD;
+    while (i++ < end)
+        errorMessage << "^";
+    errorMessage << ColorCode::DEFAULT << StyleCode::SLIM << endl;
+    
     cerr << errorMessage.str();
     
     errorMessage.clear();
@@ -165,27 +173,27 @@ bool ErrorManager::hasWarnings() {
 }
 
 void ErrorManager::createError(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    addError(ParseError(type, line, col, fileName, lines[line - 1], comment, false, aggressive));
+    addError(ParseError(type, line, col, col, fileName, lines[line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createError(ErrorType type, Token token, string comment, bool aggressive) {
-    addError(ParseError(type, token.line, token.col, fileName, lines[token.line - 1], comment, false, aggressive));
+    addError(ParseError(type, token.line, token.start, token.end, fileName, lines[token.line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createError(ErrorType type, AST &ast, string comment, bool aggressive) {
-    addError(ParseError(type, ast.line, ast.col, fileName, lines[ast.line - 1], comment, false, aggressive));
+    addError(ParseError(type, ast.line, ast.col, ast.col, fileName, lines[ast.line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    addError(ParseError(type, line, col, fileName, lines[line - 1], comment, true, aggressive));
+    addError(ParseError(type, line, col, col, fileName, lines[line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, Token token, string comment, bool aggressive) {
-    addError(ParseError(type, token.line, token.col, fileName, lines[token.line - 1], comment, true, aggressive));
+    addError(ParseError(type, token.line, token.start, token.end, fileName, lines[token.line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, AST &ast, string comment, bool aggressive) {
-    addError(ParseError(type, ast.line, ast.col, fileName, lines[ast.line - 1], comment, true, aggressive));
+    addError(ParseError(type, ast.line, ast.col, ast.col, fileName, lines[ast.line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::reportAll() {
