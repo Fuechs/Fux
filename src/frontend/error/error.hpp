@@ -85,7 +85,7 @@ public:
     ParseError();
     ParseError(const ParseError &pe);
     ParseError(ErrorType type, size_t line, size_t start, size_t end, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
-    ParseError(ErrorType type, Token token, string fileName, string lienContent, string comment = "", bool warning = false, bool aggressive = false);
+    ParseError(ErrorType type, Token token, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
 
     void operator=(const ParseError &pe);
 
@@ -128,11 +128,16 @@ public:
     void reportAll();
 
     // literally self destruct because of a fatal error
-    void panic() {
+    void panic(bool fatal = false) {
         reportAll();
+        if (fatal)
+            cout 
+                << ColorCode::RED << StyleCode::BOLD 
+                << "Hit an fatal error.\n" 
+                << ColorCode::DEFAULT << StyleCode::SLIM;
         delete this;
     }
-    
+
     string fileName;
     vector<string> lines;
     

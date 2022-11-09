@@ -13,31 +13,42 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
+#include "type.hpp"
 
 enum NodeType {
+    // * statements
     AST_ROOT,
+    AST_VARIABLE_DECl,
+
+    // * expressions
     AST_NULL_LITERAL,
     AST_NUMERIC_LITERAL,
     AST_IDENTIFIER,
     AST_BINARY_EXPR,
     AST_BINARY_OPERATOR,
+    AST_TYPE,
+
     AST_NONE,
 };
 
 static const char *NodeTypeString[] = {
     "AST_ROOT",
+    "AST_VARIABLE_DECL",
+
     "AST_NULL_LITERAL",
     "AST_NUMERIC_LITERAL",
     "AST_IDENTIFIER",
     "AST_BINARY_EXPR",
     "AST_BINARY_OPERATOR",
+    "AST_TYPE",
+
     "AST_NONE",
 };
 
 class AST {
 public:
     AST(AST *copy)
-    : parent(copy->parent), type(copy->type), line(copy->line), start(copy->line),
+    : parent(copy->parent), type(copy->type), line(copy->line), start(copy->start),
     end(copy->end), body(copy->body), value(copy->value) {}
 
     AST(AST *parent, NodeType type, size_t line = 1, size_t start = 1, size_t end = 1)
@@ -78,7 +89,10 @@ public:
     NodeType type;  
     size_t line, start, end;
     vector<AST *> body;
-    string value;
+    union { 
+        string value; 
+        Type valueType = NO_TYPE; 
+    };
 };
 
 // typedef vector<AST *> AstList;

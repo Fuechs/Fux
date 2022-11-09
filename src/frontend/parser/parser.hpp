@@ -41,9 +41,11 @@ private:
     AST *root;
 
     AST *parseStmt(AST *parent);
+    AST *parseVarDecl(AST *parent);
+
     AST *parseExpr(AST *parent);
     AST *parseAdditiveExpr(AST *parent);
-    AST *parseMultiplicativExpr(AST *parent);
+    AST *parseMultiplicativeExpr(AST *parent);
     AST *parsePrimaryExpr(AST *parent);
     
     // int64_t parseNumber(string str);

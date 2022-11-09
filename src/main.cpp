@@ -17,20 +17,16 @@
 __fux_struct fux;
 
 int main(int argc, char **argv) {
-    
-    int result = 0;
+    int result = bootstrap(argc, argv);
+    switch (result) {
+        case -1:    return repl();
+        case 0:     break;
+        default:    return result;
+    }
 
-    // int result = bootstrap(argc, argv);
-    // if (result != 0) 
-    //     return result;
+    // fux.options.fileName = "src/examples/main.fux"; // debugger
     
-    // setting file manually for debugging reasons
-    fux.options.fileName = "src/examples/test.fux"; 
-
     fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
-
-    // just repl for testing
-    return repl();
 
     ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
     
@@ -39,7 +35,8 @@ int main(int argc, char **argv) {
         auto root = parser->parse();
 
         root->debugPrint();
-        
+        root->debugLiteral();
+
         delete parser; 
 
         if (error->hasErrors())
@@ -113,7 +110,8 @@ int bootstrap(int argc, char **argv) {
             fux.options.strip = true;
         }
         else if (cmp("-debug") || cmp("-d"))    fux.options.userDebug = true;
-        else if (cmp("-h") || cmp("-help"))        return printHelp();
+        else if (cmp("-repl"))                  return -1;
+        else if (cmp("-h") || cmp("-help"))     return printHelp();
 
         else if (argv[i][0] == '-')             cerr << "invalid option '"+string(argv[i])+"'\n";
         else                                    fux.options.fileName = argv[i];
@@ -147,6 +145,7 @@ int printHelp() {
         << "    -werror -werr       treat warnings as errors\n"
         << "    -release -r         generate a release build\n"
         << "    -debug -d           turn debug mode on\n"
+        << "    -repl               start repl\n"
         << "    -h -help            show this message and exit"
     << endl;
 
@@ -166,12 +165,11 @@ string toLower(string data) {
 }
 
 int repl() { 
+    int result = 0;
     string input = "";
     for (;;) {
         cout << "> ";
-        // getline(cin, input);
-        input = "10 * (20 % 5) - 3";
-        cout << input << endl;
+        getline(cin, input);
 
         if (input.empty()) 
             continue;
@@ -185,5 +183,6 @@ int repl() {
         root->debugLiteral();
         error->panic();
     }
-    return 1;
+
+    return result;
 }

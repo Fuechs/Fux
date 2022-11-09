@@ -54,7 +54,10 @@ void AST::debugPrint(size_t indent, bool all) {
     debug << "Body Size: " << body.size() << "\n";
     
     debugIndent(debug, indent);
-    debug << "Value: " << value << "\n";
+    if (type == AST_VARIABLE_DECl)
+        debug << "ValueType: " << TypeString[valueType] << "\n";
+    else 
+        debug << "Value: " << value << "\n";
     
     cout << debug.str();
 
@@ -73,11 +76,15 @@ void AST::debugIndent(stringstream &debug, size_t indent) {
 }
 
 void AST::debugLiteral() {
+    if (!fux.options.debugMode)
+        return;
+
     switch (type) {
         case AST_ROOT:
             cout << ColorCode::RED << "-- ROOT --\n" << ColorCode::DEFAULT;
             for (AST *sub : body)
                 sub->debugLiteral();
+            cout << endl;
             break;
 
         case AST_NULL_LITERAL:
@@ -94,12 +101,20 @@ void AST::debugLiteral() {
             body[0]->debugLiteral(); // op
             cout << " ";
             body[2]->debugLiteral(); // rhs
-            cout << ")\n";   
+            cout << ")";   
             break; 
+        
+        case AST_VARIABLE_DECl:
+            body[0]->debugLiteral(); // name
+            if (valueType == INT)
+                cout << " := ";
+            else if (valueType == CONSTANT)
+                cout << " :=== ";
+            body[1]->debugLiteral(); // value
+            cout << ";";
+            break;
 
         default:
             break;       
     }
-
-    cout << flush;
 }

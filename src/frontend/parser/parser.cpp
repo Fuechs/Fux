@@ -38,7 +38,50 @@ AST *Parser::parse() {
 // PrimaryExpr
 
 AST *Parser::parseStmt(AST *parent) {
+    switch (tokens[0].type) {
+        case SEMICOLON:         eat(); return parseStmt(parent); // skip semicolon
+        case IDENTIFIER:        return parseVarDecl(parent);
+        default:                return parseExpr(parent);
+    }
+}
+
+AST *Parser::parseVarDecl(AST *parent) {
+    if (tokens[1].type == SEMICOLON) {
+        Token name = eat();
+        eat(); // semicolon
+        AST *variable = new AST(parent, AST_VARIABLE_DECl);
+        AST *symbol = new AST(variable, AST_IDENTIFIER, name);
+        variable->addSub(symbol);
+        variable->copyPosition(symbol);
+        variable->end++; // semicolon
+
+        return variable;
+    }
+
+    if (tokens[1].type == COLON) {
+        Token name = eat();
+        eat(); // colon
+        AST *variable = new AST(parent, AST_VARIABLE_DECl);
+        AST *symbol = new AST(variable, AST_IDENTIFIER, name);
+        variable->addSub(symbol);
+        variable->copyPosition(symbol);
+        
+        if (tokens[0].type == EQUALS)
+            variable->valueType = INT;
+        else if (tokens[0].type == TRIPLE_EQUALS)
+            variable->valueType = CONSTANT;
+        eat(); // = or ===
+        
+        AST *value = parseExpr(variable);
+        variable->addSub(value);
+        variable->end = value->end + 1; // semicolon
+        expect(SEMICOLON);
+
+        return variable;
+    } 
+ 
     return parseExpr(parent);
+
 }
 
 AST *Parser::parseExpr(AST *parent) {
@@ -46,11 +89,11 @@ AST *Parser::parseExpr(AST *parent) {
 }
 
 AST *Parser::parseAdditiveExpr(AST *parent) {
-    AST *lhs = parseMultiplicativExpr(parent);
+    AST *lhs = parseMultiplicativeExpr(parent);
 
     while (tokens[0].type == PLUS || tokens[0].type == MINUS) {
         AST *op = new AST(nullptr, AST_BINARY_OPERATOR, eat());
-        AST *rhs = parseMultiplicativExpr(nullptr);
+        AST *rhs = parseMultiplicativeExpr(nullptr);
         AST *copy = new AST(lhs); // copy old lhs
         lhs = new AST(parent, AST_BINARY_EXPR, copy->line, copy->start, rhs->end);
         // ( op lhs(copy) rhs )
@@ -62,7 +105,7 @@ AST *Parser::parseAdditiveExpr(AST *parent) {
     return lhs;
 }
 
-AST *Parser::parseMultiplicativExpr(AST *parent) {
+AST *Parser::parseMultiplicativeExpr(AST *parent) {
     AST *lhs = parsePrimaryExpr(parent);
 
     while (tokens[0].type == SLASH || tokens[0].type == ASTERISK || tokens[0].type == PERCENT) {
@@ -112,6 +155,8 @@ AST *Parser::parsePrimaryExpr(AST *parent) {
 
 Token Parser::eat() {
     Token prev = tokens[0];
+    if (prev.type == _EOF)
+        return prev;
     tokens.erase(tokens.begin()); 
     return prev;
 }
@@ -123,8 +168,8 @@ Token Parser::expect(TokenType type, ErrorType errType) {
         err 
             << "expected " << TokenTypeString[type] 
             << " '" << TokenTypeValue[type] << "', "
-            << "got " << TokenTypeValue[curTok.type] 
-            << " '" << TokenTypeValue[curTok.type] << "' instead";
+            << "got " << TokenTypeString[curTok.type] 
+            << " '" << curTok.value << "' instead";
         error->createError(errType, curTok, err.str());
         return Token();
     }
