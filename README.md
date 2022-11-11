@@ -22,71 +22,80 @@
 **`Flawless Unambiguous Programming`**
 
 
-## The beautiful alternative for C++ 
-
-- so you don't shoot yourself in the foot (like I do working on Fux)
-- with better errors (well, better than just `Segmentation fault`) 
-- providing a large standard library
+## The Beautiful Alternative For C++ 
 
 <p align="center">
     <img src="./assets/snippets/helloworld.png" width=50%/>
+    <br>
+    More examples <a href="#examples">here</a>.
 </p>
 
-> More examples [`here`](#examples).
 
 ## Why Fux?
 
-To be a valid alternative to C++ to experienced developers and the go-to language for newbies looking into learning their first programming language, Fux is very flexible.
+### Flexible, Portable, Fast
 
-While it is possible to program in a pythonic style,
+- At least as high performant as C++
+- Using LLVM to compile and run on several paltforms
 
-```cpp
-name := "Fuechs";
-```
+### Easy To Learn
 
-C++ developers can find strict typing and already known features like references very useful.
+- Already known environment for developers with experience in C++
+- Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory managment
 
-```cpp
-number: f32 = 1.0;
-address -> f32 = number;
-```
+### Large Standard Library
 
-> As already mentioned above, Fux ships with a large standard library, ready to use.
-> It includes, but is not limited to, Utility, (File) IO and Maths. 
+- Fux ships with a large standard library packed with utility ready to be used
+- This includes but is not limited to
+    - Console IO
+    - File IO
+    - Math
+    - Algorithms
 
-## Setup
+### More Readable Code
 
-Since Fux is still in an early development stage, there are no setup methods yet.
+- Variable and function types are declared after the name, making reading the code natural
+- The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions
+- Variables, functions and classes can be defined without the usage of a single keyword
 
-## Roadmap
 
-- [&check;] `Error`
+## State
+
+### Roadmap
+
+- [&check;] `Error System` 
 - [&check;] `Lexer`
 - [...] `Parser`
 - [&cross;] `AST Analysis`
-- [&cross;] `Optimization`
-- [&cross;] `Code Generation`
-- [&cross;] `Virtual Machine`
+- [&cross;] `IR Generation (LLVM)`
+- [&cross;] `Optimization (LLVM)`
+- [&cross;] `Compilation (LLVM)`
 - [...] `Runtime`
 - [...] `Syntax`
 - [...] `Standard Library`
 
+Fux is currently still in early development. There is no working compiler avaiable for this language. 
+
+As of now, I am focusing on refining the syntax of Fux, since some aspects are not cleared up yet.
+I took inspiration from C++, D, Python, Odin, Elixir and Holy C.
+
 ## Examples
 
 
-### Arrays
+#### Arrays
 
 <img src="./assets/snippets/arrays.png" width=50%>
 
-### Reading Files
+
+#### Reading Files
 
 <img src="./assets/snippets/readfile.png" width=50%>
 
-### Formatted Print
+#### Formatted Print
 
 <img src="./assets/snippets/format.png" width=50%>
 
-### Fibonacci
+#### Fibonacci
 
 <img src="./assets/snippets/fibonacci.png" width=50%>
 
