@@ -25,7 +25,10 @@ menu {
         // ...
     };
 
-    :MenuItem;
+    template<T>
+    :MenuItem { 
+        ::(content: T = T(), color: FontColor = INHERIT); 
+    }
 
     MenuItem:TextItem::(content: str = "", color: FontColor = INHERIT);
 
