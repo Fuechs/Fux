@@ -9,7 +9,7 @@
 -->
 
 <p align="center">
-    <img src="./art/fux-material-icon.svg" width=25% />
+    <img src="./assets/fux-material-icon.svg" width=25% />
 </p>
 
 ###### &cross; Warning - Fux is still in early development &cross;
@@ -28,23 +28,9 @@
 - with better errors (well, better than just `Segmentation fault`) 
 - providing a large standard library
 
-
-```cpp
-get core.io;
-
-using io;
-
-fib(num: i32): i32 {
-    if (num < 2) 
-        return num;
-    return fib(num - 1) + fib(num - 2);
-}
-
-main(): void {
-    num := getint("Fibonacci of: ");
-    fib(num) >> putln();
-}
-```
+<p align="center">
+    <img src="./assets/snippets/helloworld.png" width=50%/>
+</p>
 
 > More examples [`here`](#examples).
 
@@ -55,14 +41,14 @@ To be a valid alternative to C++ to experienced developers and the go-to languag
 While it is possible to program in a pythonic style,
 
 ```cpp
-name := "Fuechs"; // automatic typing
+name := "Fuechs";
 ```
 
-Legacy C developers can find strict typing and already known features like pointers very useful.
+C++ developers can find strict typing and already known features like references very useful.
 
 ```cpp
-number: float = 1.0;
-address -> float = &number;
+number: f32 = 1.0;
+address -> f32 = number;
 ```
 
 > As already mentioned above, Fux ships with a large standard library, ready to use.
@@ -87,105 +73,21 @@ Since Fux is still in an early development stage, there are no setup methods yet
 
 ## Examples
 
-<details>
-    <summary>Hello World</summary>
 
-<br>
+### Arrays
 
-```cpp
-get core.io;
+<img src="./assets/snippets/arrays.png" width=50%>
 
-main(): void { 
-    io.putln("Hello World!");
-}
-```
+### Reading Files
 
-</details>
+<img src="./assets/snippets/readfile.png" width=50%>
 
-<details>
-    <summary>Reading Files</summary>
+### Formatted Print
 
-<br>
+<img src="./assets/snippets/format.png" width=50%>
 
-```cpp
-get core.file;
-get core.io;
+### Fibonacci
 
-using file;
-
-main(): void { 
-    filePath := "path/file.txt";
-    file := File(filePath, 'r');
-    if (!?file) // check if file does not (-> !) exist (-> ?)
-        io.err(1, "Could not open "+filePath);
-    contents := file.read();
-}
-```
-
-</details>
-
-<details>
-    <summary>Arrays</summary>
-
-<br>
-
-```cpp
-main(): void { 
-    someArray: i32[];
-    someArray[] << 1; // someArray = {1}
-    someArray[] << 3; // someArray = {1, 3}
-}
-```
-
-</details>
-
-<details>
-    <summary>Formatted Print</summary>
-
-<br>
-
-```cpp
-get core.io;
-
-main(): void {
-    res := 1;
-    io.printf("Result: %i", res);
-}
-```
-
-</details>
-
-<details>
-    <summary>Loops</summary>
-
-<br>
-
-```cpp
-main(): void {
-
-    string := "Some String";
-
-    /// For-In Loop
-
-    for (c: char) in (string) // {
-        doSomething();
-    // }
-
-    /// For Loop
-
-    for (i: u8; i < 10; ++i) // {
-        doSomething();
-    // }
-
-    /// While Loop
-
-    while (true) // {
-        doSomething();
-    // }
-
-}
-```
-
-</details>
+<img src="./assets/snippets/fibonacci.png" width=50%>
 
 ---

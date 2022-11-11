@@ -8,7 +8,7 @@ io {
 
     intern flush(): void {
         for (obj: str in buffer) 
-            __stdout(obj);
+            puts obj;
     }
 
     put(args: var, ...): void {
@@ -41,7 +41,7 @@ io {
 
     clear(): void {
         flush();
-        __stdout("clear", 1);
+        puts "\033[2J";
     }
 
     err(code: int, args: var, ...): void {
