@@ -42,6 +42,7 @@ private:
 
     AST *parseStmt(AST *parent);
     AST *parseVarDecl(AST *parent);
+    AST *parseType(AST *parent);
 
     AST *parseExpr(AST *parent);
     AST *parseAdditiveExpr(AST *parent);

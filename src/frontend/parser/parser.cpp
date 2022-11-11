@@ -65,13 +65,25 @@ AST *Parser::parseVarDecl(AST *parent) {
         AST *symbol = new AST(variable, AST_IDENTIFIER, name);
         variable->addSub(symbol);
         variable->copyPosition(symbol);
-        
-        if (tokens[0].type == EQUALS)
-            variable->valueType = INT;
-        else if (tokens[0].type == TRIPLE_EQUALS)
-            variable->valueType = CONSTANT;
-        eat(); // = or ===
-        
+
+        AST *varType = parseType(variable);
+        if (varType->type != AST_NONE)
+            variable->addSub(varType);
+
+        switch (tokens[0].type) {
+            case EQUALS:            variable->valueType = VAR; break;
+            case TRIPLE_EQUALS:     variable->valueType = CONSTANT; break;
+            case SEMICOLON:
+                if (varType->type == AST_NONE) {
+                    error->createError(UNEXPECTED_TOKEN, tokens[0], "got unexpected SEMICOLON ';' in variable defenition");
+                    return new AST(parent, AST_NONE, eat());
+                }
+                eat(); // semicolon
+                variable->end++;
+                return variable;
+        }
+        eat(); 
+                
         AST *value = parseExpr(variable);
         variable->addSub(value);
         variable->end = value->end + 1; // semicolon
@@ -82,6 +94,15 @@ AST *Parser::parseVarDecl(AST *parent) {
  
     return parseExpr(parent);
 
+}
+
+AST *Parser::parseType(AST *parent) {
+    AST *varType = new AST(parent, AST_NONE);
+    switch (tokens[0].type) {
+        case KEY_I32:       varType->valueType = I32; break;
+        default:            return varType;
+    }
+    varType->copyPosition(eat());
 }
 
 AST *Parser::parseExpr(AST *parent) {

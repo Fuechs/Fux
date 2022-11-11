@@ -21,6 +21,12 @@ void AST::copyPosition(AST *from) {
     end = from->end;
 }
 
+void AST::copyPosition(Token from) {
+    line = from.line;
+    start = from.start;
+    end = from.end;
+}
+
 void AST::debugPrint(size_t indent, bool all) {
 
     if (!fux.options.debugMode)

@@ -81,6 +81,7 @@ public:
     // shorthand for pushing sub asts
     void addSub(AST *sub);
     void copyPosition(AST *from);
+    void copyPosition(Token from);
     void debugPrint(size_t indent = 0, bool all = true);
     void debugIndent(stringstream &debug, size_t indent);
     void debugLiteral();
