@@ -43,7 +43,7 @@
 ### Flexible, Portable, Fast
 
 - At least as high performant as C++[^1]
-- Using LLVM to compile and run on several paltforms
+- Using LLVM to compile and run on several platforms
 
 ### Easy To Learn
 
