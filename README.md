@@ -65,9 +65,9 @@
 - The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions
 - Variables, functions and classes can be defined without the usage of a single keyword[^2]
 
-[^1] As long as the compiler does not have to use garbage collection and take over a lot of work from you.
+[^1]: As long as the compiler does not have to use garbage collection and take over a lot of work from you.
 
-[^2] As long as automatic typing is used.
+[^2]: As long as automatic typing is used.
 
 </div>
 
