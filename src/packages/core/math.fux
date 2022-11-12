@@ -2,23 +2,23 @@ package core;
 
 math {
 
-    pi: double === 3.14159265358979323846;
-
-    root(base: double, number: double): double {
+    pi: f64 === 3.14159265358979323846;
+    
+    root(base: f64, number: f64): f64 {
         return (number ^ (1 / base));
     }
 
-    sqrt(number: double): double {
+    sqrt(number: f64): f64 {
         return number < 0 ? null : root(2, number);
     }
 
-    log(base: double, number: double): double;
+    log(base: f64, number: f64): double;
 
-    log2(number: double): double {
+    log2(number: f64): f64 {
         return log(2, number);
     }
 
-    lg(number: double): double {
+    lg(number: f64): f64 {
         return log(10, number);
     }
     

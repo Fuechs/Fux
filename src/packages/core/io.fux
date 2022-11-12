@@ -33,7 +33,7 @@ io {
         return __stdin(0, '\n');
     }
 
-    getch(args: var, ...): char {
+    getch(args: var, ...): c8 {
         put(args);
         flush();
         return __stdin(1);
@@ -44,7 +44,7 @@ io {
         puts "\033[2J";
     }
 
-    err(code: int, args: var, ...): void {
+    err(code: i64, args: var, ...): void {
         put(args);
         flush();
         if (code != 0)

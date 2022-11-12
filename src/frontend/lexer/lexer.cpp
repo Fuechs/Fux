@@ -627,6 +627,8 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "goto")          currentToken.type = KEY_GOTO;
     else if (currentToken.value == "delete")        currentToken.type = KEY_DELETE;
     else if (currentToken.value == "exit")          currentToken.type = KEY_EXIT;
+    else if (currentToken.value == "puts")          currentToken.type = KEY_PUTS;
+    else if (currentToken.value == "putch")         currentToken.type = KEY_PUTCH;
     
     else if (currentToken.value == "safe")          currentToken.type = KEY_SAFE;
     else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;
@@ -644,18 +646,16 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "bool")          currentToken.type = KEY_BOOL;
     else if (currentToken.value == "i8")            currentToken.type = KEY_I8;
     else if (currentToken.value == "u8")            currentToken.type = KEY_U8;
-    else if (currentToken.value == "char")          currentToken.type = KEY_CHAR;
+    else if (currentToken.value == "c8")            currentToken.type = KEY_C8;
     else if (currentToken.value == "i16")           currentToken.type = KEY_I16;
     else if (currentToken.value == "u16")           currentToken.type = KEY_U16;
-    else if (currentToken.value == "wchar")         currentToken.type = KEY_WCHAR;
+    else if (currentToken.value == "c16")           currentToken.type = KEY_C16;
     else if (currentToken.value == "i32")           currentToken.type = KEY_I32;
     else if (currentToken.value == "u32")           currentToken.type = KEY_U32;
-    else if (currentToken.value == "float")         currentToken.type = KEY_FLOAT;
+    else if (currentToken.value == "f32")           currentToken.type = KEY_F32;
     else if (currentToken.value == "i64")           currentToken.type = KEY_I64;
     else if (currentToken.value == "u64")           currentToken.type = KEY_U64;
-    else if (currentToken.value == "double")        currentToken.type = KEY_DOUBLE;
-    else if (currentToken.value == "int")           currentToken.type = KEY_INT;
-    else if (currentToken.value == "uint")          currentToken.type = KEY_UINT;
+    else if (currentToken.value == "f64")           currentToken.type = KEY_F64;
     else if (currentToken.value == "str")           currentToken.type = KEY_STR;
     else if (currentToken.value == "var")           currentToken.type = KEY_VAR;
     else if (currentToken.value == "enum")          currentToken.type = KEY_ENUM;

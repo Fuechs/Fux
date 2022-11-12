@@ -112,7 +112,7 @@ void AST::debugLiteral() {
         
         case AST_VARIABLE_DECl:
             body[0]->debugLiteral(); // name
-            if (valueType == INT)
+            if (valueType == VAR)
                 cout << " := ";
             else if (valueType == CONSTANT)
                 cout << " :=== ";

@@ -75,12 +75,16 @@ AST *Parser::parseVarDecl(AST *parent) {
             case TRIPLE_EQUALS:     variable->valueType = CONSTANT; break;
             case SEMICOLON:
                 if (varType->type == AST_NONE) {
-                    error->createError(UNEXPECTED_TOKEN, tokens[0], "got unexpected SEMICOLON ';' in variable defenition");
+                    error->createError(UNEXPECTED_TOKEN, tokens[0], "got unexpected SEMICOLON ';' after COLON ':' in variable defenition");
                     return new AST(parent, AST_NONE, eat());
                 }
                 eat(); // semicolon
                 variable->end++;
                 return variable;
+
+            default:
+                error->createError(UNEXPECTED_TOKEN, tokens[0], "got unexpected "+string(TokenTypeString[tokens[0].type])+" '"+tokens[0].value+"' after COLON ':' in variable definition");
+                return new AST(parent, AST_NONE, eat());
         }
         eat(); 
                 
@@ -103,6 +107,7 @@ AST *Parser::parseType(AST *parent) {
         default:            return varType;
     }
     varType->copyPosition(eat());
+    return varType;
 }
 
 AST *Parser::parseExpr(AST *parent) {
