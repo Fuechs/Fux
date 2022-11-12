@@ -6,7 +6,6 @@ fux
 dev_only
 web/
 main
-docs/
 grammar.bnf
 *.dSYM
 old*

@@ -14,9 +14,12 @@
 
 ###### &cross; Warning - Fux is still in early development &cross;
 
-![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4&style=for-the-badge)
-![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&style=for-the-badge)
-![version](https://img.shields.io/badge/version-alpha-ec243c?style=for-the-badge)
+![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4&style=flat-square)
+![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&style=flat-square)
+![version](https://img.shields.io/badge/version-ALPHA-ec243c?style=flat-square)
+[![license](https://img.shields.io/github/license/fuechs/fux?9&style=flat-square&logo=github&logoColor=e0f2e9)](./LICENSE)
+[![issues](https://img.shields.io/github/issues/fuechs/fux?logo=github&logoColor=e0f2e9&style=flat-square)](https://github.com/Fuechs/Fux/issues)
+
 ---
 
 **`Flawless Unambiguous Programming`**
@@ -27,15 +30,19 @@
 <p align="center">
     <img src="./assets/snippets/helloworld.png" width=50%/>
     <br>
-    More examples <a href="#examples">here</a>.
+    <a href="#examples">Examples</a> | 
+    <a href="#state">Language State</a> | 
+    <a href="./docs/">Documentation</a>
 </p>
 
 
 ## Why Fux?
 
+<div display="grid" >
+
 ### Flexible, Portable, Fast
 
-- At least as high performant as C++
+- At least as high performant as C++[^1]
 - Using LLVM to compile and run on several paltforms
 
 ### Easy To Learn
@@ -56,10 +63,15 @@
 
 - Variable and function types are declared after the name, making reading the code natural
 - The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions
-- Variables, functions and classes can be defined without the usage of a single keyword
+- Variables, functions and classes can be defined without the usage of a single keyword[^2]
 
+[^1] As long as the compiler does not have to use garbage collection and take over a lot of work from you.
 
-## State
+[^2] As long as automatic typing is used.
+
+</div>
+
+## State 
 
 ### Roadmap
 

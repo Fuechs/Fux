@@ -1,0 +1,27 @@
+# Documentation
+
+> Full documentation for the current version of the Fux programming language.
+
+- [Types](./types.md)
+    - [Basic Types](./types.md#data-types)
+    - [Storage Modifiers](./types.md#storage-modifiers)
+        - [Constants](./types.md#constants)
+        - [Safe](./types.md#safe)
+        - [Intern](./types.md#intern)
+        - [Final](./types.md#final)
+- [Objects](./objects.md)
+    - [Variables](./objects.md#variables)
+    - [Functions](./objects.md#functions)
+    - [Classes](./objects.md#classes)
+        - [Templates](./objects.md#templates)
+    - [Namespaces](./objects.md#namespaces)
+- [Keywords](./keywords.md)
+    - [Output](./keywords.md#output)
+        - [`puts`](./keywords.md#puts)
+        - [`putch`](./keywords.md#putch)
+    - [Control](./keywords.md#control)
+        - [Condition](./keywords.md#condition)
+            - [`if / else`](./keywords.md#if--else)
+            - [`switch`](./keywords.md#switch)
+        - [`return`](./keywords.md#return)
+        - [`exit`](./keywords.md#exit)
