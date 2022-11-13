@@ -91,9 +91,9 @@ SomeParent:SomeClass::(name: str, value: i32) {
 }
 
 // use initizalier
-// <class> <identifier> ( <arguments> );
-SomeClass variable();
-SomeClass variable("fuechs", 0);
+// <identifier> : <class> ( <arguments> ) ;
+variable: SomeClass();
+variable: SomeClass("fuechs", 0);
 ```
 
 ### Templates
@@ -110,9 +110,9 @@ template<T>
 :List::(arr: T[] = {});
 
 // initialize
-// <class> < <type> >  <identifier> ( <arguments> );
-List<bool> list();
-List<bool> list({true, false});
+// <identifier> : <class> < <type> > ( <arguments> ) ;
+list: List<bool>();
+list: List<bool>({true, false});
 ```
 
 ## Namespaces

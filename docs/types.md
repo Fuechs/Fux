@@ -22,6 +22,7 @@ Name | Size | Default Value | Description
 `var` | / | `null` | can hold any type of value
 `enum` | / | `{}` | enumeration of identifiers
 `struct` | / | `{}` | structure of objects
+`array` | / | `{}` | array of values
 
 ## Storage Modifiers
 
