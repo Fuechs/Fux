@@ -24,21 +24,17 @@
 
 **`Flawless Unambiguous Programming`**
 
-
 ## The Beautiful Alternative For C++ 
 
 <p align="center">
-    <img src="./assets/snippets/helloworld.png" width=50%/>
+    <img src="./assets/snippets/helloworld.png" width=60%/>
     <br>
     <a href="#examples">Examples</a> | 
     <a href="#state">Language State</a> | 
     <a href="./docs/">Documentation</a>
 </p>
 
-
 ## Why Fux?
-
-<div display="grid" >
 
 ### Flexible, Portable, Fast
 
@@ -53,29 +49,29 @@
 ### Large Standard Library
 
 - Fux ships with a large standard library packed with utility ready to be used
-- This includes but is not limited to
-    - Console IO
-    - File IO
-    - Math
+- The Core Library includes but is not limited to[^3]
+    - Console I/O
+    - File I/O
+    - Mathematics
     - Algorithms
 
 ### More Readable Code
 
 - Variable and function types are declared after the name, making reading the code natural
-- The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions
+- The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions[^3]
 - Variables, functions and classes can be defined without the usage of a single keyword[^2]
 
 [^1]: As long as the compiler does not have to use garbage collection and take over a lot of work from you.
 
 [^2]: As long as automatic typing is used.
 
-</div>
+[^3]: More information [here](./docs/).
 
 ## State 
 
 ### Roadmap
 
-- [&check;] `Error System` 
+- [&check;] `Error System`
 - [&check;] `Lexer`
 - [...] `Parser`
 - [&cross;] `AST Analysis`
@@ -93,22 +89,18 @@ I took inspiration from C++, D, Python, Odin, Elixir and Holy C.
 
 ## Examples
 
+### Arrays
 
-#### Arrays
+<img src="./assets/snippets/arrays.png" width=60%>
 
-<img src="./assets/snippets/arrays.png" width=50%>
+### Reading Files
 
+<img src="./assets/snippets/readfile.png" width=60%>
 
-#### Reading Files
+### Formatted Print
 
-<img src="./assets/snippets/readfile.png" width=50%>
+<img src="./assets/snippets/format.png" width=60%>
 
-#### Formatted Print
+### Fibonacci
 
-<img src="./assets/snippets/format.png" width=50%>
-
-#### Fibonacci
-
-<img src="./assets/snippets/fibonacci.png" width=50%>
-
----
+<img src="./assets/snippets/fibonacci.png" width=60%>
