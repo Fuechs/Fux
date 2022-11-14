@@ -1,52 +1,69 @@
-# Documentation
+# Design Documentation
 
-> Full documentation for the current version of the Fux programming language.
+> Documentation for the current version of the Fux programming language. 
+>
+> **Status:** \
+> Last updated on 2022-11-14 \
+> Unfinished
 
-- [Types](./types.md)
-    - [Basic Types](./types.md#data-types)
-    - [Storage Modifiers](./types.md#storage-modifiers)
-        - [Constants](./types.md#constants)
-        - [`safe`](./types.md#safe)
-        - [`intern`](./types.md#intern)
-        - [`final`](./types.md#final)
-- [Objects](./objects.md)
-    - [Variables](./objects.md#variables)
-    - [Functions](./objects.md#functions)
-    - [Classes](./objects.md#classes)
-        - [Templates](./objects.md#templates)
-    - [Namespaces](./objects.md#namespaces)
-- [Keywords](./keywords.md)
-    - [Output](./keywords.md#output)
-        - [`puts`](./keywords.md#puts)
-        - [`putch`](./keywords.md#putch)
-    - [Control](./keywords.md#control)
-        - [Condition](./keywords.md#condition)
-            - [`if / else`](./keywords.md#if--else)
-            - [`switch`](./keywords.md#switch)
-        - [Loops](./keywords.md#loops)
-            - [`for`](./keywords.md#for)
-            - [`for ... in`](./keywords.md#for--in)
-            - [`while`](./keywords.md#while)
-            - [`do ... while`](./keywords.md#do--while)
-            - [`break`](./keywords.md#break)
-            - [`continue`](./keywords.md#continue)
-        - [`return`](./keywords.md#return)
-        - [`exit`](./keywords.md#exit)
-        - [`label ... goto`](./keywords.md#label--goto)
-        - [`execept`](./keywords.md#except)
-    - [Boolean Values](./keywords.md#boolean-values)
-        - [`true`](./keywords.md#true)
-        - [`false`](./keywords.md#false)
-        - [`null`](./keywords.md#null)
-    - [`typedef`](./keywords.md#types)
-    - [Packages](./keywords.md#packages)
-        - [`package`](./keywords.md#package)
-        - [`get`](./keywords.md#get)
-        - [`using`](./keywords.md#using)
-- [Operators](./operators.md)
-    - [Structure](./operators.md#structure)
-    - [Assignment](./operators.md#assignment)
-    - [Condition](./operators.md#condition)
-    - [Binary Operation](./operators.md#binary-operation)
-    - [Bitwise Operation](./operators.md#bitwise-operation)
-    - [Objects](./operators.md#objects)
+## Contents
+
+- [Introduction](#introduction)
+
+
+## Introduction
+
+> Please note that the syntax is still evolving a lot and may look different in the future.
+
+```rust
+// takes reference to a string
+// and increments its (i32) value 
+incrementValue(value -> str): void {
+    value = (str) (++(i32) value);
+}
+
+numStr := "1";
+incrementValue(numStr);
+puts numStr;
+```
+
+> Yes this function is useless, but it simply works. Isn't that cool? :P
+
+Fux is supposed to look similar to C++, but still feel modern and flexible enough to qualify as a modern language. \
+That includes removing redundant code and adding more inbuilt features.
+
+---
+
+
+```rust
+// takes reference to a string
+// and increments its (i32) value
+```
+
+Let's start with the simplest thing in this example: \
+Comments have to be either on a line that starts with `//`. \
+Multiline comments start with `/*` and end with `*/`.
+
+```rust
+/*
+    This is a comment
+    - a multiline comment
+*/
+```
+
+---
+
+```rust
+incrementValue(value -> str): void { ... }
+```
+
+You might have already noticed that functions and variables are defined without are preceding keyword. \
+A basic function definition only needs an identifier and some operators:
+
+```rust
+incrementValue();
+```
+
+> Soon ...
+
+---
