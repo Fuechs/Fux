@@ -21,6 +21,9 @@
     - [*Design Goals*](#design-goals)
 - [*Variables*](#variables)
 - [*Types*](#types)
+- [New Concepts](#new-concepts)
+    - [Pipe Operators](#pipe-operators)
+    - [Swap Operator](#swap-operator)
 
 ## Introduction
 
@@ -168,10 +171,65 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 
 > Soon...
 
-### Boolean Types
+### Boolean Type
 
 ### Integer Types
 
 ### Character Types
 
 ### String Type
+
+## New Concepts
+
+Of course, Fux also offers some quality of life features and little improvements over C++, making the overall programming experience more enjoyable.
+
+### Pipe Operators
+
+The pipe operators `<<` and `>>` can be used to pass around  function arguments and for example push / append values to an array.
+
+```rust
+"someString" >> someFunction();
+// same as someFunction("someString");
+```
+
+```rust
+someArray: i32[];
+someArray[] << 1; // {1}
+2 >> someArray[] << 3; // {2, 1, 3}
+6 >> 7 >> someArray[] << 4 << 5; // {6, 7, 2, 1, 3, 4, 5}
+//                 ^^ without brackets, fux would 
+//                  try to assign a value to someArray 
+//                  someArray << {}; 
+//                  => someArray = {}
+```
+
+### Swap Operator
+
+The swap operator `<>` can be used to swap the value of two variables. 
+
+```rust
+first: bool = true;
+second: bool = false;
+
+first <> second;
+// first is now false
+// second is now true
+```
+
+```rust
+array1: i32[] = {0, 1, 2, 3, 4};
+array2: i32[] = {5, 6, 7, 8, 9};
+
+array1 <> array2;
+// array1 = {5, 6, 7, 8, 9}
+// array2 = {0, 1, 2, 3, 4}
+array1[2] <> array2[2];
+// array1 = {5, 6, 2, 8, 9}
+// array2 = {0, 1, 7, 3, 4}
+//                 ^
+array1[2] <> array2[1];
+// array1 = {5, 6, 1, 8, 9}
+//                 ^
+// array2 = {0, 2, 7, 3, 4}
+//              ^
+```
