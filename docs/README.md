@@ -1,9 +1,15 @@
 # Design Documentation
+<!-- 
+    Copyright (c) 2020-2022, Fuechs. 
+    All rights reserved.
+-->
 
-> Documentation for the current version of the Fux programming language. 
+> This is a design documentation for the current version of the Fux programming language. 
+>
+> This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status:** \
-> Last updated on 2022-11-14 \
+> Last updated on 2022-11-15 \
 > Unfinished
 
 ## Contents
@@ -12,6 +18,7 @@
 
 - [Introduction](#introduction)
     - [Basic Example](#basic-example)
+    - [*Design Goals*](#design-goals)
 - [*Variables*](#variables)
 - [*Types*](#types)
 
@@ -145,17 +152,17 @@ puts numStr;
 Finally, we output the result to see if our program actually works -- and yes it does, the output is "2". \
 For that, we use the `puts` keyword, which will directly output a string to the console (`putch`: Output a character to the console).
 
+### Design Goals
+
+> Soon ...
+
 ## Variables
 
 > Soon...
 
 ### Declaration
 
-> Soon...
-
 ### Pointer & References
-
-> Soon...
 
 ## Types
 
@@ -163,16 +170,8 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 
 ### Boolean Types
 
-> Soon...
-
 ### Integer Types
-
-> Soon...
 
 ### Character Types
 
-> Soon...
-
 ### String Type
-
-> Soon...
