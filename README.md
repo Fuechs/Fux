@@ -27,7 +27,7 @@
 ## The Beautiful Alternative For C++ 
 
 <p align="center">
-    <img src="./assets/snippets/helloworld.svg" width=60%/>
+    <img src="./assets/snippets/helloworld.png" width=60%/>
     <br>
     <a href="#examples">Examples</a> | 
     <a href="#state">Language State</a> | 
