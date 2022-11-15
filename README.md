@@ -31,7 +31,7 @@
     <br>
     <a href="#examples">Examples</a> | 
     <a href="#state">Language State</a> | 
-    <a href="./docs/">Documentation</a>
+    <a href="./docs/README.md">Documentation</a>
 </p>
 
 ## Why Fux?

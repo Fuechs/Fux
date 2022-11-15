@@ -111,6 +111,24 @@ void Lexer::getToken() {
             break;
         
         case '[': 
+            if (isdigit(peek())) {
+                currentToken.type = ARRAY_BRACKET_SIZE;
+                currentToken.value = "";
+                advance();
+                do {
+                    currentToken.value += current();
+                    advance();
+                    if (!isdigit(current()) && current() != ']') {
+                        error->createError(GENERIC, currentToken, "invalid array size");
+                        currentToken.type = ARRAY_BRACKET;
+                        currentToken.value = "[]";
+                        break;
+                    }
+                } while (current() != ']');
+                advance();
+                break;
+            }
+
             if (peek() == ']') {
                 currentToken.type = ARRAY_BRACKET;
                 currentToken.value = "[]";
@@ -196,6 +214,13 @@ void Lexer::getToken() {
             if (peek() == '=') {
                 currentToken.type = LTEQUALS;
                 currentToken.value = "<=";
+                advance(2);
+                break;
+            }
+
+            if (peek() == '>') {
+                currentToken.type = SWAP;
+                currentToken.value = "<>";
                 advance(2);
                 break;
             }
