@@ -4,7 +4,7 @@
     All rights reserved.
 -->
 
-> __Note__
+> __Note__ \
 > This is a design documentation for the current version of the Fux programming language. 
 >
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.

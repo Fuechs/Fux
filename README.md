@@ -12,8 +12,7 @@
     <img src="./assets/fux-material-icon.svg" width=25% />
 </p>
 
-> __Warning__ 
-> Fux is still in early development.
+> __Warning__ - Fux is still in early development
 
 ![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4&style=flat-square)
 ![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&style=flat-square)
