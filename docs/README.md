@@ -194,7 +194,7 @@ someFloat: f32 = 1.0;
 
 ### Character Types
 
-- `cN` - UTF-N code unit `8, 16`
+- `cN` - UTF-N code unit (`8, 16`)
 
 ```rust
 someChar: c8 = '\n';
