@@ -9,7 +9,7 @@
 >
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
-> **Status:** \
+> **Status** \
 > Last updated on 2022-11-15 \
 > Unfinished
 
@@ -21,7 +21,7 @@
     - [Basic Example](#basic-example)
     - [*Design Goals*](#design-goals)
 - [*Variables*](#variables)
-- [*Types*](#types)
+- [Types](#types)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
     - [Swap Operator](#swap-operator)
@@ -170,15 +170,41 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 
 ## Types
 
-> Soon...
-
 ### Boolean Type
+
+- Keyword - `bool`
+- Values - `true` or `false`
+
+```rust
+truth: bool;
+truth = true;
+truth = false;
+```
 
 ### Integer Types
 
+- `iN` - signed N-bit integer `(8, 16, 32, 64)`
+- `uN` - unsigned N-bit integer `(8, 16, 32, 64)`
+- `fN` - N-bit floating point integer `(32, 64)`
+
+```rust
+someNum: i32 = 1;
+someFloat: f32 = 1.0;
+```
+
 ### Character Types
 
+- `cN` - UTF-N code unit (8, 16)
+
+```rust
+someChar: u8 = '\n';
+...
+putch someChar; // output a single character
+```
+
 ### String Type
+
+> Soon ...
 
 ## New Concepts
 
@@ -186,11 +212,18 @@ Of course, Fux also offers some quality of life features and little improvements
 
 ### Pipe Operators
 
-The pipe operators `<<` and `>>` can be used to pass around  function arguments and for example push / append values to an array.
+The pipe operators `<<` and `>>` can be used to pass around  function arguments and for example push / append values to an array. \
+In any other cases, Fux will perform an assignment, rather than a special operation.
 
 ```rust
 "someString" >> someFunction();
 // same as someFunction("someString");
+
+someFunction() << 1 << "someString";
+// someFunction(1, "someString");
+
+someFunction() << ("someString" >> someFormat(1, 3));
+// someFunction(someFormat("someString", 1, 3));
 ```
 
 ```rust
@@ -198,7 +231,7 @@ someArray: i32[];
 someArray[] << 1; // {1}
 2 >> someArray[] << 3; // {2, 1, 3}
 6 >> 7 >> someArray[] << 4 << 5; // {6, 7, 2, 1, 3, 4, 5}
-//                 ^^ without brackets, fux would 
+//                 ^^ without brackets, Fux would 
 //                  try to assign a value to someArray 
 //                  someArray << {}; 
 //                  => someArray = {}
@@ -234,3 +267,5 @@ array1[2] <> array2[1];
 // array2 = {0, 2, 7, 3, 4}
 //              ^
 ```
+
+---
