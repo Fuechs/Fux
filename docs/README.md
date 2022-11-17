@@ -22,9 +22,15 @@
     - [*Design Goals*](#design-goals)
 - [*Variables*](#variables)
 - [Types](#types)
+    - [Boolean Type](#boolean-type)
+    - [Integer Types](#integer-types)
+    - [Character Types](#character-types)
+    - [*String Type*](#string-type)
+    - [*Array Type*](#array-type)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
     - [Swap Operator](#swap-operator)
+    - [Existence of Objects](#existence-of-objects)
 
 ## Introduction
 
@@ -194,7 +200,7 @@ someFloat: f32 = 1.0;
 
 ### Character Types
 
-- `cN` - UTF-N code unit (`8, 16`)
+- `cN` - UTF-N code unit `(8, 16)`
 
 ```rust
 someChar: c8 = '\n';
@@ -203,6 +209,10 @@ putch someChar; // output a single character
 ```
 
 ### String Type
+
+> Soon ...
+
+### Array Type
 
 > Soon ...
 
@@ -266,6 +276,27 @@ array1[2] <> array2[1];
 //                 ^
 // array2 = {0, 2, 7, 3, 4}
 //              ^
+```
+
+### Existence of Objects
+
+The exitence operator `?` can be used to check wether an object exists.
+
+```rust
+someVar;
+if (?someVar) { ... }
+    // false
+...
+if (?anotherVar) { ... }
+    // true - we never defined 'anotherVar'
+```
+
+Switch statements have the `not` key, which functions the same way.
+
+```rust
+switch (someVar) {
+    not { ... }
+}
 ```
 
 ---

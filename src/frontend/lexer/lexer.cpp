@@ -647,6 +647,7 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "switch")        currentToken.type = KEY_SWITCH;
     else if (currentToken.value == "case")          currentToken.type = KEY_CASE;
     else if (currentToken.value == "default")       currentToken.type = KEY_DEFAULT;
+    else if (currentToken.value == "not")           currentToken.type = KEY_NOT;
     else if (currentToken.value == "break")         currentToken.type = KEY_BREAK;
     else if (currentToken.value == "label")         currentToken.type = KEY_LABEL;
     else if (currentToken.value == "goto")          currentToken.type = KEY_GOTO;
