@@ -104,3 +104,5 @@ I took inspiration from C++, D, Python, Odin, Elixir and Holy C.
 ### Fibonacci
 
 <img src="./assets/snippets/fibonacci.png" width=60%>
+
+---
