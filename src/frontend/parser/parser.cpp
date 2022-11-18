@@ -16,8 +16,10 @@ AST *Parser::parse() {
     tokens = lexer->lex();
     
     if (fux.options.debugMode)
-        for (Token &token : tokens)
+        for (Token token : tokens)
             token.debugPrint();
+        
+    current = tokens.begin();
 
     // parsing 
     while (notEOF())
@@ -38,7 +40,7 @@ AST *Parser::parse() {
 // PrimaryExpr
 
 AST *Parser::parseStmt(AST *parent) {
-    switch (tokens[0].type) {
+    switch (current->type) {
         case SEMICOLON:         eat(); return parseStmt(parent); // skip semicolon
         case IDENTIFIER:        return parseVarDecl(parent);
         default:                return parseExpr(parent);
@@ -46,7 +48,8 @@ AST *Parser::parseStmt(AST *parent) {
 }
 
 AST *Parser::parseVarDecl(AST *parent) {
-    if (tokens[1].type == SEMICOLON) {
+    if ((++current)->type == SEMICOLON) {
+        --current;
         Token name = eat();
         eat(); // semicolon
         AST *variable = new AST(parent, AST_VARIABLE_DECl);
@@ -58,7 +61,8 @@ AST *Parser::parseVarDecl(AST *parent) {
         return variable;
     }
 
-    if (tokens[1].type == COLON) {
+    if ((++current)->type == COLON) {
+        --current;
         Token name = eat();
         eat(); // colon
         AST *variable = new AST(parent, AST_VARIABLE_DECl);
@@ -70,12 +74,12 @@ AST *Parser::parseVarDecl(AST *parent) {
         if (varType->type != AST_NONE)
             variable->addSub(varType);
 
-        switch (tokens[0].type) {
+        switch (current->type) {
             case EQUALS:            variable->valueType = VAR; break;
             case TRIPLE_EQUALS:     variable->valueType = CONSTANT; break;
             case SEMICOLON:
                 if (varType->type == AST_NONE) {
-                    error->createError(UNEXPECTED_TOKEN, tokens[0], "got unexpected SEMICOLON ';' after COLON ':' in variable defenition");
+                    error->createError(UNEXPECTED_TOKEN, *current, "got unexpected SEMICOLON ';' after COLON ':' in variable defenition");
                     return new AST(parent, AST_NONE, eat());
                 }
                 eat(); // semicolon
@@ -83,7 +87,7 @@ AST *Parser::parseVarDecl(AST *parent) {
                 return variable;
 
             default:
-                error->createError(UNEXPECTED_TOKEN, tokens[0], "got unexpected "+string(TokenTypeString[tokens[0].type])+" '"+tokens[0].value+"' after COLON ':' in variable definition");
+                error->createError(UNEXPECTED_TOKEN, *current, "got unexpected "+string(TokenTypeString[current->type])+" '"+current->value+"' after COLON ':' in variable definition");
                 return new AST(parent, AST_NONE, eat());
         }
         eat(); 
@@ -102,7 +106,7 @@ AST *Parser::parseVarDecl(AST *parent) {
 
 AST *Parser::parseType(AST *parent) {
     AST *varType = new AST(parent, AST_NONE);
-    switch (tokens[0].type) {
+    switch (current->type) {
         case KEY_I32:       varType->valueType = I32; break;
         default:            return varType;
     }
@@ -117,7 +121,7 @@ AST *Parser::parseExpr(AST *parent) {
 AST *Parser::parseAdditiveExpr(AST *parent) {
     AST *lhs = parseMultiplicativeExpr(parent);
 
-    while (tokens[0].type == PLUS || tokens[0].type == MINUS) {
+    while (current->type == PLUS || current->type == MINUS) {
         AST *op = new AST(nullptr, AST_BINARY_OPERATOR, eat());
         AST *rhs = parseMultiplicativeExpr(nullptr);
         AST *copy = new AST(lhs); // copy old lhs
@@ -134,7 +138,7 @@ AST *Parser::parseAdditiveExpr(AST *parent) {
 AST *Parser::parseMultiplicativeExpr(AST *parent) {
     AST *lhs = parsePrimaryExpr(parent);
 
-    while (tokens[0].type == SLASH || tokens[0].type == ASTERISK || tokens[0].type == PERCENT) {
+    while (current->type == SLASH || current->type == ASTERISK || current->type == PERCENT) {
         AST *op = new AST(nullptr, AST_BINARY_OPERATOR, eat());
         AST *rhs = parsePrimaryExpr(nullptr);
         AST *copy = new AST(lhs); // copy old lhs

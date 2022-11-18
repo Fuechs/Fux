@@ -1,6 +1,7 @@
 cc = g++
 exec = fux
-cflags = -g -O3 -std=c++20 `llvm-config --cxxflags`
+cflags = -g -O3 -std=c++20
+llvmflags = `llvm-config --cxxflags --ldflags --system-libs --libs core`
 src = $(wildcard src/main.cpp src/util/io.cpp src/frontend/*/*.cpp)
 ex = src/examples
  
@@ -9,15 +10,8 @@ ex = src/examples
 
 all: comp
 
-# f = main
-
-# gen: 
-# 	./$(exec) gen $(ex)/$(f).fux
-
-# code: 
-# 	./$(exec) vm $(ex)/$(f).fux
-
 comp:
+#	$(cc) $(src) -o $(exec) $(cflags) $(llvmflags)
 	$(cc) $(src) -o $(exec) $(cflags)
 
 run: comp

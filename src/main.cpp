@@ -17,14 +17,16 @@
 __fux_struct fux;
 
 int main(int argc, char **argv) {
-    int result = bootstrap(argc, argv);
+    int result = 0;
+
+    result = bootstrap(argc, argv);
     switch (result) {
         case -1:    return repl();
         case 0:     break;
         default:    return result;
     }
 
-    // fux.options.fileName = "src/examples/main.fux"; // debugger
+    // fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
     
     fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
 
