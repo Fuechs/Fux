@@ -1,4 +1,5 @@
 # Design Documentation
+
 <!-- 
     Copyright (c) 2020-2022, Fuechs. 
     All rights reserved.
@@ -25,8 +26,8 @@
     - [Boolean Type](#boolean-type)
     - [Integer Types](#integer-types)
     - [Character Types](#character-types)
-    - [*String Type*](#string-type)
-    - [*Array Type*](#array-type)
+    - [String Type](#string-type)
+    - [Array Type](#array-type)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
     - [Swap Operator](#swap-operator)
@@ -176,10 +177,17 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 
 ## Types
 
+> A variable declared with the `var` type can hold any type of value.
+> ```rust
+> someVar: var = 1;
+> someVar = "1";
+> someList: var[] = {1, "2", true, 4.3, 'a'};
+> ```
+
 ### Boolean Type
 
 - Keyword - `bool`
-- Values - `true` or `false`
+- Value - `true` or `false`
 
 ```rust
 truth: bool;
@@ -189,9 +197,10 @@ truth = false;
 
 ### Integer Types
 
-- `iN` - signed N-bit integer `(8, 16, 32, 64)`
-- `uN` - unsigned N-bit integer `(8, 16, 32, 64)`
-- `fN` - N-bit floating point integer `(32, 64)`
+- Keyword - `iN` - signed N-bit integer `(8, 16, 32, 64)`
+- Keyword - `uN` - unsigned N-bit integer `(8, 16, 32, 64)`
+- Keyword - `fN` - N-bit floating point integer `(32, 64)`
+- Value - signed integer, unsigned integer or floating point integer
 
 ```rust
 someNum: i32 = 1;
@@ -200,7 +209,8 @@ someFloat: f32 = 1.0;
 
 ### Character Types
 
-- `cN` - UTF-N code unit `(8, 16)`
+- Keyword - `cN` - UTF-N code unit `(8, 16)`
+- Value - UTF-N character enclosed in single quotes `'.'`
 
 ```rust
 someChar: c8 = '\n';
@@ -210,11 +220,44 @@ putch someChar; // output a single character
 
 ### String Type
 
-> Soon ...
+- Keyword - `str`
+- Value - sequence of characters enclosed in double quotes `".*"`
+
+```rust
+someString: str = "hello world";
+...
+puts someString; // output a string
+```
 
 ### Array Type
 
-> Soon ...
+Using the operator `[]` or `[N]` you can define arrays with a fixed or unfixed size of any type. For example an array of integers.
+
+```rust
+list: i32[] = { 1, 2, 3, 4, 5 };
+```
+
+Values can be pushed and appended to the array as shown [here](#pipe-operators). Alternatively the `.push()` (push on top of array) or `.append()` (append to end of array) function can be used.
+
+```rust
+list.push(0);
+// list = { 0, 1, 2, 3, 4, 5 }
+//          ^
+list.append(6);
+// list = { 0, 1, 2, 3, 4, 5, 6 }
+//                            ^
+```
+
+To pop values of the array, you can use the `.pop()` function, which removes the first element and returns its value. `.popBack()` removes the last element and returns its value.
+
+```rust
+first := list.pop(); // = 1
+// list = { 2, 3, 4, 5 }
+//         ^
+last := list.popBack(); // = 5
+// list = { 2, 3, 4 }
+//                 ^
+```
 
 ## New Concepts
 
