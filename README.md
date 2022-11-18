@@ -12,25 +12,26 @@
     <img src="./assets/fux-material-icon.svg" width=25% />
 </p>
 
-> __Warning__ - Fux is still in early development
 
-![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4)
-![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68)
-![version](https://img.shields.io/badge/version-ALPHA-ec243c)
-[![license](https://img.shields.io/badge/license-Apache%20License%20v2.0-important)](./LICENSE)
 
----
+![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68)
+![top language](https://img.shields.io/github/languages/top/fuechs/fux?labelColor=151515&color=fcaa68)
+![version](https://img.shields.io/badge/version-alpha-fcaa68?colorA=151515)
+[![license](https://img.shields.io/badge/license-Apache%20License%20v2.0-fcaa68?labelColor=151515)](./LICENSE)
 
-**`Flawless Unambiguous Programming`**
+> __Warning__ \
+> Fux is still in early development
+
+###### Flawless Unambiguous Programming
 
 ## The Beautiful Alternative For C++ 
 
 <p align="center">
     <img src="./assets/snippets/helloworld.png" width=60%/>
     <br>
-    <a href="#examples">Examples</a> | 
-    <a href="#state">Language State</a> | 
-    <a href="./docs/README.md">Documentation</a>
+    <a href="#examples"><img src="https://img.shields.io/badge/-Examples-fcaa68"/></a>
+    <a href="#state"><img src="https://img.shields.io/badge/-Language_State-fcaa68" /></a>
+    <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Documentation-fcaa68" /></a>
 </p>
 
 ## Why Fux?
