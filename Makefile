@@ -1,6 +1,6 @@
 cc = g++
 exec = fux
-cflags = -g -std=c++20
+cflags = -g -O3 -std=c++20 `llvm-config --cxxflags`
 src = $(wildcard src/main.cpp src/util/io.cpp src/frontend/*/*.cpp)
 ex = src/examples
  

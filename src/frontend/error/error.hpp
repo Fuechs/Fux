@@ -85,7 +85,7 @@ public:
     ParseError();
     ParseError(const ParseError &pe);
     ParseError(ErrorType type, size_t line, size_t start, size_t end, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
-    ParseError(ErrorType type, Token token, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
+    ParseError(ErrorType type, Token &token, string fileName, string lineContent, string comment = "", bool warning = false, bool aggressive = false);
 
     void operator=(const ParseError &pe);
 
@@ -118,11 +118,11 @@ public:
     bool hasWarnings();
 
     void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
-    void createError(ErrorType type, Token token, string comment = "", bool aggressive = false);
+    void createError(ErrorType type, Token &token, string comment = "", bool aggressive = false);
     void createError(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
 
     void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
-    void createWarning(ErrorType type, Token token, string comment = "", bool aggressive = false);
+    void createWarning(ErrorType type, Token &token, string comment = "", bool aggressive = false);
     void createWarning(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
 
     void reportAll();

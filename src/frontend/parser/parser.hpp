@@ -36,6 +36,7 @@ public:
 
 private:
     TokenList tokens;
+    TokenIter current;
     ErrorManager *error;
     Lexer *lexer;
     AST *root;

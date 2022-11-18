@@ -413,4 +413,4 @@ public:
 };
 
 typedef vector<Token> TokenList;
-typedef TokenList::iterator TokenIter;
+typedef TokenList::const_iterator TokenIter;

@@ -16,7 +16,7 @@ AST *Parser::parse() {
     tokens = lexer->lex();
     
     if (fux.options.debugMode)
-        for (Token token : tokens)
+        for (Token &token : tokens)
             token.debugPrint();
 
     // parsing 
@@ -180,11 +180,9 @@ AST *Parser::parsePrimaryExpr(AST *parent) {
 // }
 
 Token Parser::eat() {
-    Token prev = tokens[0];
-    if (prev.type == _EOF)
-        return prev;
-    tokens.erase(tokens.begin()); 
-    return prev;
+    if (current->type == _EOF)
+        return *current;
+    return *current++;
 }
 
 Token Parser::expect(TokenType type, ErrorType errType) {
@@ -204,5 +202,5 @@ Token Parser::expect(TokenType type, ErrorType errType) {
 }
 
 bool Parser::notEOF() { 
-    return tokens[0].type != _EOF; 
+    return current->type != _EOF;
 }
