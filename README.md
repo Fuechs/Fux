@@ -17,7 +17,7 @@
 ![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4)
 ![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68)
 ![version](https://img.shields.io/badge/version-ALPHA-ec243c)
-[![license](https://img.shields.io/github/license/fuechs/fux?9&logo=github&logoColor=e0f2e9)](./LICENSE)
+[![license](https://img.shields.io/badge/license-Apache%20License%20v2.0-important)](./LICENSE)
 
 ---
 
