@@ -14,11 +14,10 @@
 
 > __Warning__ - Fux is still in early development
 
-![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4&style=flat-square)
-![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68&style=flat-square)
-![version](https://img.shields.io/badge/version-ALPHA-ec243c?style=flat-square)
-[![license](https://img.shields.io/github/license/fuechs/fux?9&style=flat-square&logo=github&logoColor=e0f2e9)](./LICENSE)
-[![issues](https://img.shields.io/github/issues/fuechs/fux?logo=github&logoColor=e0f2e9&style=flat-square)](https://github.com/Fuechs/Fux/issues)
+![total lines](https://aschey.tech/tokei/github/fuechs/fux?color=a390e4)
+![top language](https://img.shields.io/github/languages/top/fuechs/fux?color=fcaa68)
+![version](https://img.shields.io/badge/version-ALPHA-ec243c)
+[![license](https://img.shields.io/github/license/fuechs/fux?9&logo=github&logoColor=e0f2e9)](./LICENSE)
 
 ---
 
@@ -65,7 +64,7 @@
 
 [^2]: As long as automatic typing is used.
 
-[^3]: More information [here](./docs/).
+[^3]: More information [here](./docs/README.md).
 
 ## State 
 
