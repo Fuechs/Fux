@@ -132,7 +132,7 @@ size_t ErrorManager::errorCount() {
     
     size_t count = 0;
     
-    for (ParseError error : errors)
+    for (ParseError &error : errors)
         if (!error.warning)
             ++count;
     
@@ -142,7 +142,7 @@ size_t ErrorManager::errorCount() {
 size_t ErrorManager::warningCount() {
     size_t count = 0;
     
-    for (ParseError error : errors)
+    for (ParseError &error : errors)
         if (error.warning)
             ++count;
     
@@ -153,23 +153,19 @@ bool ErrorManager::hasErrors() {
     if (fux.options.werrors)
         return !errors.empty();
 
-    size_t count = 0;
-
-    for (ParseError error : errors)
+    for (ParseError &error : errors)
         if (!error.warning)
-            ++count;
+            return true;
     
-    return (count > 0);
+    return false;
 }
 
 bool ErrorManager::hasWarnings() {
-    size_t count = 0;
-
-    for (ParseError error : errors)
+    for (ParseError &error : errors)
         if (error.warning)
-            ++count;
+            return true;
     
-    return (count > 0);
+    return false;
 }
 
 void ErrorManager::createError(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
