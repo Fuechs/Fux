@@ -2,10 +2,10 @@
     <img src="./assets/fux-material-icon.svg" width=25% />
 </p>
 
-![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68)
-![top language](https://img.shields.io/github/languages/top/fuechs/fux?labelColor=151515&color=fcaa68)
-![version](https://img.shields.io/badge/version-alpha-fcaa68?colorA=151515)
-[![license](https://img.shields.io/badge/license-Apache%20License%20v2.0-fcaa68?labelColor=151515)](./LICENSE)
+![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68&style=for-the-badge)
+![top language](https://img.shields.io/github/languages/top/fuechs/fux?labelColor=151515&color=fcaa68&style=for-the-badge)
+![version](https://img.shields.io/badge/version-alpha-fcaa68?colorA=151515&style=for-the-badge)
+[![license](https://img.shields.io/badge/license-Apache%20License%20v2.0-fcaa68?labelColor=151515&style=for-the-badge)](./LICENSE)
 
 > __Warning__ \
 > Fux ist noch in früher Entwicklung.
@@ -17,9 +17,9 @@
 <p align="center">
     <img src="./assets/snippets/helloworld.png" width=60%/>
     <br>
-    <a href="#beispiele"><img src="https://img.shields.io/badge/-Beispiele-fcaa68"/></a>
-    <a href="#status"><img src="https://img.shields.io/badge/-Status-fcaa68" /></a>
-    <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Dokumentation-fcaa68" /></a>
+    <a href="#beispiele"><img src="https://img.shields.io/badge/-Beispiele-fcaa68?style=for-the-badge"/></a>
+    <a href="#status"><img src="https://img.shields.io/badge/-Status-fcaa68?style=for-the-badge" /></a>
+    <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Dokumentation-fcaa68?style=for-the-badge" /></a>
 </p>
 
 ## Warum Fux?
