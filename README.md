@@ -12,8 +12,6 @@
     <img src="./assets/fux-material-icon.svg" width=25% />
 </p>
 
-
-
 ![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68)
 ![top language](https://img.shields.io/github/languages/top/fuechs/fux?labelColor=151515&color=fcaa68)
 ![version](https://img.shields.io/badge/version-alpha-fcaa68?colorA=151515)
