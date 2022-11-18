@@ -84,8 +84,8 @@
 
 Fux is currently still in early development. There is no working compiler avaiable for this language. 
 
-As of now, I am focusing on refining the syntax of Fux, since some aspects are not cleared up yet.
-I took inspiration from C++, D, Python, Odin, Elixir and Holy C.
+As of now, I am focusing on refining the syntax of Fux, since some aspects are not yet clear.
+I have been inspired by [C++](https://isocpp.org/), [D](https://dlang.org/), [Python](https://python.org/), [Odin](https://odin-lang.org/) and [Elixir](https://elixir-lang.org/).
 
 ## Examples
 
