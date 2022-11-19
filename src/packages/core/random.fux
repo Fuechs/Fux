@@ -1,0 +1,11 @@
+package random;
+
+random {
+
+    randint(start: i64, end: i64): i64;
+
+    choice(first: var, second: var): var;
+    
+    choice(list: var[]): var;
+
+}

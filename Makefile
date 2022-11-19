@@ -19,3 +19,4 @@ run: comp
 
 clean:
 	-rm $(exec)
+	-rm *.ll
