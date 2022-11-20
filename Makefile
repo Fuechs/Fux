@@ -2,7 +2,7 @@ cc = g++
 exec = fux
 cflags = -g -O3 -std=c++20
 llvmflags = `llvm-config --cxxflags --ldflags --system-libs --libs core`
-src = $(wildcard src/main.cpp src/util/io.cpp src/frontend/*/*.cpp)
+src = $(wildcard src/main.cpp src/util/io.cpp src/*/*/*.cpp)
 ex = src/examples
  
 # Copyright (c) 2020-2022 Fuechs
@@ -11,8 +11,7 @@ ex = src/examples
 all: comp
 
 comp:
-#	$(cc) $(src) -o $(exec) $(cflags) $(llvmflags)
-	$(cc) $(src) -o $(exec) $(cflags)
+	$(cc) $(src) -o $(exec) $(cflags) $(llvmflags)
 
 run: comp
 	./$(exec)

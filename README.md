@@ -73,7 +73,7 @@
 - [&check;] `Lexer`
 - [...] `Parser`
 - [&cross;] `AST Analysis`
-- [&cross;] `IR Generation (LLVM)`
+- [...] `IR Generation (LLVM)`
 - [&cross;] `Optimization (LLVM)`
 - [&cross;] `Compilation (LLVM)`
 - [...] `Runtime`

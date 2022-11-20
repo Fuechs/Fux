@@ -10,14 +10,22 @@
  */
 
 #include "fux.hpp"
+
 #include "frontend/error/error.hpp"
 #include "frontend/parser/parser.hpp"
 #include "frontend/parser/ast.hpp"
+
+#include "backend/generator/generator.hpp"
 
 __fux_struct fux;
 
 int main(int argc, char **argv) {
     int result = 0;
+
+    Generator *generator = new Generator(new AST(nullptr, AST_ROOT));
+    generator->generate();
+
+    return result;
 
     result = bootstrap(argc, argv);
     switch (result) {
