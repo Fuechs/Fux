@@ -21,7 +21,9 @@
 - [Introduction](#introduction)
     - [Basic Example](#basic-example)
     - [*Design Goals*](#design-goals)
-- [*Variables*](#variables)
+- [Variables](#variables)
+    - [Declaration / Defenition](#declaration--definition)
+    - [*Pointer & References*](#pointer--references)
 - [Types](#types)
     - [Boolean Type](#boolean-type)
     - [Integer Types](#integer-types)
@@ -169,11 +171,50 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 
 ## Variables
 
-> Soon...
+### Declaration / Definition
 
-### Declaration
+[`# Types`](#types)
+
+```rust
+// <identifier> : [ <type> ] [ =/=== <value> ] ;
+name;
+name := "fuechs"; // automatic typing
+name :=== "fuechs"; // constant
+name: str;
+name: str = "fuechs";
+name: str === "fuechs";
+
+// redefinition
+name = "fuechsss";
+```
 
 ### Pointer & References
+
+```rust
+// pointer definition
+// * <identifier> : [ <type> ] [ =/=== <address> ] ; 
+// address 
+// & <variable>
+
+*ptr: str;
+*ptr: str = &name;
+*ptr := &name;
+
+
+someString = "a";
+ptr = &someString; // redefinition
+
+*ptr = "b";
+// someString = "b";
+
+puts ptr;
+// <someString address>
+
+puts *ptr;
+// "b"
+```
+
+> Soon ...
 
 ## Types
 
@@ -257,6 +298,18 @@ first := list.pop(); // = 1
 last := list.popBack(); // = 5
 // list = { 2, 3, 4 }
 //                 ^
+```
+
+Specific elements at `index` can be accessed by writing
+
+```rust
+list[index];
+list[0]; // first element
+list[1]; // second element
+...
+list[-2]; // element before the last element
+list[list.size() - 1]; // last element
+list[-1];              // last element
 ```
 
 ## New Concepts
