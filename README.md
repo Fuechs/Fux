@@ -22,7 +22,7 @@
 
 ###### Flawless Unambiguous Programming
 
-## The Beautiful Alternative For C++ 
+## The Beautiful Alternative For C++
 
 <p align="center">
     <img src="./assets/snippets/helloworld.png" width=60%/>
@@ -42,7 +42,7 @@
 ### Easy To Learn
 
 - Already known environment for developers with experience in C++
-- Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory managment
+- Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory management
 
 ### Large Standard Library
 

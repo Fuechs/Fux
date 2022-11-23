@@ -24,7 +24,9 @@ int main(int argc, char **argv) {
 
     Generator *generator = new Generator(new AST(nullptr, AST_ROOT));
     generator->generate();
-
+    Module *LLVMModule = generator->getModule();
+    delete generator;
+    
     return result;
 
     result = bootstrap(argc, argv);

@@ -28,25 +28,23 @@ typedef SmallVector<Value *, 16> ValList;
 
 class Generator {
 public:
-    Generator(AST *root) { this->root = root; }
+    Generator(AST *root) : root(root), context(), module(), builder() {}
+
+    ~Generator() { 
+        delete root;
+        delete builder;
+    }
 
     void generate();
+    Module *getModule() { return module; }
 
 private:
     AST *root;
     LLVMContext *context;
     Module *module;
     IRBuilder<> *builder;
-    vector<string> funcArgs;
 
     void initializeModule();
-
-    Function *createFunc(IRBuilder<> &builder, string name);
-    BasicBlock *createBB(Function *func, string name);
-    void setFuncArgs(Function *func, vector<string> funcArgs);
-
-    GlobalVariable *createGlob(IRBuilder<> &builder, string name);
-
-    Value *createArith(IRBuilder<> &builder, Value *L, Value *R);
-    Value *createIfElse(IRBuilder<> &builder, BBList list, ValList VL);
+    void readAST(AST *astPtr);
+    void createArith();
 };
