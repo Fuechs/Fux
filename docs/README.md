@@ -22,7 +22,7 @@
     - [Basic Example](#basic-example)
     - [*Design Goals*](#design-goals)
 - [Variables](#variables)
-    - [Declaration / Defenition](#declaration--definition)
+    - [Declaration & Defenition](#declaration--definition)
     - [*Pointer & References*](#pointer--references)
 - [Types](#types)
     - [Boolean Type](#boolean-type)
@@ -30,8 +30,12 @@
     - [Character Types](#character-types)
     - [String Type](#string-type)
     - [Array Type](#array-type)
+    - [*Type Casts*](#type-casts)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
+        - [Passing Arguments](#passing-arguments)
+        - [Modifying Arrays](#modifying-arrays)
+        - [Extending Strings](#extending-strings)
     - [Swap Operator](#swap-operator)
     - [Existence of Objects](#existence-of-objects)
 
@@ -171,7 +175,7 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 
 ## Variables
 
-### Declaration / Definition
+### Declaration & Definition
 
 [`# Types`](#types)
 
@@ -218,7 +222,7 @@ puts *ptr;
 
 ## Types
 
-> A variable declared with the `var` type can hold any type of value.
+> A variable declared with the `var` type can hold any type of value. (Not fixed!)
 > ```rust
 > someVar: var = 1;
 > someVar = "1";
@@ -261,6 +265,8 @@ putch someChar; // output a single character
 
 ### String Type
 
+[`# Extending Strings`](#extending-strings)
+
 - Keyword - `str`
 - Value - sequence of characters enclosed in double quotes `".*"`
 
@@ -271,6 +277,8 @@ puts someString; // output a string
 ```
 
 ### Array Type
+
+[`# Modifying Arrays`](#modifying-arrays)
 
 Using the operator `[]` or `[N]` you can define arrays with a fixed or unfixed size of any type. For example an array of integers.
 
@@ -312,6 +320,10 @@ list[list.size() - 1]; // last element
 list[-1];              // last element
 ```
 
+### Type Casts
+
+> Soon ...
+
 ## New Concepts
 
 Of course, Fux also offers some quality of life features and little improvements over C++, making the overall programming experience more enjoyable.
@@ -320,6 +332,8 @@ Of course, Fux also offers some quality of life features and little improvements
 
 The pipe operators `<<` and `>>` can be used to pass around  function arguments and for example push / append values to an array. \
 In any other cases, Fux will perform an assignment, rather than a special operation.
+
+#### Passing Arguments
 
 ```rust
 "someString" >> someFunction();
@@ -332,15 +346,33 @@ someFunction() << ("someString" >> someFormat(1, 3));
 // someFunction(someFormat("someString", 1, 3));
 ```
 
+#### Modifying Arrays
+
 ```rust
 someArray: i32[];
-someArray[] << 1; // {1}
-2 >> someArray[] << 3; // {2, 1, 3}
+someArray[] << 1;  // {1}
+2 >> someArray[] << 3;  // {2, 1, 3}
 6 >> 7 >> someArray[] << 4 << 5; // {6, 7, 2, 1, 3, 4, 5}
 //                 ^^ without brackets, Fux would 
 //                  try to assign a value to someArray 
 //                  someArray << {}; 
 //                  => someArray = {}
+```
+
+#### Extending Strings
+
+```rust
+someString: str = "uech";
+someString << 's';
+// someString = "uechs";
+'f' >> someString;
+// someString = "fuechs";
+someString << 's' << 's';
+// someString = "fuechsss";
+
+someString << "s";
+//            ^ ^ fux assigns new value because a string was used
+// someString = "s"; 
 ```
 
 ### Swap Operator
