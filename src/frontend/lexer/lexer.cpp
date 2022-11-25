@@ -642,6 +642,7 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "do")            currentToken.type = KEY_DO;
     else if (currentToken.value == "for")           currentToken.type = KEY_FOR;
     else if (currentToken.value == "in")            currentToken.type = KEY_IN;
+    else if (currentToken.value == "is")            currentToken.type = KEY_IS;
     else if (currentToken.value == "return")        currentToken.type = KEY_RETURN;
     else if (currentToken.value == "except")        currentToken.type = KEY_EXCEPT;
     else if (currentToken.value == "switch")        currentToken.type = KEY_SWITCH;
@@ -655,6 +656,7 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "exit")          currentToken.type = KEY_EXIT;
     else if (currentToken.value == "puts")          currentToken.type = KEY_PUTS;
     else if (currentToken.value == "putch")         currentToken.type = KEY_PUTCH;
+    else if (currentToken.value == "operator")      currentToken.type = KEY_OPERATOR;
     
     else if (currentToken.value == "safe")          currentToken.type = KEY_SAFE;
     else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;

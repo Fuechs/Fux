@@ -4,12 +4,35 @@ get string;
 
 io {
 
-    safe buffer: str[];
+    :IOBuffer {
+        ::() {
+            intern self.buffer: str[];
+            intern self.max: u8 === 255;
+        }
+        
+        operator[]<<(buf -> IOBuffer, val: str): void {
+            buf.buffer[] << val;
+            if (buf.buffer.size() >= max)
+                buf.flush();
+        }
 
-    intern flush(): void {
-        for (obj: str in buffer) 
-            puts obj;
+        operator>>[](val: str, buf -> IOBuffer): void {
+            val >> buf.buffer[];
+            if (buf.buffer.size() >= max)
+                buf.flush();
+        }
+
+        flush(): void {
+            for (obj: str in buffer)
+                puts obj;
+        }
+
+        size(): u8 {
+            return buffer.size();
+        }
     }
+
+    safe buffer: IOBuffer;
 
     put(args: var, ...): void {
         for (obj: var in args)
@@ -19,7 +42,7 @@ io {
     putln(args: var, ...): void {
         put(args);
         buffer[] << "\n";
-        flush();
+        buffer.flush();
     }
 
     putf(data: str, args: var, ...): void {
@@ -35,12 +58,12 @@ io {
 
     getch(args: var, ...): c8 {
         put(args);
-        flush();
+        buffer.flush();
         return __stdin(1);
     }
 
     clear(): void {
-        flush();
+        buffer.flush();
         puts "\033[2J";
     }
 

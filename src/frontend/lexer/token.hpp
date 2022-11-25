@@ -89,6 +89,7 @@ enum TokenType {
     KEY_DO,
     KEY_FOR,
     KEY_IN,
+    KEY_IS,
     KEY_RETURN,
     KEY_EXCEPT,
     KEY_SWITCH,
@@ -102,6 +103,7 @@ enum TokenType {
     KEY_EXIT,
     KEY_PUTS,
     KEY_PUTCH,
+    KEY_OPERATOR,
     
     KEY_SAFE,
     KEY_INTERN,
@@ -213,6 +215,7 @@ static const char *TokenTypeString[] = {
     "KEY_DO",
     "KEY_FOR",
     "KEY_IN",
+    "KEY_IS",
     "KEY_RETURN",
     "KEY_EXCEPT",
     "KEY_SWITCH",
@@ -226,6 +229,7 @@ static const char *TokenTypeString[] = {
     "KEY_EXIT",
     "KEY_PUTS",
     "KEY_PUTCH",
+    "KEY_OPERATOR",
     
     "KEY_SAFE",
     "KEY_INTERN",
@@ -337,6 +341,7 @@ static const char *TokenTypeValue[] = {
     "do",
     "for",
     "in",
+    "is",
     "return",
     "except",
     "switch",
@@ -350,6 +355,7 @@ static const char *TokenTypeValue[] = {
     "exit",
     "puts",
     "putch",
+    "operator",
     
     "safe",
     "intern",
