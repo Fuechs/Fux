@@ -17,5 +17,10 @@ map {
                 if (pair.key == key)
                     return pair.value;
         }
+
+        operator[]<<(_map -> KeyMap, final key: K, final value: V): KeyMap {
+            _map.keymap[] << KeyPair<K, V>(key, value);
+            return _map;
+        }
     }
 }

@@ -10,16 +10,18 @@ io {
             intern self.max: u8 === 255;
         }
         
-        operator[]<<(buf -> IOBuffer, val: str): void {
+        operator[]<<(buf -> IOBuffer, val: str): IOBuffer {
             buf.buffer[] << val;
             if (buf.buffer.size() >= max)
                 buf.flush();
+            return buf;
         }
 
-        operator>>[](val: str, buf -> IOBuffer): void {
+        operator>>[](val: str, buf -> IOBuffer): IOBuffer {
             val >> buf.buffer[];
             if (buf.buffer.size() >= max)
                 buf.flush();
+            return buf;
         }
 
         flush(): void {
