@@ -1,0 +1,21 @@
+package core;
+
+map {
+
+    tempalte<K, V>
+    :KeyPair::(K key, V value);
+
+    template<K, V>
+    :KeyMap {
+        ::() {
+            intern self.keymap: KeyPair<K, V>[] = {};
+        }
+
+        operator[](final key: K) -> V {
+            // ineffecient af idk
+            for (pair: KeyPare<K, V> in self.keymap)
+                if (pair.key == key)
+                    return pair.value;
+        }
+    }
+}

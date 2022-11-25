@@ -2,6 +2,43 @@ package core;
 
 string {
 
-    format(data -> str, args: var, ...): void;
+    replace(data: str, from: str, to: str, amount: u64 = 1): str;
+
+    replace(data -> str, from: str, to: str, amount: u64 = 1): void;
+
+    format(data: str, args: var, ...): str;
+
+    format(data -> str, args: var, ...): void {
+        for (val: str in (str[]) args) {
+            find: str;
+
+            switch (arg) {
+                is (bool)
+                    find = "%b";
+                    break;
+                is (c16)
+                    find = "%c";
+                    break;
+                is (i64)
+                    find = "%i";
+                    break;
+                is (u64)
+                    find = "%u";
+                    break;
+                is (f64)
+                    find = "%f";
+                    break;
+                is (str)
+                    find = "%s";
+                    break;
+
+                default
+                    // throw error here
+                    break;
+            }
+
+            replace(data, find, arg);
+        }
+    }
 
 }
