@@ -5,44 +5,42 @@ get string;
 io {
 
     :IOBuffer {
-        ::() {
-            intern self.buffer: str[255];
-            intern self.max :=== 255;
-        }
+        intern buffer: str[256];
         
-        operator[]<<(buf -> IOBuffer, val: str): IOBuffer {
-            buf.buffer[] << val;
-            if (buf.buffer.size() == max)
-                buf.flush();
-            return buf;
+        operator[]<<(val: str) -> IOBuffer {
+            list[] << val;
+            flush();
+            return self;
         }
 
-        operator>>[](val: str, buf -> IOBuffer): IOBuffer {
-            val >> buf.buffer[];
-            if (buf.buffer.size() == max)
-                buf.flush();
-            return buf;
+        operator>>[](val: str) -> IOBuffer {
+            val >> list[];
+            flush();
+            return self;
         }
 
-        operator[](buf -> IOBuffer): IOBuffer {
-            return buf.buffer[];
+        operator[](): str[] {
+            return buffer;
+        }
+
+        operator[](index: u8): str {
+            return buffer[index];
         }
 
         flush(): void {
-            for (obj: str in buffer[])
+            if (!buffer.full())
+                return;
+
+            for (obj: str in buffer)
                 puts obj;
             buffer.clear();
-        }
-
-        size(): u8 {
-            return buffer.size();
         }
     }
 
     safe buffer: IOBuffer;
 
     put(args: var, ...): void {
-        for (obj: var in args[])
+        for (obj: var in args)
             buffer[] << (str) obj;
     }
 
@@ -59,14 +57,14 @@ io {
 
     getln(args: var, ...): str {
         put(args);
-        flush();
-        return __stdin(0, '\n');
+        buffer.flush();
+        return __stdin__(0, '\n');
     }
 
     getch(args: var, ...): c8 {
         put(args);
         buffer.flush();
-        return __stdin(1);
+        return __stdin__(1);
     }
 
     clear(): void {
@@ -76,7 +74,7 @@ io {
 
     err(code: i64, args: var, ...): void {
         put(args);
-        flush();
+        buffer.flush();
         if (code != 0)
             exit code;
     }
