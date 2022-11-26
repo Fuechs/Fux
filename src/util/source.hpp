@@ -22,15 +22,16 @@ public:
     AST *parse() {
         error = new ErrorManager(filePath, vector<string>());
         parser = new Parser(error, filePath, contents, mainFile);
-        AST *root = parser->parse();
-        delete this;
-        return root;
+        return parser->parse();
     }
 
-private:
-    ErrorManager *error;
-    Parser *parser;
+    string getDir() {
+        return fileDir;
+    }
 
+    ErrorManager *error;
+private:
+    Parser *parser;
     string filePath;
     string fileDir;
     string contents;

@@ -11,6 +11,8 @@
 
 #include "fux.hpp"
 
+#include "util/source.hpp"
+
 #include "frontend/error/error.hpp"
 #include "frontend/parser/parser.hpp"
 #include "frontend/parser/ast.hpp"
@@ -22,12 +24,12 @@ __fux_struct fux;
 int main(int argc, char **argv) {
     int result = 0;
 
-    Generator *generator = new Generator(new AST(nullptr, AST_ROOT));
-    generator->generate();
-    Module *LLVMModule = generator->getModule();
-    delete generator;
+    // Generator *generator = new Generator(new AST(nullptr, AST_ROOT));
+    // generator->generate();
+    // Module *LLVMModule = generator->getModule();
+    // delete generator;
     
-    return result;
+    // return result;
 
     result = bootstrap(argc, argv);
     switch (result) {
@@ -36,28 +38,20 @@ int main(int argc, char **argv) {
         default:    return result;
     }
 
+    SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
+
     // fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
     
-    fux.options.libraries.push_back(getDirectory(fux.options.fileName)); // add src include path 
+    fux.options.libraries.push_back(mainFile->getDir()); // add src include path 
 
-    ErrorManager *error = new ErrorManager(fux.options.fileName, vector<string>());
-    
-    {   // own scope so it can be skipped by goto
-        Parser *parser = new Parser(error, fux.options.fileName, readFile(fux.options.fileName), true);
-        auto root = parser->parse();
+    AST* root = mainFile->parse();
+    if (mainFile->error->hasErrors())
+        goto end;
 
-        root->debugPrint();
-        root->debugLiteral();
+    { /* generation & compilation */  }
 
-        delete parser; 
-
-        if (error->hasErrors())
-            goto end;
-    }
-
-    end: 
-        error->panic();
-
+    end:
+        delete mainFile;
         return result;
 }
 
