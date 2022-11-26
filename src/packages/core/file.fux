@@ -8,7 +8,7 @@ file {
     :File {
         ::(path: str = null, mode: c8 = 'r') {
             intern self.path :=== path;
-            if (mode not in ["r", "w", "b", "a"])
+            if (mode not in {'r', 'w', 'b', 'a'})
                 io.err(1, "invalid mode '", mode, "' on file '", path, "'");
             intern self.mode :=== mode;
         }

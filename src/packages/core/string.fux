@@ -4,15 +4,15 @@ string {
 
     replace(data: str, from: str, to: str, amount: u64 = 1): str;
 
-    replace(data -> str, from: str, to: str, amount: u64 = 1): void;
+    replace(data -> str, from: str, to: str, amount: u64 = 1): void {
+        data = replace(data, from, to, amount);
+    }
 
-    format(data: str, args: var, ...): str;
-
-    format(data -> str, args: var, ...): void {
-        for (val: str in (str[]) args) {
+    format(data: str, args: var, ...): str {
+        for (val in args) {
             find: str;
 
-            switch (arg) {
+            switch (val) {
                 is (bool)
                     find = "%b";
                     break;
@@ -36,9 +36,15 @@ string {
                     // throw error here
                     break;
             }
-
-            replace(data, find, arg);
+        
+            replace(data, find, (str) val);
         }
+
+        return data;
+    }
+
+    format(data -> str, args: var, ...): void {
+        data = format(data, args);
     }
 
 }

@@ -11,7 +11,7 @@
 
 #include "io.hpp"
 
-const string readFile(const string path) {
+const string readFile(const string& path) {
     ifstream file(path);
     if (!file.is_open()) {
         cerr << "could not open file '" << path << "'\n";

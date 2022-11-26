@@ -7,24 +7,16 @@ io {
     :IOBuffer {
         intern buffer: str[256];
         
-        operator[]<<(val: str) -> IOBuffer {
-            list[] << val;
-            flush();
-            return self;
+        operator<<(this -> IOBuffer, val: str) -> IOBuffer {
+            this.buffer[] << val;
+            this.flush();
+            return this;
         }
 
-        operator>>[](val: str) -> IOBuffer {
-            val >> list[];
-            flush();
-            return self;
-        }
-
-        operator[](): str[] {
-            return buffer;
-        }
-
-        operator[](index: u8): str {
-            return buffer[index];
+        operator>>(val: str, this -> IOBuffer) -> IOBuffer {
+            val >> this.buffer[];
+            this.flush();
+            return this;
         }
 
         flush(): void {
@@ -41,12 +33,12 @@ io {
 
     put(args: var, ...): void {
         for (obj: var in args)
-            buffer[] << (str) obj;
+            buffer << (str) obj;
     }
 
     putln(args: var, ...): void {
         put(args);
-        buffer[] << "\n";
+        buffer << "\n";
         buffer.flush();
     }
 

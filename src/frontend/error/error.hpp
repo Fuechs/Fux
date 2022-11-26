@@ -133,7 +133,7 @@ public:
         if (fatal)
             cout 
                 << ColorCode::RED << StyleCode::BOLD 
-                << "Hit an fatal error.\n" 
+                << "Hit a fatal error.\n" 
                 << ColorCode::DEFAULT << StyleCode::SLIM;
         delete this;
     }
