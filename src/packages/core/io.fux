@@ -6,27 +6,32 @@ io {
 
     :IOBuffer {
         ::() {
-            intern self.buffer: str[];
-            intern self.max: u8 === 255;
+            intern self.buffer: str[255];
+            intern self.max :=== 255;
         }
         
         operator[]<<(buf -> IOBuffer, val: str): IOBuffer {
             buf.buffer[] << val;
-            if (buf.buffer.size() >= max)
+            if (buf.buffer.size() == max)
                 buf.flush();
             return buf;
         }
 
         operator>>[](val: str, buf -> IOBuffer): IOBuffer {
             val >> buf.buffer[];
-            if (buf.buffer.size() >= max)
+            if (buf.buffer.size() == max)
                 buf.flush();
             return buf;
         }
 
+        operator[](buf -> IOBuffer): IOBuffer {
+            return buf.buffer[];
+        }
+
         flush(): void {
-            for (obj: str in buffer)
+            for (obj: str in buffer[])
                 puts obj;
+            buffer.clear();
         }
 
         size(): u8 {
@@ -37,7 +42,7 @@ io {
     safe buffer: IOBuffer;
 
     put(args: var, ...): void {
-        for (obj: var in args)
+        for (obj: var in args[])
             buffer[] << (str) obj;
     }
 
