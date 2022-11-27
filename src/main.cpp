@@ -194,7 +194,7 @@ int repl() {
         ErrorManager *error = new ErrorManager("<stdin>", {});
         Parser *parser = new Parser(error, "<stdin>", input, true);
         AST *root = parser->parse();
-        Analyser *analyser = new Analyser(root);
+        Analyser *analyser = new Analyser(error, root);
         analyser->analyse();
         root->debugPrint();
         root->debugLiteral();

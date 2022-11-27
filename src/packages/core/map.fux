@@ -3,7 +3,12 @@ package core;
 map {
 
     tempalte<K, V>
-    :KeyPair::(K key, V value);
+    :KeyPair::(K key, V value) {
+        set(K key, V value) {
+            self.key = key;
+            self.value = value;
+        }
+    }
 
     template<K, V>
     :KeyMap {
@@ -18,9 +23,13 @@ map {
                     return pair.value;
         }
 
-        operator[]<<(_map -> KeyMap, final key: K, final value: V): KeyMap {
+        operator<<(_map -> KeyMap, final key: K, final value: V) -> KeyMap {
             _map.keymap[] << KeyPair<K, V>(key, value);
             return _map;
+        }
+
+        getPair(key: K) -> KeyPair<K, V> {
+            // TODO: parallel search / multithreading
         }
     }
 }
