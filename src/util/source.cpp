@@ -24,10 +24,13 @@ SourceFile::~SourceFile() {
     contents.clear();
     error->panic();
     delete parser;
+    delete analyser;
 }
 
 AST *SourceFile::parse() {
     error = new ErrorManager(filePath, vector<string>());
     parser = new Parser(error, filePath, contents, mainFile);
-    return parser->parse();
+    AST *root = parser->parse();
+    analyser = new Analyser(error, root);
+    return root;
 }

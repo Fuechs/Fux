@@ -176,20 +176,12 @@ void ErrorManager::createError(ErrorType type, Token &token, string comment, boo
     addError(ParseError(type, token, fileName, lines[token.line - 1], comment, false, aggressive));
 }
 
-void ErrorManager::createError(ErrorType type, AST &ast, string comment, bool aggressive) {
-    addError(ParseError(type, ast.line, ast.start, ast.end, fileName, lines[ast.line - 1], comment, false, aggressive));
-}
-
 void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
     addError(ParseError(type, line, col, col, fileName, lines[line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, Token &token, string comment, bool aggressive) {
     addError(ParseError(type, token, fileName, lines[token.line - 1], comment, true, aggressive));
-}
-
-void ErrorManager::createWarning(ErrorType type, AST &ast, string comment, bool aggressive) {
-    addError(ParseError(type, ast.line, ast.start, ast.end, fileName, lines[ast.line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::reportAll() {

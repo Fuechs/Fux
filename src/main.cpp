@@ -16,6 +16,7 @@
 #include "frontend/error/error.hpp"
 #include "frontend/parser/parser.hpp"
 #include "frontend/parser/ast.hpp"
+#include "frontend/analyser/analyser.hpp"
 
 #include "backend/generator/generator.hpp"
 
@@ -31,27 +32,26 @@ int main(int argc, char **argv) {
     
     // return result;
 
-    result = bootstrap(argc, argv);
-    switch (result) {
-        case -1:    return repl();
-        case 0:     break;
-        default:    return result;
-    }
+    // result = bootstrap(argc, argv);
+    // switch (result) {
+    //     case -1:    return repl();
+    //     case 0:     break;
+    //     default:    return result;
+    // }
+
+    fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
 
     SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
 
-    // fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
     
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    AST* root = mainFile->parse();
+    AST *root = mainFile->parse();
     if (mainFile->error->hasErrors())
         goto end;
-        
-    { /* TODO: ast analysis */ }
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
-        Generator* generator = new Generator(root);
+        Generator *generator = new Generator(root);
         generator->generate();
         if (false) { // TODO: check for errors
             generator->forceDelete();
@@ -194,6 +194,8 @@ int repl() {
         ErrorManager *error = new ErrorManager("<stdin>", {});
         Parser *parser = new Parser(error, "<stdin>", input, true);
         AST *root = parser->parse();
+        Analyser *analyser = new Analyser(root);
+        analyser->analyse();
         root->debugPrint();
         root->debugLiteral();
         error->panic();

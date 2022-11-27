@@ -84,7 +84,6 @@ public:
 
     ~AST() {
         value.clear();
-        delete &pos;
         for (AST *sub : body)
             delete sub;
         body.clear();
@@ -114,7 +113,7 @@ public:
     vector<AST *> body;
     union { 
         string value; 
-        Type valueType = NO_TYPE; 
+        fuxType::Type valueType; 
     };
 };
 

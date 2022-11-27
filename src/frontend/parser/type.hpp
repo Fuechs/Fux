@@ -11,6 +11,8 @@
 
 #pragma once
 
+namespace fuxType {
+
 enum Type {
     VOID,
     BOOL,
@@ -58,3 +60,5 @@ static const char *TypeString[] = {
     "CONSTANT", // ===
     "NO_TYPE",
 };
+
+}

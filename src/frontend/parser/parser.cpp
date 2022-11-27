@@ -75,8 +75,8 @@ AST *Parser::parseVarDecl(AST *parent) {
             variable->addSub(varType);
 
         switch (current->type) {
-            case EQUALS:            variable->valueType = VAR; break;
-            case TRIPLE_EQUALS:     variable->valueType = CONSTANT; break;
+            case EQUALS:            variable->valueType = fuxType::VAR; break;
+            case TRIPLE_EQUALS:     variable->valueType = fuxType::CONSTANT; break;
             case SEMICOLON:
                 if (varType->type == AST_NONE) {
                     error->createError(UNEXPECTED_TOKEN, *current, "got unexpected SEMICOLON ';' after COLON ':' in variable defenition");
@@ -107,7 +107,7 @@ AST *Parser::parseVarDecl(AST *parent) {
 AST *Parser::parseType(AST *parent) {
     AST *varType = new AST(parent, AST_NONE);
     switch (current->type) {
-        case KEY_I32:       varType->valueType = I32; break;
+        case KEY_I32:       varType->valueType = fuxType::I32; break;
         default:            return varType;
     }
     varType->copyPosition(eat());

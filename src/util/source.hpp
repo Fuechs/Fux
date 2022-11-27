@@ -14,6 +14,7 @@
 #include "../fux.hpp"
 #include "../frontend/error/error.hpp"
 #include "../frontend/parser/parser.hpp"
+#include "../frontend/analyser/analyser.hpp"
 
 class SourceFile {
 public:
@@ -25,6 +26,7 @@ public:
 
     ErrorManager *error;
     Parser *parser;
+    Analyser *analyser;
 
     string filePath;
     string fileDir;

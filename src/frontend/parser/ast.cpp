@@ -60,7 +60,7 @@ void AST::debugPrint(size_t indent, bool all) {
     
     debugIndent(debug, indent);
     if (type == AST_VARIABLE_DECl)
-        debug << "ValueType: " << TypeString[valueType] << "\n";
+        debug << "ValueType: " << fuxType::TypeString[valueType] << "\n";
     else 
         debug << "Value: " << value << "\n";
     
@@ -111,9 +111,9 @@ void AST::debugLiteral() {
         
         case AST_VARIABLE_DECl:
             body[0]->debugLiteral(); // name
-            if (valueType == VAR)
+            if (valueType == fuxType::VAR)
                 cout << " := ";
-            else if (valueType == CONSTANT)
+            else if (valueType == fuxType::CONSTANT)
                 cout << " :=== ";
             body[1]->debugLiteral(); // value
             cout << ";";

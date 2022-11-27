@@ -117,11 +117,9 @@ public:
 
     void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
     void createError(ErrorType type, Token &token, string comment = "", bool aggressive = false);
-    void createError(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
 
     void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
     void createWarning(ErrorType type, Token &token, string comment = "", bool aggressive = false);
-    void createWarning(ErrorType type, AST &ast, string comment = "", bool aggressive = false);
 
     void reportAll();
 
