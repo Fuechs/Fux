@@ -45,24 +45,46 @@ static const char *NodeTypeString[] = {
     "AST_NONE",
 };
 
+/**
+ * @brief exact position of an AST (Node) for error tracking
+ * 
+ */
+struct Position {
+    Position(size_t first = 1, size_t last = 1, size_t start = 1, size_t end = 1)
+    : first(first), last(last), start(start), end(end) {}
+
+    // line the AST starts 
+    size_t first;
+    // line the AST ends
+    size_t last;
+    // column the AST starts 
+    size_t start;
+    // column the AST ends 
+    size_t end; 
+};
+
 class AST {
 public:
     AST(AST *copy)
-    : parent(copy->parent), type(copy->type), line(copy->line), start(copy->start),
-    end(copy->end), body(copy->body), value(copy->value) {}
+    : parent(copy->parent), type(copy->type), pos(copy->pos), body(copy->body), value(copy->value) { }
 
-    AST(AST *parent, NodeType type, size_t line = 1, size_t start = 1, size_t end = 1)
-    : parent(parent), type(type), line(line), start(start), end(end), body({}), value("none") {}
+    AST(AST *parent, NodeType type, Position pos = Position(), string value = "none")
+    : parent(parent), type(type), pos(pos), body({}), value(value) {}
 
-    AST(AST *parent, NodeType type, size_t line, size_t start, size_t end, string value)
-    : parent(parent), type(type), line(line), start(start), end(end), body({}), value(value) {}
+    AST(AST *parent, NodeType type, Position& pos, string& value)
+    : parent(parent), type(type), pos(pos), body({}), value(value) {}
 
     AST(AST *parent, NodeType type, Token token)
-    : parent(parent), type(type), line(token.line), start(token.start), 
-    end(token.end), body({}), value(token.value) {}
+    : parent(parent), type(type), body({}), value(token.value) {
+        pos.first = token.line;
+        pos.last = token.line;
+        pos.start = token.start;
+        pos.end = token.end;
+    }
 
     ~AST() {
         value.clear();
+        delete &pos;
         for (AST *sub : body)
             delete sub;
         body.clear();
@@ -88,7 +110,7 @@ public:
     
     AST *parent;
     NodeType type;  
-    size_t line, start, end;
+    Position pos;
     vector<AST *> body;
     union { 
         string value; 

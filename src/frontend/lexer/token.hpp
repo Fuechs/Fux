@@ -103,7 +103,6 @@ enum TokenType {
     KEY_EXIT,
     KEY_PUTS,
     KEY_PUTCH,
-    KEY_OPERATOR,
     
     KEY_SAFE,
     KEY_INTERN,
@@ -112,6 +111,7 @@ enum TokenType {
 
     KEY_USING,
     KEY_TYPEDEF,
+    KEY_OPERATOR,
     
     KEY_TRUE,
     KEY_FALSE,
@@ -229,7 +229,6 @@ static const char *TokenTypeString[] = {
     "KEY_EXIT",
     "KEY_PUTS",
     "KEY_PUTCH",
-    "KEY_OPERATOR",
     
     "KEY_SAFE",
     "KEY_INTERN",
@@ -238,6 +237,7 @@ static const char *TokenTypeString[] = {
 
     "KEY_USING",
     "KEY_TYPEDEF",
+    "KEY_OPERATOR",
     
     "KEY_TRUE",
     "KEY_FALSE",
@@ -355,7 +355,6 @@ static const char *TokenTypeValue[] = {
     "exit",
     "puts",
     "putch",
-    "operator",
     
     "safe",
     "intern",
@@ -364,6 +363,7 @@ static const char *TokenTypeValue[] = {
 
     "using",
     "typedef",
+    "operator",
     
     "true",
     "false",

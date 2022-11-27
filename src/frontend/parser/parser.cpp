@@ -56,7 +56,7 @@ AST *Parser::parseVarDecl(AST *parent) {
         AST *symbol = new AST(variable, AST_IDENTIFIER, name);
         variable->addSub(symbol);
         variable->copyPosition(symbol);
-        variable->end++; // semicolon
+        variable->pos.end++; // semicolon
 
         return variable;
     }
@@ -83,7 +83,7 @@ AST *Parser::parseVarDecl(AST *parent) {
                     return new AST(parent, AST_NONE, eat());
                 }
                 eat(); // semicolon
-                variable->end++;
+                variable->pos.end++;
                 return variable;
 
             default:
@@ -94,7 +94,7 @@ AST *Parser::parseVarDecl(AST *parent) {
                 
         AST *value = parseExpr(variable);
         variable->addSub(value);
-        variable->end = value->end + 1; // semicolon
+        variable->pos.end = value->pos.end + 1; // semicolon
         expect(SEMICOLON);
 
         return variable;
@@ -125,7 +125,8 @@ AST *Parser::parseAdditiveExpr(AST *parent) {
         AST *op = new AST(nullptr, AST_BINARY_OPERATOR, eat());
         AST *rhs = parseMultiplicativeExpr(nullptr);
         AST *copy = new AST(lhs); // copy old lhs
-        lhs = new AST(parent, AST_BINARY_EXPR, copy->line, copy->start, rhs->end);
+        lhs = new AST(parent, AST_BINARY_EXPR, copy->pos);
+        lhs->pos.end = rhs->pos.end;
         // ( op lhs(copy) rhs )
         lhs->addSub(op); op->parent = lhs;
         lhs->addSub(copy); copy->parent = lhs;
@@ -142,7 +143,8 @@ AST *Parser::parseMultiplicativeExpr(AST *parent) {
         AST *op = new AST(nullptr, AST_BINARY_OPERATOR, eat());
         AST *rhs = parsePrimaryExpr(nullptr);
         AST *copy = new AST(lhs); // copy old lhs
-        lhs = new AST(parent, AST_BINARY_EXPR, copy->line, copy->start, rhs->end);
+        lhs = new AST(parent, AST_BINARY_EXPR, copy->pos);
+        lhs->pos.end = rhs->pos.end;
         // ( op lhs(copy) rhs )
         lhs->addSub(op); op->parent = lhs;
         lhs->addSub(copy); copy->parent = lhs;

@@ -9,6 +9,8 @@
  * 
  */
 
+#pragma once
+
 #include "../fux.hpp"
 #include "../frontend/error/error.hpp"
 #include "../frontend/parser/parser.hpp"

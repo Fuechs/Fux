@@ -18,6 +18,5 @@
 
 using namespace std;
 
-const string readFile(const string path);
-
+const string readFile(const string& path);
 const string getDirectory(const string path);

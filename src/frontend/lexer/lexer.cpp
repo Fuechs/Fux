@@ -17,9 +17,7 @@ TokenList Lexer::lex() {
 
         switch (currentToken.type) {
             case IDENTIFIER:
-                do
-                    advance();
-                while (getIdent());
+                do advance(); while (getIdent());
                 hasLetter = false;
                 checkKeyword();
                 break;
@@ -603,18 +601,16 @@ void Lexer::getNumber() {
 }
 
 bool Lexer::skipComment() {
-    if (peek() == '/') {
-        while (idx < source.length() && current() != '\n')
-            advance();
+    if (peek() == '/') { // single line comment '//'
+        do advance(); while (idx < source.length() && current() != '\n');
         advance();
         resetPos();
         return true;
     }
 
-    if (peek() == '*') {
-        while (idx < source.length() 
-        && current() != '/' 
-        && peek(2) != '*') {
+    if (peek() == '*') { // multi line comment '/*'
+                                        // check for '*/'
+        while (idx < source.length() && current() != '*' && peek() != '/') {
             if (current() == '\n') {
                 resetPos();
                 --idx;
@@ -625,7 +621,7 @@ bool Lexer::skipComment() {
         if (idx >= source.length())
             error->createError(UNEXPECTED_EOF, line, col, "expected multi-line comment to end");
         else
-            advance(2);
+            advance(2); // skip the '*/'
         
         return true;
     }
@@ -656,7 +652,6 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "exit")          currentToken.type = KEY_EXIT;
     else if (currentToken.value == "puts")          currentToken.type = KEY_PUTS;
     else if (currentToken.value == "putch")         currentToken.type = KEY_PUTCH;
-    else if (currentToken.value == "operator")      currentToken.type = KEY_OPERATOR;
     
     else if (currentToken.value == "safe")          currentToken.type = KEY_SAFE;
     else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;
@@ -665,11 +660,12 @@ void Lexer::checkKeyword() {
     
     else if (currentToken.value == "using")         currentToken.type = KEY_USING;
     else if (currentToken.value == "typedef")       currentToken.type = KEY_TYPEDEF;
+    else if (currentToken.value == "operator")      currentToken.type = KEY_OPERATOR;
     
     else if (currentToken.value == "true")          currentToken.type = KEY_TRUE;
     else if (currentToken.value == "false")         currentToken.type = KEY_FALSE;
     else if (currentToken.value == "null")          currentToken.type = KEY_NULL;
-    
+
     else if (currentToken.value == "void")          currentToken.type = KEY_VOID;
     else if (currentToken.value == "bool")          currentToken.type = KEY_BOOL;
     else if (currentToken.value == "i8")            currentToken.type = KEY_I8;

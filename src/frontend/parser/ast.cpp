@@ -16,15 +16,14 @@ void AST::addSub(AST* sub) {
 }
 
 void AST::copyPosition(AST *from) {
-    line = from->line;
-    start = from->start;
-    end = from->end;
+    pos = from->pos;
 }
 
 void AST::copyPosition(Token from) {
-    line = from.line;
-    start = from.start;
-    end = from.end;
+    pos.first = from.line;
+    pos.last = from.line;
+    pos.start = from.start;
+    pos.end = from.end;
 }
 
 void AST::debugPrint(size_t indent, bool all) {
@@ -48,13 +47,13 @@ void AST::debugPrint(size_t indent, bool all) {
     debug << "Parent: ";
 
     if (parent != nullptr)
-        debug << NodeTypeString[parent->type] << " (Line " << parent->line << ":" << parent->start << ")\n";
+        debug << NodeTypeString[parent->type] << " (Line " << parent->pos.first << ":" << parent->pos.start << ")\n";
     else
         debug << "none\n";
 
 
     debugIndent(debug, indent);
-    debug << "Line " << line << ":" << start << "\n";
+    debug << "Line " << pos.first << ":" << pos.start << " to " << pos.last << ":" << pos.end << "\n";
     
     debugIndent(debug, indent);
     debug << "Body Size: " << body.size() << "\n";

@@ -162,7 +162,7 @@ int printHelp() {
         << "    -debug -d           turn debug mode on\n"
         << "    -repl               start repl\n"
         << "    -h -help            show this message and exit"
-    << endl;
+        << endl;
 
     return 1;
 }
