@@ -29,8 +29,6 @@ public:
         tokens.clear();
         lines.clear();
         source.clear();
-        error->fileName = fux.options.fileName;
-        error->lines = fux.options.fileLines;
     }
 
     TokenList lex();

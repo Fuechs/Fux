@@ -42,13 +42,22 @@ int main(int argc, char **argv) {
 
     // fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
     
-    fux.options.libraries.push_back(mainFile->getDir()); // add src include path 
+    fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
     AST* root = mainFile->parse();
     if (mainFile->error->hasErrors())
         goto end;
+        
+    { /* TODO: ast analysis */ }
 
-    { /* generation & compilation */  }
+    { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
+        Generator* generator = new Generator(root);
+        generator->generate();
+        if (false) { // TODO: check for errors
+            generator->forceDelete();
+            goto end;
+        }
+    }
 
     end:
         delete mainFile;

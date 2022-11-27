@@ -35,6 +35,13 @@ public:
         delete builder;
     }
 
+    void forceDelete() {
+        delete builder;
+        delete module;
+        delete context;
+        delete this;
+    }
+
     void generate();
     Module *getModule() { return module; }
 

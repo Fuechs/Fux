@@ -101,9 +101,7 @@ private:
     bool reported;
 };
 
-typedef vector<ParseError> ErrorList;
-
-// ast needs error -> fake class 
+namespace fuxErr { typedef vector<ParseError> ErrorList; }
 
 class ErrorManager {
 public:
@@ -127,7 +125,8 @@ public:
 
     void reportAll();
 
-    // literally self destruct because of a fatal error
+    // literally self destruct 
+    // may be because of a fatal error
     void panic(bool fatal = false) {
         reportAll();
         if (fatal)
@@ -142,7 +141,7 @@ public:
     vector<string> lines;
     
 private:
-    ErrorList errors;
+    fuxErr::ErrorList errors;
 
     void addError(ParseError error);
 };

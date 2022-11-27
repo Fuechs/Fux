@@ -1,37 +1,29 @@
+/**
+ * @file source.hpp
+ * @author fuechs
+ * @brief fux source file header
+ * @version 0.1
+ * @date 2022-11-26
+ * 
+ * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
+ * 
+ */
+
 #include "../fux.hpp"
 #include "../frontend/error/error.hpp"
 #include "../frontend/parser/parser.hpp"
 
 class SourceFile {
 public:
-    SourceFile(const string& filePath, bool mainFile = false) {
-        this->filePath = filePath;
-        this->fileDir = getDirectory(filePath);
-        this->contents = readFile(filePath);
-        this->mainFile = mainFile;
-    }
-
-    ~SourceFile() {
-        filePath.clear();
-        fileDir.clear();
-        contents.clear();
-        error->panic();
-        delete parser;
-    }
-
-    AST *parse() {
-        error = new ErrorManager(filePath, vector<string>());
-        parser = new Parser(error, filePath, contents, mainFile);
-        return parser->parse();
-    }
-
-    string getDir() {
-        return fileDir;
-    }
+    SourceFile(const string& filePath, bool mainFile = false);
+    
+    ~SourceFile();
+    
+    AST *parse();
 
     ErrorManager *error;
-private:
     Parser *parser;
+
     string filePath;
     string fileDir;
     string contents;

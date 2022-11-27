@@ -33,5 +33,7 @@ void Generator::readAST(AST *astPtr) {
             break;
         case AST_BINARY_EXPR:
             break;
+        default:
+            break;
     }
 }
