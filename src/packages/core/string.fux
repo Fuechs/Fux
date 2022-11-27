@@ -2,6 +2,31 @@ package core;
 
 string {
 
+    isdigit(data: c8): bool {
+        return __istype__(data, digit);
+    }
+    
+    isdigit(data: str): bool {
+        if (data[i] == ('+' || '-'))
+            data.pop();
+
+        for (char: c8 in data)
+            if (!isdigit(char))
+                return false;
+        return true;
+    }
+
+    isalpha(data: c8): bool {
+        return __istype__(data, alpha);
+    }
+    
+    isalpha(data: str): bool {
+        for (char: c8 in data)
+            if (!isalpha(char))
+                return false;
+        return true;
+    }
+
     replace(data: str, from: str, to: str, amount: u64 = 1): str;
 
     replace(data -> str, from: str, to: str, amount: u64 = 1): void {
@@ -9,37 +34,30 @@ string {
     }
 
     format(data: str, args: var, ...): str {
-        for (val in args) {
-            find: str;
-
-            switch (val) {
-                is (bool)
-                    find = "%b";
-                    break;
-                is (c16)
-                    find = "%c";
-                    break;
-                is (i64)
-                    find = "%i";
-                    break;
-                is (u64)
-                    find = "%u";
-                    break;
-                is (f64)
-                    find = "%f";
-                    break;
-                is (str)
-                    find = "%s";
-                    break;
-
-                default
-                    // throw error here
-                    break;
-            }
-        
-            replace(data, find, (str) val);
+        i: u64; j: u64; buf: str;
+        for (i: u64; ?data[i]; i++) {
+            if (data[i] == '%') {
+                ++i;
+                switch (data[i]) {
+                    case ('c')
+                        buf << (c16) args[j++];
+                        break;
+                    case ('i')
+                        buf += (str) (i64) args[j++];
+                        break;
+                    case ('u')
+                        buf += (str) (u64) args[j++];
+                        break;
+                    case ('f')
+                        buf += (str) (f64) args[j++];
+                        break;
+                    default
+                        // throw error
+                        break;
+                }
+            } else
+                buf << data[i];
         }
-
         return data;
     }
 
