@@ -11,7 +11,7 @@
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status** \
-> Last updated on 2022-11-18 \
+> Last updated on 2022-11-24 \
 > Unfinished
 
 ## Contents
