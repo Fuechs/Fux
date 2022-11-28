@@ -1,6 +1,6 @@
 cc = g++
 exec = fux
-cflags = -g -O3 -std=c++20
+cflags = -g -O3 -std=c++20 
 llvmflags = `llvm-config --cxxflags --ldflags --system-libs --libs core`
 src = $(wildcard src/main.cpp src/*/*.cpp src/*/*/*.cpp)
 ex = src/examples
@@ -19,3 +19,4 @@ run: comp
 clean:
 	-rm $(exec)
 	-rm *.ll
+	-rm *.s

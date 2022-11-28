@@ -15,8 +15,8 @@
 #include "../llvmheader.hpp"
 #include "../../frontend/parser/ast.hpp"
 
-typedef SmallVector<BasicBlock *, 16> BBList;
-typedef SmallVector<Value *, 16> ValList;
+typedef vector<Value *> ValueList;
+typedef vector<BasicBlock *> BlockList;
 
 class Generator {
 public:
@@ -48,5 +48,11 @@ private:
     Value *readAST(AST *astPtr);
 
     Value *codegen(AST *astPtr);
-    Value *createArith(AST *op, AST *LHS, AST *RHS);
+    Value *createArith(AST *binaryExpr);
+    
+    Value *defineGlobal();
+
+    Function *createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name);
+    Function *createFunc(Function *prototype);
+    Function *createFunc(fuxType::Type type, Function::LinkageTypes linkage, const string name);
 };

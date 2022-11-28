@@ -14,15 +14,10 @@
 void Generator::generate() {
     initializeModule();
     
-    FunctionType *FT = FunctionType::get(Type::getInt32Ty(*context), false);
-    Function *F = Function::Create(FT, Function::ExternalLinkage, "main", module);
-    BasicBlock *BB = BasicBlock::Create(*context, "entry", F);
-    builder->SetInsertPoint(BB);
-    
-    Value *retVal = readAST(root);
-    
-    builder->CreateRet(retVal);
-    verifyFunction(*F);
+    Function *mainFunc = createFunc(fuxType::VOID, Function::ExternalLinkage, "main");
+    for (AST *sub : root->body)
+        Value *V = readAST(sub);
+    verifyFunction(*mainFunc);
 
     if (fux.options.debugMode)
         module->print(errs(), nullptr);
@@ -41,10 +36,10 @@ Value *Generator::readAST(AST *astPtr) {
         case AST_ROOT:
             return readAST((*astPtr)[0]);
         case AST_BINARY_EXPR: {
-            Value *arith = createArith((*astPtr)[0], (*astPtr)[1], (*astPtr)[2]);
+            Value *arith = createArith(astPtr);
             if (arith)
-                arith->print(errs());
-                cout << endl;
+                // arith->print(errs());
+                // cout << endl;
                 return arith;
             return nullptr;
         }
@@ -54,18 +49,49 @@ Value *Generator::readAST(AST *astPtr) {
 }
 
 Value *Generator::codegen(AST *astPtr) {
-    return ConstantFP::get(*context, APFloat(stod(astPtr->value)));
+    if (astPtr->type == AST_BINARY_EXPR)
+        return createArith(astPtr);
+    return ConstantInt::get(*context, APInt(64, astPtr->value, true));
 }
 
-Value *Generator::createArith(AST *op, AST *LHS, AST *RHS) {
+Value *Generator::createArith(AST *binaryExpr) {
+    AST *op = (*binaryExpr)[0];
+    AST *LHS = (*binaryExpr)[1];
+    AST *RHS = (*binaryExpr)[2];
+
     Value *L = codegen(LHS);
     Value *R = codegen(RHS);
     if (!L || !R)
         return nullptr;
     
-    if      (op->value == "+")   return builder->CreateFAdd(L, R, "addtmp");
-    else if (op->value == "-")   return builder->CreateFSub(L, R, "subtmp");
-    else if (op->value == "*")   return builder->CreateFMul(L, R, "multmp");
+    if      (op->value == "+")   return builder->CreateAdd(L, R, "addtmp");
+    else if (op->value == "-")   return builder->CreateSub(L, R, "subtmp");
+    else if (op->value == "*")   return builder->CreateMul(L, R, "multmp");
     else if (op->value == "/")   return builder->CreateFDiv(L, R, "divtmp");
     else                         return nullptr;
+}
+
+// TODO: Arguments
+Function *Generator::createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name) {
+    FunctionType *FT;
+    switch (type) {
+        case fuxType::VOID:     
+            FT = FunctionType::get(Type::getVoidTy(*context), false);
+            break;
+        default:
+            return nullptr;
+    }
+
+    Function *F = Function::Create(FT, linkage, "main", module);
+    return F;
+}
+
+Function *Generator::createFunc(Function *prototype) {
+    BasicBlock *BB = BasicBlock::Create(*context, "entry", prototype);
+    builder->SetInsertPoint(BB);
+    return prototype;
+}
+
+Function *Generator::createFunc(fuxType::Type type, Function::LinkageTypes linkage, const string name) {
+    return createFunc(createProto(type, linkage, name));
 }
