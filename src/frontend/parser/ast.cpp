@@ -27,7 +27,6 @@ void AST::copyPosition(Token from) {
 }
 
 void AST::debugPrint(size_t indent, bool all) {
-
     if (!fux.options.debugMode)
         return;
 

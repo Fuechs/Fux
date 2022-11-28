@@ -89,15 +89,9 @@ public:
         body.clear();
     }
 
-    // void operator=(AST* copy) { 
-    //     parent = copy->parent;
-    //     type = copy->type;
-    //     line = copy->line;
-    //     start = copy->start;
-    //     end = copy->end;
-    //     body = copy->body;
-    //     value = copy->value;
-    // }
+    AST *operator[](size_t index) {
+        return body[index];
+    }
 
     // shorthand for pushing sub asts
     void addSub(AST *sub);
@@ -116,6 +110,3 @@ public:
         fuxType::Type valueType; 
     };
 };
-
-// typedef vector<AST *> AstList;
-// typedef vector<AstList> AstLists;

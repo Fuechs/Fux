@@ -39,6 +39,9 @@ string {
             if (data[i] == '%') {
                 ++i;
                 switch (data[i]) {
+                    case ('%')
+                        buf << '%';
+                        break;
                     case ('c')
                         buf << (c16) args[j++];
                         break;

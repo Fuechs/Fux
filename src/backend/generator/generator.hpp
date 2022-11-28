@@ -44,6 +44,9 @@ private:
     IRBuilder<> *builder;
 
     void initializeModule();
-    void readAST(AST *astPtr);
-    void createArith();
+    
+    Value *readAST(AST *astPtr);
+
+    Value *codegen(AST *astPtr);
+    Value *createArith(AST *op, AST *LHS, AST *RHS);
 };

@@ -13,9 +13,20 @@
 
 void Generator::generate() {
     initializeModule();
-    readAST(root);
+    
+    FunctionType *FT = FunctionType::get(Type::getInt32Ty(*context), false);
+    Function *F = Function::Create(FT, Function::ExternalLinkage, "main", module);
+    BasicBlock *BB = BasicBlock::Create(*context, "entry", F);
+    builder->SetInsertPoint(BB);
+    
+    Value *retVal = readAST(root);
+    
+    builder->CreateRet(retVal);
+    verifyFunction(*F);
+
     if (fux.options.debugMode)
         module->print(errs(), nullptr);
+    
     delete this;
 }
 
@@ -25,15 +36,36 @@ void Generator::initializeModule() {
     builder = new IRBuilder<>(*context);
 }
 
-void Generator::readAST(AST *astPtr) {
+Value *Generator::readAST(AST *astPtr) {
     switch (astPtr->type) {
         case AST_ROOT:
-            for (AST *sub : astPtr->body)
-                readAST(sub);
-            break;
-        case AST_BINARY_EXPR:
-            break;
+            return readAST((*astPtr)[0]);
+        case AST_BINARY_EXPR: {
+            Value *arith = createArith((*astPtr)[0], (*astPtr)[1], (*astPtr)[2]);
+            if (arith)
+                arith->print(errs());
+                cout << endl;
+                return arith;
+            return nullptr;
+        }
         default:
-            break;
+            return nullptr;
     }
+}
+
+Value *Generator::codegen(AST *astPtr) {
+    return ConstantFP::get(*context, APFloat(stod(astPtr->value)));
+}
+
+Value *Generator::createArith(AST *op, AST *LHS, AST *RHS) {
+    Value *L = codegen(LHS);
+    Value *R = codegen(RHS);
+    if (!L || !R)
+        return nullptr;
+    
+    if      (op->value == "+")   return builder->CreateFAdd(L, R, "addtmp");
+    else if (op->value == "-")   return builder->CreateFSub(L, R, "subtmp");
+    else if (op->value == "*")   return builder->CreateFMul(L, R, "multmp");
+    else if (op->value == "/")   return builder->CreateFDiv(L, R, "divtmp");
+    else                         return nullptr;
 }

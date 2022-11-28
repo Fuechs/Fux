@@ -32,5 +32,8 @@ AST *SourceFile::parse() {
     parser = new Parser(error, filePath, contents, mainFile);
     AST *root = parser->parse();
     analyser = new Analyser(error, root);
+    analyser->analyse();
+    root->debugPrint();
+    root->debugLiteral();
     return root;
 }
