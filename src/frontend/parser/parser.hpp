@@ -32,6 +32,7 @@ public:
         tokens.clear();
     }
 
+    // parse the Tokens and return AST root
     AST *parse();
 
 private:
@@ -41,18 +42,30 @@ private:
     Lexer *lexer;
     AST *root;
 
+    // parse a statement
     AST *parseStmt(AST *parent);
+    // parse a variable declaration
     AST *parseVarDecl(AST *parent);
+    // parse a type
     AST *parseType(AST *parent);
 
+    // parse an expression
     AST *parseExpr(AST *parent);
+    // parse an additive expression 
+    // + || -
     AST *parseAdditiveExpr(AST *parent);
+    // parse a multiplicative expression
+    // / || * || %
     AST *parseMultiplicativeExpr(AST *parent);
+    // parse a primary expression
     AST *parsePrimaryExpr(AST *parent);
     
     // int64_t parseNumber(string str);
 
+    // get next token
     Token eat();
+    // expect an token
     Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
+    // check wether end of file is reached
     bool notEOF();
 };

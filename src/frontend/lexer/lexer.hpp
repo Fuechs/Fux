@@ -31,6 +31,7 @@ public:
         source.clear();
     }
 
+    // lex source
     TokenList lex();
 
     vector<string> getLines() { return this->lines; }
@@ -45,17 +46,29 @@ private:
 
     bool hasLetter = false; // identifier error
 
+    // split source into vector of lines
     void parseLines();
+    // peek to next chararacter
     char peek(int offset = 1);
+    // advance to next character
     void advance(int steps = 1);
+    // reset column and increment line
     void resetPos();
+    // get current character
     char current();
+    // get next token
     void getToken();
+    // reset currenToken and push to tokens
     void endToken();
+    // get identifier
     bool getIdent();
+    // get string
     void getString();
+    // get number, float
     void getNumber();
+    // skip comments
     bool skipComment();
+    // check identifiers for keywords
     void checkKeyword();
 
 };

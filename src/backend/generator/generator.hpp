@@ -43,16 +43,24 @@ private:
     Module *module;
     IRBuilder<> *builder;
 
+    // initialize context, module & builder
     void initializeModule();
     
+    // read the AST and do different things depending on type
     Value *readAST(AST *astPtr);
 
+    // put ASTs on the right path for code generation
     Value *codegen(AST *astPtr);
+    // create arithmetic operation from binaryExprAST
     Value *createArith(AST *binaryExpr);
     
+    // TODO: define a global variable
     Value *defineGlobal();
 
+    // create a function prototype
     Function *createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name);
+    // create a function from a prototype
     Function *createFunc(Function *prototype);
+    // create a function
     Function *createFunc(fuxType::Type type, Function::LinkageTypes linkage, const string name);
 };

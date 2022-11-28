@@ -95,10 +95,16 @@ public:
 
     // shorthand for pushing sub asts
     void addSub(AST *sub);
+    // copy position from another AST
     void copyPosition(AST *from);
+    // copy position from a Token
     void copyPosition(Token from);
+    // print out debug info about the AST and all sub ASTs
     void debugPrint(size_t indent = 0, bool all = true);
+    // helper function for debugIndent
     void debugIndent(stringstream &debug, size_t indent);
+    // print out literal from AST
+    // (+ 1 1) --> (1 + 1)
     void debugLiteral();
     
     AST *parent;

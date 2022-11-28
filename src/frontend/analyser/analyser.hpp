@@ -20,6 +20,7 @@ class Analyser {
 public:
     Analyser(ErrorManager *error, AST *root) : error(error), root(root) {}
 
+    // analyse AST 
     void analyse() { return; }
 
 private:

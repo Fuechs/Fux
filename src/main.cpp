@@ -173,7 +173,6 @@ int printVersion() {
     return 1;
 }
 
-// from https://stackoverflow.com/a/313990
 string toLower(string data) {
     transform(data.begin(), data.end(), data.begin(), [](unsigned char c){ return std::tolower(c); });
     return data;

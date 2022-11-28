@@ -89,7 +89,11 @@ public:
 
     void operator=(const ParseError &pe);
 
+    // free the error data
     void free();
+    // check if error is supposed to be reported and print it out
+    // includes checks for aggressive and warnings and werror
+    // errormanager has to free error when it's freed
     void report();
 
     bool warning, aggressive;
@@ -115,12 +119,17 @@ public:
     bool hasErrors();
     bool hasWarnings();
 
+    // create an error with custom line and column
     void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
+    // create an error with token position
     void createError(ErrorType type, Token &token, string comment = "", bool aggressive = false);
 
+    // create a warning with custom line and column
     void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
+    // create a warning with token position
     void createWarning(ErrorType type, Token &token, string comment = "", bool aggressive = false);
 
+    // report all errors and warnings
     void reportAll();
 
     // literally self destruct 
@@ -141,5 +150,6 @@ public:
 private:
     fuxErr::ErrorList errors;
 
+    // add an error to errors (checks for errorlimit too)
     void addError(ParseError error);
 };

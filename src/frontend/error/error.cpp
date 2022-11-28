@@ -77,9 +77,6 @@ void ParseError::free() {
     lineContent.clear();
 }
 
-// check if error is supposed to be reported and print it out
-// includes checks for aggressive and warnings and werror
-// errormanager has to free error when it's freed
 void ParseError::report() {
     if ((aggressive && !fux.options.aggressiveErrors) || (warning && !fux.options.warnings) || reported) 
         return;

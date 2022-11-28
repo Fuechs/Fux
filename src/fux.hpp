@@ -1,7 +1,7 @@
 /**
  * @file fux.hpp
  * @author fuechs
- * @brief 
+ * @brief fux base header
  * @version 0.1
  * @date 2022-11-03
  * 
@@ -26,10 +26,6 @@
 
 #include "util/color.hpp"
 #include "util/io.hpp"
-
-// #include "util/keypair.hpp"
-// #include "util/list.hpp"
-// #include "util/time.hpp"
 
 #define FUX_DEV_DEBUG
 
@@ -86,10 +82,16 @@ struct __fux_struct {
 
 extern __fux_struct fux;
 
+// read flags and data from call arguments
 int bootstrap(int argc, char **argv);
+// print out the help
 int printHelp();
+// print out the version
 int printVersion();
+// convert a string to lowercase
+// from https://stackoverflow.com/a/313990
 string toLower(string data);
+// run repl
 int repl();
 
 #define cmp(s) (strcmp(argv[i], s) == 0)
