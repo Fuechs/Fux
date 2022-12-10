@@ -33,6 +33,8 @@ public:
     }
 
     void generate();
+
+    LLVMContext *getContext() { return context; }
     Module *getModule() { return module; }
 
 private:

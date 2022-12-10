@@ -55,9 +55,9 @@ struct __options_struct {
 
     // debug logs for development
     #ifdef FUX_DEV_DEBUG
-    bool debugMode          = true;
+    const bool debugMode    = true;
     #else
-    bool debugMode          = false; 
+    const bool debugMode    = false; 
     #endif
     
     uint64_t errorLimit     = 1000;

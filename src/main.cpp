@@ -189,15 +189,10 @@ int repl() {
             continue;
         else if (input == "exit" || input == "exit;")
             break;
-            
-        ErrorManager *error = new ErrorManager("<stdin>", {});
-        Parser *parser = new Parser(error, "<stdin>", input, true);
-        AST *root = parser->parse();
-        Analyser *analyser = new Analyser(error, root);
-        analyser->analyse();
-        root->debugPrint();
-        root->debugLiteral();
-        error->panic();
+
+        SourceFile *that = new SourceFile("<stdin>", true);
+        AST *root = that->parse();
+        // TODO: generate and run ...
     }
 
     return result;

@@ -30,6 +30,9 @@ void Generator::generate() {
 }
 
 void Generator::initializeModule() {
+    delete context; 
+    delete module;
+    delete builder;
     context = new LLVMContext();
     module = new Module("fux compiler", *context);
     builder = new IRBuilder<>(*context);
