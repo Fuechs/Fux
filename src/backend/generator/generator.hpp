@@ -18,7 +18,7 @@
 
 class Generator {
 public:
-    Generator(AST *root) : root(root), context(), module(), builder() {}
+    Generator(RootAST *root) : root(root), context(), module(), builder() {}
 
     ~Generator() { 
         delete root;
@@ -38,29 +38,11 @@ public:
     Module *getModule() { return module; }
 
 private:
-    AST *root;
+    RootAST *root;
     LLVMContext *context;
     Module *module;
     IRBuilder<> *builder;
 
     // initialize context, module & builder
     void initializeModule();
-
-    // read the AST and do different things depending on type
-    Value *readAST(AST *astPtr);
-
-    // put ASTs on the right path for code generation
-    Value *codegen(AST *astPtr);
-    // create arithmetic operation from binaryExprAST
-    Value *createArith(AST *binaryExpr);
-
-    // create global variables
-    GlobalVariable *createGlobalI64(const string name, const _i64 value = 0, bool constant = false);
-
-    // create a function prototype
-    Function *createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name);
-    // create a function from a prototype
-    Function *createFunc(Function *prototype);
-    // create a function
-    Function *createFunc(fuxType::Type type, Function::LinkageTypes linkage, const string name);
 };

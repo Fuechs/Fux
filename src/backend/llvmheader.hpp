@@ -24,6 +24,7 @@ using namespace llvm;
 
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;
+typedef vector<Type *> TypeList;
 
 // type definitions for generating objects
 typedef int8_t      _i8;

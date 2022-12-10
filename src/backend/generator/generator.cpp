@@ -14,15 +14,8 @@
 void Generator::generate() {
     initializeModule();
 
-    GlobalVariable *globVar = createGlobalI64("global", 16);
-    
-    Function *mainFunc = createFunc(fuxType::VOID, Function::ExternalLinkage, "main");
-    // for (AST *sub : root->body)
-    //     Value *V = readAST(sub);
-    Constant *constVar = builder->getInt64(1);
-    verifyFunction(*mainFunc);
-    Value *arith = builder->CreateAdd(constVar, globVar, "addtmp");
-    builder->Insert(arith);
+    root->codegen(builder, module);
+
     if (fux.options.debugMode)
         module->print(errs(), nullptr);
     
@@ -38,76 +31,55 @@ void Generator::initializeModule() {
     builder = new IRBuilder<>(*context);
 }
 
-Value *Generator::readAST(AST *astPtr) {
-    switch (astPtr->type) {
-        case AST_ROOT:
-            return readAST((*astPtr)[0]);
-        case AST_BINARY_EXPR: {
-            Value *arith = createArith(astPtr);
-            if (arith)
-                // arith->print(errs());
-                // cout << endl;
-                return arith;
-            return nullptr;
-        }
-        default:
-            return nullptr;
-    }
+Value *NumberExprAST::codegen(IRBuilder<> *builder, Module *module) {
+    return ConstantFP::get(builder->getContext(), APFloat(value));
 }
 
-Value *Generator::codegen(AST *astPtr) {
-    if (astPtr->type == AST_BINARY_EXPR)
-        return createArith(astPtr);
-    return ConstantInt::get(*context, APInt(64, astPtr->value, true));
+Value *VariableExprAST::codegen(IRBuilder<> *builder, Module *module) {
+    return nullptr;
 }
 
-Value *Generator::createArith(AST *binaryExpr) {
-    AST *op = (*binaryExpr)[0];
-    AST *LHS = (*binaryExpr)[1];
-    AST *RHS = (*binaryExpr)[2];
-
-    Value *L = codegen(LHS);
-    Value *R = codegen(RHS);
+Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module) {
+    Value *L = LHS->codegen(builder, module);
+    Value *R = RHS->codegen(builder, module);
     if (!L || !R)
         return nullptr;
+
+    switch (op) {
+        case '+':   return builder->CreateFAdd(L, R, "addtmp");
+        case '-':   return builder->CreateFSub(L, R, "subtmp");
+        case '*':   return builder->CreateFMul(L, R, "multmp");
+        case '/':   return builder->CreateFDiv(L, R, "divtmp");
+        default:    return nullptr;
+    }
+}
+
+Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module) {
+    Function *calleeFunc = module->getFunction(callee);
+    if (!calleeFunc)
+        return nullptr;
     
-    if      (op->value == "+")   return builder->CreateAdd(L, R, "addtmp");
-    else if (op->value == "-")   return builder->CreateSub(L, R, "subtmp");
-    else if (op->value == "*")   return builder->CreateMul(L, R, "multmp");
-    else if (op->value == "/")   return builder->CreateFDiv(L, R, "divtmp");
-    else                         return nullptr;
-}
+    if (calleeFunc->arg_size() != args.size())
+        return nullptr;
 
-GlobalVariable *Generator::createGlobalI64(const string name, const _i64 value, bool constant) {
-    GlobalVariable *var = new GlobalVariable(
-        *module, builder->getInt64Ty(), constant, 
-        GlobalValue::CommonLinkage, builder->getInt64(value), name
-    );
-    var->setAlignment(MaybeAlign(4));
-    return var;
-}
-
-// TODO: Arguments
-Function *Generator::createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name) {
-    FunctionType *FT;
-    switch (type) {
-        case fuxType::VOID:     
-            FT = FunctionType::get(Type::getVoidTy(*context), false);
-            break;
-        default:
+    ValueList argList;
+    for (size_t i = 0, e = args.size(); i != e; ++i) {
+        argList.push_back(args[i]->codegen(builder, module));
+        if (!argList.back())    
             return nullptr;
     }
 
-    Function *F = Function::Create(FT, linkage, name, module);
-    return F;
-}
+    return builder->CreateCall(calleeFunc, argList, "calltmp");
+} 
 
-Function *Generator::createFunc(Function *prototype) {
-    BasicBlock *BB = BasicBlock::Create(*context, "entry", prototype);
-    builder->SetInsertPoint(BB);
-    return prototype;
-}
-
-Function *Generator::createFunc(fuxType::Type type, Function::LinkageTypes linkage, const string name) {
-    return createFunc(createProto(type, linkage, name));
+Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module) {
+    TypeList doubles(args.size(), builder->getDoubleTy());
+    FunctionType *funcType = FunctionType::get(builder->getDoubleTy(), doubles, false);
+    Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *module);
+    
+    size_t idx = 0;
+    for (auto &arg : func->args())
+        arg.setName(args[idx++]);
+    
+    return func;
 }

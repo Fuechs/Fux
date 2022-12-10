@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <memory>
 
 #include <cstdio>
 #include <cstring>

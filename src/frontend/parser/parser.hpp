@@ -24,7 +24,7 @@ public:
         lexer = new Lexer(source, fileName, error);
         if (mainFile)
             fux.options.fileLines = lexer->getLines();
-        root = new AST(nullptr, AST_ROOT);
+        root = new RootAST();
     }
 
     ~Parser() {
@@ -33,32 +33,32 @@ public:
     }
 
     // parse the Tokens and return AST root
-    AST *parse();
+    RootAST *parse();
 
 private:
     TokenList tokens;
     TokenIter current;
     ErrorManager *error;
     Lexer *lexer;
-    AST *root;
+    RootAST *root;
 
-    // parse a statement
-    AST *parseStmt(AST *parent);
-    // parse a variable declaration
-    AST *parseVarDecl(AST *parent);
-    // parse a type
-    AST *parseType(AST *parent);
+    // // parse a statement
+    // AST *parseStmt(AST *parent);
+    // // parse a variable declaration
+    // AST *parseVarDecl(AST *parent);
+    // // parse a type
+    // AST *parseType(AST *parent);
 
-    // parse an expression
-    AST *parseExpr(AST *parent);
-    // parse an additive expression 
-    // +, -
-    AST *parseAdditiveExpr(AST *parent);
-    // parse a multiplicative expression
-    // /, *, %
-    AST *parseMultiplicativeExpr(AST *parent);
-    // parse a primary expression
-    AST *parsePrimaryExpr(AST *parent);
+    // // parse an expression
+    // AST *parseExpr(AST *parent);
+    // // parse an additive expression 
+    // // +, -
+    // AST *parseAdditiveExpr(AST *parent);
+    // // parse a multiplicative expression
+    // // /, *, %
+    // AST *parseMultiplicativeExpr(AST *parent);
+    // // parse a primary expression
+    // AST *parsePrimaryExpr(AST *parent);
     
     // get next token
     Token eat();
