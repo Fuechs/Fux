@@ -12,7 +12,7 @@ math {
         return number < 0 ? null : root(2, number);
     }
 
-    log(base: f64, number: f64): double;
+    log(base: f64, number: f64): f64;
 
     log2(number: f64): f64 {
         return log(2, number);

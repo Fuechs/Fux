@@ -15,10 +15,6 @@
 #include "../llvmheader.hpp"
 #include "../../frontend/parser/ast.hpp"
 
-typedef vector<Value *> ValueList;
-typedef vector<BasicBlock *> BlockList;
-
-typedef signed long long genI64;
 
 class Generator {
 public:
@@ -57,7 +53,7 @@ private:
     Value *createArith(AST *binaryExpr);
 
     // create global variables
-    GlobalVariable *createGlobalI64(const string name, const genI64 value = 0);
+    GlobalVariable *createGlobalI64(const string name, const _i64 value = 0, bool constant = false);
 
     // create a function prototype
     Function *createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name);

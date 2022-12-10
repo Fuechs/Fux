@@ -14,13 +14,15 @@
 void Generator::generate() {
     initializeModule();
 
-    auto glob = createGlobalI64("global", 16);
+    GlobalVariable *globVar = createGlobalI64("global", 16);
     
     Function *mainFunc = createFunc(fuxType::VOID, Function::ExternalLinkage, "main");
-    for (AST *sub : root->body)
-        Value *V = readAST(sub);
+    // for (AST *sub : root->body)
+    //     Value *V = readAST(sub);
+    Constant *constVar = builder->getInt64(1);
     verifyFunction(*mainFunc);
-
+    Value *arith = builder->CreateAdd(constVar, globVar, "addtmp");
+    builder->Insert(arith);
     if (fux.options.debugMode)
         module->print(errs(), nullptr);
     
@@ -73,16 +75,14 @@ Value *Generator::createArith(AST *binaryExpr) {
     else                         return nullptr;
 }
 
-// TODO: use passed value
-GlobalVariable *Generator::createGlobalI64(const string name, const genI64 value) {
-    module->getOrInsertGlobal(name, builder->getInt64Ty());
-    GlobalVariable *var = module->getNamedGlobal(name);
-    var->setLinkage(GlobalValue::CommonLinkage);
+GlobalVariable *Generator::createGlobalI64(const string name, const _i64 value, bool constant) {
+    GlobalVariable *var = new GlobalVariable(
+        *module, builder->getInt64Ty(), constant, 
+        GlobalValue::CommonLinkage, builder->getInt64(value), name
+    );
+    var->setAlignment(MaybeAlign(4));
     return var;
 }
-
-template<typename T>
-GlobalVariable *createGlobal(const string name);
 
 // TODO: Arguments
 Function *Generator::createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name) {
