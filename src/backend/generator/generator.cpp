@@ -13,6 +13,8 @@
 
 void Generator::generate() {
     initializeModule();
+
+    auto glob = createGlobalI64("global", 16);
     
     Function *mainFunc = createFunc(fuxType::VOID, Function::ExternalLinkage, "main");
     for (AST *sub : root->body)
@@ -71,6 +73,17 @@ Value *Generator::createArith(AST *binaryExpr) {
     else                         return nullptr;
 }
 
+// TODO: use passed value
+GlobalVariable *Generator::createGlobalI64(const string name, const genI64 value) {
+    module->getOrInsertGlobal(name, builder->getInt64Ty());
+    GlobalVariable *var = module->getNamedGlobal(name);
+    var->setLinkage(GlobalValue::CommonLinkage);
+    return var;
+}
+
+template<typename T>
+GlobalVariable *createGlobal(const string name);
+
 // TODO: Arguments
 Function *Generator::createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name) {
     FunctionType *FT;
@@ -82,7 +95,7 @@ Function *Generator::createProto(fuxType::Type type, Function::LinkageTypes link
             return nullptr;
     }
 
-    Function *F = Function::Create(FT, linkage, "main", module);
+    Function *F = Function::Create(FT, linkage, name, module);
     return F;
 }
 

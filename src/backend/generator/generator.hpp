@@ -18,6 +18,8 @@
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;
 
+typedef signed long long genI64;
+
 class Generator {
 public:
     Generator(AST *root) : root(root), context(), module(), builder() {}
@@ -45,7 +47,7 @@ private:
 
     // initialize context, module & builder
     void initializeModule();
-    
+
     // read the AST and do different things depending on type
     Value *readAST(AST *astPtr);
 
@@ -53,9 +55,9 @@ private:
     Value *codegen(AST *astPtr);
     // create arithmetic operation from binaryExprAST
     Value *createArith(AST *binaryExpr);
-    
-    // TODO: define a global variable
-    Value *defineGlobal();
+
+    // create global variables
+    GlobalVariable *createGlobalI64(const string name, const genI64 value = 0);
 
     // create a function prototype
     Function *createProto(fuxType::Type type, Function::LinkageTypes linkage, const string name);

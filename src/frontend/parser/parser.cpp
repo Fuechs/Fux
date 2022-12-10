@@ -180,11 +180,6 @@ AST *Parser::parsePrimaryExpr(AST *parent) {
     }
 }
 
-
-// int64_t Parser::parseNumber(string str) {
-//     return (int64_t) atoll(str.c_str());
-// }
-
 Token Parser::eat() {
     if (current->type == _EOF)
         return *current;

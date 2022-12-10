@@ -52,16 +52,14 @@ private:
     // parse an expression
     AST *parseExpr(AST *parent);
     // parse an additive expression 
-    // + || -
+    // +, -
     AST *parseAdditiveExpr(AST *parent);
     // parse a multiplicative expression
-    // / || * || %
+    // /, *, %
     AST *parseMultiplicativeExpr(AST *parent);
     // parse a primary expression
     AST *parsePrimaryExpr(AST *parent);
     
-    // int64_t parseNumber(string str);
-
     // get next token
     Token eat();
     // expect an token
