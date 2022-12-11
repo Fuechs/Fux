@@ -38,7 +38,7 @@ Value *RootAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedVal
 }
 
 Value *NumberExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    return ConstantFP::get(builder->getContext(), APFloat(value));
+    return builder->getInt32((_i32) value);
 }
 
 Value *VariableExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
@@ -55,9 +55,9 @@ Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &na
         return nullptr;
 
     switch (op) {
-        case '+':   return builder->CreateFAdd(L, R, "addtmp");
-        case '-':   return builder->CreateFSub(L, R, "subtmp");
-        case '*':   return builder->CreateFMul(L, R, "multmp");
+        case '+':   return builder->CreateAdd(L, R, "addtmp");
+        case '-':   return builder->CreateSub(L, R, "subtmp");
+        case '*':   return builder->CreateMul(L, R, "multmp");
         case '/':   return builder->CreateFDiv(L, R, "divtmp");
         default:    return nullptr;
     }
@@ -82,8 +82,14 @@ Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &name
 } 
 
 Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    TypeList doubles(args.size(), builder->getDoubleTy());
-    FunctionType *funcType = FunctionType::get(builder->getDoubleTy(), doubles, false);
+    TypeList argTypes(args.size(), builder->getInt32Ty());
+    FunctionType *funcType;
+    switch (type) {
+        case fuxType::VOID: funcType = FunctionType::get(builder->getVoidTy(), argTypes, false); break;
+        case fuxType::I32:  funcType = FunctionType::get(builder->getInt32Ty(), argTypes, false); break;
+        case fuxType::F64:  funcType = FunctionType::get(builder->getDoubleTy(), argTypes, false); break;
+        default:            return nullptr;
+    }
     Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *module);
     
     size_t idx = 0;

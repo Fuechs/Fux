@@ -185,13 +185,14 @@ public:
 
 // prototype of a function
 // name and arguments
-class PrototypeAST {
+class PrototypeAST : public ExprAST {
+    fuxType::Type type;
     string name;
     vector<string> args;
 
 public:
-    PrototypeAST(const string &name, vector<string> args)
-    : name(name), args(move(args)) {}
+    PrototypeAST(fuxType::Type type, const string &name, vector<string> args)
+    : type(type), name(name), args(move(args)) {}
 
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);
 
@@ -205,10 +206,10 @@ class FunctionAST : public ExprAST {
     ExprPtr body;
 
 public:
-    FunctionAST(const string &name, vector<string> args, ExprPtr &body)
-    : proto(make_unique<PrototypeAST>(name, args)), body(move(body)) {}
+    FunctionAST(fuxType::Type type, const string &name, vector<string> args, ExprPtr &body)
+    : proto(make_unique<PrototypeAST>(type, name, args)), body(move(body)) {}
 
-    FunctionAST(ProtoPtr proto, ExprPtr body)
+    FunctionAST(ProtoPtr proto, ExprPtr &body)
     : proto(move(proto)), body(move(body)) {}
 
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);

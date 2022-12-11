@@ -1,8 +1,8 @@
 ; ModuleID = 'fux compiler'
 source_filename = "fux compiler"
 
-define double @main(double %x, double %y) {
+define i32 @main(i32 %x, i32 %y) {
 entry:
-  %addtmp = fadd double %x, %y
-  ret double %addtmp
+  %addtmp = add i32 %x, %y
+  ret i32 %addtmp
 }

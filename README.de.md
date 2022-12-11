@@ -14,9 +14,14 @@
 
 ## Die Bessere Alternative Für C++
 
+```rust
+main(): i32 {
+    puts "Hello World!\n";
+    return 0;
+}
+```
+
 <p align="center">
-    <img src="./assets/snippets/helloworld.png" width=60%/>
-    <br>
     <a href="#beispiele"><img src="https://img.shields.io/badge/-Beispiele-fcaa68?style=for-the-badge"/></a>
     <a href="#status"><img src="https://img.shields.io/badge/-Status-fcaa68?style=for-the-badge" /></a>
     <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Dokumentation-fcaa68?style=for-the-badge" /></a>
