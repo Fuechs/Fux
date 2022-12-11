@@ -19,6 +19,7 @@
 #include <sstream>
 #include <fstream>
 #include <memory>
+#include <map>
 
 #include <cstdio>
 #include <cstring>

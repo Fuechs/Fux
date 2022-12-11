@@ -27,13 +27,11 @@ SourceFile::~SourceFile() {
     delete analyser;
 }
 
-AST *SourceFile::parse() {
+RootAST *SourceFile::parse() {
     error = new ErrorManager(filePath, vector<string>());
     parser = new Parser(error, filePath, contents, mainFile);
-    AST *root = parser->parse();
+    RootAST *root = parser->parse();
     analyser = new Analyser(error, root);
     analyser->analyse();
-    root->debugPrint();
-    root->debugLiteral();
     return root;
 }

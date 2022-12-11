@@ -122,3 +122,8 @@
 //             break;       
 //     }
 // }
+
+void RootAST::addSub(ExprPtr sub) {
+    program.push_back(move(sub));
+    // do stuff
+}

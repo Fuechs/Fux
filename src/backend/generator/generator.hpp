@@ -15,6 +15,7 @@
 #include "../llvmheader.hpp"
 #include "../../frontend/parser/ast.hpp"
 
+typedef map<string, Value *> ValueMap;
 
 class Generator {
 public:
@@ -42,6 +43,8 @@ private:
     LLVMContext *context;
     Module *module;
     IRBuilder<> *builder;
+
+    ValueMap namedValues;
 
     // initialize context, module & builder
     void initializeModule();

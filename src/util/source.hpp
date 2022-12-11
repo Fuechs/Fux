@@ -23,7 +23,7 @@ public:
     ~SourceFile();
     
     // parse file and return AST root (will only be called for the main file)
-    AST *parse();
+    RootAST *parse();
 
     ErrorManager *error;
     Parser *parser;

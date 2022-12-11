@@ -120,10 +120,13 @@ public:
 
 */
 
+#include <llvm/IR/Value.h>
+typedef map<string, Value *> ValueMap;
+
 class ExprAST {
 public:
     virtual ~ExprAST() {}
-    virtual Value *codegen(IRBuilder<> *builder, Module *module) = 0;
+    virtual Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) = 0;
 };
 
 typedef unique_ptr<ExprAST> ExprPtr;
@@ -137,7 +140,7 @@ public:
 
     void addSub(ExprPtr sub);
     
-    Value *codegen(IRBuilder<> *builder, Module *module) override;
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
 
 class NumberExprAST : public ExprAST {
@@ -146,7 +149,7 @@ class NumberExprAST : public ExprAST {
 public:
     NumberExprAST(double value) : value(value) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module) override;
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
 
 class VariableExprAST : public ExprAST {
@@ -155,7 +158,7 @@ class VariableExprAST : public ExprAST {
 public:
     VariableExprAST(const string& name) : name(name) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module) override;
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
 
 class BinaryExprAST : public ExprAST {
@@ -166,7 +169,7 @@ public:
     BinaryExprAST(char op, ExprPtr LHS, ExprPtr RHS) 
     : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module) override;
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
 
 class CallExprAST : public ExprAST {
@@ -177,7 +180,7 @@ public:
     CallExprAST(const string &callee, ExprList args)
     : callee(callee), args(move(args)) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module) override;
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
 
 // prototype of a function
@@ -190,7 +193,9 @@ public:
     PrototypeAST(const string &name, vector<string> args)
     : name(name), args(move(args)) {}
 
-    Function *codegen(IRBuilder<> *builder, Module *module);
+    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);
+
+    string getName() { return name; }
 };
 
 typedef unique_ptr<PrototypeAST> ProtoPtr;
@@ -206,5 +211,5 @@ public:
     FunctionAST(ProtoPtr proto, ExprPtr body)
     : proto(move(proto)), body(move(body)) {}
 
-    Function *codegen(IRBuilder<> *builder, Module *module);
+    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);
 };

@@ -46,9 +46,15 @@ int main(int argc, char **argv) {
     
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    AST *root = mainFile->parse();
-    if (mainFile->error->hasErrors())
-        goto end;
+    // RootAST *root = mainFile->parse();
+    // if (mainFile->error->hasErrors())
+    //     goto end;
+
+    RootAST *root = new RootAST();
+    ExprPtr num1 = make_unique<NumberExprAST>(1.0);
+    ExprPtr num2 = make_unique<NumberExprAST>(1.0);
+    ExprPtr binOp = make_unique<BinaryExprAST>('+', move(num1), move(num2));
+    root->addSub(move(binOp));
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
         Generator *generator = new Generator(root);
@@ -60,7 +66,7 @@ int main(int argc, char **argv) {
     }
 
     end:
-        delete mainFile;
+        // delete mainFile;
         return result;
 }
 
@@ -191,7 +197,7 @@ int repl() {
             break;
 
         SourceFile *that = new SourceFile("<stdin>", true);
-        AST *root = that->parse();
+        RootAST *root = that->parse();
         // TODO: generate and run ...
     }
 

@@ -14,7 +14,7 @@
 void Generator::generate() {
     initializeModule();
 
-    root->codegen(builder, module);
+    root->codegen(builder, module, namedValues);
 
     if (fux.options.debugMode)
         module->print(errs(), nullptr);
@@ -31,17 +31,26 @@ void Generator::initializeModule() {
     builder = new IRBuilder<>(*context);
 }
 
-Value *NumberExprAST::codegen(IRBuilder<> *builder, Module *module) {
-    return ConstantFP::get(builder->getContext(), APFloat(value));
-}
-
-Value *VariableExprAST::codegen(IRBuilder<> *builder, Module *module) {
+Value *RootAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
+    for (ExprPtr &sub : program)
+        sub->codegen(builder, module, namedValues);
     return nullptr;
 }
 
-Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module) {
-    Value *L = LHS->codegen(builder, module);
-    Value *R = RHS->codegen(builder, module);
+Value *NumberExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
+    return ConstantFP::get(builder->getContext(), APFloat(value));
+}
+
+Value *VariableExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
+    Value *V = namedValues[name];
+    if (!V)
+        return nullptr;
+    return V;
+}
+
+Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
+    Value *L = LHS->codegen(builder, module, namedValues);
+    Value *R = RHS->codegen(builder, module, namedValues);
     if (!L || !R)
         return nullptr;
 
@@ -54,7 +63,7 @@ Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module) {
     }
 }
 
-Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module) {
+Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
     Function *calleeFunc = module->getFunction(callee);
     if (!calleeFunc)
         return nullptr;
@@ -64,7 +73,7 @@ Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module) {
 
     ValueList argList;
     for (size_t i = 0, e = args.size(); i != e; ++i) {
-        argList.push_back(args[i]->codegen(builder, module));
+        argList.push_back(args[i]->codegen(builder, module, namedValues));
         if (!argList.back())    
             return nullptr;
     }
@@ -72,7 +81,7 @@ Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module) {
     return builder->CreateCall(calleeFunc, argList, "calltmp");
 } 
 
-Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module) {
+Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
     TypeList doubles(args.size(), builder->getDoubleTy());
     FunctionType *funcType = FunctionType::get(builder->getDoubleTy(), doubles, false);
     Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *module);
@@ -82,4 +91,30 @@ Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module) {
         arg.setName(args[idx++]);
     
     return func;
+}
+
+Function *FunctionAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
+    Function *func = module->getFunction(proto->getName());  
+    if (!func)  func = proto->codegen(builder, module, namedValues);
+    if (!func)  return nullptr; 
+    
+    if (!func->empty()) 
+        return nullptr; // cannot be redefined
+
+    BasicBlock *BB = BasicBlock::Create(builder->getContext(), "entry", func);
+    builder->SetInsertPoint(BB);
+
+    namedValues.clear();
+    for (auto &arg : func->args())
+        namedValues[arg.getName().str()] = &arg;
+
+    if (Value *retVal = body->codegen(builder, module, namedValues)) {
+        builder->CreateRet(retVal);
+        verifyFunction(*func);
+        return func;
+    }
+
+    // error reading body
+    func->eraseFromParent();
+    return nullptr;
 }
