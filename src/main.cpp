@@ -54,7 +54,9 @@ int main(int argc, char **argv) {
     ExprPtr arg1 = make_unique<VariableExprAST>("x");
     ExprPtr arg2 = make_unique<VariableExprAST>("y");
     ExprPtr binOp = make_unique<BinaryExprAST>('+', arg1, arg2);
-    vector<string> args = {"x", "y"};
+    ArgMap args;
+    args["x"] = fuxType::I32;
+    args["y"] = fuxType::I32;
     ExprPtr mFunc = make_unique<FunctionAST>(fuxType::I32, "main", args, binOp);
     root->addSub(mFunc);
 

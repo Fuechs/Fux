@@ -92,9 +92,9 @@ Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &
     }
     Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *module);
     
-    size_t idx = 0;
+    auto it = args.begin();
     for (auto &arg : func->args())
-        arg.setName(args[idx++]);
+        arg.setName(it++->first);
     
     return func;
 }

@@ -17,111 +17,10 @@
 
 #include "../../backend/llvmheader.hpp"
 
-/*
-
-enum NodeType {
-    // * statements
-    AST_ROOT,
-    AST_VARIABLE_DECl,
-
-    // * expressions
-    AST_NULL_LITERAL,
-    AST_NUMERIC_LITERAL,
-    AST_IDENTIFIER,
-    AST_BINARY_EXPR,
-    AST_BINARY_OPERATOR,
-    AST_TYPE,
-
-    AST_NONE,
-};
-
-static const char *NodeTypeString[] = {
-    "AST_ROOT",
-    "AST_VARIABLE_DECL",
-
-    "AST_NULL_LITERAL",
-    "AST_NUMERIC_LITERAL",
-    "AST_IDENTIFIER",
-    "AST_BINARY_EXPR",
-    "AST_BINARY_OPERATOR",
-    "AST_TYPE",
-
-    "AST_NONE",
-};
-
-// exact position of an AST (Node) for error tracking
-struct Position {
-    Position(size_t first = 1, size_t last = 1, size_t start = 1, size_t end = 1)
-    : first(first), last(last), start(start), end(end) {}
-
-    // line the AST starts 
-    size_t first;
-    // line the AST ends
-    size_t last;
-    // column the AST starts 
-    size_t start;
-    // column the AST ends 
-    size_t end; 
-};
-
-class AST {
-public:
-    AST(AST *copy)
-    : parent(copy->parent), type(copy->type), pos(copy->pos), body(copy->body), value(copy->value) { }
-
-    AST(AST *parent, NodeType type, Position pos = Position(), string value = "none")
-    : parent(parent), type(type), pos(pos), body({}), value(value) {}
-
-    AST(AST *parent, NodeType type, Position& pos, string& value)
-    : parent(parent), type(type), pos(pos), body({}), value(value) {}
-
-    AST(AST *parent, NodeType type, Token token)
-    : parent(parent), type(type), body({}), value(token.value) {
-        pos.first = token.line;
-        pos.last = token.line;
-        pos.start = token.start;
-        pos.end = token.end;
-    }
-
-    ~AST() {
-        value.clear();
-        for (AST *sub : body)
-            delete sub;
-        body.clear();
-    }
-
-    AST *operator[](size_t index) {
-        return body[index];
-    }
-
-    // shorthand for pushing sub asts
-    void addSub(AST *sub);
-    // copy position from another AST
-    void copyPosition(AST *from);
-    // copy position from a Token
-    void copyPosition(Token from);
-    // print out debug info about the AST and all sub ASTs
-    void debugPrint(size_t indent = 0, bool all = true);
-    // helper function for debugIndent
-    void debugIndent(stringstream &debug, size_t indent);
-    // print out literal from AST
-    // (+ 1 1) --> (1 + 1)
-    void debugLiteral();
-    
-    AST *parent;
-    NodeType type;  
-    Position pos;
-    vector<AST *> body;
-    union { 
-        string value; 
-        fuxType::Type valueType; 
-    };
-}; 
-
-*/
-
 #include <llvm/IR/Value.h>
+
 typedef map<string, Value *> ValueMap;
+typedef map<string, fuxType::Type> ArgMap;
 
 class ExprAST {
 public:
@@ -144,10 +43,11 @@ public:
 };
 
 class NumberExprAST : public ExprAST {
+    fuxType::Type type;
     double value;
 
 public:
-    NumberExprAST(double value) : value(value) {}
+    NumberExprAST(fuxType::Type, double value) : type(type), value(value) {}
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
@@ -157,6 +57,7 @@ class VariableExprAST : public ExprAST {
 
 public:
     VariableExprAST(const string& name) : name(name) {}
+    ~VariableExprAST() override { name.clear(); }
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
@@ -179,6 +80,7 @@ class CallExprAST : public ExprAST {
 public:
     CallExprAST(const string &callee, ExprList args)
     : callee(callee), args(move(args)) {}
+    ~CallExprAST() override { callee.clear(); }
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
@@ -188,11 +90,12 @@ public:
 class PrototypeAST : public ExprAST {
     fuxType::Type type;
     string name;
-    vector<string> args;
+    ArgMap args;
 
 public:
-    PrototypeAST(fuxType::Type type, const string &name, vector<string> args)
-    : type(type), name(name), args(move(args)) {}
+    PrototypeAST(fuxType::Type type, const string &name, ArgMap args)
+    : type(type), name(name), args(args) {}
+    ~PrototypeAST() override { name.clear(); }
 
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);
 
@@ -206,7 +109,7 @@ class FunctionAST : public ExprAST {
     ExprPtr body;
 
 public:
-    FunctionAST(fuxType::Type type, const string &name, vector<string> args, ExprPtr &body)
+    FunctionAST(fuxType::Type type, const string &name, ArgMap args, ExprPtr &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(move(body)) {}
 
     FunctionAST(ProtoPtr proto, ExprPtr &body)
