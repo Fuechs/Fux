@@ -1,8 +1,8 @@
 ; ModuleID = 'fux compiler'
 source_filename = "fux compiler"
 
-@global = common global i64 16, align 4
-
-define void @main() {
+define double @main(double %x, double %y) {
 entry:
+  %addtmp = fadd double %x, %y
+  ret double %addtmp
 }

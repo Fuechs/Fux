@@ -138,7 +138,7 @@ class RootAST : public ExprAST {
 public:
     RootAST() : program(ExprList()) {}
 
-    void addSub(ExprPtr sub);
+    void addSub(ExprPtr &sub);
     
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
@@ -166,7 +166,7 @@ class BinaryExprAST : public ExprAST {
     ExprPtr LHS, RHS;
 
 public:
-    BinaryExprAST(char op, ExprPtr LHS, ExprPtr RHS) 
+    BinaryExprAST(char op, ExprPtr &LHS, ExprPtr &RHS) 
     : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
@@ -200,12 +200,12 @@ public:
 
 typedef unique_ptr<PrototypeAST> ProtoPtr;
 
-class FunctionAST {
+class FunctionAST : public ExprAST {
     ProtoPtr proto;
     ExprPtr body;
 
 public:
-    FunctionAST(const string &name, vector<string> args, ExprPtr body)
+    FunctionAST(const string &name, vector<string> args, ExprPtr &body)
     : proto(make_unique<PrototypeAST>(name, args)), body(move(body)) {}
 
     FunctionAST(ProtoPtr proto, ExprPtr body)

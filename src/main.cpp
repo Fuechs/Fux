@@ -51,10 +51,12 @@ int main(int argc, char **argv) {
     //     goto end;
 
     RootAST *root = new RootAST();
-    ExprPtr num1 = make_unique<NumberExprAST>(1.0);
-    ExprPtr num2 = make_unique<NumberExprAST>(1.0);
-    ExprPtr binOp = make_unique<BinaryExprAST>('+', move(num1), move(num2));
-    root->addSub(move(binOp));
+    ExprPtr num1 = make_unique<VariableExprAST>("x");
+    ExprPtr num2 = make_unique<VariableExprAST>("y");
+    ExprPtr binOp = make_unique<BinaryExprAST>('+', num1, num2);
+    vector<string> args = {"x", "y"};
+    ExprPtr mFunc = make_unique<FunctionAST>("main", args, binOp);
+    root->addSub(mFunc);
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
         Generator *generator = new Generator(root);
