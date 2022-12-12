@@ -127,8 +127,8 @@ io.putf("Result: %i", res);
 get core.io;
 
 fib(num: i32): i32 {
-	if (num < 2)
-    	return num;
+    if (num < 2)
+    	return num;    
     return fib(num-1) + fib(num-2);
 }
 
