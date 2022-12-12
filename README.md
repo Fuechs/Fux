@@ -94,18 +94,48 @@ I have been inspired by [C++](https://isocpp.org/), [D](https://dlang.org/), [Py
 
 ### Arrays
 
-<img src="./assets/snippets/arrays.png" width=60%>
+```rust
+array: i32[]; // {}
+array[] << 1; // {1}
+array[] << 3; // {1, 3}
+```
 
 ### Reading Files
 
-<img src="./assets/snippets/readfile.png" width=60%>
+```rust
+get core.file;
+
+using file;
+...
+filePath := "path/to/file.txt";
+file: File(filePath, 'r');
+contents := file.read();
+```
 
 ### Formatted Print
 
-<img src="./assets/snippets/format.png" width=60%>
+```rust
+get core.io;
+...
+res := 1;
+io.putf("Result: %i", res);
+```
 
 ### Fibonacci
 
-<img src="./assets/snippets/fibonacci.png" width=60%>
+```rust
+get core.io;
+
+fib(num: i32): i32 {
+	if (num < 2)
+    	return num;
+    return fib(num-1) + fib(num-2);
+}
+
+main(): i32 {
+	io.getint() >> fib() >> io.putln();
+	return 0;
+}
+```
 
 ---
