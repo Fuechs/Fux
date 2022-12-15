@@ -41,24 +41,6 @@ private:
     ErrorManager *error;
     Lexer *lexer;
     RootAST *root;
-
-    // // parse a statement
-    // AST *parseStmt(AST *parent);
-    // // parse a variable declaration
-    // AST *parseVarDecl(AST *parent);
-    // // parse a type
-    // AST *parseType(AST *parent);
-
-    // // parse an expression
-    // AST *parseExpr(AST *parent);
-    // // parse an additive expression 
-    // // +, -
-    // AST *parseAdditiveExpr(AST *parent);
-    // // parse a multiplicative expression
-    // // /, *, %
-    // AST *parseMultiplicativeExpr(AST *parent);
-    // // parse a primary expression
-    // AST *parsePrimaryExpr(AST *parent);
     
     // get next token
     Token eat();

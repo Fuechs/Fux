@@ -115,8 +115,13 @@ Function *FunctionAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &n
         namedValues[arg.getName().str()] = &arg;
 
     Value *retVal;
-    for (ExprPtr &sub : body)
-        retVal = sub->codegen(builder, module, namedValues);
+    for (ExprPtr &expr : body)
+        retVal = expr->codegen(builder, module, namedValues);
+    
+    if (func->getReturnType()->isVoidTy()) {
+        builder->CreateRetVoid();
+        return func;
+    }
     
     if (retVal) {
         builder->CreateRet(retVal);
