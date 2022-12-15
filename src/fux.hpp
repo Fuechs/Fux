@@ -36,7 +36,13 @@ using namespace std;
 // compiler options / flags
 struct __options_struct {
 
-    ~__options_struct() { out.clear(); }
+    ~__options_struct() { 
+        fileName.clear();
+        fileLines.clear();
+        out.clear(); 
+        version.clear();
+        libraries.clear();
+    }
 
     string fileName; // file to compile (main)
     vector<string> fileLines; // lines of that file (main)
@@ -62,12 +68,17 @@ struct __options_struct {
     const bool debugMode    = false; 
     #endif
     
-    uint64_t errorLimit     = 1000;
+    size_t errorLimit     = 1000;
     int target              = 0; // targeted fux version 
 };
 
 // fux metadata for the compiler
 struct __fux_struct {
+
+    ~__fux_struct() {
+        delete &options;
+        delete &latest;
+    }
 
     // enumeration of all supported fux versions; can be targeted through compiler flags
     enum version {
@@ -76,10 +87,10 @@ struct __fux_struct {
         // ~2020-present
         ALPHA = 0,
     };
-     
-    __options_struct options;  
+    const version current = ALPHA;
+    const string latest = "Alpha (0)";
 
-    string latest = "Alpha ("+to_string(this->ALPHA)+")";
+    __options_struct options;  
 };
 
 extern __fux_struct fux;

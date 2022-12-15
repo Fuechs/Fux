@@ -13,11 +13,6 @@
 
 #include "util/source.hpp"
 
-#include "frontend/error/error.hpp"
-#include "frontend/parser/parser.hpp"
-#include "frontend/parser/ast.hpp"
-#include "frontend/analyser/analyser.hpp"
-
 #include "backend/generator/generator.hpp"
 
 __fux_struct fux;
