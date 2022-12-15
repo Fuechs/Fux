@@ -9,18 +9,18 @@ io {
         
         operator<<(this -> IOBuffer, val: str) -> IOBuffer {
             this.buffer[] << val;
-            this.flush();
+            this.flush(false);
             return this;
         }
 
         operator>>(val: str, this -> IOBuffer) -> IOBuffer {
             val >> this.buffer[];
-            this.flush();
+            this.flush(false);
             return this;
         }
 
-        flush(): void {
-            if (!buffer.full())
+        flush(final bool force = true): void {
+            if (!buffer.full() && !force)
                 return;
 
             for (obj: str in buffer)
@@ -43,7 +43,7 @@ io {
     }
 
     putf(data: str, args: var, ...): void {
-        format(data, args);
+        string.format(data, args);
         put(data);
     }
 
@@ -57,6 +57,12 @@ io {
         put(args);
         buffer.flush();
         return __stdin__(1);
+    }
+
+    getint(args: var, ...): i64 {
+        put(args);
+        buffer.flush();
+        return __stdin__(2);
     }
 
     clear(): void {
