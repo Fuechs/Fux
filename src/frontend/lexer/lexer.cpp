@@ -109,24 +109,6 @@ void Lexer::getToken() {
             break;
         
         case '[': 
-            if (isdigit(peek())) {
-                currentToken.type = ARRAY_BRACKET_SIZE;
-                currentToken.value = "";
-                advance();
-                do {
-                    currentToken.value += current();
-                    advance();
-                    if (!isdigit(current()) && current() != ']') {
-                        error->createError(GENERIC, currentToken, "invalid array size");
-                        currentToken.type = ARRAY_BRACKET;
-                        currentToken.value = "[]";
-                        break;
-                    }
-                } while (current() != ']');
-                advance();
-                break;
-            }
-
             if (peek() == ']') {
                 currentToken.type = ARRAY_BRACKET;
                 currentToken.value = "[]";
@@ -243,6 +225,11 @@ void Lexer::getToken() {
             }
 
             currentToken.type = GREATERTHAN;
+            advance();
+            break;
+
+        case '@':
+            currentToken.type = AT;
             advance();
             break;
         
@@ -652,6 +639,7 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "exit")          currentToken.type = KEY_EXIT;
     else if (currentToken.value == "puts")          currentToken.type = KEY_PUTS;
     else if (currentToken.value == "putch")         currentToken.type = KEY_PUTCH;
+    else if (currentToken.value == "throw")         currentToken.type = KEY_THROW;
     
     else if (currentToken.value == "safe")          currentToken.type = KEY_SAFE;
     else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;

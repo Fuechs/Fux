@@ -133,8 +133,8 @@ fib(num: i32): i32 {
 }
 
 main(): i32 {
-	io.getint() >> fib() >> io.putln();
-	return 0;
+    io.getint() >> fib() >> io.putln();
+    return 0;
 }
 ```
 

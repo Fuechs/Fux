@@ -47,7 +47,7 @@ class NumberExprAST : public ExprAST {
     double value;
 
 public:
-    NumberExprAST(fuxType::Type, double value) : type(type), value(value) {}
+    NumberExprAST(fuxType::Type type, double value) : type(type), value(value) {}
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };
@@ -78,7 +78,7 @@ class CallExprAST : public ExprAST {
     ExprList args;
 
 public:
-    CallExprAST(const string &callee, ExprList args)
+    CallExprAST(const string &callee, ExprList &args)
     : callee(callee), args(move(args)) {}
     ~CallExprAST() override { callee.clear(); }
 
@@ -97,7 +97,7 @@ public:
     : type(type), name(name), args(args) {}
     ~PrototypeAST() override { name.clear(); }
 
-    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);
+    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 
     string getName() { return name; }
 };
@@ -106,14 +106,14 @@ typedef unique_ptr<PrototypeAST> ProtoPtr;
 
 class FunctionAST : public ExprAST {
     ProtoPtr proto;
-    ExprPtr body;
+    ExprList body;
 
 public:
-    FunctionAST(fuxType::Type type, const string &name, ArgMap args, ExprPtr &body)
+    FunctionAST(fuxType::Type type, const string &name, ArgMap args, ExprList &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(move(body)) {}
 
-    FunctionAST(ProtoPtr proto, ExprPtr &body)
+    FunctionAST(ProtoPtr proto, ExprList &body)
     : proto(move(proto)), body(move(body)) {}
 
-    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues);
+    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };

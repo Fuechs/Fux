@@ -29,6 +29,7 @@ enum TokenType {
     RPOINTER,       // ->
     LSHIFT,         // <<
     RSHIFT,         // >>
+    AT,             // @
 
     // assignment
     EQUALS,         // =
@@ -73,7 +74,6 @@ enum TokenType {
     COLON_COLON,    // ::
     TRIPLE_DOT,     // ...
     ARRAY_BRACKET,  // []
-    ARRAY_BRACKET_SIZE,     // [N]
     IDENTIFIER,     // identifier
     NUMBER,         // 0
     FLOAT,          // 0.0 or .0
@@ -103,6 +103,7 @@ enum TokenType {
     KEY_EXIT,
     KEY_PUTS,
     KEY_PUTCH,
+    KEY_THROW,
     
     KEY_SAFE,
     KEY_INTERN,
@@ -155,6 +156,7 @@ static const char *TokenTypeString[] = {
     "RPOINTER",       // ->
     "LSHIFT",         // <<
     "RSHIFT",         // >>
+    "AT",
 
     // assignment
     "EQUALS",         // =
@@ -199,7 +201,6 @@ static const char *TokenTypeString[] = {
     "COLON_COLON",    // ::
     "TRIPLE_DOT",     // ...
     "ARRAY_BRACKET",  // []
-    "ARRAY_BRACKET_SIZE", // [N]
     "IDENTIFIER",     // identifier
     "NUMBER",         // 0, 0.0, .0
     "FLOAT",
@@ -229,6 +230,7 @@ static const char *TokenTypeString[] = {
     "KEY_EXIT",
     "KEY_PUTS",
     "KEY_PUTCH",
+    "KEY_THROW",
     
     "KEY_SAFE",
     "KEY_INTERN",
@@ -281,6 +283,7 @@ static const char *TokenTypeValue[] = {
     "->",       // ->
     "<<",         // <<
     ">>",         // >>
+    "@",
 
     // assignment
     "=",         // =
@@ -325,7 +328,6 @@ static const char *TokenTypeValue[] = {
     "::",    // ::
     "...",     // ...
     "[]",   
-    "[n]",
     "ident",     // identifier
     "0",         // 0
     "0.0",  // .0 or 0.0
@@ -355,6 +357,7 @@ static const char *TokenTypeValue[] = {
     "exit",
     "puts",
     "putch",
+    "throw",
     
     "safe",
     "intern",

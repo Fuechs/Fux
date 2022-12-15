@@ -114,7 +114,11 @@ Function *FunctionAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &n
     for (auto &arg : func->args())
         namedValues[arg.getName().str()] = &arg;
 
-    if (Value *retVal = body->codegen(builder, module, namedValues)) {
+    Value *retVal;
+    for (ExprPtr &sub : body)
+        retVal = sub->codegen(builder, module, namedValues);
+    
+    if (retVal) {
         builder->CreateRet(retVal);
         verifyFunction(*func);
         return func;
