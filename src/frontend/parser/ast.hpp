@@ -38,6 +38,7 @@ public:
     RootAST() : program(ExprList()) {}
 
     void addSub(ExprPtr &sub);
+    ExprList getProg();
     
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 };

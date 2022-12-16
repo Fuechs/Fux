@@ -21,6 +21,14 @@ RootAST *Parser::parse() {
         
     current = tokens.begin();
 
+    ExprPtr branch;
+
+    while (notEOF()) {
+        branch = parseStmt();
+        root->addSub(branch);
+    }
+    
+    delete &branch;
     return root;
 }
 
@@ -34,6 +42,22 @@ RootAST *Parser::parse() {
 // MutiplicativeExpr
 // UnaryExpr
 // PrimaryExpr
+
+ExprPtr Parser::parseStmt() {
+    return parsePrimaryExpr();
+}
+
+ExprPtr Parser::parsePrimaryExpr() {
+    Token that = eat();
+    switch (that.type) {
+        case NUMBER:        return make_unique<NumberExprAST>(stod(that.value.c_str()));
+        case IDENTIFIER:    return make_unique<VariableExprAST>(that.value);
+        default:            
+            error->createError(UNEXPECTED_TOKEN, that, "unexpected token while parsing primary expression");
+            return nullptr;
+    }
+}
+
 
 Token Parser::eat() {
     if (current->type == _EOF)

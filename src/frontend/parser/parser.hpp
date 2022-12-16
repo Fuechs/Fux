@@ -19,8 +19,8 @@
 
 class Parser {
 public:
-    Parser(ErrorManager *error, string fileName, string source, bool mainFile = false) 
-    : error(error) {
+    Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false) 
+    : error(error), mainFile(mainFile) {
         lexer = new Lexer(source, fileName, error);
         if (mainFile)
             fux.options.fileLines = lexer->getLines();
@@ -41,6 +41,10 @@ private:
     ErrorManager *error;
     Lexer *lexer;
     RootAST *root;
+    const bool mainFile;
+
+    ExprPtr parseStmt();
+    ExprPtr parsePrimaryExpr();
     
     // get next token
     Token eat();
