@@ -22,13 +22,10 @@ RootAST *Parser::parse() {
     current = tokens.begin();
 
     ExprPtr branch;
-
-    while (notEOF()) {
-        branch = parseStmt();
-        root->addSub(branch);
-    }
+    while (notEOF()) 
+        if ((branch = parseStmt())) // check for nullptr in case of error
+            root->addSub(branch);
     
-    delete &branch;
     return root;
 }
 
@@ -44,20 +41,36 @@ RootAST *Parser::parse() {
 // PrimaryExpr
 
 ExprPtr Parser::parseStmt() {
-    return parsePrimaryExpr();
+    return parseExpr();
+}
+
+ExprPtr Parser::parseExpr() {
+    return parseAdditiveExpr();
+}
+
+ExprPtr Parser::parseAdditiveExpr() {
+    ExprPtr LHS = parsePrimaryExpr();
+
+    while (current->type == PLUS || current->type == MINUS) {
+        char op = *(current->value.c_str()); // get '+' or '-' from char*
+        ++current;
+        ExprPtr RHS = parsePrimaryExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
 }
 
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
     switch (that.type) {
-        case NUMBER:        return make_unique<NumberExprAST>(stod(that.value.c_str()));
+        case NUMBER:        return make_unique<NumberExprAST>(fuxType::I32, stod(that.value));
         case IDENTIFIER:    return make_unique<VariableExprAST>(that.value);
         default:            
             error->createError(UNEXPECTED_TOKEN, that, "unexpected token while parsing primary expression");
             return nullptr;
     }
 }
-
 
 Token Parser::eat() {
     if (current->type == _EOF)

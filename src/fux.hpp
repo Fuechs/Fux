@@ -75,11 +75,6 @@ struct __options_struct {
 // fux metadata for the compiler
 struct __fux_struct {
 
-    ~__fux_struct() {
-        delete &options;
-        delete &latest;
-    }
-
     // enumeration of all supported fux versions; can be targeted through compiler flags
     enum version {
 

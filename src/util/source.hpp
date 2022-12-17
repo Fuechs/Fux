@@ -23,11 +23,12 @@ public:
     ~SourceFile();
     
     // parse file and return AST root (will only be called for the main file)
-    RootAST *parse();
+    void parse();
 
     ErrorManager *error;
     Parser *parser;
     Analyser *analyser;
+    RootAST *root;
 
     string filePath;
     string fileDir;

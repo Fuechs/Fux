@@ -44,6 +44,8 @@ private:
     const bool mainFile;
 
     ExprPtr parseStmt();
+    ExprPtr parseExpr();
+    ExprPtr parseAdditiveExpr();
     ExprPtr parsePrimaryExpr();
     
     // get next token

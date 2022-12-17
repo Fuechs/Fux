@@ -22,10 +22,23 @@
 typedef map<string, Value *> ValueMap;
 typedef map<string, fuxType::Type> ArgMap;
 
+// exact position of an AST for error tracking
+// TODO: implement in error and parser
+class Position {
+    Position(size_t lStart = 1, size_t lEnd = 1, size_t colStart = 1, size_t colEnd = 1)
+    : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
+
+    size_t lStart; // first line
+    size_t lEnd; // last line
+    size_t colStart; // first column of first line
+    size_t colEnd; // last column of last line
+};
+
 class ExprAST {
 public:
     virtual ~ExprAST() {}
     virtual Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) = 0;
+    virtual void debugPrint() = 0;
 };
 
 typedef unique_ptr<ExprAST> ExprPtr;
@@ -41,6 +54,7 @@ public:
     ExprList getProg();
     
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
 };
 
 class NumberExprAST : public ExprAST {
@@ -51,6 +65,7 @@ public:
     NumberExprAST(fuxType::Type type, double value) : type(type), value(value) {}
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
 };
 
 class VariableExprAST : public ExprAST {
@@ -61,6 +76,7 @@ public:
     ~VariableExprAST() override { name.clear(); }
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
 };
 
 class BinaryExprAST : public ExprAST {
@@ -72,6 +88,7 @@ public:
     : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
 };
 
 class CallExprAST : public ExprAST {
@@ -84,6 +101,7 @@ public:
     ~CallExprAST() override { callee.clear(); }
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
 };
 
 // prototype of a function
@@ -101,6 +119,7 @@ public:
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
 
     string getName() { return name; }
+    void debugPrint() override;
 };
 
 typedef unique_ptr<PrototypeAST> ProtoPtr;
@@ -117,4 +136,5 @@ public:
     : proto(move(proto)), body(move(body)) {}
 
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
 };

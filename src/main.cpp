@@ -20,13 +20,6 @@ __fux_struct fux;
 int main(int argc, char **argv) {
     int result = 0;
 
-    // Generator *generator = new Generator(new AST(nullptr, AST_ROOT));
-    // generator->generate();
-    // Module *LLVMModule = generator->getModule();
-    // delete generator;
-    
-    // return result;
-
     // result = bootstrap(argc, argv);
     // switch (result) {
     //     case -1:    return repl();
@@ -35,49 +28,50 @@ int main(int argc, char **argv) {
     // }
 
     fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
-
     SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
-
-    
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    // RootAST *root = mainFile->parse();
-    // if (mainFile->error->hasErrors())
-    //     goto end;
+    mainFile->parse();
+    RootAST *root = mainFile->root;
+    if (mainFile->error->hasErrors())
+        goto end;
+    
+    root->debugPrint();
 
-    RootAST *root = new RootAST();
+    return result;
+
+    // RootAST *root = new RootAST();
+    
+    // // i32 mod(i32);
+    // ArgMap eArgs;
+    // eArgs["a"] = fuxType::I32;
+    // ExprPtr emptyF = make_unique<PrototypeAST>(fuxType::I32, "mod", eArgs);
+    // root->addSub(emptyF);
+
+    // // i32 main(i32 %x, i32 %y) {
+    // //      %addtmp = add i32 %x, %y
+    // //      ret i32 %addtmp
+    // // }
+    // ExprPtr arg1 = make_unique<VariableExprAST>("x");
+    // ExprPtr arg2 = make_unique<VariableExprAST>("y");
+    // ExprPtr binOp = make_unique<BinaryExprAST>('+', arg1, arg2);
+
+    // ExprList callArgs;
+    // ExprPtr num = make_unique<VariableExprAST>("addtmp");
+    // callArgs.push_back(move(num));
+    // ExprPtr eCall = make_unique<CallExprAST>("mod", callArgs);
+
+    // ExprList mBody;
+    // mBody.push_back(move(binOp));
+    // mBody.push_back(move(eCall));
+
+    // ArgMap args;
+    // args["x"] = fuxType::I32;
+    // args["y"] = fuxType::I32;
     
     
-    
-    ArgMap eArgs;
-    eArgs["a"] = fuxType::I32;
-    // ExprList eBody;
-    // ExprPtr eArg1 = make_unique<VariableExprAST>("a");
-    // ExprPtr eArg2 = make_unique<NumberExprAST>(1.0);
-    // ExprPtr binOp2 = make_unique<BinaryExprAST>('*', eArg1, eArg2);
-    // eBody.push_back(binOp2);
-    ExprPtr emptyF = make_unique<PrototypeAST>(fuxType::I32, "mod", eArgs);
-    root->addSub(emptyF);
-
-    ExprPtr arg1 = make_unique<VariableExprAST>("x");
-    ExprPtr arg2 = make_unique<VariableExprAST>("y");
-    ExprPtr binOp = make_unique<BinaryExprAST>('+', arg1, arg2);
-
-    ExprList callArgs;
-    ExprPtr num = make_unique<VariableExprAST>("addtmp");
-    callArgs.push_back(move(num));
-    ExprPtr eCall = make_unique<CallExprAST>("mod", callArgs);
-
-    ExprList mBody;
-    mBody.push_back(move(binOp));
-    mBody.push_back(move(eCall));
-
-    ArgMap args;
-    args["x"] = fuxType::I32;
-    args["y"] = fuxType::I32;
-    
-    ExprPtr mFunc = make_unique<FunctionAST>(fuxType::I32, "main", args, mBody);
-    root->addSub(mFunc);
+    // ExprPtr mFunc = make_unique<FunctionAST>(fuxType::I32, "main", args, mBody);
+    // root->addSub(mFunc);
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
         Generator *generator = new Generator(root);
@@ -89,7 +83,7 @@ int main(int argc, char **argv) {
     }
 
     end:
-        // delete mainFile;
+        delete mainFile;
         return result;
 }
 
@@ -220,7 +214,8 @@ int repl() {
             break;
 
         SourceFile *that = new SourceFile("<stdin>", true);
-        RootAST *root = that->parse();
+        that->parse();
+        RootAST *root = that->root;
         // TODO: generate and run ...
     }
 
