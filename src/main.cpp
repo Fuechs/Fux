@@ -10,9 +10,7 @@
  */
 
 #include "fux.hpp"
-
 #include "util/source.hpp"
-
 #include "backend/generator/generator.hpp"
 
 __fux_struct fux;
@@ -27,20 +25,23 @@ int main(int argc, char **argv) {
     //     default:    return result;
     // }
 
-    fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
-    SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
-    fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
+    // fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
+    // SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
+    // fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    mainFile->parse();
-    RootAST *root = mainFile->root;
-    if (mainFile->error->hasErrors())
-        goto end;
+    // mainFile->parse();
+    // RootAST *root = mainFile->root;
+    // if (mainFile->error->hasErrors())
+    //     goto end;
     
-    root->debugPrint();
+    // root->debugPrint();
+
+    fuxThread::Thread *t1 = new fuxThread::Thread("test thread");
+    t1->run((fuxThread::pfunc) printVersion);
 
     return result;
 
-    // RootAST *root = new RootAST();
+    RootAST *root = new RootAST();
     
     // // i32 mod(i32);
     // ArgMap eArgs;
@@ -69,9 +70,11 @@ int main(int argc, char **argv) {
     // args["x"] = fuxType::I32;
     // args["y"] = fuxType::I32;
     
-    
     // ExprPtr mFunc = make_unique<FunctionAST>(fuxType::I32, "main", args, mBody);
     // root->addSub(mFunc);
+
+    // root->debugPrint();
+    // return result;
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
         Generator *generator = new Generator(root);
@@ -83,7 +86,7 @@ int main(int argc, char **argv) {
     }
 
     end:
-        delete mainFile;
+        // delete mainFile;
         return result;
 }
 
@@ -191,8 +194,7 @@ int printHelp() {
 }
 
 int printVersion() {
-    cout
-        << "Fux Version '" << fux.latest << "'\n";
+    cout << "Fux Version '" << fux.latest << "'\n";
     return 1;
 }
 
@@ -216,6 +218,7 @@ int repl() {
         SourceFile *that = new SourceFile("<stdin>", true);
         that->parse();
         RootAST *root = that->root;
+        root->debugPrint();
         // TODO: generate and run ...
     }
 

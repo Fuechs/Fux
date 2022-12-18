@@ -12,27 +12,32 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <iostream>
+#include <thread>
 
 using namespace std;
 
-namespace fux {
+namespace fuxThread {
 
-using pfunc = void (*)(void); // pointer to a function
+    using pfunc = void (*)(void); // pointer to a function
 
-class Thread {
-public:
-    Thread(const string &name = "unnamed");
-    ~Thread();
+    class Thread {
+    public:
+        Thread(const string &name = "unnamed");
+        ~Thread();
 
-    void debugPrint();
-    void run(pfunc function);
+        void debugPrint(const string message = "no message");
+        void run(pfunc function);
 
-private:
-    thread *current;
-};
+    private:
+        size_t id;
+        string name;
+        thread *current;
+    };
 
+    typedef vector<Thread *> ThreadList;
 
-typedef vector<Thread> ThreadList;
-
+    extern ThreadList threads;
 
 }

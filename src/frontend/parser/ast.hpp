@@ -28,6 +28,8 @@ class Position {
     Position(size_t lStart = 1, size_t lEnd = 1, size_t colStart = 1, size_t colEnd = 1)
     : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
 
+    Position &operator=(Position &pos);
+
     size_t lStart; // first line
     size_t lEnd; // last line
     size_t colStart; // first column of first line
@@ -39,6 +41,8 @@ public:
     virtual ~ExprAST() {}
     virtual Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) = 0;
     virtual void debugPrint() = 0;
+
+    ExprAST &operator=(ExprPtr &ast);
 };
 
 typedef unique_ptr<ExprAST> ExprPtr;
@@ -114,11 +118,13 @@ class PrototypeAST : public ExprAST {
 public:
     PrototypeAST(fuxType::Type type, const string &name, ArgMap args)
     : type(type), name(name), args(args) {}
-    ~PrototypeAST() override { name.clear(); }
-
+    ~PrototypeAST() override;
+    
+    string getName();
+    ArgMap getArgs();
+    fuxType::Type getType();
+    
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
-
-    string getName() { return name; }
     void debugPrint() override;
 };
 

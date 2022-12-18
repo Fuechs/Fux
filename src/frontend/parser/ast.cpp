@@ -11,6 +11,16 @@
 
 #include "ast.hpp"
 
+Position &Position::operator=(Position &pos) {
+    *this = pos;
+    return *this;
+}
+
+ExprAST &ExprAST::operator=(ExprPtr &ast) {
+    *this = *ast;
+    return *this;
+}
+
 void RootAST::addSub(ExprPtr &sub) {
     program.push_back(move(sub));
 }
@@ -19,32 +29,62 @@ ExprList RootAST::getProg() {
     return move(program);
 }
 
+PrototypeAST::~PrototypeAST() { name.clear(); }
+string PrototypeAST::getName() { return name; }
+ArgMap PrototypeAST::getArgs() { return args; }
+fuxType::Type PrototypeAST::getType() { return type; }
+
 // * debugPrint() functions 
 
 void RootAST::debugPrint() {
     if (!fux.options.debugMode)
         return;
-        
-    for (ExprPtr &sub : program)
+
+    cout << "Debug: Root AST";
+    for (ExprPtr &sub : program) {
+        cout << "\n";
         sub->debugPrint();
+    }
+    cout << endl;
 }
 
-void NumberExprAST::debugPrint() {
-    cout << value;
-}
+void NumberExprAST::debugPrint() { cout << value; }
 
-void VariableExprAST::debugPrint() {
-    cout << name;
-}
+void VariableExprAST::debugPrint() { cout << name; }
 
 void BinaryExprAST::debugPrint() {
     cout << "( ";
     LHS->debugPrint();
     cout << " " << op << " ";
     RHS->debugPrint();
-    cout << " )\n";
+    cout << " )";
 }
 
-void CallExprAST::debugPrint() { return; }
-void PrototypeAST::debugPrint() { return; }
-void FunctionAST::debugPrint() { return; }
+void CallExprAST::debugPrint() { 
+    cout << callee << "( ";
+    for (ExprPtr &element : args) {
+        element->debugPrint();
+        cout << ", ";
+    }
+    cout << ");";
+}
+
+void PrototypeAST::debugPrint() {
+    cout << name << "( ";
+    for (auto &param : args)
+        cout << fuxType::TypeString[param.second] << ", ";
+    cout << "): " << fuxType::TypeString[type] << ";";
+}
+
+void FunctionAST::debugPrint() { 
+    cout << proto->getName() << "( ";
+    for (auto &param : proto->getArgs()) 
+        cout << param.first << ": " << fuxType::TypeString[param.second] << ", ";
+    cout << "): "<< fuxType::TypeString[proto->getType()] << " {\n";
+    for (ExprPtr &stmt : body) {
+        cout << "\t";
+        stmt->debugPrint();
+        cout << "\n";
+    }
+    cout << "}";
+}

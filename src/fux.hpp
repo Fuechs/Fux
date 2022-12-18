@@ -28,6 +28,7 @@
 
 #include "util/color.hpp"
 #include "util/io.hpp"
+#include "util/threading.hpp"
 
 #define FUX_DEV_DEBUG
 
