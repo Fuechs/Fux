@@ -14,6 +14,8 @@
 #include "util/threading.hpp"
 #include "backend/generator/generator.hpp"
 
+using fuxThread::ThreadManager;
+
 __fux_struct fux;
 
 void createTestAST(RootAST *root);
@@ -39,7 +41,8 @@ int main(int argc, char **argv) {
     
     // root->debugPrint();
 
-    fuxThread::ThreadManager *threadManager = new fuxThread::ThreadManager();
+
+    ThreadManager *threadManager = new ThreadManager();
     threadManager->require(mainFile);
     threadManager->createThreads();
     threadManager->debugPrint();

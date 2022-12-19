@@ -34,8 +34,8 @@ namespace fuxThread {
     void Thread::run(SourceFile *sf) { 
         debugPrint(true, "Creating thread.");
         current = new thread(std::ref(*sf)); // we need the RootAST to be in the original SourceFile!
-        debugPrint(true, "Detaching thread.");
-        current->detach();
+        debugPrint(true, "Joining thread.");
+        current->join();
         delete &current;
         debugPrint(true, "Destroyed thread.");
     }
@@ -48,6 +48,10 @@ namespace fuxThread {
             delete thread;
         threads.clear();
     } 
+
+    void ThreadManager::operator()(size_t n) {
+        this->runHelper(n);
+    }
 
     void ThreadManager::require(SourceFile *sf) {
         // compiler will optimize these out anyways
@@ -93,9 +97,15 @@ namespace fuxThread {
     }
 
     void ThreadManager::runThreads() {
-        for (size_t i = 0; i < required.size(); i++)
-            for (SourceFile *sf : required[i])
-                threads[i]->run(sf);
+        for (size_t i = 0; i < required.size(); i++) {
+            master = new thread(std::ref(*this), i);
+            master->detach();
+        }
+    }
+
+    void ThreadManager::runHelper(size_t n) {
+        for (SourceFile *sf : required.at(n))
+            threads.at(n)->run(sf);
     }
 
 }
