@@ -11,7 +11,7 @@
 
 #include "ast.hpp"
 
-Position &Position::operator=(Position &pos) {
+Position &Position::operator=(Position pos) {
     lStart = pos.lStart;
     lEnd = pos.lStart;
     colStart = pos.colStart;

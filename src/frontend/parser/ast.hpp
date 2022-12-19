@@ -30,7 +30,7 @@ public:
     : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
 
     // FIXME: c++ doesn't recognize overload
-    Position &operator=(Position &pos);
+    Position &operator=(Position pos);
 
     size_t lStart; // first line
     size_t lEnd; // last line

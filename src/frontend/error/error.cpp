@@ -97,13 +97,13 @@ void ParseError::report() {
     
     errorMessage 
         << ColorCode::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
-        << StyleCode::SLIM << lineContent << "\n\t";
+        << StyleCode::SLIM << lineContent.at(0) << "\n\t";
     
     size_t i;
-    for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
+    for (i = 0; i < (pos.colStart - 1); i++) // -1 so arrow points at exact position
         errorMessage << " ";
     errorMessage << ColorCode::GREEN << StyleCode::BOLD;
-    while (i++ < end)
+    while (i++ < pos.colEnd)
         errorMessage << "^";
     errorMessage << ColorCode::DEFAULT << StyleCode::SLIM << endl;
     
