@@ -46,6 +46,7 @@ private:
     ExprPtr parseStmt();
     ExprPtr parseExpr();
     ExprPtr parseAdditiveExpr();
+    ExprPtr parseMultiplicativeExpr();
     ExprPtr parsePrimaryExpr();
     
     // get next token

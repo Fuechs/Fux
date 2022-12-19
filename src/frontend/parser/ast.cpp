@@ -16,8 +16,8 @@ Position &Position::operator=(Position &pos) {
     return *this;
 }
 
-ExprAST &ExprAST::operator=(ExprPtr &ast) {
-    *this = *ast;
+ExprAST &ExprAST::operator=(ExprAST &ast) {
+    *this = ast;
     return *this;
 }
 
@@ -53,11 +53,11 @@ void NumberExprAST::debugPrint() { cout << value; }
 void VariableExprAST::debugPrint() { cout << name; }
 
 void BinaryExprAST::debugPrint() {
-    cout << "( ";
+    cout << "(";
     LHS->debugPrint();
     cout << " " << op << " ";
     RHS->debugPrint();
-    cout << " )";
+    cout << ")";
 }
 
 void CallExprAST::debugPrint() { 

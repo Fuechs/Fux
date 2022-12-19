@@ -49,10 +49,23 @@ ExprPtr Parser::parseExpr() {
 }
 
 ExprPtr Parser::parseAdditiveExpr() {
-    ExprPtr LHS = parsePrimaryExpr();
+    ExprPtr LHS = parseMultiplicativeExpr();
 
     while (current->type == PLUS || current->type == MINUS) {
         char op = *(current->value.c_str()); // get '+' or '-' from char*
+        ++current;
+        ExprPtr RHS = parseMultiplicativeExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+}
+
+ExprPtr Parser::parseMultiplicativeExpr() {
+    ExprPtr LHS = parsePrimaryExpr();
+
+    while (current->type == ASTERISK || current->type == SLASH || current->type == PERCENT) {
+        char op = *(current->value.c_str()); // get '*', '/', '%' from char*
         ++current;
         ExprPtr RHS = parsePrimaryExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
@@ -66,6 +79,11 @@ ExprPtr Parser::parsePrimaryExpr() {
     switch (that.type) {
         case NUMBER:        return make_unique<NumberExprAST>(fuxType::I32, stod(that.value));
         case IDENTIFIER:    return make_unique<VariableExprAST>(that.value);
+        case LPAREN: {
+            ExprPtr expr = parseExpr();
+            expect(RPAREN, MISSING_BRACKET);
+            return expr;
+        }
         default:            
             error->createError(UNEXPECTED_TOKEN, that, "unexpected token while parsing primary expression");
             return nullptr;

@@ -25,23 +25,25 @@ int main(int argc, char **argv) {
     //     default:    return result;
     // }
 
-    // fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
-    // SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
-    // fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
+    fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
+    SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
+    fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    // mainFile->parse();
-    // RootAST *root = mainFile->root;
-    // if (mainFile->error->hasErrors())
-    //     goto end;
+    mainFile->parse();
+    RootAST *root = mainFile->root;
+    if (mainFile->error->hasErrors())
+        goto end;
     
-    // root->debugPrint();
-
-    fuxThread::Thread *t1 = new fuxThread::Thread("test thread");
-    t1->run((fuxThread::pfunc) printVersion);
+    root->debugPrint();
 
     return result;
 
-    RootAST *root = new RootAST();
+    // fuxThread::Thread *t1 = new fuxThread::Thread("test thread");
+    // t1->run((fuxThread::pfunc) printVersion);
+
+    // return result;
+
+    // RootAST *root = new RootAST();
     
     // // i32 mod(i32);
     // ArgMap eArgs;
@@ -86,7 +88,6 @@ int main(int argc, char **argv) {
     }
 
     end:
-        // delete mainFile;
         return result;
 }
 

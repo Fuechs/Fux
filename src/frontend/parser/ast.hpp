@@ -42,7 +42,7 @@ public:
     virtual Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) = 0;
     virtual void debugPrint() = 0;
 
-    ExprAST &operator=(ExprPtr &ast);
+    ExprAST &operator=(ExprAST &ast);
 };
 
 typedef unique_ptr<ExprAST> ExprPtr;
