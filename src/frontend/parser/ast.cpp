@@ -12,8 +12,11 @@
 #include "ast.hpp"
 
 Position &Position::operator=(Position &pos) {
-    *this = pos;
-    return *this;
+    lStart = pos.lStart;
+    lEnd = pos.lStart;
+    colStart = pos.colStart;
+    colEnd = pos.colEnd;
+    return *this; 
 }
 
 ExprAST &ExprAST::operator=(ExprAST &ast) {

@@ -10,7 +10,7 @@
  */
 
 #include "error.hpp"
-// #include "../parser/ast.hpp"
+#include "../parser/ast.hpp"
 
 // * ParseError
 
@@ -21,24 +21,20 @@ ParseError::ParseError() {
     type = NO_ERR;
     message = "";
     fileName = "";
-    lineContent = "";
-    line = 1;
-    start = 1;
-    end = 1;
+    lineContent = {};
+    pos = Position();
 }
 
 ParseError::ParseError(const ParseError &pe) {
     operator=(pe);
 }
 
-ParseError::ParseError(ErrorType type, size_t line, size_t start, size_t end, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
+ParseError::ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
     this->type = type;
-    this->line = line;
-    this->start = start;
-    this->end = end;
     this->message = string(ErrorTypeString[type])+": "+comment;
     this->fileName = fileName;
-    this->lineContent = lineContent;
+    this->lineContent = {lineContent};
+    this->pos = Position(lStart, lEnd, colStart, colEnd);
     reported = false;
     this->warning = warning;
     this->aggressive = aggressive;
@@ -46,9 +42,18 @@ ParseError::ParseError(ErrorType type, size_t line, size_t start, size_t end, st
 
 ParseError::ParseError(ErrorType type, Token &token, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
     this->type = type;
-    this->line = token.line;
-    this->start = token.start;
-    this->end = token.end;
+    this->pos = Position(token.line, token.line, token.start, token.end);
+    this->message = string(ErrorTypeString[type])+": "+comment;
+    this->fileName = fileName;
+    this->lineContent = {lineContent};
+    reported = false;
+    this->warning = warning;
+    this->aggressive = aggressive;
+}
+
+ParseError::ParseError(ErrorType type, ExprPtr &ast, string fileName, vector<string> lineContent, string comment, bool warning, bool aggressive) {
+    this->type = type;
+    this->pos = Position();
     this->message = string(ErrorTypeString[type])+": "+comment;
     this->fileName = fileName;
     this->lineContent = lineContent;
@@ -56,7 +61,6 @@ ParseError::ParseError(ErrorType type, Token &token, string fileName, string lin
     this->warning = warning;
     this->aggressive = aggressive;
 }
-
 
 void ParseError::operator=(const ParseError &pe) {
     reported = pe.reported;
@@ -66,9 +70,7 @@ void ParseError::operator=(const ParseError &pe) {
     message = pe.message;
     fileName = pe.fileName;
     lineContent = pe.lineContent;
-    line = pe.line;
-    start = pe.start;
-    end = pe.end;
+    pos = pe.pos;
 }
 
 void ParseError::free() {
@@ -86,7 +88,7 @@ void ParseError::report() {
 
     stringstream errorMessage;
     
-    errorMessage << StyleCode::BOLD << fileName << ":" << line << ":" << start << ": ";
+    errorMessage << StyleCode::BOLD << fileName << ":" << pos.lStart << ":" << pos.colStart << ": ";
     
     if (warning)
         errorMessage << ColorCode::MAGENTA << "warning: ";
@@ -166,7 +168,7 @@ bool ErrorManager::hasWarnings() {
 }
 
 void ErrorManager::createError(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    addError(ParseError(type, line, col, col, fileName, lines[line - 1], comment, false, aggressive));
+    addError(ParseError(type, line, line, col, col, fileName, lines[line - 1], comment, false, aggressive));
 }
 
 void ErrorManager::createError(ErrorType type, Token &token, string comment, bool aggressive) {
@@ -174,7 +176,7 @@ void ErrorManager::createError(ErrorType type, Token &token, string comment, boo
 }
 
 void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    addError(ParseError(type, line, col, col, fileName, lines[line - 1], comment, true, aggressive));
+    addError(ParseError(type, line, line, col, col, fileName, lines[line - 1], comment, true, aggressive));
 }
 
 void ErrorManager::createWarning(ErrorType type, Token &token, string comment, bool aggressive) {

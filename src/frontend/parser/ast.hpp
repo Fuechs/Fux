@@ -25,9 +25,11 @@ typedef map<string, fuxType::Type> ArgMap;
 // exact position of an AST for error tracking
 // TODO: implement in error and parser
 class Position {
+public:
     Position(size_t lStart = 1, size_t lEnd = 1, size_t colStart = 1, size_t colEnd = 1)
     : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
 
+    // FIXME: c++ doesn't recognize overload
     Position &operator=(Position &pos);
 
     size_t lStart; // first line
