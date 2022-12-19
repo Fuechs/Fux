@@ -182,6 +182,7 @@ void ErrorManager::createWarning(ErrorType type, Token &token, string comment, b
 }
 
 void ErrorManager::reportAll() {
+
     for (ParseError &error : errors)
         error.report();
 }

@@ -21,9 +21,16 @@ public:
     SourceFile(const string& filePath, bool mainFile = false);
     
     ~SourceFile();
+
+    // get std::thread to run this->parse
+    void operator()(void) { this->parse(); }
     
-    // parse file and return AST root (will only be called for the main file)
+    // parse file and save RootAST in root
+    // will be called for every file that's referenced 
     void parse();
+
+    // from https://stackoverflow.com/a/32286531
+    size_t getFileSize();
 
     ErrorManager *error;
     Parser *parser;
@@ -36,3 +43,6 @@ public:
 
     bool mainFile;
 };
+
+typedef vector<SourceFile *> FileList;
+typedef vector<FileList> FileGroups; 

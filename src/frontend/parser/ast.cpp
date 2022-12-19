@@ -40,7 +40,7 @@ void RootAST::debugPrint() {
     if (!fux.options.debugMode)
         return;
 
-    cout << "Debug: Root AST";
+    cout << getDebugText() << "Root AST";
     for (ExprPtr &sub : program) {
         cout << "\n";
         sub->debugPrint();

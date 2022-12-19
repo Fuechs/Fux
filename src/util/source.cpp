@@ -11,6 +11,8 @@
 
 #include "source.hpp"
 
+#include <filesystem>
+
 SourceFile::SourceFile(const string& filePath, bool mainFile) {
     this->filePath = filePath;
     this->fileDir = getDirectory(filePath);
@@ -33,4 +35,9 @@ void SourceFile::parse() {
     root = parser->parse();
     analyser = new Analyser(error, root);
     analyser->analyse();
+}
+
+size_t SourceFile::getFileSize() {
+    std::__fs::filesystem::path p {filePath};
+    return (size_t) std::__fs::filesystem::file_size(p);
 }

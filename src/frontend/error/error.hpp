@@ -109,7 +109,8 @@ namespace fuxErr { typedef vector<ParseError> ErrorList; }
 
 class ErrorManager {
 public:
-    ErrorManager(string fileName, vector<string> lines) : fileName(fileName), lines(lines) {}
+    ErrorManager(string fileName, vector<string> lines) 
+    : fileName(fileName), lines(lines), errors(fuxErr::ErrorList()) {}
 
     ~ErrorManager();
 

@@ -12,12 +12,14 @@
 #pragma once
 
 #include <ostream>
+#include <string>
 
 namespace {
 
     enum ColorCode {
         RED = 31,
         GREEN = 32,
+        YELLOW = 33,
         MAGENTA = 35,
         DEFAULT = 39,
     };
@@ -33,6 +35,13 @@ namespace {
 
     std::ostream &operator<<(std::ostream &os, StyleCode code) {
         return os << "\033[" << static_cast<int>(code) << "m";
+    }
+
+    // return colored string "Debug: "
+    std::string getDebugText() {
+        std::stringstream ss;
+        ss << ColorCode::YELLOW << "Debug" << ColorCode::DEFAULT << ": ";
+        return ss.str();
     }
 
 }
