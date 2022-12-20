@@ -13,6 +13,7 @@
 #include "util/source.hpp"
 #include "util/threading.hpp"
 #include "backend/generator/generator.hpp"
+#include "backend/compiler/compiler.hpp"
 
 using fuxThread::ThreadManager;
 
@@ -66,6 +67,16 @@ int main(int argc, char **argv) {
         if (false) { // TODO: check for errors
             generator->forceDelete();
             goto end;
+        }
+
+        {
+            Compiler *compiler = new Compiler(mainFile->filePath, generator->getModule());
+            compiler->compile();
+
+            if (false) { // TODO: check for errors
+                delete compiler;
+                goto end;        
+            }
         }
     }
 
@@ -121,10 +132,7 @@ int bootstrap(int argc, char **argv) {
                 cerr << "file version required after option '-target'\n";
             else {
                 string x = string(argv[++i]);
-                if (toLower(x) == "alpha")
-                    fux.options.target = fux.ALPHA;
-                else
-                    cerr << "unknown target '"+x+"'\n";
+                fux.options.target = toLower(x);
             }
         }
         else if (cmp("-werror") || cmp("-werr"))    fux.options.werrors = true;

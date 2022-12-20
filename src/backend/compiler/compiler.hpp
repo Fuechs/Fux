@@ -13,3 +13,15 @@
 
 #include "../../fux.hpp"
 #include "../llvmheader.hpp"
+
+class Compiler {
+public:
+    Compiler(const string &fileName, Module *module);
+    ~Compiler();
+
+    void compile();
+
+private:
+    string fileName;
+    Module *module;
+};

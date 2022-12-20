@@ -18,7 +18,8 @@
 [![license](https://img.shields.io/badge/license-Apache%20License%20v2.0-fcaa68?labelColor=151515&style=for-the-badge)](./LICENSE)
 
 > __Warning__ \
-> Fux is still in early development
+> Fux is still in early development. \
+> As of now only Unix-based systems will be supported.
 
 ###### Flawless Unambiguous Programming
 
@@ -80,7 +81,7 @@ main(): i32 {
 - [&cross;] `AST Analysis`
 - [...] `IR Generation (LLVM)`
 - [&cross;] `Optimization (LLVM)`
-- [&cross;] `Compilation (LLVM)`
+- [...] `Compilation (LLVM)`
 - [...] `Runtime`
 - [...] `Syntax`
 - [...] `Standard Library`

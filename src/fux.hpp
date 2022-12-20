@@ -20,11 +20,16 @@
 #include <fstream>
 #include <memory>
 #include <map>
+#include <system_error>
+#include <utility>
+#include <optional>
 
 #include <cstdio>
 #include <cstring>
 #include <cstdint>
 #include <cstdlib>
+#include <cassert>
+#include <cctype>
 
 #include "util/color.hpp"
 #include "util/io.hpp"
@@ -42,6 +47,7 @@ struct __options_struct {
         out.clear(); 
         version.clear();
         libraries.clear();
+        target.clear();
     }
 
     string fileName; // file to compile (main)
@@ -69,7 +75,10 @@ struct __options_struct {
     #endif
     
     size_t errorLimit     = 1000;
-    int target              = 0; // targeted fux version 
+    string target         = ""; 
+    // targeted architecture / platform
+    // e.g. arm64-apple-darwin22.2.0
+    //      x86_64-unknown-linux-gnu
 };
 
 // fux metadata for the compiler

@@ -13,8 +13,9 @@
 
 #include <filesystem>
 
-SourceFile::SourceFile(const string& filePath, bool mainFile) {
+SourceFile::SourceFile(const string& filePath, const bool mainFile) {
     this->filePath = filePath;
+    this->fileName = getFileName(filePath);
     this->fileDir = getDirectory(filePath);
     this->contents = readFile(filePath);
     this->mainFile = mainFile;
@@ -22,6 +23,7 @@ SourceFile::SourceFile(const string& filePath, bool mainFile) {
 
 SourceFile::~SourceFile() {
     filePath.clear();
+    fileName.clear();
     fileDir.clear();
     contents.clear();
     error->panic();

@@ -29,3 +29,7 @@ const string getDirectory(const string path) {
         directory = path.substr(0, lastSlashIdx);
     return directory;
 }
+
+const string getFileName(const string &path) {
+    return path.substr(path.find_last_of("/") + 1);
+}

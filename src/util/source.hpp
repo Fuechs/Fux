@@ -18,7 +18,7 @@
 
 class SourceFile {
 public:
-    SourceFile(const string& filePath, bool mainFile = false);
+    SourceFile(const string& filePath, const bool mainFile = false);
     
     ~SourceFile();
 
@@ -36,8 +36,9 @@ public:
     Parser *parser;
     Analyser *analyser;
     RootAST *root;
-
+    
     string filePath;
+    string fileName;
     string fileDir;
     string contents;
 
