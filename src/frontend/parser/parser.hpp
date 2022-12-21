@@ -16,19 +16,23 @@
 #include "../error/error.hpp"
 #include "../lexer/lexer.hpp"
 #include "../lexer/token.hpp"
+#include "../../util/threading.hpp"
 
 class Parser {
 public:
     Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false) 
     : error(error), mainFile(mainFile) {
         lexer = new Lexer(source, fileName, error);
-        if (mainFile)
+        if (mainFile) {
             fux.options.fileLines = lexer->getLines();
+            threader = new fuxThread::ThreadManager();
+        }
         root = new RootAST();
     }
 
     ~Parser() {
         delete lexer;
+        delete threader;
         tokens.clear();
     }
 
@@ -40,6 +44,7 @@ private:
     TokenIter current;
     ErrorManager *error;
     Lexer *lexer;
+    fuxThread::ThreadManager *threader;
     RootAST *root;
     const bool mainFile;
 
