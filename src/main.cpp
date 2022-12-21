@@ -35,22 +35,21 @@ int main(int argc, char **argv) {
     SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    // mainFile->parse();
-    // RootAST *root = mainFile->root;
-    // if (mainFile->error->hasErrors())
-    //     goto end;
-    
-    // root->debugPrint();
-
-
-    ThreadManager *threadManager = new ThreadManager();
-    threadManager->require(mainFile);
-    threadManager->createThreads();
-    threadManager->debugPrint();
-    threadManager->runThreads();
-
+    mainFile->parse();
     RootAST *root = mainFile->root;
+    if (mainFile->hasErrors())
+        goto end;
     root->debugPrint();
+
+
+    // ThreadManager *threadManager = new ThreadManager();
+    // threadManager->require(mainFile);
+    // threadManager->createThreads();
+    // threadManager->debugPrint();
+    // threadManager->runThreads();
+
+    // RootAST *root = mainFile->root;
+    // root->debugPrint();
 
     return result; // ! program ends here
 

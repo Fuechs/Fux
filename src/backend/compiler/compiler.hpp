@@ -24,4 +24,6 @@ public:
 private:
     string fileName;
     Module *module;
+
+    void debugPrint(const string message);
 };

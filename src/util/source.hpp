@@ -29,19 +29,22 @@ public:
     // will be called for every file that's referenced 
     void parse();
 
+    // check if file has errors
+    bool hasErrors();
+
     // from https://stackoverflow.com/a/32286531
     size_t getFileSize();
+    
+    string fileName;
+    string filePath;
+    string fileDir;
 
+    RootAST *root;
+private:
     ErrorManager *error;
     Parser *parser;
     Analyser *analyser;
-    RootAST *root;
-    
-    string filePath;
-    string fileName;
-    string fileDir;
     string contents;
-
     bool mainFile;
 };
 

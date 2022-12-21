@@ -36,6 +36,8 @@ public:
 
     vector<string> getLines() { return this->lines; }
 
+    void debugPrint();
+
 private:
     string source;
     vector<string> lines;

@@ -408,6 +408,7 @@ public:
 
     void debugPrint() {
         cout    
+            << getDebugText()
             << "<Token, "
             << TokenTypeString[type]
             << ", '" 

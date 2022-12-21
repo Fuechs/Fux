@@ -673,3 +673,12 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "enum")          currentToken.type = KEY_ENUM;
     else if (currentToken.value == "struct")        currentToken.type = KEY_STRUCT;
 }
+
+void Lexer::debugPrint() {
+    if (!fux.options.debugMode)
+        return;
+    
+    cout << getDebugText() << "Lexer:\n";
+    for (Token &token : tokens)
+        token.debugPrint();
+}

@@ -39,6 +39,10 @@ void SourceFile::parse() {
     analyser->analyse();
 }
 
+bool SourceFile::hasErrors() {
+    return error->hasErrors();
+}
+
 size_t SourceFile::getFileSize() {
     std::__fs::filesystem::path p {filePath};
     return (size_t) std::__fs::filesystem::file_size(p);

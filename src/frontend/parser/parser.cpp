@@ -14,11 +14,8 @@
 RootAST *Parser::parse() {
     // lexing
     tokens = lexer->lex();
+    lexer->debugPrint();
     
-    if (fux.options.debugMode)
-        for (Token token : tokens)
-            token.debugPrint();
-        
     current = tokens.begin();
 
     ExprPtr branch;
