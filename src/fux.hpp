@@ -23,6 +23,8 @@
 #include <system_error>
 #include <utility>
 #include <optional>
+#include <mutex>
+#include <future>
 
 #include <cstdio>
 #include <cstring>

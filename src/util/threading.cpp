@@ -15,7 +15,7 @@
 namespace fuxThread {
 
     Thread::Thread(const string &name, size_t id) 
-    : name(name), id(id), current(nullptr) {
+    : name(name), id(id), it(future<void>()) {
         debugPrint(true, "Initialized this thread.");
     }
 
@@ -33,15 +33,17 @@ namespace fuxThread {
 
     void Thread::run(SourceFile *sf) { 
         debugPrint(true, "Creating thread.");
-        current = new thread(std::ref(*sf)); // we need the RootAST to be in the original SourceFile!
-        debugPrint(true, "Joining thread.");
-        current->join();
-        delete &current;
-        debugPrint(true, "Destroyed thread.");
+        it = async(launch::async, ref(*sf));
+        debugPrint(true, "Running thread.");
+    }
+
+    void Thread::finish() {
+        it.get(); 
+        debugPrint(true, "Finished thread.");
     }
 
     ThreadManager::ThreadManager()
-    : threads(ThreadList()), required(FileGroups()) {}
+    : threads(ThreadList()), required(FileList()) {}
 
     ThreadManager::~ThreadManager() {
         for (Thread *thread : threads)
@@ -49,34 +51,7 @@ namespace fuxThread {
         threads.clear();
     } 
 
-    void ThreadManager::operator()(size_t n) {
-        this->runHelper(n);
-    }
-
-    void ThreadManager::require(SourceFile *sf) {
-        // compiler will optimize these out anyways
-        size_t KiB3 = 3072; // Bytes (min)
-        size_t KiB6 = 6144; // Bytes (max)
-        
-        if (required.size() == 0) {
-            required.push_back({sf});
-            return;
-        }
-        
-        FileList &currentGroup = required.back();
-
-        // get size of latest currentGroup 
-        size_t currentSize = 0;
-        for (SourceFile *sub : currentGroup)
-            currentSize += sub->getFileSize();
-
-        // if currentGroup isn't larger than 6 KiB
-        // and sf isn't larger than 3KiB
-        if (currentSize <= KiB6 && sf->getFileSize() <= KiB3)
-            currentGroup.push_back(sf);
-        else
-            required.push_back({sf});
-    }
+    void ThreadManager::require(SourceFile *sf) { required.push_back(sf); }
 
     void ThreadManager::debugPrint() {
         if (!fux.options.debugMode)
@@ -88,24 +63,18 @@ namespace fuxThread {
     }
 
     void ThreadManager::createThreads() {
-        for (FileList &fl : required) {
-            stringstream name;
-            for (SourceFile *sf : fl)
-                name << sf->filePath << "; ";
-            threads.push_back(new Thread(name.str(), threads.size()));
-        }
+        for (SourceFile *fl : required)
+            threads.push_back(new Thread(fl->fileName, threads.size()));
     }
 
     void ThreadManager::runThreads() {
-        for (size_t i = 0; i < required.size(); i++) {
-            master = new thread(std::ref(*this), i);
-            master->detach();
-        }
+        for (size_t i = 0; i < required.size(); i++)
+            threads.at(i)->run(required.at(i));
     }
 
-    void ThreadManager::runHelper(size_t n) {
-        for (SourceFile *sf : required.at(n))
-            threads.at(n)->run(sf);
+    void ThreadManager::checkThreads() {
+        for (Thread *t : threads)
+            t->finish();
     }
 
 }

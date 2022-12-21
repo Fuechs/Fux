@@ -35,21 +35,22 @@ int main(int argc, char **argv) {
     SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
-    mainFile->parse();
-    RootAST *root = mainFile->root;
-    if (mainFile->hasErrors())
-        goto end;
-    root->debugPrint();
-
-
-    // ThreadManager *threadManager = new ThreadManager();
-    // threadManager->require(mainFile);
-    // threadManager->createThreads();
-    // threadManager->debugPrint();
-    // threadManager->runThreads();
-
+    // mainFile->parse();
     // RootAST *root = mainFile->root;
+    // if (mainFile->hasErrors())
+    //     goto end;
     // root->debugPrint();
+
+
+    ThreadManager *threadManager = new ThreadManager();
+    threadManager->require(mainFile);
+    threadManager->createThreads();
+    // threadManager->debugPrint();
+    threadManager->runThreads();
+    threadManager->checkThreads();
+
+    RootAST *root = mainFile->root;
+    root->debugPrint();
 
     return result; // ! program ends here
 
@@ -66,8 +67,8 @@ int main(int argc, char **argv) {
         if (false) { // TODO: check for errors
             generator->forceDelete();
             goto end;
-        }
-
+        } 
+        
         {
             Compiler *compiler = new Compiler(mainFile->filePath, generator->getModule());
             compiler->compile();

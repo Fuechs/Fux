@@ -11,18 +11,7 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-#include <iostream>
-#include <thread>
-
 #include "source.hpp"
-
-// FIXME: Segmentation fault when trying to access data from SourceFile after thread got detached. 
-// Possible solution: Wait until all threads are finished, while still detaching them.
-// Still need to figure out how to do that.
-
-using namespace std;
 
 namespace fuxThread {
 
@@ -35,10 +24,13 @@ namespace fuxThread {
         // create thread and run sf->parse    
         void run(SourceFile *sf);
 
+        // wait until thread is finished
+        void finish();
+
     private:
         size_t id;
         string name;
-        thread *current;
+        future<void> it;
     };
 
     typedef vector<Thread *> ThreadList;
@@ -47,10 +39,9 @@ namespace fuxThread {
     public:
         ThreadManager();
         ~ThreadManager();
-
-        void operator()(size_t n);
         
-        // adds an requirement to parse the SourceFile 'sf'
+        // // adds a requirement to parse the SourceFile 'sf'
+        // add SourceFile to required vector
         void require(SourceFile *sf);
         // prints information about all managed threads
         void debugPrint();
@@ -59,17 +50,13 @@ namespace fuxThread {
         void createThreads(); 
         // parse all required SourceFiles with the threads
         void runThreads();
+        // wait until all threads are finished
+        void checkThreads();
         
     private:
         thread *master;
         ThreadList threads;
-        // respective group of files for each thread
-        // max size is 6 KiB each (text data)
-        // min size is 3 KiB    "    "
-        FileGroups required;
-
-        void runHelper(size_t n);
-        
+        FileList required;
     };
 
 }
