@@ -41,13 +41,10 @@ int main(int argc, char **argv) {
     //     goto end;
     // root->debugPrint();
 
-
     ThreadManager *threadManager = new ThreadManager();
     threadManager->require(mainFile);
     threadManager->createThreads();
-    // threadManager->debugPrint();
     threadManager->runThreads();
-    threadManager->checkThreads();
 
     RootAST *root = mainFile->root;
     root->debugPrint();

@@ -40,23 +40,25 @@ namespace fuxThread {
         ThreadManager();
         ~ThreadManager();
         
-        // // adds a requirement to parse the SourceFile 'sf'
-        // add SourceFile to required vector
+        // adds a requirement to parse the SourceFile 'sf'
         void require(SourceFile *sf);
         // prints information about all managed threads
-        void debugPrint();
+        void debugPrint(const string message);
         // create threads that are required
         // delete threads that are unused
         void createThreads(); 
         // parse all required SourceFiles with the threads
         void runThreads();
-        // wait until all threads are finished
-        void checkThreads();
+       
         
     private:
         thread *master;
         ThreadList threads;
-        FileList required;
+        FileGroups required;
+        size_t threadsMax;
+        
+        // wait until all threads are finished
+        void checkThreads(); 
     };
 
 }

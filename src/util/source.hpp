@@ -49,3 +49,4 @@ private:
 };
 
 typedef vector<SourceFile *> FileList;
+typedef vector<FileList> FileGroups;
