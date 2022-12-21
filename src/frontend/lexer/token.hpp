@@ -109,6 +109,7 @@ enum TokenType {
     KEY_INTERN,
     KEY_STATIC,
     KEY_FINAL,
+    KEY_FIXED,
 
     KEY_USING,
     KEY_TYPEDEF,
@@ -236,6 +237,7 @@ static const char *TokenTypeString[] = {
     "KEY_INTERN",
     "KEY_STATIC",
     "KEY_FINAL",
+    "KEY_FIXED",
 
     "KEY_USING",
     "KEY_TYPEDEF",
@@ -363,6 +365,7 @@ static const char *TokenTypeValue[] = {
     "intern",
     "static",
     "final",
+    "fixed",
 
     "using",
     "typedef",

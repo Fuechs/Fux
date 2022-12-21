@@ -645,7 +645,8 @@ void Lexer::checkKeyword() {
     else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;
     else if (currentToken.value == "static")        currentToken.type = KEY_STATIC;
     else if (currentToken.value == "final")         currentToken.type = KEY_FINAL;
-    
+    else if (currentToken.value == "fixed")         currentToken.type = KEY_FIXED;
+
     else if (currentToken.value == "using")         currentToken.type = KEY_USING;
     else if (currentToken.value == "typedef")       currentToken.type = KEY_TYPEDEF;
     else if (currentToken.value == "operator")      currentToken.type = KEY_OPERATOR;

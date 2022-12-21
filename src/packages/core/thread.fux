@@ -1,0 +1,15 @@
+package core;
+
+get sys;
+
+thread {
+    
+    template<R>
+    :Thread {
+        ::(*function: R, args: var, ...);
+
+        join(): R;
+        detach(): R;
+    }
+
+}
