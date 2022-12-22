@@ -31,6 +31,13 @@ void Generator::initializeModule() {
     builder = new IRBuilder<>(*context);
 }
 
+void Generator::debugPrint(const string message) {
+    cout << getDebugText() << "Generator";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
+
 Value *RootAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
     for (ExprPtr &sub : program)
         sub->codegen(builder, module, namedValues);

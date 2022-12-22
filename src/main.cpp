@@ -15,8 +15,6 @@
 #include "backend/generator/generator.hpp"
 #include "backend/compiler/compiler.hpp"
 
-using fuxThread::ThreadManager;
-
 __fux_struct fux;
 
 void createTestAST(RootAST *root);

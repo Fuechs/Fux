@@ -50,8 +50,19 @@ private:
 
     ExprPtr parseStmt();
     ExprPtr parseExpr();
+    // <symbol> = <value>;
+    ExprPtr parseAssignmentExpr();
+    ExprPtr parseMemberExpr();
+    ExprPtr parseCallExpr();
+    ExprPtr parseLogicalExpr();
+    ExprPtr parseComparisonExpr();
+    // +, -
     ExprPtr parseAdditiveExpr();
+    // *, /, %
     ExprPtr parseMultiplicativeExpr();
+    ExprPtr parseUnaryExpr();
+    // identifier, value, sub expr
+    // x         , 1    , (...)
     ExprPtr parsePrimaryExpr();
     
     // get next token

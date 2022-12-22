@@ -48,4 +48,5 @@ private:
 
     // initialize context, module & builder
     void initializeModule();
+    void debugPrint(const string message);
 };

@@ -26,17 +26,6 @@ RootAST *Parser::parse() {
     return root;
 }
 
-// * orders of precedence
-// AssignmentExpr
-// MemberExpr
-// FunctionCall
-// LogicalExpr
-// ComparisonExpr
-// AdditiveExpr
-// MutiplicativeExpr
-// UnaryExpr
-// PrimaryExpr
-
 ExprPtr Parser::parseStmt() {
     return parseExpr();
 }
@@ -44,6 +33,16 @@ ExprPtr Parser::parseStmt() {
 ExprPtr Parser::parseExpr() {
     return parseAdditiveExpr();
 }
+
+ExprPtr Parser::parseAssignmentExpr() { return nullptr; }
+
+ExprPtr Parser::parseMemberExpr() { return nullptr; }
+
+ExprPtr Parser::parseCallExpr() { return nullptr; }
+
+ExprPtr Parser::parseLogicalExpr() { return nullptr; }
+
+ExprPtr Parser::parseComparisonExpr() { return nullptr; } 
 
 ExprPtr Parser::parseAdditiveExpr() {
     ExprPtr LHS = parseMultiplicativeExpr();
@@ -70,6 +69,8 @@ ExprPtr Parser::parseMultiplicativeExpr() {
 
     return LHS;
 }
+
+ExprPtr Parser::parseUnaryExpr() { return nullptr; }
 
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
