@@ -60,11 +60,10 @@ namespace fuxThread {
     }
 
     void ThreadManager::require(SourceFile *sf) { 
-        for (FileList &fl : required)
-            if (fl.size() < threadsMax) {
-                fl.push_back(sf);
-                return;
-            }
+        if (required.back().size() < threadsMax) {
+            required.back().push_back(sf);
+            return;
+        }
 
         required.push_back({sf});
     }
