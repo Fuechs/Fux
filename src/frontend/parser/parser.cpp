@@ -30,25 +30,62 @@ ExprPtr Parser::parseStmt() {
     return parseExpr();
 }
 
-ExprPtr Parser::parseExpr() {
-    return parseAdditiveExpr();
+ExprPtr Parser::parseVariableDeclStmt() {
+    // TODO: parse storage modifiers
+    const string symbol = expect(IDENTIFIER).value;
+    const fuxType::Type type = fuxType::NO_TYPE; // TODO: parse type
+    expect(EQUALS); // TODO: parse constant
+    ExprPtr value = parseExpr();
+    expect(SEMICOLON);
+    return make_unique<VariableDeclAST>(symbol, type, EQUALS);
 }
 
-ExprPtr Parser::parseAssignmentExpr() { return nullptr; }
+ExprPtr Parser::parseExpr() {
+    return parseAssignmentExpr();
+}
 
-ExprPtr Parser::parseMemberExpr() { return nullptr; }
+ExprPtr Parser::parseAssignmentExpr() { return parseMemberExpr(); }
 
-ExprPtr Parser::parseCallExpr() { return nullptr; }
+ExprPtr Parser::parseMemberExpr() { return parseCallExpr(); }
 
-ExprPtr Parser::parseLogicalExpr() { return nullptr; }
+ExprPtr Parser::parseCallExpr() { return parseLogicalExpr(); }
 
-ExprPtr Parser::parseComparisonExpr() { return nullptr; } 
+ExprPtr Parser::parseLogicalExpr() {
+    ExprPtr LHS = parseComparisonExpr();
+
+    while (current->type == AND || current->type == OR || current->type == EXCLAMATION) {
+        char logical = current->value.front();
+        ++current;
+        ExprPtr RHS = parseComparisonExpr();
+        LHS = make_unique<LogicalExprAST>(logical, LHS, RHS);
+    }
+
+    return LHS;
+}
+
+ExprPtr Parser::parseComparisonExpr() {
+    ExprPtr LHS = parseExpr();
+
+    while ( current->type == EQUALS_EQUALS 
+    ||      current->type == NOT_EQUALS 
+    ||      current->type == LESSTHAN
+    ||      current->type == LTEQUALS
+    ||      current->type == GREATERTHAN
+    ||      current->type == GTEQUALS) {
+        char comp = current->value.front();
+        ++current;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<ComparisonExprAST>(comp, LHS, RHS);
+    }
+
+    return LHS;
+} 
 
 ExprPtr Parser::parseAdditiveExpr() {
     ExprPtr LHS = parseMultiplicativeExpr();
 
     while (current->type == PLUS || current->type == MINUS) {
-        char op = *(current->value.c_str()); // get '+' or '-' from char*
+        char op = current->value.front(); // get '+' or '-' (optimized out by compiler)
         ++current;
         ExprPtr RHS = parseMultiplicativeExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
@@ -61,7 +98,7 @@ ExprPtr Parser::parseMultiplicativeExpr() {
     ExprPtr LHS = parsePrimaryExpr();
 
     while (current->type == ASTERISK || current->type == SLASH || current->type == PERCENT) {
-        char op = *(current->value.c_str()); // get '*', '/', '%' from char*
+        char op = current->value.front(); // get '*', '/', '%' (optimized out by compiler)
         ++current;
         ExprPtr RHS = parsePrimaryExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);

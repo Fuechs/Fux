@@ -49,6 +49,8 @@ private:
     const bool mainFile;
 
     ExprPtr parseStmt();
+    ExprPtr parseVariableDeclStmt();
+
     ExprPtr parseExpr();
     // <symbol> = <value>;
     ExprPtr parseAssignmentExpr();

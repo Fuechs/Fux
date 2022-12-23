@@ -50,6 +50,8 @@ public:
 typedef unique_ptr<ExprAST> ExprPtr;
 typedef vector<ExprPtr> ExprList;
 
+extern ExprPtr nullExpr;
+
 class RootAST : public ExprAST {
     ExprList program;
 
@@ -97,6 +99,30 @@ public:
     void debugPrint() override;
 };
 
+class ComparisonExprAST : public ExprAST {
+    char comp;
+    ExprPtr LHS, RHS;
+
+public:
+    ComparisonExprAST(char comp, ExprPtr &LHS, ExprPtr &RHS)
+    : comp(comp), LHS(move(LHS)), RHS(move(RHS)) {}
+
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override; 
+};
+
+class LogicalExprAST : public ExprAST {
+    char logical;
+    ExprPtr LHS, RHS;
+
+public:
+    LogicalExprAST(char logical, ExprPtr &LHS, ExprPtr &RHS)
+    : logical(logical), LHS(move(LHS)), RHS(move(RHS)) {}
+
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override; 
+};
+
 class CallExprAST : public ExprAST {
     string callee;
     ExprList args;
@@ -106,6 +132,27 @@ public:
     : callee(callee), args(move(args)) {}
     ~CallExprAST() override { callee.clear(); }
 
+    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    void debugPrint() override;
+};
+
+class VariableDeclAST : public ExprAST {
+    string symbol;
+    fuxType::Type type;
+    ExprPtr value;
+
+public:
+    VariableDeclAST(string symbol, fuxType::Type type = fuxType::NO_TYPE, ExprPtr &value = nullExpr) 
+    : symbol(symbol), type(type), value(move(value)) {}
+    ~VariableDeclAST() { 
+        symbol.clear(); 
+        delete &value; 
+    }
+
+    string getSymbol();
+    fuxType::Type getType();
+    ExprPtr &getValue();
+    
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
 };
