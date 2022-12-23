@@ -16,34 +16,34 @@ namespace fuxThread {
 
     Thread::Thread(const string &name, size_t id) 
     : name(name), id(id), it(future<void>()) {
-        debugPrint(true, "Initialized this thread.");
+        debugPrint("Initialized this thread.");
     }
 
     Thread::~Thread() { 
         name.clear(); 
         delete &it;
-        debugPrint(true, "Deleted this thread.");
+        debugPrint("Deleted this thread.");
     }
 
-    void Thread::debugPrint(const bool sendMessage, const string message) {  
+    void Thread::debugPrint(const string message) {  
         if (!fux.options.debugMode)
             return;
             
         cout << getDebugText() << "Thread '" << name << "' (" << id << ")";
-        if (sendMessage)
+        if (!message.empty())
             cout << ": " << message;
         cout << "\n";
     }
 
     void Thread::run(SourceFile *sf) { 
-        debugPrint(true, "Creating thread.");
+        debugPrint("Creating thread.");
         it = async(launch::async, ref(*sf));
-        debugPrint(true, "Running thread.");
+        debugPrint("Running thread.");
     }
 
     void Thread::finish() {
         it.get(); 
-        debugPrint(true, "Finished thread.");
+        debugPrint("Finished thread.");
     }
 
     ThreadManager::ThreadManager() : threads(ThreadList()), required({{}}) {

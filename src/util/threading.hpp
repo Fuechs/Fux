@@ -20,7 +20,7 @@ namespace fuxThread {
         Thread(const string &name = "unnamed", size_t id = 0);
         ~Thread();
 
-        void debugPrint(const bool sendMessage = false, const string message = "no message");
+        void debugPrint(const string message);
         // create thread and run sf->parse    
         void run(SourceFile *sf);
 

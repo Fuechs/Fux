@@ -19,7 +19,7 @@
 using namespace std;
 
 // reads and returns contents of a file
-const string readFile(const string& path);
+const string readFile(const string &path);
 
 // splits the directory from a file path
 // "some/path/file.txt" --> "some/path/"
