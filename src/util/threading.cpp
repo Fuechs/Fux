@@ -25,16 +25,6 @@ namespace fuxThread {
         debugPrint("Deleted this thread.");
     }
 
-    void Thread::debugPrint(const string message) {  
-        if (!fux.options.debugMode)
-            return;
-            
-        cout << getDebugText() << "Thread '" << name << "' (" << id << ")";
-        if (!message.empty())
-            cout << ": " << message;
-        cout << "\n";
-    }
-
     void Thread::run(SourceFile *sf) { 
         debugPrint("Creating thread.");
         it = async(launch::async, ref(*sf));
@@ -44,6 +34,10 @@ namespace fuxThread {
     void Thread::finish() {
         it.get(); 
         debugPrint("Finished thread.");
+    }
+
+    void Thread::setName(const string &name) {
+        this->name = name;
     }
 
     ThreadManager::ThreadManager() : threads(ThreadList()), required({{}}) {
@@ -68,16 +62,6 @@ namespace fuxThread {
         required.push_back({sf});
     }
 
-    void ThreadManager::debugPrint(const string message) {
-        if (!fux.options.debugMode)
-            return;
-            
-        cout << getDebugText() << "ThreadManager";
-        if (!message.empty())
-            cout << ": " << message;
-        cout << "\n";
-    }
-
     void ThreadManager::createThreads() {
         if (fux.options.debugMode) {
             threads.push_back(new Thread("universal debug thread", threads.size()));
@@ -89,11 +73,8 @@ namespace fuxThread {
             threads.pop_back();
         }
 
-        for (SourceFile *sf : required[0]) { // max amount of threads required
-            if (threads.size() >= required[0].size())
-                return;
-            threads.push_back(new Thread(sf->fileName, threads.size()));
-        }
+        while (threads.size() < required[0].size()) // create required threads
+            threads.push_back(new Thread(required[0][threads.size()]->fileName, threads.size()));
     }
 
     void ThreadManager::runThreads() {

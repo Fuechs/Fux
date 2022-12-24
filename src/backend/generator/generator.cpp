@@ -31,12 +31,7 @@ void Generator::initializeModule() {
     builder = new IRBuilder<>(*context);
 }
 
-void Generator::debugPrint(const string message) {
-    cout << getDebugText() << "Generator";
-    if (!message.empty())
-        cout << ": " << message;
-    cout << "\n";
-}
+// *::codegen()
 
 Value *RootAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
     for (ExprPtr &sub : program)
@@ -70,6 +65,9 @@ Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &na
     }
 }
 
+Value *ComparisonExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) { return nullptr; }
+Value *LogicalExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) { return nullptr; }
+
 Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
     Function *calleeFunc = module->getFunction(callee);
     if (!calleeFunc)
@@ -87,6 +85,8 @@ Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &name
 
     return builder->CreateCall(calleeFunc, argList, "calltmp");
 } 
+
+Value *VariableDeclAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) { return nullptr; }
 
 Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
     TypeList argTypes(args.size(), builder->getInt32Ty());

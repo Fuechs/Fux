@@ -26,4 +26,6 @@ public:
 private:
     ErrorManager *error;
     RootAST *root;
+
+    void debugPrint(const string message);
 };

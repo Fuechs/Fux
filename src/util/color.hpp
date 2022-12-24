@@ -37,11 +37,9 @@ namespace {
         return os << "\033[" << static_cast<int>(code) << "m";
     }
 
-    // return colored string "Debug: "
+    // return yellow string "Debug: "
     std::string getDebugText() {
-        std::stringstream ss;
-        ss << ColorCode::YELLOW << "Debug" << ColorCode::DEFAULT << ": ";
-        return ss.str();
+        return std::string("\033[33mDebug\033[39m: ");
     }
 
 }

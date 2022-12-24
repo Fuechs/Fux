@@ -409,20 +409,7 @@ public:
     string value;
     size_t line, start, end;
 
-    void debugPrint() {
-        cout    
-            << getDebugText()
-            << "<Token, "
-            << TokenTypeString[type]
-            << ", '" 
-            << value 
-            << "', "
-            << "Line "
-            << line
-            << ":"
-            << start
-            << ">\n";
-    }
+    void debugPrint();
 };
 
 typedef vector<Token> TokenList;

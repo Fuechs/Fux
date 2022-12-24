@@ -22,13 +22,3 @@ Compiler::~Compiler() {
 void Compiler::compile() {
     return;
 }
-
-void Compiler::debugPrint(const string message) {
-    if (!fux.options.debugMode)
-        return;
-        
-    cout << getDebugText() << "Compiler";
-    if (!message.empty())
-        cout << ": " << message;
-    cout << "\n";
-}

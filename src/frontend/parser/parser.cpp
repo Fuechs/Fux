@@ -27,7 +27,7 @@ RootAST *Parser::parse() {
 }
 
 ExprPtr Parser::parseStmt() {
-    return parseExpr();
+    return parseExpr(); // ! skipping variabledeclstmt here
 }
 
 ExprPtr Parser::parseVariableDeclStmt() {
@@ -37,18 +37,16 @@ ExprPtr Parser::parseVariableDeclStmt() {
     expect(EQUALS); // TODO: parse constant
     ExprPtr value = parseExpr();
     expect(SEMICOLON);
-    return make_unique<VariableDeclAST>(symbol, type, EQUALS);
+    return make_unique<VariableDeclAST>(symbol, type, value);
 }
 
-ExprPtr Parser::parseExpr() {
-    return parseAssignmentExpr();
-}
+ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
 
 ExprPtr Parser::parseAssignmentExpr() { return parseMemberExpr(); }
 
 ExprPtr Parser::parseMemberExpr() { return parseCallExpr(); }
 
-ExprPtr Parser::parseCallExpr() { return parseLogicalExpr(); }
+ExprPtr Parser::parseCallExpr() { return parseAdditiveExpr(); } // ! skipping logicalexpr here
 
 ExprPtr Parser::parseLogicalExpr() {
     ExprPtr LHS = parseComparisonExpr();

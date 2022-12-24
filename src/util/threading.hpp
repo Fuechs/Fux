@@ -27,6 +27,8 @@ namespace fuxThread {
         // wait until thread is finished
         void finish();
 
+        void setName(const string &name); 
+
     private:
         size_t id;
         string name;

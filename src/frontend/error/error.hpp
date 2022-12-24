@@ -149,10 +149,13 @@ public:
 
     string fileName;
     vector<string> lines;
+
+    void debugPrint();
     
 private:
     fuxErr::ErrorList errors;
 
     // add an error to errors (checks for errorlimit too)
     void addError(ParseError error);
+
 };
