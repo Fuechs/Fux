@@ -18,12 +18,12 @@
 
 class SourceFile {
 public:
-    SourceFile(const string& filePath, const bool mainFile = false);
+    SourceFile(const string &filePath, const bool mainFile = false);
     
     ~SourceFile();
 
     // get std::thread to run this->parse
-    void operator()(void) { this->parse(); }
+    void operator()() { this->parse(); }
     
     // parse file and save RootAST in root
     // will be called for every file that's referenced 
@@ -40,6 +40,7 @@ public:
     string fileDir;
 
     RootAST *root;
+    
 private:
     ErrorManager *error;
     Parser *parser;
