@@ -71,7 +71,7 @@ main(): i32 {
 - [&cross;] `AST Analyse`
 - [...] `IR Generation (LLVM)`
 - [&cross;] `Optimisierung (LLVM)`
-- [...] `Kompilation (LLVM)`
+- [&cross;] `Kompilation (LLVM)`
 - [...] `Runtime`
 - [...] `Syntax`
 - [...] `Standard-Bibliothek`

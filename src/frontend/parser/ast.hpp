@@ -29,7 +29,6 @@ public:
     Position(size_t lStart = 1, size_t lEnd = 1, size_t colStart = 1, size_t colEnd = 1)
     : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
 
-    // FIXME: c++ doesn't recognize overload
     Position &operator=(Position pos);
 
     size_t lStart; // first line
@@ -45,6 +44,8 @@ public:
     virtual void debugPrint() = 0;
 
     ExprAST &operator=(ExprAST &ast);
+
+    Position pos = Position();
 };
 
 typedef unique_ptr<ExprAST> ExprPtr;
@@ -63,6 +64,8 @@ public:
     
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+    
+    Position pos = Position();
 };
 
 class NumberExprAST : public ExprAST {
@@ -74,6 +77,8 @@ public:
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+  
+    Position pos = Position();
 };
 
 class VariableExprAST : public ExprAST {
@@ -85,6 +90,8 @@ public:
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+
+    Position pos = Position();
 };
 
 class BinaryExprAST : public ExprAST {
@@ -97,6 +104,8 @@ public:
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+
+    Position pos = Position();
 };
 
 class ComparisonExprAST : public ExprAST {
@@ -109,6 +118,8 @@ public:
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override; 
+
+    Position pos = Position();
 };
 
 class LogicalExprAST : public ExprAST {
@@ -121,6 +132,8 @@ public:
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override; 
+
+    Position pos = Position();
 };
 
 class CallExprAST : public ExprAST {
@@ -134,6 +147,8 @@ public:
 
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+
+    Position pos = Position();
 };
 
 class VariableDeclAST : public ExprAST {
@@ -155,6 +170,8 @@ public:
     
     Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+
+    Position pos = Position();
 };
 
 // prototype of a function
@@ -175,6 +192,8 @@ public:
     
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+
+    Position pos = Position();
 };
 
 typedef unique_ptr<PrototypeAST> ProtoPtr;
@@ -192,4 +211,6 @@ public:
 
     Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
     void debugPrint() override;
+
+    Position pos = Position();
 };
