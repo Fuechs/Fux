@@ -145,6 +145,20 @@ Token Parser::expect(TokenType type, ErrorType errType) {
     return curTok;
 }
 
+Token Parser::peek(size_t steps) {
+    size_t old = steps;
+
+    while (steps --> 0)
+        ++current;
+
+    Token ret = *current;
+
+    while (steps ++< old)
+        --current;
+
+    return ret;
+}
+
 bool Parser::notEOF() { 
     return current->type != _EOF;
 }

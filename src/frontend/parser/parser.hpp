@@ -66,6 +66,9 @@ private:
     Token eat();
     // expect an token
     Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
+    // peek to Nth token
+    Token peek(size_t steps = 1);
+
     // check wether end of file is reached
     bool notEOF();
 
