@@ -72,6 +72,7 @@ enum TokenType {
 
     // object
     COLON_COLON,    // ::
+    HASH,
     TRIPLE_DOT,     // ...
     ARRAY_BRACKET,  // []
     IDENTIFIER,     // identifier
@@ -107,7 +108,6 @@ enum TokenType {
     
     KEY_SAFE,
     KEY_INTERN,
-    KEY_STATIC,
     KEY_FINAL,
     KEY_FIXED,
 
@@ -200,6 +200,7 @@ static const char *TokenTypeString[] = {
 
     // object
     "COLON_COLON",    // ::
+    "HASH",
     "TRIPLE_DOT",     // ...
     "ARRAY_BRACKET",  // []
     "IDENTIFIER",     // identifier
@@ -235,7 +236,6 @@ static const char *TokenTypeString[] = {
     
     "KEY_SAFE",
     "KEY_INTERN",
-    "KEY_STATIC",
     "KEY_FINAL",
     "KEY_FIXED",
 
@@ -328,6 +328,7 @@ static const char *TokenTypeValue[] = {
 
     // object
     "::",    // ::
+    "#",   
     "...",     // ...
     "[]",   
     "ident",     // identifier
@@ -363,7 +364,6 @@ static const char *TokenTypeValue[] = {
     
     "safe",
     "intern",
-    "static",
     "final",
     "fixed",
 

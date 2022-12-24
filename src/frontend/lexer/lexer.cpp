@@ -383,6 +383,11 @@ void Lexer::getToken() {
             currentToken.type = BIT_AND;
             advance();
             break;
+
+        case '#':
+            currentToken.type = HASH;
+            advance();
+            break;
         
         case ' ':
         case '\t':
@@ -643,7 +648,6 @@ void Lexer::checkKeyword() {
     
     else if (currentToken.value == "safe")          currentToken.type = KEY_SAFE;
     else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;
-    else if (currentToken.value == "static")        currentToken.type = KEY_STATIC;
     else if (currentToken.value == "final")         currentToken.type = KEY_FINAL;
     else if (currentToken.value == "fixed")         currentToken.type = KEY_FIXED;
 
