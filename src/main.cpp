@@ -22,6 +22,27 @@ void createTestAST(RootAST *root);
 int main(int argc, char **argv) {
     int result = 0;
 
+    #if defined(FUX_WIN_INVALID)
+        cout << "[ERROR]: Unsupported 'windows' architecture: Fux requires 64-bit.\n";
+        return result;
+    #elif defined(FUX_UNKNOWN_PLATFORM)
+        cout << "[WARNING]: Unknown platform. Compiled version may be broken.\n";
+    #endif
+
+    #ifdef FUX_DEV_DEBUG
+        cout << getDebugText() << "This version of Fux was compiled for ";
+        #if defined(FUX_WIN)
+            cout << "Windows";
+        #elif defined(FUX_LINUX)
+            cout << "Linux";
+        #elif defined(FUX_UNIX)
+            cout << "Unix";
+        #elif defined(FUX_DARWIN)
+            cout << "Darwin (MacOS)";
+        #endif
+        cout << ".\n";
+    #endif
+
     // result = bootstrap(argc, argv);
     // switch (result) {
     //     case -1:    return repl();

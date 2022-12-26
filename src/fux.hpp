@@ -38,6 +38,28 @@
 
 #define FUX_DEV_DEBUG
 
+/**
+ * Determination a platform of an operation system
+ * Fully supported supported only GNU GCC/G++, partially on Clang/LLVM
+ */
+
+#if defined(_WIN32) || defined(_WIN64) || (defined(__CYGWIN__) && defined(_WIN32))
+    #ifndef _WIN64
+        #define FUX_WIN_INVALID
+    #else
+        #define FUX_WIN
+        #include <windows.h>
+    #endif
+#elif defined(__linux__) 
+    #define FUX_LINUX 
+#elif defined(__unix__) || !defined(__APPLE__) && defined(__MACH__)
+    #define FUX_UNIX
+#elif defined(__APPLE__) && defined(__MACH__) 
+    #define FUX_DARWIN
+#else
+    #define FUX_UNKNOWN_PLATFORM
+#endif
+
 using namespace std;
 
 // compiler options / flags
@@ -56,7 +78,11 @@ struct __options_struct {
     vector<string> fileLines; // lines of that file (main)
     string out              = "a.out"; // output binary file
     string version          = "0.1";
-    vector<string> libraries = {"/usr/local/include/fux/"}; // library paths
+    vector<string> libraries = {
+        #ifdef FUX_DARWIN
+            "/usr/local/include/fux/",
+        #endif
+    }; // library paths
 
     bool aggressiveErrors   = false;
     bool compileOnly        = false;
