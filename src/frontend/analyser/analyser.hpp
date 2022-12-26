@@ -18,14 +18,18 @@
 
 class Analyser {
 public:
-    Analyser(ErrorManager *error, RootAST *root) : error(error), root(root) {}
+    Analyser(ErrorManager *error, RootAST *root) 
+    : error(error), origin(root), mod(new RootAST(root)) {} // create a copy for now
+
+    ~Analyser() { delete mod; }
 
     // analyse AST 
-    void analyse() { return; }
+    void analyse() { *origin = *mod; }
 
 private:
     ErrorManager *error;
-    RootAST *root;
+    RootAST *origin;
+    RootAST *mod;
 
     void debugPrint(const string message);
 };

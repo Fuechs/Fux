@@ -49,4 +49,6 @@ private:
     // initialize context, module & builder
     void initializeModule();
     void debugPrint(const string message);
+
+    Type *getType(fuxType::Type type, const bool pointer = false);
 };

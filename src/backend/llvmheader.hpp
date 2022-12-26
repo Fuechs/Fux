@@ -37,7 +37,6 @@
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
 
-
 using namespace llvm;
 
 typedef vector<Value *> ValueList;

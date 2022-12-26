@@ -58,6 +58,7 @@ class RootAST : public ExprAST {
 
 public:
     RootAST() : program(ExprList()) {}
+    RootAST(RootAST *copy) { this->program = copy->program; }
 
     void addSub(ExprPtr &sub);
     ExprList getProg();
