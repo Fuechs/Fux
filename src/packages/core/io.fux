@@ -4,8 +4,10 @@ get string;
 
 io {
 
-    :IOBuffer {
+    class IOBuffer {
         intern buffer: str[256];
+
+        #IOBuffer() { delete &buffer; }
         
         operator<<(this -> IOBuffer, val: str) -> IOBuffer {
             this.buffer[] << val;

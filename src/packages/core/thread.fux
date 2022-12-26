@@ -5,8 +5,11 @@ get sys;
 thread {
     
     template<R>
-    :Thread {
-        ::(*function: R, args: var, ...);
+    class Thread {
+        intern *function: R;
+        intern args: var[];
+        
+        Thread(*function: R, args: var, ...);
 
         join(): R;
         detach(): R;

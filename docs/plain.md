@@ -4,12 +4,16 @@
 > These are just plain notes so that I can remember the syntax.
 > There will be insufficient explanations.
 
+
 - [Classes](#classes)
     - [Constructor](#constructor)
     - [Destructor](#destructor)
     - [Access Modifiers](#access-modifiers)
 
 ## Classes
+
+> __Warning__ \
+> Outdated.
 
 ```rust
 // <parent>:<name> { <body> }
@@ -40,7 +44,7 @@ SomeParent:SomeClass {
 
 ### Destructor
 
-Can be called with `delete <address>;`
+Can be called with `delete <address>, <arguments>;`
 
 ```rust
 // { ... #(<parameters>) { <body> } ... }

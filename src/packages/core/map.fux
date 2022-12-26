@@ -2,23 +2,34 @@ package core;
 
 map {
 
-    tempalte<K, V>
-    :KeyPair::(K key, V value) {
-        set(K key, V value) {
+    template<K, V>
+    class KeyPair {
+        key: K;
+        value V;
+
+        KeyPair(key: K, value: V) {
+            self.key = key;
+            self.value = value;
+        }
+
+        #KeyPair() {
+            delete &key;
+            delete &value;
+        }
+
+        set(key: K, value: V) {
             self.key = key;
             self.value = value;
         }
     }
 
     template<K, V>
-    :KeyMap {
-        ::() {
-            intern self.keymap: KeyPair<K, V>[] = {};
-        }
+    class KeyMap {
+        intern keymap: KeyPair<K, V>[];
 
         operator[](final key: K) -> V {
             // ineffecient af idk
-            for (pair: KeyPare<K, V> in self.keymap)
+            for (pair: KeyPare<K, V> in keymap)
                 if (pair.key == key)
                     return pair.value;
         }
@@ -32,4 +43,5 @@ map {
             // TODO: parallel search / multithreading
         }
     }
+    
 }

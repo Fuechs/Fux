@@ -72,7 +72,7 @@ enum TokenType {
 
     // object
     COLON_COLON,    // ::
-    HASH,
+    HASH,           // #
     TRIPLE_DOT,     // ...
     ARRAY_BRACKET,  // []
     IDENTIFIER,     // identifier
@@ -137,6 +137,7 @@ enum TokenType {
     KEY_VAR,
     KEY_ENUM,
     KEY_STRUCT,
+    KEY_CLASS,
 
     _EOF,           // end of file
     NONE,
@@ -265,12 +266,13 @@ static const char *TokenTypeString[] = {
     "KEY_VAR",
     "KEY_ENUM",
     "KEY_STRUCT",
+    "KEY_CLASS",
 
     "EOF",           // end of file
     "NONE",
 };
 
-static const char *TokenTypeValue[] = {
+static vector<string> TokenTypeValue = {
     // structure
     "(",         // (
     ")",         // )
@@ -393,6 +395,7 @@ static const char *TokenTypeValue[] = {
     "var",
     "enum",
     "struct",
+    "class",
 
     "eof",           // end of file
     "none",

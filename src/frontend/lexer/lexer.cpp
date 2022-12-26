@@ -621,60 +621,9 @@ bool Lexer::skipComment() {
     return false;
 }
 
-void Lexer::checkKeyword() {
-    if      (currentToken.value == "get")           currentToken.type = KEY_GET;
-    else if (currentToken.value == "package")       currentToken.type = KEY_PACKAGE;
-    else if (currentToken.value == "if")            currentToken.type = KEY_IF;
-    else if (currentToken.value == "else")          currentToken.type = KEY_ELSE;
-    else if (currentToken.value == "while")         currentToken.type = KEY_WHILE;
-    else if (currentToken.value == "do")            currentToken.type = KEY_DO;
-    else if (currentToken.value == "for")           currentToken.type = KEY_FOR;
-    else if (currentToken.value == "in")            currentToken.type = KEY_IN;
-    else if (currentToken.value == "is")            currentToken.type = KEY_IS;
-    else if (currentToken.value == "return")        currentToken.type = KEY_RETURN;
-    else if (currentToken.value == "except")        currentToken.type = KEY_EXCEPT;
-    else if (currentToken.value == "switch")        currentToken.type = KEY_SWITCH;
-    else if (currentToken.value == "case")          currentToken.type = KEY_CASE;
-    else if (currentToken.value == "default")       currentToken.type = KEY_DEFAULT;
-    else if (currentToken.value == "not")           currentToken.type = KEY_NOT;
-    else if (currentToken.value == "break")         currentToken.type = KEY_BREAK;
-    else if (currentToken.value == "label")         currentToken.type = KEY_LABEL;
-    else if (currentToken.value == "goto")          currentToken.type = KEY_GOTO;
-    else if (currentToken.value == "delete")        currentToken.type = KEY_DELETE;
-    else if (currentToken.value == "exit")          currentToken.type = KEY_EXIT;
-    else if (currentToken.value == "puts")          currentToken.type = KEY_PUTS;
-    else if (currentToken.value == "putch")         currentToken.type = KEY_PUTCH;
-    else if (currentToken.value == "throw")         currentToken.type = KEY_THROW;
-    
-    else if (currentToken.value == "safe")          currentToken.type = KEY_SAFE;
-    else if (currentToken.value == "intern")        currentToken.type = KEY_INTERN;
-    else if (currentToken.value == "final")         currentToken.type = KEY_FINAL;
-    else if (currentToken.value == "fixed")         currentToken.type = KEY_FIXED;
-
-    else if (currentToken.value == "using")         currentToken.type = KEY_USING;
-    else if (currentToken.value == "typedef")       currentToken.type = KEY_TYPEDEF;
-    else if (currentToken.value == "operator")      currentToken.type = KEY_OPERATOR;
-    
-    else if (currentToken.value == "true")          currentToken.type = KEY_TRUE;
-    else if (currentToken.value == "false")         currentToken.type = KEY_FALSE;
-    else if (currentToken.value == "null")          currentToken.type = KEY_NULL;
-
-    else if (currentToken.value == "void")          currentToken.type = KEY_VOID;
-    else if (currentToken.value == "bool")          currentToken.type = KEY_BOOL;
-    else if (currentToken.value == "i8")            currentToken.type = KEY_I8;
-    else if (currentToken.value == "u8")            currentToken.type = KEY_U8;
-    else if (currentToken.value == "c8")            currentToken.type = KEY_C8;
-    else if (currentToken.value == "i16")           currentToken.type = KEY_I16;
-    else if (currentToken.value == "u16")           currentToken.type = KEY_U16;
-    else if (currentToken.value == "c16")           currentToken.type = KEY_C16;
-    else if (currentToken.value == "i32")           currentToken.type = KEY_I32;
-    else if (currentToken.value == "u32")           currentToken.type = KEY_U32;
-    else if (currentToken.value == "f32")           currentToken.type = KEY_F32;
-    else if (currentToken.value == "i64")           currentToken.type = KEY_I64;
-    else if (currentToken.value == "u64")           currentToken.type = KEY_U64;
-    else if (currentToken.value == "f64")           currentToken.type = KEY_F64;
-    else if (currentToken.value == "str")           currentToken.type = KEY_STR;
-    else if (currentToken.value == "var")           currentToken.type = KEY_VAR;
-    else if (currentToken.value == "enum")          currentToken.type = KEY_ENUM;
-    else if (currentToken.value == "struct")        currentToken.type = KEY_STRUCT;
+void Lexer::checkKeyword() { 
+    auto it = find(TokenTypeValue.begin(), TokenTypeValue.end(), currentToken.value);
+  
+    if (it != TokenTypeValue.end())
+        currentToken.value = TokenTypeValue[it - TokenTypeValue.begin()];
 }
