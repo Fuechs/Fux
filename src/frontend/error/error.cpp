@@ -77,24 +77,24 @@ void ParseError::report() {
 
     stringstream errorMessage;
     
-    errorMessage << StyleCode::BOLD << fileName << ":" << pos.lStart << ":" << pos.colStart << ": ";
+    errorMessage << SC::BOLD << fileName << ":" << pos.lStart << ":" << pos.colStart << ": ";
     
     if (warning)
-        errorMessage << ColorCode::MAGENTA << "warning: ";
+        errorMessage << CC::MAGENTA << "warning: ";
     else
-        errorMessage << ColorCode::RED << "error: ";
+        errorMessage << CC::RED << "error: ";
     
     errorMessage 
-        << ColorCode::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
-        << StyleCode::SLIM << lineContent.at(0) << "\n\t";
+        << CC::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
+        << SC::RESET << lineContent.at(0) << "\n\t";
     
     size_t i;
     for (i = 0; i < (pos.colStart - 1); i++) // -1 so arrow points at exact position
         errorMessage << " ";
-    errorMessage << ColorCode::GREEN << StyleCode::BOLD;
+    errorMessage << CC::GREEN << SC::BOLD;
     while (i++ < pos.colEnd)
         errorMessage << "^";
-    errorMessage << ColorCode::DEFAULT << StyleCode::SLIM << endl;
+    errorMessage << CC::DEFAULT << SC::RESET << endl;
     
     cerr << errorMessage.str();
     reported = true;
@@ -181,9 +181,9 @@ void ErrorManager::addError(ParseError error) {
     if (errorCount() >= fux.options.errorLimit) {
         reportAll();
         cerr 
-            << ColorCode::RED << StyleCode::BOLD 
+            << CC::RED << SC::BOLD 
             << "Hit error limit of " << fux.options.errorLimit << "."
-            << ColorCode::DEFAULT << StyleCode::SLIM
+            << CC::DEFAULT << SC::RESET
             << endl;
         exit(error.type);
     }

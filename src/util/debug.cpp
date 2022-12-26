@@ -28,7 +28,7 @@ void Token::debugPrint() {
         return;
 
     cout    
-        << getDebugText()
+        << debugText
         << "<Token, " << TokenTypeString[type] << ", '"  
         << value << "', "
         << "Line " << line << ":" << start << ">\n";
@@ -39,7 +39,7 @@ void Lexer::debugPrint() {
     if (!fux.options.debugMode)
         return;
     
-    cout << getDebugText() << "Lexer:\n";
+    cout << debugText << "Lexer:\n";
     for (Token &token : tokens)
         token.debugPrint();
 }
@@ -50,7 +50,7 @@ void RootAST::debugPrint() {
     if (!fux.options.debugMode)
         return;
 
-    cout << getDebugText() << "Root AST";
+    cout << debugText << "Root AST";
     for (ExprPtr &sub : program) {
         cout << "\n";
         sub->debugPrint();
@@ -108,7 +108,7 @@ void Parser::debugPrint(const string message) {
     if (!fux.options.debugMode)
         return;
 
-    cout << getDebugText() << "Parser";
+    cout << debugText<< "Parser";
     if (!message.empty())
         cout << ": " << message;
     cout << "\n";
@@ -120,7 +120,7 @@ void Analyser::debugPrint(const string message) {
     if (!fux.options.debugMode)
         return;
 
-    cout << getDebugText() << "Analyser";
+    cout << debugText << "Analyser";
     if (!message.empty())
         cout << ": " << message;
     cout << "\n";
@@ -136,7 +136,7 @@ void Generator::debugPrint(const string message) {
     if (!fux.options.debugMode)
         return;
 
-    cout << getDebugText() << "Generator";
+    cout << debugText << "Generator";
     if (!message.empty())
         cout << ": " << message;
     cout << "\n";
@@ -148,7 +148,7 @@ void Compiler::debugPrint(const string message) {
     if (!fux.options.debugMode)
         return;
         
-    cout << getDebugText() << "Compiler";
+    cout << debugText << "Compiler";
     if (!message.empty())
         cout << ": " << message;
     cout << "\n";
@@ -160,7 +160,7 @@ void fuxThread::Thread::debugPrint(const string message) {
     if (!fux.options.debugMode)
         return;
             
-    cout << getDebugText() << "Thread '" << name << "' (" << id << ")";
+    cout << debugText << "Thread '" << name << "' (" << id << ")";
     if (!message.empty())
         cout << ": " << message;
     cout << "\n";
@@ -170,7 +170,7 @@ void fuxThread::ThreadManager::debugPrint(const string message) {
     if (!fux.options.debugMode)
         return;
         
-    cout << getDebugText() << "ThreadManager";
+    cout << debugText << "ThreadManager";
     if (!message.empty())
         cout << ": " << message;
     cout << "\n";

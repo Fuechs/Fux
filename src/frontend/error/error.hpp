@@ -140,9 +140,9 @@ public:
         reportAll();
         if (fatal)
             cout 
-                << ColorCode::RED << StyleCode::BOLD 
+                << CC::RED << SC::BOLD 
                 << "Hit a fatal error.\n" 
-                << ColorCode::DEFAULT << StyleCode::SLIM;
+                << CC::DEFAULT << SC::RESET;
         delete this;
     }
 

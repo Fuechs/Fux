@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     #endif
 
     #ifdef FUX_DEV_DEBUG
-        cout << getDebugText() << "This version of Fux was compiled for ";
+        cout << debugText << "This version of Fux was compiled for ";
         #if defined(FUX_WIN)
             cout << "Windows";
         #elif defined(FUX_LINUX)
