@@ -37,7 +37,14 @@
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
 
+// FIXME: recompile llvm as described in mlir.llvm.org
+
+// #include <mlir/Dialect/StandardOps/IR/Ops.h>
+// #include <mlir/IR/MLIRContext.h>
+// #include <mlir/Pass/PassManager.h>
+
 using namespace llvm;
+// using namespace mlir;
 
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;

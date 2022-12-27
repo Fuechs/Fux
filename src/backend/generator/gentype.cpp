@@ -24,12 +24,12 @@ Type *Generator::getType(fuxType::Type type, const bool pointer) {
             case fuxType::I16:      return Type::getInt16PtrTy(*context);
             case fuxType::U16:      return Type::getInt16PtrTy(*context);
             case fuxType::C16:      return Type::getInt16PtrTy(*context);
-            case fuxType::I32:      return Type::getInt16PtrTy(*context);
-            case fuxType::U32:      return Type::getInt16PtrTy(*context);
-            case fuxType::F32:      return Type::getInt16PtrTy(*context);
-            case fuxType::I64:      return Type::getInt16PtrTy(*context);
-            case fuxType::U64:      return Type::getInt16PtrTy(*context);
-            case fuxType::F64:      return Type::getInt16PtrTy(*context);
+            case fuxType::I32:      return Type::getInt32PtrTy(*context);
+            case fuxType::U32:      return Type::getInt32PtrTy(*context);
+            case fuxType::F32:      return Type::getFloatPtrTy(*context);
+            case fuxType::I64:      return Type::getInt64PtrTy(*context);
+            case fuxType::U64:      return Type::getInt64PtrTy(*context);
+            case fuxType::F64:      return Type::getDoublePtrTy(*context);
             case fuxType::STR:      return builder->getPtrTy();
             default:                return nullptr;
         }

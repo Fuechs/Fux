@@ -70,8 +70,21 @@ void BinaryExprAST::debugPrint() {
     cout << ")";
 }
 
-void ComparisonExprAST::debugPrint() { return; }
-void LogicalExprAST::debugPrint() { return; }
+void ComparisonExprAST::debugPrint() { 
+    cout << "(";
+    LHS->debugPrint();
+    cout << " " << comp << " ";
+    RHS->debugPrint();
+    cout << ")";
+}
+
+void LogicalExprAST::debugPrint() { 
+    cout << "(";
+    LHS->debugPrint();
+    cout << " " << logical << " ";
+    RHS->debugPrint();
+    cout << ")";
+ }
 
 void CallExprAST::debugPrint() { 
     cout << callee << "( ";
@@ -82,7 +95,14 @@ void CallExprAST::debugPrint() {
     cout << ");";
 }
 
-void VariableDeclAST::debugPrint() { return; }
+void VariableDeclAST::debugPrint() {
+    cout << symbol << ": " << fuxType::TypeString[type] << "";
+    if (value) {
+        cout << " = ";
+        value->debugPrint();
+    }
+    cout << ";";
+}
 
 void PrototypeAST::debugPrint() {
     cout << name << "( ";
