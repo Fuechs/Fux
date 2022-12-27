@@ -19,12 +19,12 @@
 class Analyser {
 public:
     Analyser(ErrorManager *error, RootAST *root) 
-    : error(error), origin(root), mod(new RootAST(root)) {} // create a copy for now
+    : error(error), origin(root), mod(new RootAST()) {} 
 
     ~Analyser() { delete mod; }
 
     // analyse AST 
-    void analyse() { *origin = *mod; }
+    void analyse() { return; }
 
 private:
     ErrorManager *error;

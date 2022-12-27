@@ -12,8 +12,7 @@
 #include "fux.hpp"
 #include "util/source.hpp"
 #include "util/threading.hpp"
-#include "backend/generator/generator.hpp"
-#include "backend/compiler/compiler.hpp"
+#include "backend/context/context.hpp"
 
 __fux_struct fux;
 
@@ -68,22 +67,7 @@ int main(int argc, char **argv) {
     return result; // ! program ends here
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
-        Generator *generator = new Generator(root);
-        generator->generate();
-        if (false) { // TODO: check for errors
-            generator->forceDelete();
-            goto end;
-        } 
-        
-        {
-            Compiler *compiler = new Compiler(mainFile->filePath, generator->getModule());
-            compiler->compile();
-
-            if (false) { // TODO: check for errors
-                delete compiler;
-                goto end;        
-            }
-        }
+        FuxContext *context = new FuxContext(root);
     }
 
     end:
