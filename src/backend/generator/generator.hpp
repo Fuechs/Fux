@@ -19,8 +19,9 @@ typedef map<string, Value *> ValueMap;
 
 class Generator {
 public:
-    Generator(RootAST *root, Module *module, IRBuilder<> *builder) 
-    : root(root), context(&module->getContext()), module(module), builder(builder) {}
+    Generator(RootAST *root, Module *module) 
+    : root(root), context(&module->getContext()), 
+    module(module), builder(new IRBuilder<>(*context)) {}
 
     ~Generator() { 
         delete root;
@@ -35,9 +36,6 @@ public:
     }
 
     void generate();
-
-    LLVMContext *getContext() { return context; }
-    Module *getModule() { return module; }
 
 private:
     RootAST *root;

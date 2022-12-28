@@ -38,9 +38,6 @@
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
 
-#include <mlir/IR/MLIRContext.h>
-#include <mlir/Pass/PassManager.h>
-
 using namespace llvm;
 
 typedef vector<Value *> ValueList;

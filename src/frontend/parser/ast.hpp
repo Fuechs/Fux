@@ -17,11 +17,8 @@
 
 #include "../../backend/llvmheader.hpp"
 
-using llvm::Value, llvm::Function, llvm::IRBuilder, llvm::Module;
-
 typedef map<string, Value *> ValueMap;
 typedef map<string, fuxType::Type> ArgMap;
-
 
 // exact position of an AST for error tracking
 // TODO: implement in error and parser

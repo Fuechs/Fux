@@ -16,27 +16,9 @@
 #include "../compiler/compiler.hpp"
 
 /**
- * FLIR:    ...    
- * MLIR:    ...Lowered FLIR to MLIR
- * LIR:     ...Lowered MLIR to LIR
- * IR:      ...Lowered LIR to LLVM IR
- * NOOPT:   ...No optimization
- * OPTN:    ...Nth optimization
- */
-enum class FuxPhase {
-    FLIR,
-    MLIR,
-    LIR,
-    IR,
-    NOOPT,
-    OPT1, 
-    OPT2, 
-    OPT3, 
-};
-
-/**
  * Manages...
  * ...Generator
+ * ...Optimizer
  * ...Compiler
  * ...LLVMContext
  * ...MLIRContext
@@ -44,18 +26,26 @@ enum class FuxPhase {
  */
 class FuxContext {
 public:
-    LLVMContext *llvmContext;
-    mlir::MLIRContext *mlirContext;
-    
     FuxContext(RootAST *root);
     ~FuxContext();
 
-    mlir::PassManager *passManager;
+    LLVMContext *llvmContext;
+    Module *module;
     string target;
-    FuxPhase phase;
+
+    void run();
 
 private:
     RootAST *root;
     Generator *generator;
     Compiler *compiler;
+
+    /* generate IR */
+    void generate();
+    /* optimize IR */
+    void optimize();
+    /* compile to assembly */
+    void compile();
+
+    void debugPrint(const string message);
 };

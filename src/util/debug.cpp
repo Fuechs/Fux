@@ -17,6 +17,7 @@
 #include "../frontend/parser/parser.hpp"
 #include "../frontend/analyser/analyser.hpp"
 #include "../frontend/error/error.hpp"
+#include "../backend/context/context.hpp"
 #include "../backend/generator/generator.hpp"
 #include "../backend/compiler/compiler.hpp"
 #include "threading.hpp"
@@ -149,6 +150,18 @@ void Analyser::debugPrint(const string message) {
 // * ERROR
 
 void ErrorManager::debugPrint() { return; }
+
+// * CONTEXT
+
+void FuxContext::debugPrint(const string message) {
+    if (!fux.options.debugMode)
+        return;
+    
+    cout << debugText << "FuxContext";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
 
 // * GENERATOR
 
