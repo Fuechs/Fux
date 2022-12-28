@@ -35,20 +35,23 @@ enum class FuxPhase {
 };
 
 /**
- * imagine description here.
+ * Manages...
+ * ...Generator
+ * ...Compiler
+ * ...LLVMContext
+ * ...MLIRContext
  * 
  */
 class FuxContext {
 public:
+    LLVMContext *llvmContext;
+    mlir::MLIRContext *mlirContext;
+    
     FuxContext(RootAST *root);
     ~FuxContext();
 
-    LLVMContext *llvmContext;
-    Module *module;
-    IRBuilder<> *builder;
-    // MLIRContext *mlirContext;
-    // PassManager *passManager;
-    string targetTripe;
+    mlir::PassManager *passManager;
+    string target;
     FuxPhase phase;
 
 private:

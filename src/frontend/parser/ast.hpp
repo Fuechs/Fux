@@ -17,15 +17,15 @@
 
 #include "../../backend/llvmheader.hpp"
 
-#include <llvm/IR/Value.h>
+using llvm::Value, llvm::Function, llvm::IRBuilder, llvm::Module;
 
 typedef map<string, Value *> ValueMap;
 typedef map<string, fuxType::Type> ArgMap;
 
+
 // exact position of an AST for error tracking
 // TODO: implement in error and parser
-class Position {
-public:
+struct Position {
     Position(size_t lStart = 1, size_t lEnd = 1, size_t colStart = 1, size_t colEnd = 1)
     : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
 
@@ -58,7 +58,7 @@ class RootAST : public ExprAST {
 
 public:
     RootAST() : program(ExprList()) {}
-    
+        
     void addSub(ExprPtr &sub);
     ExprList getProg();
     

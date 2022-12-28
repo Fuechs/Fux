@@ -13,21 +13,18 @@
 
 FuxContext::FuxContext(RootAST *root) {
     this->llvmContext = new LLVMContext();
-    this->module = new Module("fux compiler", *llvmContext);
-    this->builder = new IRBuilder<>(*llvmContext);
-    // this->targetTripe = ...;
+    this->mlirContext = new mlir::MLIRContext();
+    this->passManager = new mlir::PassManager(mlirContext, "fux pass manager");
+    this->target = fux.options.target;
     this->phase = FuxPhase::FLIR;
 
     this->root = root;
-    this->generator = new Generator(root, module, builder);
+    this->generator = new Generator(root, nullptr, nullptr);
     this->compiler = nullptr; // will be required after generation
 }
 
 FuxContext::~FuxContext() {
     delete llvmContext;
-    delete module;
-    delete builder;
     delete root;
     delete compiler;
 }
-

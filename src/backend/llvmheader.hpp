@@ -34,14 +34,14 @@
 #include <llvm/Support/Host.h>
 #include <llvm/Support/TargetSelect.h>
 #include <llvm/Support/raw_ostream.h>
+
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
 
 #include <mlir/IR/MLIRContext.h>
-#include <mlir/InitAllDialects.h>
+#include <mlir/Pass/PassManager.h>
 
 using namespace llvm;
-// using namespace mlir;
 
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;
