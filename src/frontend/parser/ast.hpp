@@ -16,6 +16,7 @@
 #include "type.hpp"
 
 #include "../../backend/llvmheader.hpp"
+#include "../../backend/generator/wrapper.hpp"
 
 typedef map<string, Value *> ValueMap;
 typedef map<string, fuxType::Type> ArgMap;
@@ -37,7 +38,7 @@ struct Position {
 class ExprAST {
 public:
     virtual ~ExprAST() {}
-    virtual Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) = 0;
+    virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
     virtual void debugPrint() = 0;
 
     ExprAST &operator=(ExprAST &ast);
@@ -59,7 +60,7 @@ public:
     void addSub(ExprPtr &sub);
     ExprList getProg();
     
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
     
     Position pos = Position();
@@ -72,7 +73,7 @@ class NumberExprAST : public ExprAST {
 public:
     NumberExprAST(fuxType::Type type, double value) : type(type), value(value) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
   
     Position pos = Position();
@@ -85,7 +86,7 @@ public:
     VariableExprAST(const string& name) : name(name) {}
     ~VariableExprAST() override { name.clear(); }
 
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -99,7 +100,7 @@ public:
     BinaryExprAST(char op, ExprPtr &LHS, ExprPtr &RHS) 
     : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -113,7 +114,7 @@ public:
     ComparisonExprAST(char comp, ExprPtr &LHS, ExprPtr &RHS)
     : comp(comp), LHS(move(LHS)), RHS(move(RHS)) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override; 
 
     Position pos = Position();
@@ -127,7 +128,7 @@ public:
     LogicalExprAST(char logical, ExprPtr &LHS, ExprPtr &RHS)
     : logical(logical), LHS(move(LHS)), RHS(move(RHS)) {}
 
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override; 
 
     Position pos = Position();
@@ -142,7 +143,7 @@ public:
     : callee(callee), args(move(args)) {}
     ~CallExprAST() override { callee.clear(); }
 
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -165,7 +166,7 @@ public:
     fuxType::Type getType();
     ExprPtr &getValue();
     
-    Value *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -187,7 +188,7 @@ public:
     ArgMap getArgs();
     fuxType::Type getType();
     
-    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Function *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -206,7 +207,7 @@ public:
     FunctionAST(ProtoPtr proto, ExprList &body)
     : proto(move(proto)), body(move(body)) {}
 
-    Function *codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) override;
+    Function *codegen(LLVMWrapper *fuxLLVM) override;
     void debugPrint() override;
 
     Position pos = Position();

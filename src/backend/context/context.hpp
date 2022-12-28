@@ -14,6 +14,7 @@
 #include "../llvmheader.hpp"
 #include "../generator/generator.hpp"
 #include "../compiler/compiler.hpp"
+#include "../generator/wrapper.hpp"
 
 /**
  * Manages...
@@ -29,7 +30,7 @@ public:
     FuxContext(RootAST *root);
     ~FuxContext();
 
-    LLVMContext *llvmContext;
+    LLVMWrapper *fuxLLVM;
     Module *module;
     string target;
 

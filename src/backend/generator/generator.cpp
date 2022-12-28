@@ -12,64 +12,53 @@
 #include "generator.hpp"
 
 void Generator::generate() {
-    initializeModule();
-
-    root->codegen(builder, module, namedValues);
+    root->codegen(fuxLLVM);
 
     if (fux.options.debugMode)
-        module->print(errs(), nullptr);
+        fuxLLVM->module->print(errs(), nullptr);
     
     delete this;
 }
 
-void Generator::initializeModule() {
-    delete context; 
-    delete module;
-    delete builder;
-    context = new LLVMContext();
-    module = new Module("fux compiler", *context);
-    builder = new IRBuilder<>(*context);
-}
-
 // *::codegen()
 
-Value *RootAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
+Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
     for (ExprPtr &sub : program)
-        sub->codegen(builder, module, namedValues);
+        sub->codegen(fuxLLVM);
     return nullptr;
 }
 
-Value *NumberExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    return builder->getInt32((_i32) value);
+Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) {
+    return fuxLLVM->builder->getInt32((_i32) value);
 }
 
-Value *VariableExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    Value *V = namedValues[name];
+Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *V = fuxLLVM->namedValues[name];
     if (!V)
         return nullptr;
     return V;
 }
 
-Value *BinaryExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    Value *L = LHS->codegen(builder, module, namedValues);
-    Value *R = RHS->codegen(builder, module, namedValues);
+Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *L = LHS->codegen(fuxLLVM);
+    Value *R = RHS->codegen(fuxLLVM);
     if (!L || !R)
         return nullptr;
 
     switch (op) {
-        case '+':   return builder->CreateAdd(L, R, "addtmp");
-        case '-':   return builder->CreateSub(L, R, "subtmp");
-        case '*':   return builder->CreateMul(L, R, "multmp");
-        case '/':   return builder->CreateFDiv(L, R, "divtmp");
+        case '+':   return fuxLLVM->builder->CreateAdd(L, R, "addtmp");
+        case '-':   return fuxLLVM->builder->CreateSub(L, R, "subtmp");
+        case '*':   return fuxLLVM->builder->CreateMul(L, R, "multmp");
+        case '/':   return fuxLLVM->builder->CreateFDiv(L, R, "divtmp");
         default:    return nullptr;
     }
 }
 
-Value *ComparisonExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) { return nullptr; }
-Value *LogicalExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) { return nullptr; }
+Value *ComparisonExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *LogicalExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    Function *calleeFunc = module->getFunction(callee);
+Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
+    Function *calleeFunc = fuxLLVM->module->getFunction(callee);
     if (!calleeFunc)
         return nullptr;
     
@@ -78,26 +67,26 @@ Value *CallExprAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &name
 
     ValueList argList;
     for (size_t i = 0, e = args.size(); i != e; ++i) {
-        argList.push_back(args[i]->codegen(builder, module, namedValues));
+        argList.push_back(args[i]->codegen(fuxLLVM));
         if (!argList.back())    
             return nullptr;
     }
 
-    return builder->CreateCall(calleeFunc, argList, "calltmp");
+    return fuxLLVM->builder->CreateCall(calleeFunc, argList, "calltmp");
 } 
 
-Value *VariableDeclAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) { return nullptr; }
+Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    TypeList argTypes(args.size(), builder->getInt32Ty());
+Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
+    TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
     FunctionType *funcType;
     switch (type) {
-        case fuxType::VOID: funcType = FunctionType::get(builder->getVoidTy(), argTypes, false); break;
-        case fuxType::I32:  funcType = FunctionType::get(builder->getInt32Ty(), argTypes, false); break;
-        case fuxType::F64:  funcType = FunctionType::get(builder->getDoubleTy(), argTypes, false); break;
+        case fuxType::VOID: funcType = FunctionType::get(fuxLLVM->builder->getVoidTy(), argTypes, false); break;
+        case fuxType::I32:  funcType = FunctionType::get(fuxLLVM->builder->getInt32Ty(), argTypes, false); break;
+        case fuxType::F64:  funcType = FunctionType::get(fuxLLVM->builder->getDoubleTy(), argTypes, false); break;
         default:            return nullptr;
     }
-    Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *module);
+    Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *fuxLLVM->module);
     
     auto it = args.begin();
     for (auto &arg : func->args())
@@ -106,32 +95,32 @@ Function *PrototypeAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &
     return func;
 }
 
-Function *FunctionAST::codegen(IRBuilder<> *builder, Module *module, ValueMap &namedValues) {
-    Function *func = module->getFunction(proto->getName());  
-    if (!func)  func = proto->codegen(builder, module, namedValues);
+Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
+    Function *func = fuxLLVM->module->getFunction(proto->getName());  
+    if (!func)  func = proto->codegen(fuxLLVM);
     if (!func)  return nullptr; 
     
     if (!func->empty()) 
         return nullptr; // cannot be redefined
 
-    BasicBlock *BB = BasicBlock::Create(builder->getContext(), "entry", func);
-    builder->SetInsertPoint(BB);
+    BasicBlock *BB = BasicBlock::Create(fuxLLVM->builder->getContext(), "entry", func);
+    fuxLLVM->builder->SetInsertPoint(BB);
 
-    namedValues.clear();
+    fuxLLVM->namedValues.clear();
     for (auto &arg : func->args())
-        namedValues[arg.getName().str()] = &arg;
+        fuxLLVM->namedValues[arg.getName().str()] = &arg;
 
     Value *retVal;
     for (ExprPtr &expr : body)
-        retVal = expr->codegen(builder, module, namedValues);
+        retVal = expr->codegen(fuxLLVM);
     
     if (func->getReturnType()->isVoidTy()) {
-        builder->CreateRetVoid();
+        fuxLLVM->builder->CreateRetVoid();
         return func;
     }
     
     if (retVal) {
-        builder->CreateRet(retVal);
+        fuxLLVM->builder->CreateRet(retVal);
         verifyFunction(*func);
         return func;
     }

@@ -12,8 +12,8 @@
 #include "context.hpp"
 
 FuxContext::FuxContext(RootAST *root) {
-    this->llvmContext = new LLVMContext();
-    this->module = new Module("fux compiler", *llvmContext);
+    LLVMContext *llvmContext = new LLVMContext();
+    this->fuxLLVM = new LLVMWrapper(llvmContext, new Module("fux compiler", *llvmContext), nullptr);
     this->target = fux.options.target;
 
     this->root = root;
@@ -22,7 +22,7 @@ FuxContext::FuxContext(RootAST *root) {
 }
 
 FuxContext::~FuxContext() {
-    delete llvmContext;
+    delete fuxLLVM;
     delete module;
     target.clear();
     delete compiler;
@@ -38,7 +38,7 @@ void FuxContext::run() {
 }
 
 void FuxContext::generate() {
-    generator = new Generator(root, module);
+    generator = new Generator(root, fuxLLVM);
 }
 
 void FuxContext::optimize() { return; }
