@@ -9,3 +9,4 @@ main
 grammar.bnf
 *.dSYM
 old*
+llvm_testing

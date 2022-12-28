@@ -33,4 +33,7 @@ private:
     void debugPrint(const string message);
 
     Type *getType(fuxType::Type type, const bool pointer = false);
+
+    /* llvm IR predefinitions */
+    void defineStringType();
 };

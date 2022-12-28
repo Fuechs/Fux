@@ -12,6 +12,8 @@
 #include "generator.hpp"
 
 void Generator::generate() {
+    defineStringType();
+    
     root->codegen(fuxLLVM);
 
     if (fux.options.debugMode)
