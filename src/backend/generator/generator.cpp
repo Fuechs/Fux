@@ -13,12 +13,10 @@
 
 
 void Generator::generate() {
-    root->codegen(fuxLLVM);
+    // root->codegen(fuxLLVM);
 
     if (fux.options.debugMode)
         fuxLLVM->module->print(errs(), nullptr);
-    
-    delete this;
 }
 
 // *::codegen()
@@ -87,7 +85,7 @@ Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
         case fuxType::F64:  funcType = FunctionType::get(fuxLLVM->builder->getDoubleTy(), argTypes, false); break;
         default:            return nullptr;
     }
-    Function *func = Function::Create(funcType, Function::ExternalLinkage, name, *fuxLLVM->module);
+    Function *func = Function::Create(funcType, Function::ExternalLinkage, "__"+name+"__", *fuxLLVM->module);
     
     auto it = args.begin();
     for (auto &arg : func->args())

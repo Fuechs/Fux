@@ -59,15 +59,16 @@ int main(int argc, char **argv) {
         goto end;
     root->debugPrint();
 
-    return result; // ! program ends here
+    // return result; // ! program ends here
 
-    createTestAST(root);    
-    root->debugPrint();
+    // createTestAST(root);    
+    // root->debugPrint();
 
-    return result; // ! program ends here
+    // return result; // ! program ends here
 
     { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
         FuxContext *context = new FuxContext(root);
+        context->run();
     }
 
     end:

@@ -19,13 +19,14 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
     // temporary variables
     FunctionType *FT = nullptr; 
     BasicBlock *BB = nullptr;
+    vector<Value *> args = {};
 
     // %str = type { i8*, i64, i64, i64 }
     str = StructType::create(*context, {
-        fuxLLVM->builder->getInt8PtrTy(),
-        fuxLLVM->builder->getInt64Ty(),
-        fuxLLVM->builder->getInt64Ty(),
-        fuxLLVM->builder->getInt64Ty(),
+        builder->getInt8PtrTy(),
+        builder->getInt64Ty(),
+        builder->getInt64Ty(),
+        builder->getInt64Ty(),
     }, "str", false);
 
     // %str* | ptr
@@ -35,9 +36,11 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
     FT = FunctionType::get(builder->getVoidTy(), {ptr}, false);
     createDefaultStr = Function::Create(FT, Function::CommonLinkage, "createDefaultStr", *module);
     createDefaultStr->setCallingConv(CallingConv::Fast); // fastcc
+    args.push_back(createDefaultStr->args().begin());
     BB = BasicBlock::Create(*context, "entry", createDefaultStr);
     builder->SetInsertPoint(BB);
-    // TODO: function body
+    ArrayRef<Value *> idxList = { builder->getInt64(0), builder->getInt64(0) };
+    builder->CreateGEP(str, args[0], idxList, "%1"); // FIXME: seg fault (11) -> why ???
     builder->CreateRetVoid();
     verifyFunction(*createDefaultStr); 
     // end of createDefaultStr

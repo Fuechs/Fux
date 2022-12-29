@@ -39,6 +39,7 @@ void FuxContext::run() {
 
 void FuxContext::generate() {
     generator = new Generator(root, fuxLLVM);
+    generator->generate();
 }
 
 void FuxContext::optimize() { return; }
