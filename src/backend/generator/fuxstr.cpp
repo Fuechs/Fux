@@ -23,14 +23,19 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
 
     // %str = type { i8*, i64, i64, i64 }
     str = StructType::create(*context, {
-        builder->getInt8PtrTy(),
-        builder->getInt64Ty(),
-        builder->getInt64Ty(),
-        builder->getInt64Ty(),
+        builder->getInt8PtrTy(),    // char array (char *)
+        builder->getInt64Ty(),      // length
+        builder->getInt64Ty(),      // maxlen
+        builder->getInt64Ty()       // factor
     }, "str", false);
 
     // %str* | ptr
     ptr = PointerType::get(str, 0);
+
+    // example variable
+    module->getOrInsertGlobal("example", str);
+    GlobalVariable *_example = module->getNamedGlobal("example");
+    _example->setLinkage(GlobalValue::CommonLinkage);
 
     // define common fastcc void createDefaultStr(%str* %0)
     FT = FunctionType::get(builder->getVoidTy(), {ptr}, false);
@@ -40,9 +45,9 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
     BB = BasicBlock::Create(*context, "entry", createDefaultStr);
     builder->SetInsertPoint(BB);
     ArrayRef<Value *> idxList = { builder->getInt64(0), builder->getInt64(0) };
-    builder->CreateGEP(str, args[0], idxList, "%1"); // FIXME: seg fault (11) -> why ???
+    // builder->CreateGEP(str, args[0], idxList, "%1"); 
     builder->CreateRetVoid();
-    verifyFunction(*createDefaultStr); 
+    llvm::verifyFunction(*createDefaultStr);
     // end of createDefaultStr
 
     // TODO: following functions

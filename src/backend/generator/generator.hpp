@@ -19,9 +19,7 @@
 class Generator {
 public:
     Generator(RootAST *root, LLVMWrapper *fuxLLVM) 
-    : root(root), fuxLLVM(fuxLLVM), fuxStr(FuxStr(fuxLLVM)) {
-        fuxLLVM->builder = new IRBuilder<>(*fuxLLVM->context);
-    }
+    : root(root), fuxLLVM(fuxLLVM), fuxStr(FuxStr(fuxLLVM)) {}
 
     ~Generator() { delete root; }
 

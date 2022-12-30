@@ -13,7 +13,7 @@
 
 FuxContext::FuxContext(RootAST *root) {
     LLVMContext *llvmContext = new LLVMContext();
-    this->fuxLLVM = new LLVMWrapper(llvmContext, new Module("fux compiler", *llvmContext), nullptr);
+    this->fuxLLVM = new LLVMWrapper(llvmContext, new Module("fux compiler", *llvmContext), new IRBuilder<>(*llvmContext));
     this->target = fux.options.target;
 
     this->root = root;

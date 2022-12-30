@@ -23,15 +23,15 @@ public:
     FuxStr(LLVMWrapper *fuxLLVM);
 
     // string type
-    StructType *str;
+    StructType *str = nullptr;
     // pointer to string type
-    PointerType *ptr;
+    PointerType *ptr = nullptr;
     
-    Function *createDefaultStr;
-    Function *deleteStr;
+    Function *createDefaultStr = nullptr;
+    Function *deleteStr = nullptr;
 
 private:
-    LLVMContext *context;
-    Module *module;
-    IRBuilder<> *builder;
+    LLVMContext *context = nullptr;
+    Module *module = nullptr;
+    IRBuilder<> *builder = nullptr;
 };
