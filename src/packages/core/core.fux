@@ -3,7 +3,7 @@ package core;
 /*
     --< FUX - INBUILT CORE PACKAGE >--
     AUTHOR Fuechs
-    COPYRIGHT (c) 2020-2022, Fuechs. All rights reserved.
+    COPYRIGHT (c) 2020-2023, Fuechs. All rights reserved.
 */
 
 get string;

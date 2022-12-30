@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2022-11-01
  * 
- * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
+ * @copyright Copyright (c) 2020-2023, Fuechs. All rights reserved.
  * 
  */
 
@@ -46,8 +46,6 @@ private:
     size_t idx, col, line;
     ErrorManager *error;
 
-    bool hasLetter = false; // identifier error
-
     // split source into vector of lines
     void parseLines();
     // peek to next chararacter
@@ -63,7 +61,7 @@ private:
     // reset currenToken and push to tokens
     void endToken();
     // get identifier
-    bool getIdent();
+    void getIdentifier();
     // get string
     void getString();
     // get number, float

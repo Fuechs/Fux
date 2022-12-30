@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2022-11-01
  * 
- * @copyright Copyright (c) 2020-2022, Fuechs. All rights reserved.
+ * @copyright Copyright (c) 2020-2023, Fuechs. All rights reserved.
  * 
  */
 
@@ -14,26 +14,6 @@
 TokenList Lexer::lex() {
     while (idx < source.length()) {
         getToken();
-
-        switch (currentToken.type) {
-            case IDENTIFIER:
-                do advance(); while (getIdent());
-                hasLetter = false;
-                checkKeyword();
-                break;
-
-            case STRING:
-                getString();
-                break;
-
-            case NUMBER:
-            case FLOAT:
-                getNumber();
-                break;
-
-            default: break;
-        }
-
         currentToken.end = col - 1;
         endToken();
         // update line and column for next token
@@ -412,6 +392,7 @@ void Lexer::getToken() {
         case '9':
             currentToken.type = NUMBER;
             advance();
+            getNumber();
             break;
         
         case '\'':
@@ -430,18 +411,17 @@ void Lexer::getToken() {
          
         case '"':
             currentToken.type = STRING;
-            currentToken.value = "";
+            getString();
             break;
         
         default:
             if (!isalpha(current()) && currentToken.value != "_") {
                 error->createError(UNEXPECTED_SYMBOL, line, col, "unknown character '"+currentToken.value+"'");
                 advance();
-            }
-            else {
-                if (isalpha(current()))
-                    hasLetter = true;
+            } else {
                 currentToken.type = IDENTIFIER;
+                getIdentifier();
+                checkKeyword();
             }
             break;
 
@@ -456,24 +436,23 @@ void Lexer::endToken() {
     currentToken.value.erase();
 }
 
-bool Lexer::getIdent() {
-    if ((isalpha(current())
-    ||  isdigit(current())
-    ||  current() == '_')
-    &&  idx < source.length()) {
+void Lexer::getIdentifier() {
+    bool hasLetter = false;
+    currentToken.value.clear(); // we have to check wether first character is alphabetic
+
+    do {
         if (isalpha(current()))
             hasLetter = true;
         currentToken.value.push_back(current());
-        return true;
-    }
+        advance();
+    } while ((isalpha(current()) || isdigit(current()) || current() == '_') && idx < source.length());
 
     if (!hasLetter)
         error->createError(GENERIC, currentToken, "expected at least one character in identifier '"+currentToken.value+"'");
-    
-    return false;
 }
 
 void Lexer::getString() {
+    currentToken.value.clear(); // remove '"'
     advance();
 
     if (idx >= source.length())

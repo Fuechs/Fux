@@ -12,27 +12,16 @@
 
 ## Classes
 
-> __Warning__ \
-> Outdated.
-
 ```rust
-// <parent>:<name> { <body> }
-SomeParent:SomeClass {}
+// class <name> : <parent> { <body> }
+class SomeClass : SomeParent {}
 ```
 
 ### Constructor
 
 ```rust
-// <parent>:<name>::(<parameters>) 
-// { <constructor_body> } { <class_body> }
-SomeParent:SomeClass::(someParam: i32) {
-    self.someParam === someParam;
-} {
-    safe someParam: i32;
-}
-
 // { ... ::(<parameters>) { <body> } ... }
-SomeParent:SomeClass {
+class SomeClass : SomeParent {
     ::(someParam: i32) {
         self.someParam === someParam;
     }
@@ -41,7 +30,6 @@ SomeParent:SomeClass {
 }
 ```
 
-
 ### Destructor
 
 Can be called with `delete <address>, <arguments>;`
@@ -49,7 +37,7 @@ Can be called with `delete <address>, <arguments>;`
 ```rust
 // { ... #(<parameters>) { <body> } ... }
 
-SomeParent:SomeClass {
+class SomeClass : SomeParent {
     #() {
         delete &someParam;
     }
@@ -67,7 +55,7 @@ SomeParent:SomeClass {
 - `fixed` - Can be accessed without creating an instance
 
 ```rust
-:SomeClass { ...
+class SomeClass { ...
 
 intern value: f64;
 safe symbol: str;
