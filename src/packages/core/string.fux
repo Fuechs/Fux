@@ -43,7 +43,7 @@ string {
                         buf << '%';
                         break;
                     case ('c')
-                        buf << (c16) args[j++];
+                        buf << (c8) args[j++];
                         break;
                     case ('i')
                         buf += (str) (i64) args[j++];

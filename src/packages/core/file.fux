@@ -6,14 +6,19 @@ get io;
 file {
 
     class File {
+        safe path: str;
+        safe mode: c8;
+
         File(path: str = null, mode: c8 = 'r') {
-            intern self.path :=== path;
+            self.path === path;
             if (mode not in {'r', 'w', 'b', 'a'})
                 io.err(1, "invalid mode '", mode, "' on file '", path, "'");
-            intern self.mode :=== mode;
+            self.mode === mode;
         }
 
         #File() {
+            if (open)
+                close();
             delete &path;
             delete &mode;
         }
@@ -21,6 +26,8 @@ file {
         read(): str;
         
         write(final data: str): void;
+
+        close(): void;
     }
 
 }

@@ -1,4 +1,4 @@
-main(): i32 {
+main(argc: u64, argv: str[]): i64 {
     puts "Hello World!\n";
     return 0;
 }

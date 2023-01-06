@@ -16,7 +16,7 @@
 ## Die Bessere Alternative Für C++
 
 ```rust
-main(): i32 {
+main(): i64 {
     puts "Hello World!\n";
     return 0;
 }
@@ -123,7 +123,7 @@ fib(num: i32): i32 {
     return fib(num-1) + fib(num-2);
 }
 
-main(): i32 {
+main(): i64 {
     io.getint() >> fib() >> io.putln();
     return 0;
 }
