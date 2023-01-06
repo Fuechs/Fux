@@ -11,7 +11,7 @@
 
 #include "fuxstr.hpp"
 
-FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
+FuxStr::FuxStr(LLVMWrapper *fuxLLVM, FuxMem *fuxMem) {
     context = fuxLLVM->context;
     module = fuxLLVM->module;
     builder = fuxLLVM->builder;
@@ -19,7 +19,9 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
     // temporary variables
     FunctionType *FT = nullptr; 
     BasicBlock *BB = nullptr;
+    Value *GEP = nullptr;
     vector<Value *> args = {};
+    GlobalVariable *GV = nullptr;
 
     // %str = type { i8*, i64, i64, i64 }
     str = StructType::create(*context, {
@@ -34,8 +36,8 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
 
     // example variable
     module->getOrInsertGlobal("example", str);
-    GlobalVariable *_example = module->getNamedGlobal("example");
-    _example->setLinkage(GlobalValue::CommonLinkage);
+    GV = module->getNamedGlobal("example");
+    GV->setLinkage(GlobalValue::CommonLinkage);
 
     // define common fastcc void createDefaultStr(%str* %0)
     FT = FunctionType::get(builder->getVoidTy(), {ptr}, false);
@@ -44,9 +46,12 @@ FuxStr::FuxStr(LLVMWrapper *fuxLLVM) {
     args.push_back(createDefaultStr->args().begin());
     BB = BasicBlock::Create(*context, "entry", createDefaultStr);
     builder->SetInsertPoint(BB);
-    ArrayRef<Value *> idxList = { builder->getInt64(0), builder->getInt64(0) };
-    // builder->CreateGEP(str, args[0], idxList, "%1"); 
+    
+    GEP = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
+    builder->CreateStore(ConstantPointerNull::get(builder->getInt8PtrTy()), GEP);
+    
     builder->CreateRetVoid();
+    
     llvm::verifyFunction(*createDefaultStr);
     // end of createDefaultStr
 

@@ -239,3 +239,11 @@ void createTestAST(RootAST *root) {
     ExprPtr mFunc = make_unique<FunctionAST>(fuxType::I32, "main", args, mBody);
     root->addSub(mFunc);
 }
+
+void clearConsole() {
+    #ifdef FUX_WIN
+        system("cls");
+    #else // unix, ...
+        system("clear");
+    #endif
+}

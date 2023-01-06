@@ -13,14 +13,15 @@
 
 #include "wrapper.hpp"
 #include "../llvmheader.hpp"
+#include "fuxmem.hpp"
 
 /**
  * custom string type for Fux
  * (predefined LLVM IR)
  */
-struct FuxStr {
+class FuxStr {
 public:
-    FuxStr(LLVMWrapper *fuxLLVM);
+    FuxStr(LLVMWrapper *fuxLLVM, FuxMem *fuxMem);
 
     // string type
     StructType *str = nullptr;

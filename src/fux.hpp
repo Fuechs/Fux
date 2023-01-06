@@ -39,11 +39,6 @@
 
 #define FUX_DEV_DEBUG
 
-/**
- * Determination a platform of an operation system
- * Fully supported supported only GNU GCC/G++, partially on Clang/LLVM
- */
-
 #if defined(_WIN32) || defined(_WIN64) || (defined(__CYGWIN__) && defined(_WIN32))
     #ifndef _WIN64
         #define FUX_WIN_INVALID
@@ -139,5 +134,7 @@ int printVersion();
 string toLower(string data);
 // run repl
 int repl();
+// clear the console
+void clearConsole();
 
 #define cmp(s) (strcmp(argv[i], s) == 0)
