@@ -184,6 +184,13 @@ void Lexer::getToken() {
                 advance(2);
                 break;
             }
+            
+            if (peek() == '|') {
+                currentToken.type = BIT_LSHIFT;
+                currentToken.value = "<|";
+                advance(2);
+                break;
+            }
 
             currentToken.type = LESSTHAN;
             advance();
@@ -340,6 +347,13 @@ void Lexer::getToken() {
                 advance(2);
                 break;
             }
+            
+            if (peek() == '>') {
+                currentToken.type = BIT_RSHIFT;
+                currentToken.value = "|>";
+                advance(2);
+                break;
+            }
 
             currentToken.type = BIT_OR;
             advance();
@@ -481,94 +495,170 @@ void Lexer::getString() {
     advance();
 }
 
+
 void Lexer::getNumber() {
 
-    if (currentToken.value == "0" && peek() == 'x') {
+    /*
+        0x --> Hexadecimal
+        .. --> Decimal
+        0o --> Octal 
+        0b --> Binary
+    */
+
+    #define LENOK idx < source.length()
+    #define ISHEX (isdigit(current()) || (tolower(current()) >= 'a' && tolower(current()) <= 'f'))
+    #define ISOCT (current() >= '0' && current() <= '7')
+    #define ISBIN (current() == '0' || current() == '1')
+
+
+    if (currentToken.value != "0")
+        goto decimal;
+
+    if (current() == 'x') {
         currentToken.type = HEXADECIMAL;
         currentToken.value = "0x";
         advance();
         // extra if for error tracking and not allowing '0x_'
-        if (isdigit(current()) && idx < source.length()) {
+        if (ISHEX && LENOK) {
             currentToken.value.push_back(current());
             advance();
         } else
-            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit after '0x'");
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit (0-9, a-f) after '0x'");
         
-        while ((isdigit(current()) || current() == '_') && idx < source.length()) {
+        while ((ISHEX || current() == '_') && LENOK) {
             if (current() != '_')
                 currentToken.value.push_back(current());
             advance();
         }
-    } else {
 
-        bool eFound = false;
+        return;
+    } else if (current() == 'o') {
+        currentToken.type = OCTAL;
+        currentToken.value = "0o";
+        advance();
 
-        while (idx < source.length()) {
-            if (isdigit(current())) {
-                currentToken.value.push_back(current());
-                advance();
-            } else if (current() == '_')
-                advance();
-            else if (tolower(current()) == 'e') {
-                if (eFound) {
-                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "duplicate 'e' in number");
-                    return;
-                }
-
-                currentToken.value.push_back(current());
-                eFound = true;
-                
-                if (!isdigit(peek()) && peek() != '+' && peek() != '-') {
-                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit or sign after 'e'");
-                    return;
-                }
-
-                advance();
-                currentToken.value.push_back(current());
-                if ((current() == '+' || current() == '-') && !isdigit(peek())) {
-                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least on digit after 'e"+ to_string(current()) +"' in number");
-                    return;
-                }
-                advance();
-            } else 
-                break;
-        }
-
-        eFound = false;
-
-        if (currentToken.type == FLOAT || idx >= source.length())
-            return;
-
-        if (current() == '.') {
+        if (ISOCT && LENOK) {
+            currentToken.value.push_back(current());
             advance();
+        } else
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit (0-7) after '0o'");
 
-            if (idx >= source.length()) {
-                error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "character '.' in number with no following digits");
-                return;
-            } else if (current() == '.') {
-                error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected character '.' in float");
-                return;
-            } else
-                currentToken.value.push_back('.');
-            
-            currentToken.type = FLOAT;
-            
-            while ((isdigit(current()) || current() == '_' || tolower(current()) == 'e') && idx < source.length()) {
-                if (tolower(current()) == 'e') {
-                    if (eFound) {
-                        error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "duplicate 'e' found");
-                        return;
-                    }
-                    eFound = true;
-                    currentToken.value.push_back(current());
-                } else if (current() != '_')
-                    currentToken.value.push_back(current());
-                advance();
-            }
+        while ((ISOCT || current() == '_') && LENOK) {
+            if (current() != '_')
+                currentToken.value.push_back(current());
+            advance();
         }
 
+        return;
+    } else if (current() == 'b') {
+        currentToken.type = BINARY;
+        currentToken.value = "0b";
+        advance();
+
+        if (ISBIN || current() == '_' && LENOK) {
+            if (current() != '_')
+                currentToken.value.push_back(current());
+            advance();
+        } else
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "expected at least one digit (0|1) after '0b'");
+
+        while ((ISBIN || current() == '_') && LENOK) {
+            if (current() != '_')
+                currentToken.value.push_back(current());
+            advance();
+        }
+
+        return;
+    }
+    
+    #undef ISHEX
+    #undef ISOCT
+    #undef ISBIN
+    #define ISEXP (tolower(current()) == 'e' || current() == '+' || current() == '-')
+    
+    decimal: {
+        bool eFound = false;
+        bool signFound = false;
+
+        while ((isdigit(current()) || ISEXP || current() == '_') && LENOK) {
+            if (current() == '_') {
+                advance();
+                continue;
+            } else if (current() == 'e') {
+                if (eFound) {
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected 'e' in decimal integer");
+                    advance();
+                    return;
+                }
+                eFound = true;
+            } else if (current() == '+' || current() == '-') {
+                if (signFound || !eFound) {
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected '"+to_string(current())+"' in decimal integer");
+                    advance();
+                    return;
+                }
+                signFound = true;
+            }
+
+            currentToken.value.push_back(current());
+            advance();
+        } 
+
+        if (currentToken.value.ends_with('e') 
+        || currentToken.value.ends_with('E')
+        || currentToken.value.ends_with('+')
+        || currentToken.value.ends_with('-')) {
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "Expected at least one digit (0-9) after 'e | + | -'");                
+            return;
+        }
+        
+        if (current() == '.' && isdigit(peek()) && LENOK)
+            goto floating;
+        else
+            return;
     }
 
+    floating: {
+        currentToken.type = FLOAT;
+
+        bool eFound = false;
+        bool signFound = false;
+
+        do { // collect '.' first
+            if (current() == '_') {
+                advance();
+                continue;
+            } else if (current() == 'e') {
+                if (eFound) {
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected 'e' in floating point integer");
+                    advance();
+                    return;
+                }
+                eFound = true;
+            } else if (current() == '+' || current() == '-') {
+                if (signFound || !eFound) {
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected '"+to_string(current())+"' in floating point integer");
+                    advance();
+                    return;
+                }
+                signFound = true;
+            }
+
+            currentToken.value.push_back(current());
+            advance();
+        } while ((isdigit(current()) || ISEXP || current() == '_') && LENOK);
+            
+        if (currentToken.value.ends_with('e') 
+        || currentToken.value.ends_with('E')
+        || currentToken.value.ends_with('+')
+        || currentToken.value.ends_with('-')) {
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "Expected at least one digit (0-9) after 'e | + | -'");
+            return;
+        }
+    }
+
+    #undef ISEXP
+    #undef LENOK
 }
 
 bool Lexer::skipComment() {

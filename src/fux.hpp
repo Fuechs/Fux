@@ -25,6 +25,7 @@
 #include <optional>
 #include <mutex>
 #include <future>
+#include <string_view>
 
 #include <cstdio>
 #include <cstring>

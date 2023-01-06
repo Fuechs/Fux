@@ -64,7 +64,7 @@ private:
     void getIdentifier();
     // get string
     void getString();
-    // get number, float
+    // get number
     void getNumber();
     // skip comments
     bool skipComment();

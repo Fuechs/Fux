@@ -69,6 +69,8 @@ enum TokenType {
     // bitwise operation
     BIT_OR,         // |
     BIT_AND,        // &
+    BIT_LSHIFT,     // <|
+    BIT_RSHIFT,     // |>
 
     // object
     COLON_COLON,    // ::
@@ -79,6 +81,8 @@ enum TokenType {
     NUMBER,         // 0
     FLOAT,          // 0.0 or .0
     HEXADECIMAL,    // 0x0
+    OCTAL,          // 0o0
+    BINARY,         // 0b0
     STRING,         // "string"
     CHAR,           // 'c'
 
@@ -198,6 +202,8 @@ static const char *TokenTypeString[] = {
     // bitwise operation
     "BIT_OR",         // |
     "BIT_AND",        // &
+    "BIT_LSHIFT",
+    "BIT_RSHIFT",
 
     // object
     "COLON_COLON",    // ::
@@ -208,6 +214,8 @@ static const char *TokenTypeString[] = {
     "NUMBER",         // 0, 0.0, .0
     "FLOAT",
     "HEXADECIMAL",    // 0x0
+    "OCTAL",
+    "BINARY",
     "STRING",         
     "CHAR",
 
@@ -327,6 +335,8 @@ static vector<string> TokenTypeValue = {
     // bitwise operation
     "|",         // |
     "&",        // &
+    "<|",
+    "|>",
 
     // object
     "::",    // ::
@@ -337,6 +347,8 @@ static vector<string> TokenTypeValue = {
     "0",         // 0
     "0.0",  // .0 or 0.0
     "0x0",    // 0x0
+    "0o0",
+    "0b0",
     "\"string\"",
     "'c'",
 
@@ -413,6 +425,10 @@ public:
     size_t line, start, end;
 
     void debugPrint();
+
+    bool isKeyword() {
+        return (type >= KEY_GET && type <= KEY_CLASS);
+    }
 };
 
 typedef vector<Token> TokenList;
