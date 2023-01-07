@@ -172,6 +172,21 @@ public:
     Position pos = Position();
 };
 
+class PutsCallAST : public ExprAST {
+    ExprPtr argument;
+
+public:
+    PutsCallAST(ExprPtr &argument) : argument(move(argument)) {}
+    ~PutsCallAST() { delete &argument; }
+
+    ExprPtr &getArgument();
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
 // prototype of a function
 // name and arguments
 class PrototypeAST : public ExprAST {

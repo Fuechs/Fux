@@ -76,6 +76,8 @@ Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
 
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
+Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
     TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
     FunctionType *funcType;

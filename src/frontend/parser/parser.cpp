@@ -27,7 +27,18 @@ RootAST *Parser::parse() {
 }
 
 ExprPtr Parser::parseStmt() {
-    return parseExpr(); // ! skipping variabledeclstmt here
+    return parsePutsStmt(); 
+}
+
+ExprPtr Parser::parsePutsStmt() {
+    ExprPtr call;
+    if (current->type == KEY_PUTS) {
+        eat();
+        call = make_unique<PutsCallAST>(parseExpr()); // just parse expression for now
+    } else 
+        call = parseExpr(); // ! skipping variabledeclstmt here
+
+    return call;
 }
 
 ExprPtr Parser::parseVariableDeclStmt() {

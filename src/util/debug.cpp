@@ -105,6 +105,12 @@ void VariableDeclAST::debugPrint() {
     cout << ";";
 }
 
+void PutsCallAST::debugPrint() {
+    cout << "puts ";
+    argument->debugPrint();
+    cout << ";";
+}
+
 void PrototypeAST::debugPrint() {
     cout << name << "( ";
     for (auto &param : args)

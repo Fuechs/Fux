@@ -34,6 +34,22 @@ ExprList RootAST::getProg() {
     return move(program);
 }
 
+string VariableDeclAST::getSymbol() {
+    return symbol;
+}
+
+fuxType::Type VariableDeclAST::getType() {
+    return type;
+}
+
+ExprPtr &VariableDeclAST::getValue() {
+    return value;
+}
+
+ExprPtr &PutsCallAST::getArgument() {
+    return argument;
+}
+
 PrototypeAST::~PrototypeAST() { name.clear(); }
 string PrototypeAST::getName() { return name; }
 ArgMap PrototypeAST::getArgs() { return args; }
