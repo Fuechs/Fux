@@ -90,6 +90,7 @@ struct __options_struct {
     bool userDebug          = false;
     bool objDump            = false;
     bool unsafe             = false;
+    bool threading          = true;
 
     // debug logs for development
     #ifdef FUX_DEV_DEBUG

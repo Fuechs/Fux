@@ -133,6 +133,7 @@ int bootstrap(int argc, char **argv) {
             fux.options.strip = true;
         }
         else if (cmp("-debug") || cmp("-d"))    fux.options.userDebug = true;
+        else if (cmp("-nothread"))              fux.options.threading = false;
         else if (cmp("-repl"))                  return -1;
         else if (cmp("-h") || cmp("-help"))     return printHelp();
 
@@ -168,6 +169,7 @@ int printHelp() {
         << "    -werror -werr       treat warnings as errors\n"
         << "    -release -r         generate a release build\n"
         << "    -debug -d           turn debug mode on\n"
+        << "    -nothread           deactivate multihreading for parsing\n"
         << "    -repl               start repl\n"
         << "    -h -help            show this message and exit"
         << endl;
