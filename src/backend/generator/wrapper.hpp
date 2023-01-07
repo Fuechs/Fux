@@ -12,12 +12,17 @@
 #pragma once
 
 #include "../llvmheader.hpp"
+#include "../context/fuxmem.hpp"
+#include "../context/fuxstr.hpp"
 
 typedef map<string, Value *> ValueMap;
 
 struct LLVMWrapper {
-    LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder)
-    : context(context), module(module), builder(builder), namedValues({}) {}
+    LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder) 
+    : context(context), module(module), builder(builder), namedValues({}) {
+        fuxMem = new FuxMem(context, module, builder);
+        fuxStr = new FuxStr(context, module, builder, fuxMem);
+    }
 
     ~LLVMWrapper() {
         delete context;
@@ -29,6 +34,9 @@ struct LLVMWrapper {
     LLVMContext *context;
     Module *module;
     IRBuilder<> *builder;
+
+    FuxMem *fuxMem;
+    FuxStr *fuxStr;
 
     ValueMap namedValues;
 };

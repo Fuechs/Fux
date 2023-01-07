@@ -11,19 +11,13 @@
 
 #pragma once
 
-#include "wrapper.hpp"
 #include "../llvmheader.hpp"
 
 class FuxMem {
 public:
-    FuxMem(LLVMWrapper *fuxLLVM);
+    FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder);
 
     Function *malloc = nullptr;
     Function *free = nullptr;
     Function *memcpy = nullptr;
-
-private:
-    LLVMContext *context = nullptr;
-    Module *module = nullptr;
-    IRBuilder<> *builder = nullptr;
 };

@@ -75,16 +75,23 @@ main(): i64 {
 
 ### Roadmap
 
-- [&check;] `Error System`
-- [&check;] `Lexer`
-- [...] `Parser`
-- [&cross;] `AST Analysis`
-- [...] `IR Generation (LLVM)`
-- [&cross;] `Optimization (LLVM)`
-- [&cross;] `Compilation (LLVM)`
-- [...] `Runtime`
-- [...] `Syntax`
-- [...] `Standard Library`
+- **Stage I** --- [`Turing Complete in C++`](./src/examples/rule110.fux)
+    - [&check;] [`Error System`](./src/frontend/error/)
+    - [&check;] [`Threading`](./src/util/threading.hpp)
+    - [&check;] [`Lexer`](./src/frontend/lexer/)
+    - [...] [`Parser`](./src/frontend/parser/)
+        - [...] [`AST`](./src/frontend/parser/ast.hpp)
+        - [...] [`Parsing`](./src/frontend/parser/parser.hpp)
+    - [&cross;] [`Analyser`](./src/frontend/analyser/)
+    - [...] [`Context (LLVM)`](./src/backend/context/)
+        - [...] [`Memory`](./src/backend/context/fuxmem.hpp)
+        - [...] [`String`](./src/backend/context/fuxstr.hpp)
+    - [...] [`Generator (LLVM)`](./src/backend/generator/)
+    - [&cross;] [`Optimizer (LLVM)`](./src/backend/)
+    - [&cross;] [`Compiler (LLVM)`](./src/backend/compiler/)
+    - [...] [`Syntax`](./docs/)
+- **Stage II** --- [`Core Package`](./src/packages/core/)
+- *Soon ...*
 
 Fux is currently still in early development. There is no working compiler avaiable for this language. 
 

@@ -11,12 +11,8 @@
 
 #include "fuxmem.hpp"
 
-FuxMem::FuxMem(LLVMWrapper *fuxLLVM) {
-    context = fuxLLVM->context;
-    module = fuxLLVM->module;
-    builder = fuxLLVM->builder;
-
-    // temporary
+FuxMem::FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder) {
+    // temporary   
     FunctionType *FT = nullptr;
 
     // declare i8* @malloc(i64)

@@ -14,13 +14,13 @@
 #include "../../fux.hpp"
 #include "../llvmheader.hpp"
 #include "../../frontend/parser/ast.hpp"
-#include "fuxmem.hpp"
-#include "fuxstr.hpp"
+#include "../context/fuxmem.hpp"
+#include "../context/fuxstr.hpp"
 
 class Generator {
 public:
     Generator(RootAST *root, LLVMWrapper *fuxLLVM) 
-    : root(root), fuxLLVM(fuxLLVM), fuxMem(FuxMem(fuxLLVM)), fuxStr(FuxStr(fuxLLVM, &fuxMem)) {}
+    : root(root), fuxLLVM(fuxLLVM) {}
 
     ~Generator() { delete root; }
 
@@ -29,8 +29,6 @@ public:
 private:
     RootAST *root;
     LLVMWrapper *fuxLLVM;
-    FuxMem fuxMem;
-    FuxStr fuxStr;
 
     void debugPrint(const string message);
 

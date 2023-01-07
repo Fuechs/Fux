@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include "wrapper.hpp"
 #include "../llvmheader.hpp"
 #include "fuxmem.hpp"
 
@@ -21,7 +20,7 @@
  */
 class FuxStr {
 public:
-    FuxStr(LLVMWrapper *fuxLLVM, FuxMem *fuxMem);
+    FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem);
 
     // string type
     StructType *str = nullptr;
@@ -30,9 +29,4 @@ public:
     
     Function *createDefaultStr = nullptr;
     Function *deleteStr = nullptr;
-
-private:
-    LLVMContext *context = nullptr;
-    Module *module = nullptr;
-    IRBuilder<> *builder = nullptr;
 };

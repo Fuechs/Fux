@@ -11,10 +11,7 @@
 
 #include "fuxstr.hpp"
 
-FuxStr::FuxStr(LLVMWrapper *fuxLLVM, FuxMem *fuxMem) {
-    context = fuxLLVM->context;
-    module = fuxLLVM->module;
-    builder = fuxLLVM->builder;
+FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem) {
 
     // temporary variables
     FunctionType *FT = nullptr; 
