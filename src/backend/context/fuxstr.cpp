@@ -12,7 +12,6 @@
 #include "fuxstr.hpp"
 
 FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem) {
-
     // temporary variables
     FunctionType *FT = nullptr; 
     BasicBlock *BB = nullptr;
@@ -32,9 +31,9 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     ptr = PointerType::get(str, 0);
 
     // example variable
-    module->getOrInsertGlobal("example", str);
-    GV = module->getNamedGlobal("example");
-    GV->setLinkage(GlobalValue::CommonLinkage);
+    // module->getOrInsertGlobal("example", str);
+    // GV = module->getNamedGlobal("example");
+    // GV->setLinkage(GlobalValue::CommonLinkage);
 
     // define common fastcc void createDefaultStr(%str* %0)
     FT = FunctionType::get(builder->getVoidTy(), {ptr}, false);

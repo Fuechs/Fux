@@ -34,7 +34,8 @@ ExprPtr Parser::parsePutsStmt() {
     ExprPtr call;
     if (current->type == KEY_PUTS) {
         eat();
-        call = make_unique<PutsCallAST>(parseExpr()); // just parse expression for now
+        ExprPtr arg = parseExpr();
+        call = make_unique<PutsCallAST>(arg); // just parse expression for now
     } else 
         call = parseExpr(); // ! skipping variabledeclstmt here
 

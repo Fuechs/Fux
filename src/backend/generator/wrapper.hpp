@@ -14,6 +14,7 @@
 #include "../llvmheader.hpp"
 #include "../context/fuxmem.hpp"
 #include "../context/fuxstr.hpp"
+#include "../context/fuxio.hpp"
 
 typedef map<string, Value *> ValueMap;
 
@@ -22,6 +23,7 @@ struct LLVMWrapper {
     : context(context), module(module), builder(builder), namedValues({}) {
         fuxMem = new FuxMem(context, module, builder);
         fuxStr = new FuxStr(context, module, builder, fuxMem);
+        fuxIO = new FuxIO(context, module, builder, fuxMem, fuxStr);
     }
 
     ~LLVMWrapper() {
@@ -37,6 +39,7 @@ struct LLVMWrapper {
 
     FuxMem *fuxMem;
     FuxStr *fuxStr;
+    FuxIO *fuxIO;
 
     ValueMap namedValues;
 };
