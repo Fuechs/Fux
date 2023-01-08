@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
         goto end;
     root->debugPrint();
 
-    return result; // ! program ends here
+    // return result; // ! program ends here
 
     // createTestAST(root);    
     // root->debugPrint();

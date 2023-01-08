@@ -15,9 +15,8 @@
 void Generator::generate() {
     // root->codegen(fuxLLVM);
 
-    if (fux.options.debugMode) {
-        fuxLLVM->module->print(errs(), nullptr, false, true);
-    }
+    if (fux.options.debugMode)
+        fuxLLVM->module->print(errs(), nullptr);
 }
 
 // *::codegen()

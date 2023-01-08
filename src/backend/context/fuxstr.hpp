@@ -29,4 +29,6 @@ public:
     
     Function *createDefaultStr = nullptr;
     Function *deleteStr = nullptr;
+    Function *resizeStr = nullptr;
+    Function *addChar = nullptr;
 };
