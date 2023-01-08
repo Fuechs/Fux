@@ -1,7 +1,7 @@
 # Design Documentation
 
 <!-- 
-    Copyright (c) 2020-2022, Fuechs. 
+    Copyright (c) 2020-2023, Fuechs. 
     All rights reserved.
 -->
 
@@ -11,7 +11,7 @@
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status** \
-> Last updated on 2022-11-24 \
+> Last updated on 2023-01-08 \
 > Unfinished
 
 ## Contents
@@ -30,7 +30,7 @@
     - [Character Types](#character-types)
     - [String Type](#string-type)
     - [Array Type](#array-type)
-    - [*Type Casts*](#type-casts)
+    - [Type Casts](#type-casts)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
         - [Passing Arguments](#passing-arguments)
@@ -247,6 +247,20 @@ truth = false;
 - Keyword - `fN` - N-bit floating point integer `(32, 64)`
 - Value - signed integer, unsigned integer or floating point integer
 
+Integers can be written in following bases:
+- Hexadecimal - starting with `0x` `(0-9, a-f|A-F)`
+- Decimal - starting with any digit `(0-9)`
+- Octal - starting with `0o` `(0-7)`
+- Binary - starting with `0b` `(0|1)`
+
+Examples:
+```rust
+0xfcaa68 // hexadecimal
+16558696 // decimal
+0o77125150 // octal
+0b111111001010101001101000 // binary
+```
+
 ```rust
 someNum: i32 = 1;
 someFloat: f32 = 1.0;
@@ -322,7 +336,13 @@ list[-1];              // last element
 
 ### Type Casts
 
-> Soon ...
+Values can be casted to specific types by writing the type in parenthesis before these.
+
+```rust
+// ( <type> ) value
+puts (str) 12;
+putch (c8) "\n";
+```
 
 ## New Concepts
 
