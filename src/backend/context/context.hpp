@@ -26,7 +26,7 @@
  */
 class FuxContext {
 public:
-    FuxContext(RootAST *root);
+    FuxContext(ExprPtr &root);
     ~FuxContext();
 
     LLVMWrapper *fuxLLVM;
@@ -36,7 +36,7 @@ public:
     void run();
 
 private:
-    RootAST *root;
+    ExprPtr root;
     Generator *generator;
     Compiler *compiler;
 

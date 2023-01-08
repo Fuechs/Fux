@@ -24,7 +24,7 @@ public:
         lexer = new Lexer(source, fileName, error);
         if (mainFile) 
             fux.options.fileLines = lexer->getLines();
-        root = new RootAST();
+        root = make_unique<RootAST>();
     }
 
     ~Parser() {
@@ -33,14 +33,14 @@ public:
     }
 
     // parse the Tokens and return AST root
-    RootAST *parse();
+    ExprPtr parse();
 
 private:
     TokenList tokens;
     TokenIter current;
     ErrorManager *error;
     Lexer *lexer;
-    RootAST *root;
+    ExprPtr root;
     const bool mainFile;
 
     ExprPtr parseStmt();

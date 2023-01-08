@@ -39,7 +39,11 @@ class ExprAST {
 public:
     virtual ~ExprAST() {}
     virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
+    virtual unique_ptr<ExprAST> analyse() = 0;
     virtual void debugPrint() = 0;
+    // root functions
+    virtual vector<unique_ptr<ExprAST>> getProg() = 0;
+    virtual void addSub(unique_ptr<ExprAST> &sub) = 0;
 
     ExprAST &operator=(ExprAST &ast);
 
@@ -57,11 +61,12 @@ class RootAST : public ExprAST {
 public:
     RootAST() : program(ExprList()) {}
         
-    void addSub(ExprPtr &sub);
-    ExprList getProg();
     
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
 };
@@ -74,8 +79,13 @@ public:
     NumberExprAST(fuxType::Type type, double value) : type(type), value(value) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
-  
+    
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+
     Position pos = Position();
 };
 
@@ -87,7 +97,12 @@ public:
     ~VariableExprAST() override { name.clear(); }
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
+
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
@@ -101,7 +116,12 @@ public:
     : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
+
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
@@ -115,7 +135,12 @@ public:
     : comp(comp), LHS(move(LHS)), RHS(move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override; 
+
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
@@ -129,8 +154,13 @@ public:
     : logical(logical), LHS(move(LHS)), RHS(move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override; 
 
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+    
     Position pos = Position();
 };
 
@@ -144,9 +174,14 @@ public:
     ~CallExprAST() override { callee.clear(); }
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
 
-    Position pos = Position();
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+   
+   Position pos = Position();
 };
 
 class VariableDeclAST : public ExprAST {
@@ -161,14 +196,15 @@ public:
         symbol.clear(); 
         delete &value; 
     }
-
-    string getSymbol();
-    fuxType::Type getType();
-    ExprPtr &getValue();
     
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
 
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+    
     Position pos = Position();
 };
 
@@ -182,8 +218,13 @@ public:
     ExprPtr &getArgument();
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
 
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+    
     Position pos = Position();
 };
 
@@ -204,8 +245,13 @@ public:
     fuxType::Type getType();
     
     Function *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
 
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+    
     Position pos = Position();
 };
 
@@ -223,7 +269,12 @@ public:
     : proto(move(proto)), body(move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
     void debugPrint() override;
 
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+    
     Position pos = Position();
 };

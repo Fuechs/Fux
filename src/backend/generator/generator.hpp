@@ -19,15 +19,13 @@
 
 class Generator {
 public:
-    Generator(RootAST *root, LLVMWrapper *fuxLLVM) 
-    : root(root), fuxLLVM(fuxLLVM) {}
-
-    ~Generator() { delete root; }
+    Generator(ExprPtr &root, LLVMWrapper *fuxLLVM) 
+    : root(move(root)), fuxLLVM(fuxLLVM) {}
 
     void generate();
 
 private:
-    RootAST *root;
+    ExprPtr root;
     LLVMWrapper *fuxLLVM;
 
     void debugPrint(const string message);

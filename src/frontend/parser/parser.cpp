@@ -11,7 +11,7 @@
 
 #include "parser.hpp"
 
-RootAST *Parser::parse() {
+ExprPtr Parser::parse() {
     // lexing
     tokens = lexer->lex();
     lexer->debugPrint();
@@ -23,7 +23,7 @@ RootAST *Parser::parse() {
         if ((branch = parseStmt())) // check for nullptr in case of error
             root->addSub(branch);
     
-    return root;
+    return move(root);
 }
 
 ExprPtr Parser::parseStmt() {
@@ -122,7 +122,7 @@ ExprPtr Parser::parseUnaryExpr() { return nullptr; }
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
     switch (that.type) {
-        case NUMBER:        return make_unique<NumberExprAST>(fuxType::I32, stod(that.value));
+        case NUMBER:        return make_unique<NumberExprAST>(fuxType::I64, stod(that.value));
         case IDENTIFIER:    return make_unique<VariableExprAST>(that.value);
         case LPAREN: {
             ExprPtr expr = parseExpr();

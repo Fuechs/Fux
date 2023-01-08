@@ -37,8 +37,6 @@
 #include "util/color.hpp"
 #include "util/io.hpp"
 
-#define FUX_DEV_DEBUG
-
 #if defined(_WIN32) || defined(_WIN64) || (defined(__CYGWIN__) && defined(_WIN32))
     #ifndef _WIN64
         #define FUX_WIN_INVALID
@@ -87,17 +85,11 @@ struct __options_struct {
     bool debuggable         = true;
     bool strip              = false;
     bool werrors            = false;
-    bool userDebug          = false;
     bool objDump            = false;
     bool unsafe             = false;
     bool threading          = true;
-
     // debug logs for development
-    #ifdef FUX_DEV_DEBUG
-    const bool debugMode    = true;
-    #else
-    const bool debugMode    = false; 
-    #endif
+    bool debugMode          = true; // ! change to false later
     
     size_t errorLimit     = 1000;
     string target         = ""; 

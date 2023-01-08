@@ -11,7 +11,7 @@
 
 #include "context.hpp"
 
-FuxContext::FuxContext(RootAST *root) {
+FuxContext::FuxContext(ExprPtr &root) {
     LLVMContext *llvmContext = new LLVMContext();
     this->fuxLLVM = new LLVMWrapper(
         llvmContext, 
@@ -20,7 +20,7 @@ FuxContext::FuxContext(RootAST *root) {
     );
     this->target = fux.options.target;
 
-    this->root = root;
+    this->root = move(root);
     this->generator = nullptr;
     this->compiler = nullptr; // will be required after generation
 }

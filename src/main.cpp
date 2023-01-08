@@ -16,7 +16,7 @@
 
 __fux_struct fux;
 
-void createTestAST(RootAST *root);
+void createTestAST(ExprPtr &root);
 
 int main(int argc, char **argv) {
     int result = 0;
@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
         cout << "[WARNING]: Unknown platform. Compiled version may be broken.\n";
     #endif
 
-    #ifdef FUX_DEV_DEBUG
+    if (fux.options.debugMode) {
         cout << debugText << "This version of Fux was compiled for ";
         #if defined(FUX_WIN)
             cout << "Windows";
@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
             cout << "Darwin (MacOS)";
         #endif
         cout << ".\n";
-    #endif
+    }
 
     // result = bootstrap(argc, argv);
     // switch (result) {
@@ -54,12 +54,12 @@ int main(int argc, char **argv) {
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
     mainFile->parse();
-    RootAST *root = mainFile->root;
+    ExprPtr &root = mainFile->root;
     if (mainFile->hasErrors())
         goto end;
     root->debugPrint();
 
-    // return result; // ! program ends here
+    return result; // ! program ends here
 
     // createTestAST(root);    
     // root->debugPrint();
@@ -132,7 +132,7 @@ int bootstrap(int argc, char **argv) {
             fux.options.debuggable = true;
             fux.options.strip = true;
         }
-        else if (cmp("-debug") || cmp("-d"))    fux.options.userDebug = true;
+        else if (cmp("-debug") || cmp("-d"))    fux.options.debugMode = true;
         else if (cmp("-nothread"))              fux.options.threading = false;
         else if (cmp("-repl"))                  return -1;
         else if (cmp("-h") || cmp("-help"))     return printHelp();
@@ -201,7 +201,7 @@ int repl() {
 
         SourceFile *that = new SourceFile("<stdin>", true);
         that->parse();
-        RootAST *root = that->root;
+        ExprPtr &root = that->root;
         root->debugPrint();
         // TODO: generate and run ...
     }
@@ -210,7 +210,7 @@ int repl() {
 }
 
 // create AST to test the generator without parser
-void createTestAST(RootAST *root) {
+void createTestAST(ExprPtr &root) {
     // i32 mod(i32);
     ArgMap eArgs;
     eArgs["a"] = fuxType::I32;
