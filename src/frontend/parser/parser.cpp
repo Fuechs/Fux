@@ -23,7 +23,7 @@ ExprPtr Parser::parse() {
         if ((branch = parseStmt())) // check for nullptr in case of error
             root->addSub(branch);
     
-    return move(root);
+    return std::move(root);
 }
 
 ExprPtr Parser::parseStmt() {

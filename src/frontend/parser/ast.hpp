@@ -113,7 +113,7 @@ class BinaryExprAST : public ExprAST {
 
 public:
     BinaryExprAST(char op, ExprPtr &LHS, ExprPtr &RHS) 
-    : op(op), LHS(move(LHS)), RHS(move(RHS)) {}
+    : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;
@@ -132,7 +132,7 @@ class ComparisonExprAST : public ExprAST {
 
 public:
     ComparisonExprAST(char comp, ExprPtr &LHS, ExprPtr &RHS)
-    : comp(comp), LHS(move(LHS)), RHS(move(RHS)) {}
+    : comp(comp), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;
@@ -151,7 +151,7 @@ class LogicalExprAST : public ExprAST {
 
 public:
     LogicalExprAST(char logical, ExprPtr &LHS, ExprPtr &RHS)
-    : logical(logical), LHS(move(LHS)), RHS(move(RHS)) {}
+    : logical(logical), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;
@@ -170,7 +170,7 @@ class CallExprAST : public ExprAST {
 
 public:
     CallExprAST(const string &callee, ExprList &args)
-    : callee(callee), args(move(args)) {}
+    : callee(callee), args(std::move(args)) {}
     ~CallExprAST() override { callee.clear(); }
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
@@ -191,7 +191,7 @@ class VariableDeclAST : public ExprAST {
 
 public:
     VariableDeclAST(string symbol, fuxType::Type type = fuxType::NO_TYPE, ExprPtr &value = nullExpr) 
-    : symbol(symbol), type(type), value(move(value)) {}
+    : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() { 
         symbol.clear(); 
         delete &value; 
@@ -212,7 +212,7 @@ class PutsCallAST : public ExprAST {
     ExprPtr argument;
 
 public:
-    PutsCallAST(ExprPtr &argument) : argument(move(argument)) {}
+    PutsCallAST(ExprPtr &argument) : argument(std::move(argument)) {}
     ~PutsCallAST() { delete &argument; }
 
     ExprPtr &getArgument();
@@ -263,10 +263,10 @@ class FunctionAST : public ExprAST {
 
 public:
     FunctionAST(fuxType::Type type, const string &name, ArgMap args, ExprList &body)
-    : proto(make_unique<PrototypeAST>(type, name, args)), body(move(body)) {}
+    : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
     FunctionAST(ProtoPtr proto, ExprList &body)
-    : proto(move(proto)), body(move(body)) {}
+    : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;

@@ -30,6 +30,7 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     createDefaultStr->setDoesNotThrow();
     ArrayRef<Value *> args = {createDefaultStr->args().begin()};
     BasicBlock *entry = BasicBlock::Create(*context, "entry", createDefaultStr);
+    
     builder->SetInsertPoint(entry); 
     Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
     builder->CreateStore(ConstantPointerNull::get(builder->getInt8PtrTy()), gep0);
@@ -40,6 +41,7 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     Value *gep3 = builder->CreateGEP(ptr, args[0], {builder->getInt64(3)});
     builder->CreateStore(builder->getInt64(16), gep3);
     builder->CreateRetVoid();
+    
     llvm::verifyFunction(*createDefaultStr);
     } // end of createDefaultStr
 
@@ -52,16 +54,20 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     BasicBlock *entry = BasicBlock::Create(*context, "entry", deleteStr);
     BasicBlock *freeBegin = BasicBlock::Create(*context, "free_begin", deleteStr);
     BasicBlock *freeClose = BasicBlock::Create(*context, "free_close", deleteStr);
+    
     builder->SetInsertPoint(entry);
     Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
-    Value *load0 = builder->CreateLoad(builder->getInt8PtrTy()->getPointerTo(), gep0);
+    Value *load0 = builder->CreateLoad(builder->getInt8PtrTy(), gep0);
     Value *cmp0 = builder->CreateICmpNE(load0, ConstantPointerNull::get(builder->getInt8PtrTy()));
     builder->CreateCondBr(cmp0, freeBegin, freeClose);
+    
     builder->SetInsertPoint(freeBegin);
     builder->CreateCall(fuxMem->free, {load0});
     builder->CreateBr(freeClose);
+    
     builder->SetInsertPoint(freeClose);
     builder->CreateRetVoid();
+    
     llvm::verifyFunction(*deleteStr);
     } // end of deleteStr
 
@@ -69,6 +75,22 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     FunctionType *FT = FunctionType::get(builder->getVoidTy(), {ptr, builder->getInt64Ty()}, false);
     resizeStr = Function::Create(FT, Function::CommonLinkage, "resizeStr", *module);
     resizeStr->setCallingConv(CallingConv::Fast);
+    ArrayRef<Value *> args = {resizeStr->getArg(0), resizeStr->getArg(1)};
+    BasicBlock *entry = BasicBlock::Create(*context, "entry", resizeStr);
+
+    builder->SetInsertPoint(entry);
+    Value *output = builder->CreateCall(fuxMem->malloc, {args[1]}, "output");
+    Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
+    Value *buffer = builder->CreateLoad(builder->getInt8PtrTy(), gep0, "buffer");
+    Value *gep1 = builder->CreateGEP(ptr, args[0], {builder->getInt64(1)});
+    Value *len = builder->CreateLoad(builder->getInt64Ty(), gep1, "len");
+    Value *call = builder->CreateCall(fuxMem->memcpy, {output, buffer, len});
+    builder->CreateCall(fuxMem->free, {buffer});
+    builder->CreateStore(output, gep0);
+    Value *gep2 = builder->CreateGEP(ptr, args[0], {builder->getInt64(2)});
+    builder->CreateStore(args[1], gep2);
+    builder->CreateRetVoid();
+
     llvm::verifyFunction(*resizeStr);
     } // end of resizeStr
 
@@ -80,27 +102,31 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     BasicBlock *entry = BasicBlock::Create(*context, "entry", addChar);
     BasicBlock *growBegin = BasicBlock::Create(*context, "grow_begin", addChar);
     BasicBlock *growClose = BasicBlock::Create(*context, "grow_close", addChar);
+    
     builder->SetInsertPoint(entry);
     Value *len_gep = builder->CreateGEP(ptr, args[0], {builder->getInt64(1)});
-    Value *len = builder->CreateLoad(Type::getInt64PtrTy(*context), len_gep, "len");
+    Value *len = builder->CreateLoad(builder->getInt64Ty(), len_gep, "len");
     Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(2)});
-    Value *maxlen = builder->CreateLoad(Type::getInt64PtrTy(*context), gep0, "maxlen");
+    Value *maxlen = builder->CreateLoad(builder->getInt64Ty(), gep0, "maxlen");
     Value *cmp0 = builder->CreateICmpEQ(len, maxlen);
     builder->CreateCondBr(cmp0, growBegin, growClose);
+    
     builder->SetInsertPoint(growBegin);
     Value *gep1 = builder->CreateGEP(ptr, args[0], {builder->getInt64(3)});
-    Value *factor = builder->CreateLoad(Type::getInt64PtrTy(*context), gep1, "factor");
-    Value *add = builder->CreateAdd(maxlen, factor);
-    builder->CreateCall(resizeStr, {args[0], add});
+    Value *factor = builder->CreateLoad(builder->getInt64Ty(), gep1, "factor");
+    Value *add0 = builder->CreateAdd(maxlen, factor);
+    builder->CreateCall(resizeStr, {args[0], add0});
     builder->CreateBr(growClose);
+    
     builder->SetInsertPoint(growClose);
     Value *gep2 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
-    Value *buffer = builder->CreateLoad(builder->getInt8PtrTy()->getPointerTo(), gep2, "buffer");
+    Value *buffer = builder->CreateLoad(builder->getInt8PtrTy(), gep2, "buffer");
     Value *gep3 = builder->CreateGEP(builder->getInt8PtrTy(), buffer, len);
     builder->CreateStore(args[1], gep3);
-    add = builder->CreateAdd(len, builder->getInt64(1));
-    builder->CreateStore(add, len_gep);
+    Value *add1 = builder->CreateAdd(len, builder->getInt64(1));
+    builder->CreateStore(add1, len_gep);
     builder->CreateRetVoid();
+    
     llvm::verifyFunction(*addChar);
     } // end of addChar
 }

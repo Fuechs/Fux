@@ -27,11 +27,11 @@ ExprAST &ExprAST::operator=(ExprAST &ast) {
 }
 
 void RootAST::addSub(ExprPtr &sub) {
-    program.push_back(move(sub));
+    program.push_back(std::move(sub));
 }
 
 ExprList RootAST::getProg() {
-    return move(program);
+    return std::move(program);
 }
 
 

@@ -1,4 +1,4 @@
-cc = g++
+cc = clang++
 exec = fux
 cflags = -g -O3 -std=c++20
 llvmflags = `llvm-config --cxxflags --ldflags --system-libs --libs core`

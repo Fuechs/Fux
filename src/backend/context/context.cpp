@@ -20,7 +20,7 @@ FuxContext::FuxContext(ExprPtr &root) {
     );
     this->target = fux.options.target;
 
-    this->root = move(root);
+    this->root = std::move(root);
     this->generator = nullptr;
     this->compiler = nullptr; // will be required after generation
 }

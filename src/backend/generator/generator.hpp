@@ -20,7 +20,7 @@
 class Generator {
 public:
     Generator(ExprPtr &root, LLVMWrapper *fuxLLVM) 
-    : root(move(root)), fuxLLVM(fuxLLVM) {}
+    : root(std::move(root)), fuxLLVM(fuxLLVM) {}
 
     void generate();
 

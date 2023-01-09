@@ -227,12 +227,12 @@ void createTestAST(ExprPtr &root) {
 
     ExprList callArgs;
     ExprPtr num = make_unique<VariableExprAST>("addtmp");
-    callArgs.push_back(move(num));
+    callArgs.push_back(std::move(num));
     ExprPtr eCall = make_unique<CallExprAST>("mod", callArgs);
 
     ExprList mBody;
-    mBody.push_back(move(binOp));
-    mBody.push_back(move(eCall));
+    mBody.push_back(std::move(binOp));
+    mBody.push_back(std::move(eCall));
 
     ArgMap args;
     args["x"] = fuxType::I32;

@@ -12,17 +12,17 @@
 #include "analyser.hpp"
 
 ExprPtr Analyser::analyse() { 
-    return move(origin->analyse());
+    return std::move(origin->analyse());
 }
 
-ExprPtr RootAST::analyse() { return move(nullExpr); }
-ExprPtr NumberExprAST::analyse() { return move(nullExpr); }
-ExprPtr VariableExprAST::analyse() { return move(nullExpr); }
-ExprPtr BinaryExprAST::analyse() { return move(nullExpr); }
-ExprPtr ComparisonExprAST::analyse() { return move(nullExpr); }
-ExprPtr LogicalExprAST::analyse() { return move(nullExpr); }
-ExprPtr CallExprAST::analyse() { return move(nullExpr); }
-ExprPtr VariableDeclAST::analyse() { return move(nullExpr); }
-ExprPtr PutsCallAST::analyse() { return move(nullExpr); }
-ExprPtr PrototypeAST::analyse() { return move(nullExpr); }
-ExprPtr FunctionAST::analyse() { return move(nullExpr); }
+ExprPtr RootAST::analyse() { return std::move(nullExpr); }
+ExprPtr NumberExprAST::analyse() { return std::move(nullExpr); }
+ExprPtr VariableExprAST::analyse() { return std::move(nullExpr); }
+ExprPtr BinaryExprAST::analyse() { return std::move(nullExpr); }
+ExprPtr ComparisonExprAST::analyse() { return std::move(nullExpr); }
+ExprPtr LogicalExprAST::analyse() { return std::move(nullExpr); }
+ExprPtr CallExprAST::analyse() { return std::move(nullExpr); }
+ExprPtr VariableDeclAST::analyse() { return std::move(nullExpr); }
+ExprPtr PutsCallAST::analyse() { return std::move(nullExpr); }
+ExprPtr PrototypeAST::analyse() { return std::move(nullExpr); }
+ExprPtr FunctionAST::analyse() { return std::move(nullExpr); }
