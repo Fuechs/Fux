@@ -76,17 +76,16 @@ Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
 
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *arg = argument->codegen(fuxLLVM);
+    if (arg->getType() != fuxLLVM->fuxStr->str)
+        return nullptr;
+    return fuxLLVM->builder->CreateCall(fuxLLVM->fuxIO->puts, {arg});
+}
 
 Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
     TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
-    FunctionType *funcType;
-    switch (type) {
-        case fuxType::VOID: funcType = FunctionType::get(fuxLLVM->builder->getVoidTy(), argTypes, false); break;
-        case fuxType::I32:  funcType = FunctionType::get(fuxLLVM->builder->getInt32Ty(), argTypes, false); break;
-        case fuxType::F64:  funcType = FunctionType::get(fuxLLVM->builder->getDoubleTy(), argTypes, false); break;
-        default:            return nullptr;
-    }
+    FunctionType *funcType = FunctionType::get(Generator::getType(fuxLLVM, type), argTypes, false);
     Function *func = Function::Create(funcType, Function::ExternalLinkage, "Usr_"+name, *fuxLLVM->module);
     
     auto it = args.begin();

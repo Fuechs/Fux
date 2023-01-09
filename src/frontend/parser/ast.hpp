@@ -19,7 +19,7 @@
 #include "../../backend/generator/wrapper.hpp"
 
 typedef map<string, Value *> ValueMap;
-typedef map<string, fuxType::Type> ArgMap;
+typedef map<string, FuxType> ArgMap;
 
 // exact position of an AST for error tracking
 // TODO: implement in error and parser
@@ -72,11 +72,11 @@ public:
 };
 
 class NumberExprAST : public ExprAST {
-    fuxType::Type type;
+    FuxType type;
     double value;
 
 public:
-    NumberExprAST(fuxType::Type type, double value) : type(type), value(value) {}
+    NumberExprAST(FuxType type, double value) : type(type), value(value) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;
@@ -186,11 +186,11 @@ public:
 
 class VariableDeclAST : public ExprAST {
     string symbol;
-    fuxType::Type type;
+    FuxType type;
     ExprPtr value;
 
 public:
-    VariableDeclAST(string symbol, fuxType::Type type = fuxType::NO_TYPE, ExprPtr &value = nullExpr) 
+    VariableDeclAST(string symbol, FuxType type = FuxType(), ExprPtr &value = nullExpr) 
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() { 
         symbol.clear(); 
@@ -231,18 +231,18 @@ public:
 // prototype of a function
 // name and arguments
 class PrototypeAST : public ExprAST {
-    fuxType::Type type;
+    FuxType type;
     string name;
     ArgMap args;
 
 public:
-    PrototypeAST(fuxType::Type type, const string &name, ArgMap args)
+    PrototypeAST(FuxType type, const string &name, ArgMap args)
     : type(type), name(name), args(args) {}
     ~PrototypeAST() override;
     
     string getName();
     ArgMap getArgs();
-    fuxType::Type getType();
+    FuxType getType();
     
     Function *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;
@@ -262,7 +262,7 @@ class FunctionAST : public ExprAST {
     ExprList body;
 
 public:
-    FunctionAST(fuxType::Type type, const string &name, ArgMap args, ExprList &body)
+    FunctionAST(FuxType type, const string &name, ArgMap args, ExprList &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
     FunctionAST(ProtoPtr proto, ExprList &body)

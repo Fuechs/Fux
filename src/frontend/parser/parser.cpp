@@ -45,7 +45,7 @@ ExprPtr Parser::parsePutsStmt() {
 ExprPtr Parser::parseVariableDeclStmt() {
     // TODO: parse storage modifiers
     const string symbol = expect(IDENTIFIER).value;
-    const fuxType::Type type = fuxType::NO_TYPE; // TODO: parse type
+    const FuxType type = FuxType(); // TODO: parse type
     expect(EQUALS); // TODO: parse constant
     ExprPtr value = parseExpr();
     expect(SEMICOLON);
@@ -122,7 +122,7 @@ ExprPtr Parser::parseUnaryExpr() { return nullptr; }
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
     switch (that.type) {
-        case NUMBER:        return make_unique<NumberExprAST>(fuxType::I64, stod(that.value));
+        case NUMBER:        return make_unique<NumberExprAST>(FuxType(FuxType::I64), stod(that.value));
         case IDENTIFIER:    return make_unique<VariableExprAST>(that.value);
         case LPAREN: {
             ExprPtr expr = parseExpr();

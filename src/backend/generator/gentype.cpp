@@ -11,45 +11,32 @@
 
 #include "generator.hpp"
 
-Type *Generator::getType(fuxType::Type type, const bool pointer) {
-    // TODO: how the fuck do I get unsigned / signed integer types?
+Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
+    IRBuilder<> *builder = fuxLLVM->builder;
+    Type* ret;
 
-    if (pointer)
-        switch (type) {
-            case fuxType::VOID:     return fuxLLVM->builder->getPtrTy();
-            case fuxType::BOOL:     return Type::getInt1PtrTy(*fuxLLVM->context);
-            case fuxType::I8:       return fuxLLVM->builder->getInt8PtrTy();
-            case fuxType::U8:       return fuxLLVM->builder->getInt8PtrTy();
-            case fuxType::C8:       return fuxLLVM->builder->getInt8PtrTy();
-            case fuxType::I16:      return Type::getInt16PtrTy(*fuxLLVM->context);
-            case fuxType::U16:      return Type::getInt16PtrTy(*fuxLLVM->context);
-            case fuxType::C16:      return Type::getInt16PtrTy(*fuxLLVM->context);
-            case fuxType::I32:      return Type::getInt32PtrTy(*fuxLLVM->context);
-            case fuxType::U32:      return Type::getInt32PtrTy(*fuxLLVM->context);
-            case fuxType::F32:      return Type::getFloatPtrTy(*fuxLLVM->context);
-            case fuxType::I64:      return Type::getInt64PtrTy(*fuxLLVM->context);
-            case fuxType::U64:      return Type::getInt64PtrTy(*fuxLLVM->context);
-            case fuxType::F64:      return Type::getDoublePtrTy(*fuxLLVM->context);
-            case fuxType::STR:      return fuxLLVM->builder->getPtrTy();
-            default:                return nullptr;
-        }
-
-    switch (type) {
-        case fuxType::VOID:     return fuxLLVM->builder->getVoidTy();
-        case fuxType::BOOL:     return fuxLLVM->builder->getInt1Ty();
-        case fuxType::I8:       return fuxLLVM->builder->getInt8Ty();
-        case fuxType::U8:       return fuxLLVM->builder->getInt8Ty();
-        case fuxType::C8:       return fuxLLVM->builder->getInt8Ty();
-        case fuxType::I16:      return fuxLLVM->builder->getInt16Ty();
-        case fuxType::U16:      return fuxLLVM->builder->getInt16Ty();
-        case fuxType::C16:      return fuxLLVM->builder->getInt16Ty();
-        case fuxType::I32:      return fuxLLVM->builder->getInt32Ty();
-        case fuxType::U32:      return fuxLLVM->builder->getInt32Ty();
-        case fuxType::F32:      return fuxLLVM->builder->getFloatTy();
-        case fuxType::I64:      return fuxLLVM->builder->getInt64Ty();
-        case fuxType::U64:      return fuxLLVM->builder->getInt64Ty();
-        case fuxType::F64:      return fuxLLVM->builder->getDoubleTy();
-        case fuxType::STR:      return fuxLLVM->builder->getInt8PtrTy(); // char* for now
-        default:                return nullptr;
+    switch (type.kind) {
+        case FuxType::VOID:     ret = builder->getVoidTy();
+        case FuxType::BOOL:     ret = builder->getInt1Ty();
+        case FuxType::I8:       ret = builder->getInt8Ty();
+        case FuxType::U8:       ret = builder->getInt8Ty();
+        case FuxType::C8:       ret = builder->getInt8Ty();
+        case FuxType::I16:      ret = builder->getInt16Ty();
+        case FuxType::U16:      ret = builder->getInt16Ty();
+        case FuxType::C16:      ret = builder->getInt16Ty();
+        case FuxType::I32:      ret = builder->getInt32Ty();
+        case FuxType::U32:      ret = builder->getInt32Ty();
+        case FuxType::F32:      ret = builder->getFloatTy();
+        case FuxType::I64:      ret = builder->getInt64Ty();
+        case FuxType::U64:      ret = builder->getInt64Ty();
+        case FuxType::F64:      ret = builder->getDoubleTy();
+        case FuxType::STR:      ret = fuxLLVM->fuxStr->str;
+        default:                ret = nullptr;
     }
+
+    size_t pd = type.pointerDepth;
+    while (pd --> 0) 
+        ret = ret->getPointerTo();
+
+    return ret;
 }

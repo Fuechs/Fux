@@ -38,7 +38,7 @@ ExprList RootAST::getProg() {
 PrototypeAST::~PrototypeAST() { name.clear(); }
 string PrototypeAST::getName() { return name; }
 ArgMap PrototypeAST::getArgs() { return args; }
-fuxType::Type PrototypeAST::getType() { return type; }
+FuxType PrototypeAST::getType() { return type; }
 
 // unused root ast stuff
 void NumberExprAST::addSub(ExprPtr &sub) { return; }

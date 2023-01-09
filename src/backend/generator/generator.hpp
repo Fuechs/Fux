@@ -24,11 +24,11 @@ public:
 
     void generate();
 
+    static Type *getType(LLVMWrapper *fuxLLVM, FuxType type);
+
 private:
     ExprPtr root;
     LLVMWrapper *fuxLLVM;
 
     void debugPrint(const string message);
-
-    Type *getType(fuxType::Type type, const bool pointer = false);
 };
