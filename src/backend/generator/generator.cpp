@@ -87,7 +87,7 @@ Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
         case fuxType::F64:  funcType = FunctionType::get(fuxLLVM->builder->getDoubleTy(), argTypes, false); break;
         default:            return nullptr;
     }
-    Function *func = Function::Create(funcType, Function::ExternalLinkage, "__"+name+"__", *fuxLLVM->module);
+    Function *func = Function::Create(funcType, Function::ExternalLinkage, "Usr_"+name, *fuxLLVM->module);
     
     auto it = args.begin();
     for (auto &arg : func->args())

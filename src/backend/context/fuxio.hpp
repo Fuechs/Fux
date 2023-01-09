@@ -21,6 +21,5 @@ public:
 
     Function *putch = nullptr;
     Function *puts = nullptr;
-     
     Function *read = nullptr;
 };

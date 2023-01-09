@@ -23,40 +23,38 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     // %str* | ptr
     ptr = PointerType::get(str, 0);
 
-    { // define common fastcc void createDefaultStr(%str*) nounwind
+    { // define common fastcc void Fux_str_create_default(%str*) nounwind
     FunctionType *FT = FunctionType::get(builder->getVoidTy(), {ptr}, false);
-    createDefaultStr = Function::Create(FT, Function::CommonLinkage, "createDefaultStr", *module);
-    createDefaultStr->setCallingConv(CallingConv::Fast); // fastcc
-    createDefaultStr->setDoesNotThrow();
-    ArrayRef<Value *> args = {createDefaultStr->args().begin()};
-    BasicBlock *entry = BasicBlock::Create(*context, "entry", createDefaultStr);
+    str_create_default = Function::Create(FT, Function::CommonLinkage, "Fux_str_create_default", *module);
+    str_create_default->setCallingConv(CallingConv::Fast); // fastcc
+    str_create_default->setDoesNotThrow();
+    BasicBlock *entry = BasicBlock::Create(*context, "entry", str_create_default);
     
     builder->SetInsertPoint(entry); 
-    Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
+    Value *gep0 = builder->CreateConstGEP1_64(ptr, str_create_default->getArg(0), 0);
     builder->CreateStore(ConstantPointerNull::get(builder->getInt8PtrTy()), gep0);
-    Value *gep1 = builder->CreateGEP(ptr, args[0], {builder->getInt64(1)});
+    Value *gep1 = builder->CreateConstGEP1_64(ptr, str_create_default->getArg(0), 1);
     builder->CreateStore(builder->getInt64(0), gep1);
-    Value *gep2 = builder->CreateGEP(ptr, args[0], {builder->getInt64(2)});
+    Value *gep2 = builder->CreateConstGEP1_64(ptr, str_create_default->getArg(0), 2);
     builder->CreateStore(builder->getInt64(0), gep2);
-    Value *gep3 = builder->CreateGEP(ptr, args[0], {builder->getInt64(3)});
+    Value *gep3 = builder->CreateConstGEP1_64(ptr, str_create_default->getArg(0), 3);
     builder->CreateStore(builder->getInt64(16), gep3);
     builder->CreateRetVoid();
     
-    llvm::verifyFunction(*createDefaultStr);
-    } // end of createDefaultStr
+    llvm::verifyFunction(*str_create_default);
+    } // end of Fux_str_create_default
 
-    { // define common fastcc void deleteStr(%str*) nounwind
+    { // define common fastcc void Fux_str_delete(%str*) nounwind
     FunctionType *FT = FunctionType::get(builder->getVoidTy(), {ptr}, false);
-    deleteStr = Function::Create(FT, Function::CommonLinkage, "deleteStr", *module);
-    deleteStr->setCallingConv(CallingConv::Fast);
-    deleteStr->setDoesNotThrow();
-    ArrayRef<Value *> args = {deleteStr->args().begin()};
-    BasicBlock *entry = BasicBlock::Create(*context, "entry", deleteStr);
-    BasicBlock *freeBegin = BasicBlock::Create(*context, "free_begin", deleteStr);
-    BasicBlock *freeClose = BasicBlock::Create(*context, "free_close", deleteStr);
+    str_delete = Function::Create(FT, Function::CommonLinkage, "Fux_str_delete", *module);
+    str_delete->setCallingConv(CallingConv::Fast);
+    str_delete->setDoesNotThrow();
+    BasicBlock *entry = BasicBlock::Create(*context, "entry", str_delete);
+    BasicBlock *freeBegin = BasicBlock::Create(*context, "free_begin", str_delete);
+    BasicBlock *freeClose = BasicBlock::Create(*context, "free_close", str_delete);
     
     builder->SetInsertPoint(entry);
-    Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
+    Value *gep0 = builder->CreateConstGEP1_64(ptr, str_delete->getArg(0), 0);
     Value *load0 = builder->CreateLoad(builder->getInt8PtrTy(), gep0);
     Value *cmp0 = builder->CreateICmpNE(load0, ConstantPointerNull::get(builder->getInt8PtrTy()));
     builder->CreateCondBr(cmp0, freeBegin, freeClose);
@@ -68,65 +66,63 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     builder->SetInsertPoint(freeClose);
     builder->CreateRetVoid();
     
-    llvm::verifyFunction(*deleteStr);
-    } // end of deleteStr
+    llvm::verifyFunction(*str_delete);
+    } // end of Fux_str_delete
 
-    { // declare common fastcc void resizeStr(%str*, i64)
+    { // declare common fastcc void Fux_str_resize(%str*, i64)
     FunctionType *FT = FunctionType::get(builder->getVoidTy(), {ptr, builder->getInt64Ty()}, false);
-    resizeStr = Function::Create(FT, Function::CommonLinkage, "resizeStr", *module);
-    resizeStr->setCallingConv(CallingConv::Fast);
-    ArrayRef<Value *> args = {resizeStr->getArg(0), resizeStr->getArg(1)};
-    BasicBlock *entry = BasicBlock::Create(*context, "entry", resizeStr);
+    str_resize = Function::Create(FT, Function::CommonLinkage, "Fux_str_resize", *module);
+    str_resize->setCallingConv(CallingConv::Fast);
+    BasicBlock *entry = BasicBlock::Create(*context, "entry", str_resize);
 
     builder->SetInsertPoint(entry);
-    Value *output = builder->CreateCall(fuxMem->malloc, {args[1]}, "output");
-    Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
+    Value *output = builder->CreateCall(fuxMem->malloc, {str_resize->getArg(1)}, "output");
+    Value *gep0 = builder->CreateConstGEP1_64(ptr, str_resize->getArg(0), 0);
     Value *buffer = builder->CreateLoad(builder->getInt8PtrTy(), gep0, "buffer");
-    Value *gep1 = builder->CreateGEP(ptr, args[0], {builder->getInt64(1)});
+    Value *gep1 = builder->CreateConstGEP1_64(ptr, str_resize->getArg(0), 1);
     Value *len = builder->CreateLoad(builder->getInt64Ty(), gep1, "len");
     Value *call = builder->CreateCall(fuxMem->memcpy, {output, buffer, len});
     builder->CreateCall(fuxMem->free, {buffer});
     builder->CreateStore(output, gep0);
-    Value *gep2 = builder->CreateGEP(ptr, args[0], {builder->getInt64(2)});
-    builder->CreateStore(args[1], gep2);
+    Value *gep2 = builder->CreateConstGEP1_64(ptr, str_resize->getArg(0), 2);
+    builder->CreateStore(str_resize->getArg(1), gep2);
     builder->CreateRetVoid();
 
-    llvm::verifyFunction(*resizeStr);
-    } // end of resizeStr
+    llvm::verifyFunction(*str_resize);
+    } // end of Fux_str_resize
 
-    { // define common fastcc void addChar(%str*, i8)
+    { // define common fastcc void Fux_str_add_char(%str*, i8)
     FunctionType *FT = FunctionType::get(builder->getVoidTy(), {ptr, builder->getInt8Ty()}, false);
-    addChar = Function::Create(FT, Function::CommonLinkage, "addChar", *module);
-    addChar->setCallingConv(CallingConv::Fast);
-    ArrayRef<Value *> args = {addChar->getArg(0), addChar->getArg(1)};
-    BasicBlock *entry = BasicBlock::Create(*context, "entry", addChar);
-    BasicBlock *growBegin = BasicBlock::Create(*context, "grow_begin", addChar);
-    BasicBlock *growClose = BasicBlock::Create(*context, "grow_close", addChar);
+    str_add_char = Function::Create(FT, Function::CommonLinkage, "Fux_str_add_char", *module);
+    str_add_char->setCallingConv(CallingConv::Fast);
+    BasicBlock *entry = BasicBlock::Create(*context, "entry", str_add_char);
+    BasicBlock *growBegin = BasicBlock::Create(*context, "grow_begin", str_add_char);
+    BasicBlock *growClose = BasicBlock::Create(*context, "grow_close", str_add_char);
     
     builder->SetInsertPoint(entry);
-    Value *len_gep = builder->CreateGEP(ptr, args[0], {builder->getInt64(1)});
+    Value *len_gep = builder->CreateConstGEP1_64(ptr, str_add_char->getArg(0), 1);
     Value *len = builder->CreateLoad(builder->getInt64Ty(), len_gep, "len");
-    Value *gep0 = builder->CreateGEP(ptr, args[0], {builder->getInt64(2)});
+    Value *gep0 = builder->CreateConstGEP1_64(ptr, str_add_char->getArg(0), 2);
     Value *maxlen = builder->CreateLoad(builder->getInt64Ty(), gep0, "maxlen");
     Value *cmp0 = builder->CreateICmpEQ(len, maxlen);
     builder->CreateCondBr(cmp0, growBegin, growClose);
     
     builder->SetInsertPoint(growBegin);
-    Value *gep1 = builder->CreateGEP(ptr, args[0], {builder->getInt64(3)});
+    Value *gep1 = builder->CreateConstGEP1_64(ptr, str_add_char->getArg(0), 3);
     Value *factor = builder->CreateLoad(builder->getInt64Ty(), gep1, "factor");
     Value *add0 = builder->CreateAdd(maxlen, factor);
-    builder->CreateCall(resizeStr, {args[0], add0});
+    builder->CreateCall(str_add_char, {str_add_char->getArg(0), add0});
     builder->CreateBr(growClose);
     
     builder->SetInsertPoint(growClose);
-    Value *gep2 = builder->CreateGEP(ptr, args[0], {builder->getInt64(0)});
+    Value *gep2 = builder->CreateConstGEP1_64(ptr, str_add_char->getArg(0), 0);
     Value *buffer = builder->CreateLoad(builder->getInt8PtrTy(), gep2, "buffer");
     Value *gep3 = builder->CreateGEP(builder->getInt8PtrTy(), buffer, len);
-    builder->CreateStore(args[1], gep3);
+    builder->CreateStore(str_add_char->getArg(1), gep3);
     Value *add1 = builder->CreateAdd(len, builder->getInt64(1));
     builder->CreateStore(add1, len_gep);
     builder->CreateRetVoid();
     
-    llvm::verifyFunction(*addChar);
-    } // end of addChar
+    llvm::verifyFunction(*str_add_char);
+    } // end of Fux_str_add_char
 }

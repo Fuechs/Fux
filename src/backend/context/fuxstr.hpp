@@ -27,8 +27,8 @@ public:
     // pointer to string type
     PointerType *ptr = nullptr;
     
-    Function *createDefaultStr = nullptr;
-    Function *deleteStr = nullptr;
-    Function *resizeStr = nullptr;
-    Function *addChar = nullptr;
+    Function *str_create_default = nullptr;
+    Function *str_delete = nullptr;
+    Function *str_resize = nullptr;
+    Function *str_add_char = nullptr;
 };

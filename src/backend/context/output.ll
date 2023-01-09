@@ -10,7 +10,7 @@ declare common void @free(ptr)
 declare common ptr @memcpy(ptr, ptr, i64)
 
 ; Function Attrs: nounwind
-define common fastcc void @createDefaultStr(ptr %0) #0 {
+define common fastcc void @Fux_str_create_default(ptr %0) #0 {
 entry:
   %1 = getelementptr ptr, ptr %0, i64 0
   store ptr null, ptr %1, align 8
@@ -24,7 +24,7 @@ entry:
 }
 
 ; Function Attrs: nounwind
-define common fastcc void @deleteStr(ptr %0) #0 {
+define common fastcc void @Fux_str_delete(ptr %0) #0 {
 entry:
   %1 = getelementptr ptr, ptr %0, i64 0
   %2 = load ptr, ptr %1, align 8
@@ -39,7 +39,7 @@ free_close:                                       ; preds = %free_begin, %entry
   ret void
 }
 
-define common fastcc void @resizeStr(ptr %0, i64 %1) {
+define common fastcc void @Fux_str_resize(ptr %0, i64 %1) {
 entry:
   %output = call ptr @malloc(i64 %1)
   %2 = getelementptr ptr, ptr %0, i64 0
@@ -54,7 +54,7 @@ entry:
   ret void
 }
 
-define common fastcc void @addChar(ptr %0, i8 %1) {
+define common fastcc void @Fux_str_add_char(ptr %0, i8 %1) {
 entry:
   %2 = getelementptr ptr, ptr %0, i64 1
   %len = load i64, ptr %2, align 4
@@ -67,7 +67,7 @@ grow_begin:                                       ; preds = %entry
   %5 = getelementptr ptr, ptr %0, i64 3
   %factor = load i64, ptr %5, align 4
   %6 = add i64 %maxlen, %factor
-  call void @resizeStr(ptr %0, i64 %6)
+  call void @Fux_str_add_char(ptr %0, i64 %6)
   br label %grow_close
 
 grow_close:                                       ; preds = %grow_begin, %entry
@@ -80,10 +80,10 @@ grow_close:                                       ; preds = %grow_begin, %entry
   ret void
 }
 
-declare common void @putch(i8)
+declare common void @Fux_putch(i8)
 
-declare common void @puts(%str)
+declare common void @Fux_puts(%str)
 
-declare common %str @read()
+declare common void @Fux_read(ptr)
 
 attributes #0 = { nounwind }

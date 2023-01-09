@@ -19,7 +19,7 @@
 typedef map<string, Value *> ValueMap;
 
 struct LLVMWrapper {
-    LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder) 
+    LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder)
     : context(context), module(module), builder(builder), namedValues({}) {
         fuxMem = new FuxMem(context, module, builder);
         fuxStr = new FuxStr(context, module, builder, fuxMem);

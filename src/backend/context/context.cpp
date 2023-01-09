@@ -12,6 +12,7 @@
 #include "context.hpp"
 
 FuxContext::FuxContext(ExprPtr &root) {
+    llvm::InitializeNativeTarget();
     LLVMContext *llvmContext = new LLVMContext();
     this->fuxLLVM = new LLVMWrapper(
         llvmContext, 

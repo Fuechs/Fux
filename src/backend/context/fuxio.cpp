@@ -12,21 +12,21 @@
 #include "fuxio.hpp"
 
 FuxIO::FuxIO(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem, FuxStr *fuxStr) {
-    // temporary
-    FunctionType *FT;
-
-    // declare void putch(i8)
-    FT = FunctionType::get(builder->getVoidTy(), {builder->getInt8Ty()}, false);
-    putch = Function::Create(FT, Function::CommonLinkage, "putch", *module);
+    { // declare void putch(i8)
+    FunctionType *FT = FunctionType::get(builder->getVoidTy(), {builder->getInt8Ty()}, false);
+    putch = Function::Create(FT, Function::CommonLinkage, "Fux_putch", *module);
     llvm::verifyFunction(*putch);
+    } // end of putch
 
-    // declare void puts(%str)
-    FT = FunctionType::get(builder->getVoidTy(), {fuxStr->str}, false);
-    puts = Function::Create(FT, Function::CommonLinkage, "puts", *module);
+    { // declare void puts(%str)
+    FunctionType *FT = FunctionType::get(builder->getVoidTy(), {fuxStr->str}, false);
+    puts = Function::Create(FT, Function::CommonLinkage, "Fux_puts", *module);
     llvm::verifyFunction(*puts);
+    } // end of puts
 
-    // declare %str read(void);
-    FT = FunctionType::get(fuxStr->str, false);
-    read = Function::Create(FT, Function::CommonLinkage, "read", *module);
+    { // declare void read(%str*);
+    FunctionType *FT = FunctionType::get(builder->getVoidTy(), {fuxStr->ptr}, false);
+    read = Function::Create(FT, Function::CommonLinkage, "Fux_read", *module);
     llvm::verifyFunction(*read);
-} 
+    } // end of read
+}
