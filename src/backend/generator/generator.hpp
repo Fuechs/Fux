@@ -16,6 +16,7 @@
 #include "../../frontend/parser/ast.hpp"
 #include "../context/fuxmem.hpp"
 #include "../context/fuxstr.hpp"
+#include "genarray.hpp"
 
 class Generator {
 public:
@@ -25,6 +26,7 @@ public:
     void generate();
 
     static Type *getType(LLVMWrapper *fuxLLVM, FuxType type);
+    static FuxArray *createArrayType(LLVMWrapper *fuxLLVM, FuxType type);
 
 private:
     ExprPtr root;

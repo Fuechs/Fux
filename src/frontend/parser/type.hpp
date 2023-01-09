@@ -11,8 +11,7 @@
 
 #pragma once
 
-
-
+#include "../../fux.hpp"
 
 class FuxType {
 public:
@@ -46,6 +45,13 @@ public:
     
     FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, Access access = PUBLIC)
     : kind(kind), pointerDepth(pointerDepth), access(access) {}
+
+    FuxType &operator=(FuxType copy) {
+        this->kind = copy.kind;
+        this->pointerDepth = copy.pointerDepth;
+        this->access = copy.access;
+        return *this;
+    }
 
     Kind kind;
     size_t pointerDepth;

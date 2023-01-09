@@ -40,3 +40,7 @@ Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
 
     return ret;
 }
+
+FuxArray *Generator::createArrayType(LLVMWrapper *fuxLLVM, FuxType type) { 
+    return new FuxArray(fuxLLVM, getType(fuxLLVM, type)); 
+}

@@ -213,8 +213,8 @@ int repl() {
 void createTestAST(ExprPtr &root) {
     // i32 mod(i32);
     ArgMap eArgs;
-    eArgs["a"] = fuxType::I32;
-    ExprPtr emptyF = make_unique<PrototypeAST>(fuxType::I32, "mod", eArgs);
+    eArgs["a"] = FuxType(FuxType::I32);
+    ExprPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::I32), "mod", eArgs);
     root->addSub(emptyF);
 
     // i32 main(i32 %x, i32 %y) {
@@ -235,10 +235,10 @@ void createTestAST(ExprPtr &root) {
     mBody.push_back(std::move(eCall));
 
     ArgMap args;
-    args["x"] = fuxType::I32;
-    args["y"] = fuxType::I32;
+    args["x"] = FuxType(FuxType::I32);
+    args["y"] = FuxType(FuxType::I32);
     
-    ExprPtr mFunc = make_unique<FunctionAST>(fuxType::I32, "main", args, mBody);
+    ExprPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I32), "main", args, mBody);
     root->addSub(mFunc);
 }
 
