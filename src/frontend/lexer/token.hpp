@@ -108,6 +108,7 @@ enum TokenType {
     KEY_EXIT,
     KEY_PUTS,
     KEY_PUTCH,
+    KEY_READ,
     KEY_THROW,
     
     KEY_SAFE,
@@ -241,6 +242,7 @@ static const char *TokenTypeString[] = {
     "KEY_EXIT",
     "KEY_PUTS",
     "KEY_PUTCH",
+    "KEY_READ",
     "KEY_THROW",
     
     "KEY_SAFE",
@@ -374,6 +376,7 @@ static vector<string> TokenTypeValue = {
     "exit",
     "puts",
     "putch",
+    "read",
     "throw",
     
     "safe",

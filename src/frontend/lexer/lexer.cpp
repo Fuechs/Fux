@@ -579,7 +579,7 @@ void Lexer::getNumber() {
     decimal: {
         bool eFound = false;
         bool signFound = false;
-
+        
         while ((isdigit(current()) || ISEXP || current() == '_') && LENOK) {
             if (current() == '_') {
                 advance();
@@ -603,11 +603,11 @@ void Lexer::getNumber() {
             currentToken.value.push_back(current());
             advance();
         } 
-
-        if (currentToken.value.ends_with('e') 
-        || currentToken.value.ends_with('E')
-        || currentToken.value.ends_with('+')
-        || currentToken.value.ends_with('-')) {
+    
+        if (eFound && (currentToken.value.back() == 'e'
+        || currentToken.value.back() == 'E'
+        || currentToken.value.back() == '+'
+        || currentToken.value.back() == '-')) {
             error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "Expected at least one digit (0-9) after 'e | + | -'");                
             return;
         }
@@ -648,11 +648,11 @@ void Lexer::getNumber() {
             advance();
         } while ((isdigit(current()) || ISEXP || current() == '_') && LENOK);
             
-        if (currentToken.value.ends_with('e') 
-        || currentToken.value.ends_with('E')
-        || currentToken.value.ends_with('+')
-        || currentToken.value.ends_with('-')) {
-            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "Expected at least one digit (0-9) after 'e | + | -'");
+        if (eFound && (currentToken.value.back() == 'e'
+        || currentToken.value.back() == 'E'
+        || currentToken.value.back() == '+'
+        || currentToken.value.back() == '-')) {
+            error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "Expected at least one digit (0-9) after 'e | + | -'");                
             return;
         }
     }
