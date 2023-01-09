@@ -24,5 +24,6 @@ ExprPtr LogicalExprAST::analyse() { return std::move(nullExpr); }
 ExprPtr CallExprAST::analyse() { return std::move(nullExpr); }
 ExprPtr VariableDeclAST::analyse() { return std::move(nullExpr); }
 ExprPtr PutsCallAST::analyse() { return std::move(nullExpr); }
+ExprPtr IfElseAST::analyse() { return std::move(nullExpr); }
 ExprPtr PrototypeAST::analyse() { return std::move(nullExpr); }
 ExprPtr FunctionAST::analyse() { return std::move(nullExpr); }

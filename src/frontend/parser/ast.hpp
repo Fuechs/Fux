@@ -228,6 +228,26 @@ public:
     Position pos = Position();
 };
 
+class IfElseAST : public ExprAST {
+    ExprPtr condition;
+    ExprPtr thenBody;
+    ExprPtr elseBody;
+
+public:
+    IfElseAST(ExprPtr &condition, ExprPtr &thenBody, ExprPtr &elseBody = nullExpr)
+    : condition(std::move(condition)), thenBody(std::move(thenBody)), elseBody(std::move(elseBody)) {}
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    ExprPtr analyse() override;
+    void debugPrint() override;
+
+    // unused
+    ExprList getProg() override;
+    void addSub(ExprPtr &sub) override;
+
+    Position pos = Position();
+};
+
 // prototype of a function
 // name and arguments
 class PrototypeAST : public ExprAST {

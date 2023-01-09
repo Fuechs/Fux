@@ -33,7 +33,6 @@ public:
         F64,
         STR,
         VAR,
-        ARRAY, // []
         NO_TYPE,
     };
 
@@ -51,4 +50,41 @@ public:
     Kind kind;
     size_t pointerDepth;
     Access access;
+    
+    string str() {
+        stringstream ss;
+        for (size_t pd = pointerDepth; pd --> 0;)
+            ss << "*";
+        ss << KindString[kind] << " (" << AccessString[access] << ")"; 
+        return ss.str();
+    }
+
+private:
+    const vector<string> KindString = {
+        "void",
+        "bool",
+        "i8",
+        "u8",
+        "c8",
+        "i16",
+        "u16",
+        "c16",
+        "i32",
+        "u32",
+        "f32",
+        "i64",
+        "u64",
+        "f64",
+        "str",
+        "var",
+        "no_type",
+    };
+
+    const vector<string> AccessString = {
+        "fixed",
+        "constant",
+        "safe",
+        "intern",
+        "public",
+    };
 };

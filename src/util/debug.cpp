@@ -97,7 +97,7 @@ void CallExprAST::debugPrint() {
 }
 
 void VariableDeclAST::debugPrint() {
-    cout << symbol << ": " << fuxType::TypeString[type] << "";
+    cout << symbol << ": " << type.str() << "";
     if (value) {
         cout << " = ";
         value->debugPrint();
@@ -111,18 +111,27 @@ void PutsCallAST::debugPrint() {
     cout << ";";
 }
 
+void IfElseAST::debugPrint() {
+    cout << "if (";
+    condition->debugPrint();
+    cout << ") ";
+    thenBody->debugPrint();
+    cout << " else ";
+    elseBody->debugPrint();
+}
+
 void PrototypeAST::debugPrint() {
     cout << name << "( ";
     for (auto &param : args)
-        cout << fuxType::TypeString[param.second] << ", ";
-    cout << "): " << fuxType::TypeString[type] << ";";
+        cout << param.second.str() << ", ";
+    cout << "): " << type.str() << ";";
 }
 
 void FunctionAST::debugPrint() { 
     cout << proto->getName() << "( ";
     for (auto &param : proto->getArgs()) 
-        cout << param.first << ": " << fuxType::TypeString[param.second] << ", ";
-    cout << "): "<< fuxType::TypeString[proto->getType()] << " {\n";
+        cout << param.first << ": " << param.second.str() << ", ";
+    cout << "): "<< proto->getType().str() << " {\n";
     for (ExprPtr &stmt : body) {
         cout << "\t";
         stmt->debugPrint();

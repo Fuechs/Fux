@@ -27,7 +27,28 @@ ExprPtr Parser::parse() {
 }
 
 ExprPtr Parser::parseStmt() {
-    return parsePutsStmt(); 
+    return parseIfElseStmt(); 
+}
+
+ExprPtr Parser::parseIfElseStmt() {
+    ExprPtr stmt;
+
+    if (current->type == KEY_IF) {
+        eat();
+        expect(LPAREN, ILLEGAL_BRACKET_MISMATCH);
+        ExprPtr condition = parseStmt(); // ! parse conditional here
+        expect(LPAREN, MISSING_BRACKET);
+        ExprPtr thenBody = parseStmt(); // ! parse body or stmt here
+        if (current->type == KEY_ELSE) {
+            eat();
+            ExprPtr elseBody = parseStmt(); // ! parse body or stmt here
+            stmt = make_unique<IfElseAST>(condition, thenBody, elseBody);
+        } else
+            stmt = make_unique<IfElseAST>(condition, thenBody);
+    } else
+        stmt = parsePutsStmt();
+
+    return stmt;
 }
 
 ExprPtr Parser::parsePutsStmt() {

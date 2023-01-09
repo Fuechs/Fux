@@ -44,6 +44,7 @@ private:
     const bool mainFile;
 
     ExprPtr parseStmt();
+    ExprPtr parseIfElseStmt();
     ExprPtr parsePutsStmt();
     ExprPtr parseVariableDeclStmt();
 
