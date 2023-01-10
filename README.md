@@ -42,13 +42,13 @@ main(): i64 {
 
 ### Flexible, Portable, Fast
 
-- At least as high performant as C++[^1]
+- At least as high performant as C++[^1][^4]
 - Using LLVM to compile and run on several platforms
 
 ### Easy To Learn
 
 - Already known environment for developers with experience in C++
-- Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory management
+- Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory management, optional dynamic types[^4][^5]
 
 ### Large Standard Library
 
@@ -58,21 +58,25 @@ main(): i64 {
     - File I/O
     - Mathematics
     - Algorithms
-    - Maps
-    - Dynamic Pointers
+    - Key-Value-Maps
+    - Dynamic Pointers[^5]
     - String Utility
 
 ### More Readable Code
 
 - Variable and function types are declared after the name, making reading the code natural
 - The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions[^3]
-- Variables, functions and classes can be defined without the usage of a single keyword[^2]
+- Variables, functions and classes can be defined without the usage of a single keyword[^2][^4]
 
 [^1]: As long as not a lot of automatisation is used.
 
 [^2]: As long as automatic typing is used.
 
 [^3]: More information [here](./docs/README.md).
+
+[^4]: Feature(s) might slow down the execution and / or compilation of your program.
+
+[^5]: Feature(s) are not included for sure in the final language.
 
 ## State 
 
