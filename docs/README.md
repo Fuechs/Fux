@@ -11,7 +11,7 @@
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status** \
-> Last updated on 2023-01-08 \
+> Last updated on 2023-01-10 \
 > Unfinished
 
 ## Contents
@@ -20,6 +20,7 @@
 
 - [Introduction](#introduction)
     - [Basic Example](#basic-example)
+    - [Basic IO](#basic-io)
     - [*Design Goals*](#design-goals)
 - [Variables](#variables)
     - [Declaration & Defenition](#declaration--definition)
@@ -169,6 +170,31 @@ puts numStr;
 Finally, we output the result to see if our program actually works -- and yes it does, the output is "2". \
 For that, we use the `puts` keyword, which will directly output a string to the console (`putch`: Output a character to the console).
 
+### Basic IO
+
+#### Basic Output
+
+```rust
+// output a single character (c8)
+// putch <value (c8)> ;
+character: c8 = '\n';
+putch character;
+
+// output a string (str)
+// puts <value (str)> ;
+message: str = "Hello World!\n";
+puts message;
+```
+
+#### Basic Input
+
+```rust
+// read input until newline 
+// read <address (*str)> ;
+input: str;
+read &input; // address of 'input' = &input
+```
+
 ### Design Goals
 
 > Soon ...
@@ -211,7 +237,7 @@ ptr = &someString; // redefinition
 *ptr = "b";
 // someString = "b";
 
-puts ptr;
+puts (str) ptr;
 // <someString address>
 
 puts *ptr;

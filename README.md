@@ -54,10 +54,13 @@ main(): i64 {
 
 - Fux ships with a large standard library packed with utility ready to be used
 - The Core Library includes but is not limited to[^3]
-    - Console I/O
+    - Buffered Console I/O
     - File I/O
     - Mathematics
     - Algorithms
+    - Maps
+    - Dynamic Pointers
+    - String Utility
 
 ### More Readable Code
 
@@ -65,7 +68,7 @@ main(): i64 {
 - The pipe operators (`<<`, `>>`) are a core feature of Fux and make it easy to avoid nesting functions[^3]
 - Variables, functions and classes can be defined without the usage of a single keyword[^2]
 
-[^1]: As long as the compiler does not have to use garbage collection and take over a lot of work from you.
+[^1]: As long as not a lot of automatisation is used.
 
 [^2]: As long as automatic typing is used.
 
