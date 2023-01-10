@@ -17,12 +17,12 @@ FuxMem::FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder) {
 
     // declare i8* @malloc(i64)
     FT = FunctionType::get(builder->getInt8PtrTy(), {builder->getInt64Ty()}, false);
-    malloc = Function::Create(FT, Function::CommonLinkage, "malloc", *module);
+    malloc = Function::Create(FT, Function::ExternalLinkage, "malloc", *module);
     llvm::verifyFunction(*malloc);
 
     // declare void @free(i8*)
     FT = FunctionType::get(builder->getVoidTy(), {builder->getInt8PtrTy()}, false);
-    free = Function::Create(FT, Function::CommonLinkage, "free", *module);
+    free = Function::Create(FT, Function::ExternalLinkage, "free", *module);
     llvm::verifyFunction(*free);
 
     // declare i8* memcpy(i8*, i8*, i64)
@@ -31,6 +31,6 @@ FuxMem::FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder) {
         builder->getInt8PtrTy(),
         builder->getInt64Ty()
     }, false);
-    memcpy = Function::Create(FT, Function::CommonLinkage, "memcpy", *module);
+    memcpy = Function::Create(FT, Function::ExternalLinkage, "memcpy", *module);
     llvm::verifyFunction(*memcpy);
 }

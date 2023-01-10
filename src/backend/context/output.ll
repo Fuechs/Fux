@@ -3,30 +3,30 @@ source_filename = "fux compiler"
 
 %str = type { ptr, i64, i64, i64 }
 
-declare common ptr @malloc(i64)
+declare ptr @malloc(i64)
 
-declare common void @free(ptr)
+declare void @free(ptr)
 
-declare common ptr @memcpy(ptr, ptr, i64)
+declare ptr @memcpy(ptr, ptr, i64)
 
 ; Function Attrs: nounwind
-define common fastcc void @Fux_str_create_default(ptr %0) #0 {
+define fastcc void @Fux_str_create_default(ptr %0) #0 {
 entry:
-  %1 = getelementptr ptr, ptr %0, i64 0
+  %1 = getelementptr %str, ptr %0, i64 0, i32 0
   store ptr null, ptr %1, align 8
-  %2 = getelementptr ptr, ptr %0, i64 1
+  %2 = getelementptr %str, ptr %0, i64 0, i32 1
   store i64 0, ptr %2, align 4
-  %3 = getelementptr ptr, ptr %0, i64 2
+  %3 = getelementptr %str, ptr %0, i64 0, i32 2
   store i64 0, ptr %3, align 4
-  %4 = getelementptr ptr, ptr %0, i64 3
+  %4 = getelementptr %str, ptr %0, i64 0, i32 3
   store i64 16, ptr %4, align 4
   ret void
 }
 
 ; Function Attrs: nounwind
-define common fastcc void @Fux_str_delete(ptr %0) #0 {
+define fastcc void @Fux_str_delete(ptr %0) #0 {
 entry:
-  %1 = getelementptr ptr, ptr %0, i64 0
+  %1 = getelementptr %str, ptr %0, i64 0, i32 0
   %2 = load ptr, ptr %1, align 8
   %3 = icmp ne ptr %2, null
   br i1 %3, label %free_begin, label %free_close
@@ -39,39 +39,39 @@ free_close:                                       ; preds = %free_begin, %entry
   ret void
 }
 
-define common fastcc void @Fux_str_resize(ptr %0, i64 %1) {
+define fastcc void @Fux_str_resize(ptr %0, i64 %1) {
 entry:
   %output = call ptr @malloc(i64 %1)
-  %2 = getelementptr ptr, ptr %0, i64 0
+  %2 = getelementptr %str, ptr %0, i64 0, i32 0
   %buffer = load ptr, ptr %2, align 8
-  %3 = getelementptr ptr, ptr %0, i64 1
+  %3 = getelementptr %str, ptr %0, i64 0, i32 1
   %len = load i64, ptr %3, align 4
   %4 = call ptr @memcpy(ptr %output, ptr %buffer, i64 %len)
   call void @free(ptr %buffer)
   store ptr %output, ptr %2, align 8
-  %5 = getelementptr ptr, ptr %0, i64 2
+  %5 = getelementptr %str, ptr %0, i64 0, i32 2
   store i64 %1, ptr %5, align 4
   ret void
 }
 
-define common fastcc void @Fux_str_add_char(ptr %0, i8 %1) {
+define fastcc void @Fux_str_add_char(ptr %0, i8 %1) {
 entry:
-  %2 = getelementptr ptr, ptr %0, i64 1
+  %2 = getelementptr %str, ptr %0, i64 0, i32 1
   %len = load i64, ptr %2, align 4
-  %3 = getelementptr ptr, ptr %0, i64 2
+  %3 = getelementptr %str, ptr %0, i64 0, i32 2
   %maxlen = load i64, ptr %3, align 4
   %4 = icmp eq i64 %len, %maxlen
   br i1 %4, label %grow_begin, label %grow_close
 
 grow_begin:                                       ; preds = %entry
-  %5 = getelementptr ptr, ptr %0, i64 3
+  %5 = getelementptr %str, ptr %0, i64 0, i32 3
   %factor = load i64, ptr %5, align 4
   %6 = add i64 %maxlen, %factor
-  call void @Fux_str_add_char(ptr %0, i64 %6)
+  call void @Fux_str_resize(ptr %0, i64 %6)
   br label %grow_close
 
 grow_close:                                       ; preds = %grow_begin, %entry
-  %7 = getelementptr ptr, ptr %0, i64 0
+  %7 = getelementptr %str, ptr %0, i64 0, i32 0
   %buffer = load ptr, ptr %7, align 8
   %8 = getelementptr ptr, ptr %buffer, i64 %len
   store i8 %1, ptr %8, align 1
@@ -80,10 +80,19 @@ grow_close:                                       ; preds = %grow_begin, %entry
   ret void
 }
 
-declare common void @Fux_putch(i8)
+; Function Attrs: nounwind
+declare i32 @puts(ptr nocapture) #0
 
-declare common void @Fux_puts(%str)
+declare void @Fux_putch(i8)
 
-declare common void @Fux_read(ptr)
+define void @Fux_puts(ptr %0) {
+entry:
+  %buffer_ptr = getelementptr %str, ptr %0, i64 0, i32 0
+  %buffer = load ptr, ptr %buffer_ptr, align 8
+  %1 = call i32 @puts(ptr %buffer)
+  ret void
+}
+
+declare void @Fux_read(ptr)
 
 attributes #0 = { nounwind }

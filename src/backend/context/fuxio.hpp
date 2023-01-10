@@ -19,6 +19,8 @@ class FuxIO {
 public:
     FuxIO(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem, FuxStr *fuxStr);
 
+    Function *posixPuts = nullptr;
+
     Function *putch = nullptr;
     Function *puts = nullptr;
     Function *read = nullptr;
