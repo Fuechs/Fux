@@ -110,8 +110,8 @@ value: str;
 
 See [`# Variables`](#variables) for more information.
 
-References will point to the passed variables. Modifying the refrence will thus modify the original variable that was passed to the function.
-
+References will point to the passed variables. Modifying the reference will thus modify the original variable that was passed to the function.
+ 
 ```rust
 originalValue: str = "1";
 pointerValue -> str = originalValue;
@@ -206,7 +206,7 @@ read &input; // address of 'input' = &input
 [`# Types`](#types)
 
 ```rust
-// <identifier> : [ <type> ] [ =/=== <value> ] ;
+// <identifier> [ : [ <type> ] =/=== <value> ] ;
 name;
 name := "fuechs"; // automatic typing
 name :=== "fuechs"; // constant
@@ -222,7 +222,7 @@ name = "fuechsss";
 
 ```rust
 // pointer definition
-// * <identifier> : [ <type> ] [ =/=== <address> ] ; 
+// * <identifier> [ : [ <type> ] =/=== <address> ] ; 
 // address 
 // & <variable>
 
@@ -417,7 +417,7 @@ someString << 's' << 's';
 // someString = "fuechsss";
 
 someString << "s";
-//            ^ ^ fux assigns new value because a string was used
+//            ^ ^ fux assigns a new value because a string was used
 // someString = "s"; 
 ```
 
@@ -454,15 +454,15 @@ array1[2] <> array2[1];
 
 ### Existence of Objects
 
-The exitence operator `?` can be used to check wether an object exists.
+The existence operator `?` can be used to check wether an object exists.
 
 ```rust
 someVar;
 if (?someVar) { ... }
-    // false
+    // true
 ...
 if (?anotherVar) { ... }
-    // true - we never defined 'anotherVar'
+    // false - we never defined 'anotherVar'
 ```
 
 Switch statements have the `not` key, which functions the same way.
