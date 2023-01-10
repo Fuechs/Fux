@@ -49,6 +49,8 @@ int main(int argc, char **argv) {
     //     default:    return result;
     // }
 
+    // return repl(); // ! program ends here
+
     fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
     SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
@@ -66,10 +68,10 @@ int main(int argc, char **argv) {
 
     // return result; // ! program ends here
 
-    { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
-        FuxContext *context = new FuxContext(root);
-        context->run();
-    }
+    // { // own scope so it can be skipped by goto -- c++ calls desctructer at end of scope
+    //     FuxContext *context = new FuxContext(root);
+    //     context->run();
+    // }
 
     end:
         return result;
@@ -199,10 +201,11 @@ int repl() {
         else if (input == "exit" || input == "exit;")
             break;
 
-        SourceFile *that = new SourceFile("<stdin>", true);
-        that->parse();
-        ExprPtr &root = that->root;
+        ErrorManager *error = new ErrorManager("<stdin>", {input});
+        Parser *parser = new Parser(error, "<stdin>", input, true);
+        ExprPtr root = parser->parse();
         root->debugPrint();
+        error->panic();
         // TODO: generate and run ...
     }
 

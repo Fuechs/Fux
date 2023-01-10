@@ -27,7 +27,7 @@ ExprPtr Parser::parse() {
 }
 
 ExprPtr Parser::parseStmt() {
-    return parseIfElseStmt(); 
+    return parseIfElseStmt();
 }
 
 ExprPtr Parser::parseIfElseStmt() {
@@ -57,6 +57,7 @@ ExprPtr Parser::parsePutsStmt() {
         eat();
         ExprPtr arg = parseExpr();
         call = make_unique<PutsCallAST>(arg); // just parse expression for now
+        expect(SEMICOLON);
     } else 
         call = parseExpr(); // ! skipping variabledeclstmt here
 
@@ -150,9 +151,14 @@ ExprPtr Parser::parsePrimaryExpr() {
             expect(RPAREN, MISSING_BRACKET);
             return expr;
         }
-        default:            
-            error->createError(UNEXPECTED_TOKEN, that, "unexpected token while parsing primary expression");
+        default: {        
+            stringstream message;
+            message 
+                << "unexpected token " << TokenTypeString[that.type]
+                << " '" << that.value << "' while parsing primary expression";
+            error->createError(UNEXPECTED_TOKEN, that, message.str());
             return nullptr;
+        }
     }
 }
 

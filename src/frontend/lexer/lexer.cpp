@@ -592,11 +592,18 @@ void Lexer::getNumber() {
                 }
                 eFound = true;
             } else if (current() == '+' || current() == '-') {
-                if (signFound || !eFound) {
-                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected '"+to_string(current())+"' in decimal integer");
+                if (signFound) {
+                    string message = "unexpected '";
+                    message += current();
+                    message += "' in decimal integer";
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, message);
                     advance();
                     return;
                 }
+
+                if (!eFound)
+                    return;
+                    
                 signFound = true;
             }
 
@@ -636,11 +643,18 @@ void Lexer::getNumber() {
                 }
                 eFound = true;
             } else if (current() == '+' || current() == '-') {
-                if (signFound || !eFound) {
-                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, "unexpected '"+to_string(current())+"' in floating point integer");
+                if (signFound) {
+                    string message = "unexpected '";
+                    message += current();
+                    message += "' in floating point integer";
+                    error->createError(ILLEGAL_NUMBER_FORMAT, line, col, message);
                     advance();
                     return;
                 }
+
+                if (!eFound)
+                    return;
+
                 signFound = true;
             }
 
