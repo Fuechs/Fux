@@ -4,7 +4,7 @@ main(): i64 {
     board[size - 2] = true;
 
     for (for i: u8; i < size - 2; i++) {
-        for (value -> u8 : board)
+        for (value -> u8 in board)
             putch value == 1 ? '*' : ' ';
         putch '\n';
 

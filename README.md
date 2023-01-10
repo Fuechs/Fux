@@ -83,7 +83,9 @@ main(): i64 {
 ### Roadmap
 
 - **Stage I** --- [`Turing Complete in C++`](./src/examples/rule110.fux)
+    - [...] [`Syntax`](./docs/)
     - [&check;] [`Error System`](./src/frontend/error/)
+    - [&check;] [`Source Management`](./src/util/source.hpp)
     - [&check;] [`Threading`](./src/util/threading.hpp)
     - [&check;] [`Lexer`](./src/frontend/lexer/)
     - [...] [`Parser`](./src/frontend/parser/)
@@ -95,16 +97,23 @@ main(): i64 {
         - [...] [`String`](./src/backend/context/fuxstr.hpp)
         - [...] [`Input / Output`](./src/backend/context/fuxio.hpp)
     - [...] [`Generator (LLVM)`](./src/backend/generator/)
+        - [...] [`Array Types`](./src/backend/generator/genarray.hpp)
+        - [...] [`Code Generation`](./src/backend/generator/generator.cpp)
     - [&cross;] [`Optimizer (LLVM)`](./src/backend/)
     - [&cross;] [`Compiler (LLVM)`](./src/backend/compiler/)
-    - [...] [`Syntax`](./docs/)
 - **Stage II** --- [`Core Package`](./src/packages/core/)
+- **Stage III** --- `Alpha Release`
 - *Soon ...*
 
-Fux is currently still in early development. There is no working compiler avaiable for this language. 
+> __Info__ \
+> The Fux programming language is under the [Apache License v2.0 with LLVM Exceptions](./LICENSE).       
 
-As of now, I am focusing on refining the syntax of Fux, since some aspects are not yet clear.
-I have been inspired by [C++](https://isocpp.org/), [D](https://dlang.org/), [Python](https://python.org/), [Odin](https://odin-lang.org/) and [Elixir](https://elixir-lang.org/).
+Fux is currently still in early development. There is no working compiler available for this language. \
+**Fux is not supposed to be a superset of C++.**
+
+As of now, I am focusing on refining the syntax of Fux, since some aspects are not yet clear. The compiler is being developed alongside this process. 
+
+I have been inspired by [C++](https://isocpp.org/), [Python](https://python.org/), [Odin](https://odin-lang.org/), [Elixir](https://elixir-lang.org/) and [Carbon](https://github.com/carbon-language/carbon-lang).
 
 ## Examples
 
