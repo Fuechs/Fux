@@ -1,5 +1,8 @@
 # Contribution Guidelines
 
+> __Note__ \
+> These guidelines are rather incomplete and may change at any time.
+> 
 > Last updated on 2023-01-11
 
 - [Introduction](#introduction)
