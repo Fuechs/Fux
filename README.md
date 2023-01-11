@@ -19,7 +19,7 @@
 
 > __Warning__ \
 > Fux is still in early development. \
-> As of now only Unix-based systems will be supported.
+> As of now only MacOS & Linux will be supported.
 
 ###### Flawless Unambiguous Programming
 
@@ -105,7 +105,7 @@ main(): i64 {
 - **Stage III** --- `Alpha Release`
 - *Soon ...*
 
-> __Info__ \
+> __Note__ \
 > The Fux programming language is under the [Apache License v2.0 with LLVM Exceptions](./LICENSE).       
 
 Fux is currently still in early development. There is no working compiler available for this language. \

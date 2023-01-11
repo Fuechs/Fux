@@ -10,7 +10,7 @@ backend = 	$(wildcard src/backend/*/*.cpp)
 util = 		$(wildcard src/util/*.cpp)
 src = 		$(main) $(frontend) $(backend) $(util)
 
-# Copyright (c) 2020-2023 Fuechs
+# Copyright (c) 2020-2023, Fux programming language and authors.
 # All rights reserved.
 
 all: comp
