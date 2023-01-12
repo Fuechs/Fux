@@ -15,12 +15,12 @@ FuxMem::FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder) {
     // temporary   
     FunctionType *FT = nullptr;
 
-    // declare i8* @malloc(i64)
+    // declare i8* malloc(i64)
     FT = FunctionType::get(builder->getInt8PtrTy(), {builder->getInt64Ty()}, false);
     malloc = Function::Create(FT, Function::ExternalLinkage, "malloc", *module);
     llvm::verifyFunction(*malloc);
 
-    // declare void @free(i8*)
+    // declare void free(i8*)
     FT = FunctionType::get(builder->getVoidTy(), {builder->getInt8PtrTy()}, false);
     free = Function::Create(FT, Function::ExternalLinkage, "free", *module);
     llvm::verifyFunction(*free);

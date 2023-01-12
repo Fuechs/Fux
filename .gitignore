@@ -1,14 +1,17 @@
 .DS_Store
 .vscode
-art/old
-ignore
+
+# executables / debugger
 fux
-dev_only
-web/
 main
-grammar.bnf
 *.dSYM
-old*
-llvm_testing
+
+# folders
+dev_only/
+web/
+llvm_testing/
 unused/
+old*
+
+# files
 AUTHORS

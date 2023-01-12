@@ -18,7 +18,7 @@ FuxIO::FuxIO(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem 
     posixPuts->setDoesNotThrow();
     posixPuts->getArg(0)->addAttr(Attribute::NoCapture);
     llvm::verifyFunction(*posixPuts);
-    }
+    } // end of puts
     
     { // declare void putch(i8)
     FunctionType *FT = FunctionType::get(builder->getVoidTy(), {builder->getInt8Ty()}, false);

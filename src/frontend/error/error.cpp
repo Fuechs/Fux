@@ -88,6 +88,7 @@ void ParseError::report() {
         << CC::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
         << SC::RESET << lineContent.at(0) << "\n\t";
     
+    // TODO: correct position for multiple lines (see Position class)
     size_t i;
     for (i = 0; i < (pos.colStart - 1); i++) // -1 so arrow points at exact position
         errorMessage << " ";

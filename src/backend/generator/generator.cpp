@@ -114,6 +114,8 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     for (auto &arg : func->args())
         fuxLLVM->namedValues[arg.getName().str()] = &arg;
 
+    // FIXME: This does not work as expected, 
+    // body of the function is missing in the IR
     Value *retVal;
     for (ExprPtr &expr : body)
         retVal = expr->codegen(fuxLLVM);

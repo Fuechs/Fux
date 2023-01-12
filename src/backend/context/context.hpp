@@ -16,14 +16,7 @@
 #include "../compiler/compiler.hpp"
 #include "../generator/wrapper.hpp"
 
-/**
- * Manages...
- * ...Generator
- * ...Optimizer
- * ...Compiler
- * ...LLVMContext
- * 
- */
+// Manages whole backend of the compiler
 class FuxContext {
 public:
     FuxContext(ExprPtr &root);

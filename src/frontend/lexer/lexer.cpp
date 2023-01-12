@@ -379,6 +379,9 @@ void Lexer::getToken() {
             break;
 
         case '#':
+            if (skipComment())
+                break;
+
             currentToken.type = HASH;
             advance();
             break;
@@ -601,7 +604,7 @@ void Lexer::getNumber() {
                     return;
                 }
 
-                if (!eFound)
+                if (!eFound) // probably an operator and not part of this token
                     return;
                     
                 signFound = true;
@@ -652,7 +655,7 @@ void Lexer::getNumber() {
                     return;
                 }
 
-                if (!eFound)
+                if (!eFound) // probably an operator and not part of this token
                     return;
 
                 signFound = true;
@@ -676,6 +679,16 @@ void Lexer::getNumber() {
 }
 
 bool Lexer::skipComment() {
+    if (current() == '#') { // ignore #!...
+        if (peek() != '!') // not a #!
+            return false;
+
+        do advance(); while (idx < source.length() && current() != '\n');
+        advance();
+        resetPos();
+        return true;
+    } 
+    
     if (peek() == '/') { // single line comment '//'
         do advance(); while (idx < source.length() && current() != '\n');
         advance();

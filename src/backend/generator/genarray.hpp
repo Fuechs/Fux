@@ -23,10 +23,10 @@ public:
 
         // create array type
         arrayType = StructType::create({
-            elementType->getPointerTo(),
-            builder->getInt64Ty(),
-            builder->getInt64Ty(),
-            builder->getInt64Ty(),
+            elementType->getPointerTo(),    // buffer
+            builder->getInt64Ty(),          // length
+            builder->getInt64Ty(),          // maxlength
+            builder->getInt64Ty(),          // factor
         });
         arrayPtr = arrayType->getPointerTo();
     }

@@ -41,14 +41,14 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 
 - Follow the [Conventions](#conventions).
 - For large changes, create an issue or use an existing one (to get feedback).
-- For small changes[1], creating an issue is not required, but leave a comment if one already exists.
-- Drastic changes[2] should have a good reason.
+- For small changes[^1], creating an issue is not required, but leave a comment if one already exists.
+- Drastic changes[^2] should have a good reason.
 - Verify that the modified code is working as expected.
 - Continue as described [here](#getting-started).
 
-[1]: A few lines of code, spelling errors, additional information in markup / text / comments.
+[^1]: A few lines of code, spelling errors, additional information in markup / text / comments.
 
-[2]: Replacing e.g. a whole class, file or library. 
+[^2]: Replacing e.g. a whole class, file or library. 
 
 ## Rules
 
@@ -143,9 +143,9 @@ int main(int argc, char **argv) {
 ```
 
 - Do not introduce any unrequired classes.
-- When creating a class, the header file should only include the declaration with comments describing individual elements.
+- When creating a class, the header file should only include the declaration with comments describing individual elements (There are some exceptions to this, e.g. small classes like FuxType).
 - If no body is required, constructors can be defined in the header file (using `: param(param), ... {}`) .
-- The definitions should be in the same order as way are in the header file.
+- The definitions should be in the same order as the declarations in the header file.
 - The layout is as follows:
 
 ```

@@ -86,7 +86,7 @@ int bootstrap(int argc, char **argv) {
         if      (cmp("-V"))     return printVersion();
         else if (cmp("-o")) {
             if ((i + 1) >= argc)
-                cerr << "output file required after option '-o'\n"; // TODO: add errors
+                cerr << "output file required after option '-o'\n";
             else
                 fux.options.out = string(argv[++i]);
         }
