@@ -115,6 +115,10 @@ As of now, I am focusing on refining the syntax of Fux, since some aspects are n
 
 I have been inspired by [C++](https://isocpp.org/), [Python](https://python.org/), [Odin](https://odin-lang.org/), [Elixir](https://elixir-lang.org/) and [Carbon](https://github.com/carbon-language/carbon-lang).
 
+## Contributing
+
+More information [here](./CONTRIBUTING.md).
+
 ## Examples
 
 ### Arrays

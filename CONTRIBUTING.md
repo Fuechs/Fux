@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-11
+> Last updated on 2023-01-12
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -107,6 +107,7 @@ class SomeClass;
 
 #### Space
 
+- One tab should be equivalent to 4 spaces.
 - The code should not include any unnecessary indentation or spaces. See the code below.
 - If possible, you can leave out code blocks.
 
