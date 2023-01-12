@@ -43,8 +43,10 @@ namespace fuxThread {
     ThreadManager::ThreadManager() : threads(ThreadList()), required({{}}) {
         threadsMax = thread::hardware_concurrency() - 2;
         debugPrint("Max amount of threads: "+to_string(threadsMax+2)+" -> "+to_string(threadsMax));
-        if (fux.options.debugMode || !fux.options.threading)
+        if (fux.options.debugMode)
             debugPrint("Limited to one (1) thread because of compiler flags.");
+        if (!fux.options.threading)
+            debugPrint("Threading is set to false.");
     }
 
     ThreadManager::~ThreadManager() {
@@ -63,6 +65,9 @@ namespace fuxThread {
     }
 
     void ThreadManager::createThreads() {
+        if (!fux.options.threading)
+            return;
+
         if (fux.options.debugMode) {
             threads.push_back(new Thread("universal debug thread", threads.size()));
             return;
@@ -78,7 +83,14 @@ namespace fuxThread {
     }
 
     void ThreadManager::runThreads() {
-        if (fux.options.debugMode || !fux.options.threading) {
+        if (!fux.options.threading) {
+            for (FileList &fl : required)
+                for (SourceFile *sf : fl)
+                    sf->parse();
+            return;
+        }
+
+        if (fux.options.debugMode) {
             for (FileList &fl : required)
                 for (SourceFile *sf : fl) {
                     threads[0]->run(sf);

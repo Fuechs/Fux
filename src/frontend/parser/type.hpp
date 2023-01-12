@@ -37,6 +37,7 @@ public:
 
     enum Access {
         FIXED,
+        FINAL,
         CONSTANT,
         SAFE,
         INTERN,
@@ -88,6 +89,7 @@ private:
 
     const vector<string> AccessString = {
         "fixed",
+        "final",
         "constant",
         "safe",
         "intern",

@@ -18,9 +18,6 @@
 #include "../../backend/llvmheader.hpp"
 #include "../../backend/generator/wrapper.hpp"
 
-typedef map<string, Value *> ValueMap;
-typedef map<string, FuxType> ArgMap;
-
 // exact position of an AST for error tracking
 // TODO: implement in error and parser
 struct Position {

@@ -42,7 +42,7 @@ namespace fuxThread {
         ThreadManager();
         ~ThreadManager();
         
-        // adds a requirement to parse the SourceFile 'sf'
+        // adds a requirement to parse the SourceFile
         void require(SourceFile *sf);
         // prints information about all managed threads
         void debugPrint(const string message);
@@ -54,7 +54,6 @@ namespace fuxThread {
        
         
     private:
-        thread *master;
         ThreadList threads;
         FileGroups required;
         size_t threadsMax;
