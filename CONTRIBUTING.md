@@ -62,7 +62,7 @@ With contributing to this project you automatically agree to follow our [Code of
 
 ### Security Vulnerabilities
 
-If you find a security vulnerability, do not open an issue. Email `fuechsss@gmail.com` instead.
+Read our [Security Policy](./SECURITY.md).
 
 ### Conventions
 
