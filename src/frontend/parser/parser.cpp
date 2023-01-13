@@ -66,9 +66,34 @@ ExprPtr Parser::parsePutsStmt() {
 
 ExprPtr Parser::parseVariableDeclStmt() {
     // TODO: parse storage modifiers
-    const string symbol = expect(IDENTIFIER).value;
-    const FuxType type = FuxType(); // TODO: parse type
-    expect(EQUALS); // TODO: parse constant
+    FuxType::Access access = FuxType::PUBLIC;
+    // TODO: parse pointer depth
+    size_t pointerDepth = 0;
+
+    const string symbol = eat().value;
+    FuxType type = FuxType();
+
+    if (current->type == COLON) {
+        ++current;
+        if (current->type >= KEY_VOID && current->type <= KEY_VAR || current->type == IDENTIFIER)
+            type = FuxType((FuxType::Kind) current->type, pointerDepth, access, eat().value); // the value only matters if it's a user defined type
+
+        if (current->type == EQUALS) { 
+            ++current;  
+            if (!type)
+                type = FuxType(FuxType::AUTO, pointerDepth, access);
+        } else if (current->type == TRIPLE_EQUALS) { 
+            ++current; 
+            if (!type)
+                type = FuxType(FuxType::AUTO, pointerDepth, FuxType::CONSTANT);
+            else
+                type.access = FuxType::CONSTANT;
+        }
+    } else if (current->type == EQUALS || current->type == TRIPLE_EQUALS) { // assignment 
+        --current; // get back to identifier
+        return parseAssignmentExpr();
+    }
+
     ExprPtr value = parseExpr();
     expect(SEMICOLON);
     return make_unique<VariableDeclAST>(symbol, type, value);
@@ -85,9 +110,8 @@ ExprPtr Parser::parseCallExpr() { return parseAdditiveExpr(); } // ! skipping lo
 ExprPtr Parser::parseLogicalExpr() {
     ExprPtr LHS = parseComparisonExpr();
 
-    while (current->type == AND || current->type == OR || current->type == EXCLAMATION) {
-        char logical = current->value.front();
-        ++current;
+    while (current->type == AND || current->type == OR) {
+        TokenType logical = eat().type;
         ExprPtr RHS = parseComparisonExpr();
         LHS = make_unique<LogicalExprAST>(logical, LHS, RHS);
     }
@@ -98,14 +122,8 @@ ExprPtr Parser::parseLogicalExpr() {
 ExprPtr Parser::parseComparisonExpr() {
     ExprPtr LHS = parseExpr();
 
-    while ( current->type == EQUALS_EQUALS 
-    ||      current->type == NOT_EQUALS 
-    ||      current->type == LESSTHAN
-    ||      current->type == LTEQUALS
-    ||      current->type == GREATERTHAN
-    ||      current->type == GTEQUALS) {
-        char comp = current->value.front();
-        ++current;
+    while (current->type >= EQUALS_EQUALS && current->type <= GTEQUALS) {
+        TokenType comp = eat().type;
         ExprPtr RHS = parseExpr();
         LHS = make_unique<ComparisonExprAST>(comp, LHS, RHS);
     }
@@ -117,7 +135,7 @@ ExprPtr Parser::parseAdditiveExpr() {
     ExprPtr LHS = parseMultiplicativeExpr();
 
     while (current->type == PLUS || current->type == MINUS) {
-        char op = current->value.front(); // get '+' or '-' (optimized out by compiler)
+        char op = current->value.front(); // get '+' or '-' 
         ++current;
         ExprPtr RHS = parseMultiplicativeExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
@@ -130,7 +148,7 @@ ExprPtr Parser::parseMultiplicativeExpr() {
     ExprPtr LHS = parsePrimaryExpr();
 
     while (current->type == ASTERISK || current->type == SLASH || current->type == PERCENT) {
-        char op = current->value.front(); // get '*', '/', '%' (optimized out by compiler)
+        char op = current->value.front(); // get '*', '/', '%' 
         ++current;
         ExprPtr RHS = parsePrimaryExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);

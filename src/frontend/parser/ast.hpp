@@ -124,11 +124,11 @@ public:
 };
 
 class ComparisonExprAST : public ExprAST {
-    char comp;
+    TokenType comp;
     ExprPtr LHS, RHS;
 
 public:
-    ComparisonExprAST(char comp, ExprPtr &LHS, ExprPtr &RHS)
+    ComparisonExprAST(TokenType comp, ExprPtr &LHS, ExprPtr &RHS)
     : comp(comp), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
@@ -143,11 +143,11 @@ public:
 };
 
 class LogicalExprAST : public ExprAST {
-    char logical;
+    TokenType logical;
     ExprPtr LHS, RHS;
 
 public:
-    LogicalExprAST(char logical, ExprPtr &LHS, ExprPtr &RHS)
+    LogicalExprAST(TokenType logical, ExprPtr &LHS, ExprPtr &RHS)
     : logical(logical), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;

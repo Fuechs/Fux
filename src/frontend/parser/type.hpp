@@ -12,28 +12,31 @@
 #pragma once
 
 #include "../../fux.hpp"
+#include "../lexer/token.hpp"
 
 class FuxType {
 public:
+    // Possible kinds of data types -- Mapped to respective keyword value
     enum Kind { 
-        VOID,   // void
-        BOOL,   // boolean
-        I8,     // 8-bit signed integer
-        U8,     // 8-bit unsigned integer
-        C8,     // UTF-8 code block
-        I16,    // 16-bit signed integer
-        U16,    // 16-bit unsigned integer
-        C16,    // UTF-16 code block
-        I32,    // 32-bit signed integer
-        U32,    // 32-bit unsigned integer
-        F32,    // 32-bit floating point integer
-        I64,    // 64-bit signed integer
-        U64,    // 64-bit unsigned integer
-        F64,    // 64-bit floating point integer
-        STR,    // string ; array of c8
-        VAR,    // dynamic 
-        CUSTOM, // user defined type
-        NO_TYPE,
+        CUSTOM  = IDENTIFIER,   // user defined type
+        VOID    = KEY_VOID,     // void
+        BOOL    = KEY_BOOL,     // boolean
+        I8      = KEY_I8,       // 8-bit signed integer
+        U8      = KEY_U8,       // 8-bit unsigned integer
+        C8      = KEY_C8,       // UTF-8 code block
+        I16     = KEY_I16,      // 16-bit signed integer
+        U16     = KEY_U16,      // 16-bit unsigned integer
+        C16     = KEY_C16,      // UTF-16 code block
+        I32     = KEY_I32,      // 32-bit signed integer
+        U32     = KEY_U32,      // 32-bit unsigned integer
+        F32     = KEY_F32,      // 32-bit floating point integer
+        I64     = KEY_I64,      // 64-bit signed integer
+        U64     = KEY_U64,      // 64-bit unsigned integer
+        F64     = KEY_F64,      // 64-bit floating point integer
+        STR     = KEY_STR,      // string ; array of c8
+        VAR     = KEY_VAR,      // dynamic 
+        AUTO,                   // automatic typing
+        NO_TYPE,                // used to check for auto typing
     };
 
     enum Access {
@@ -45,8 +48,8 @@ public:
         PUBLIC,     // read and write access for everyone / everywhere
     };
     
-    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, Access access = PUBLIC, string customName = "")
-    : kind(kind), pointerDepth(pointerDepth), access(access), customName(customName) {}
+    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, Access access = PUBLIC, string name = "")
+    : kind(kind), pointerDepth(pointerDepth), access(access), name(name) {}
 
     FuxType &operator=(FuxType copy) {
         this->kind = copy.kind;
@@ -55,27 +58,33 @@ public:
         return *this;
     }
 
+    bool operator!() { return kind == NO_TYPE; }
+
     Kind kind;
     size_t pointerDepth;
     Access access;
-    string customName; // name of the user defined type; only used if kind = CUSTOM
+    string name; // string value of the type; relevant for user defined types
     
     // return string representation of this type (for debug purposes)
     string str() {
         stringstream ss;
         for (size_t pd = pointerDepth; pd --> 0;)
             ss << "*";
-        ss << KindString[kind] << " (" << AccessString[access] << ")"; 
-        if (!customName.empty())
-            ss << " ['" << customName << "']";
+
+        if (kind == CUSTOM)
+            ss << "'" << name << "'";
+        else
+            ss << KindString[kind];
+            
+        ss << " (" << AccessString[access] << ")"; 
         return ss.str();
     }
 
 private:
     // string representations of enum elements
     const vector<string> KindString = {
+        "", // custom, unreachable
         "void",
-        "bool",
         "i8",
         "u8",
         "c8",
@@ -90,9 +99,10 @@ private:
         "f64",
         "str",
         "var",
-        "custom",
-        "no_type",
+        "auto",
+        "no_type"
     };
+
 
     const vector<string> AccessString = {
         "fixed",
