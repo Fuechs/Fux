@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-12
+> Last updated on 2023-01-13
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -153,11 +153,13 @@ class ...
     public ...
         Constructors
         Destructor
+        Operators
         Functions
         Variables
     private ...
         Variables
         Functions
+        ...
 ```
 
 ```cpp

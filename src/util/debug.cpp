@@ -55,11 +55,19 @@ void RootAST::debugPrint() {
     for (ExprPtr &sub : program) {
         cout << "\n";
         sub->debugPrint();
+        cout << ";";
     }
     cout << endl;
 }
 
-void NumberExprAST::debugPrint() { cout << value; }
+void NumberExprAST::debugPrint() {
+    // TODO: add all types
+    switch (value.type.kind) {
+        case FuxType::I64:      cout << value.__i64; break;
+        case FuxType::F64:      cout << value.__f64; break;
+        default:                cout << "?";
+    }
+}
 
 void VariableExprAST::debugPrint() { cout << name; }
 
@@ -93,7 +101,7 @@ void CallExprAST::debugPrint() {
         element->debugPrint();
         cout << ", ";
     }
-    cout << ");";
+    cout << ")";
 }
 
 void VariableDeclAST::debugPrint() {
@@ -102,13 +110,11 @@ void VariableDeclAST::debugPrint() {
         cout << " = ";
         value->debugPrint();
     }
-    cout << ";";
 }
 
 void PutsCallAST::debugPrint() {
     cout << "puts ";
     argument->debugPrint();
-    cout << ";";
 }
 
 void IfElseAST::debugPrint() {
@@ -124,7 +130,7 @@ void PrototypeAST::debugPrint() {
     cout << name << "( ";
     for (auto &param : args)
         cout << param.second.str() << ", ";
-    cout << "): " << type.str() << ";";
+    cout << "): " << type.str();
 }
 
 void FunctionAST::debugPrint() { 

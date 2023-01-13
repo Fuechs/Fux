@@ -15,8 +15,12 @@
 void Generator::generate() {
     // root->codegen(fuxLLVM);
 
-    if (fux.options.debugMode)
-        fuxLLVM->module->print(errs(), nullptr);
+    if (fux.options.debugMode) {
+        error_code EC;
+        llvm::raw_fd_ostream output("src/output.ll", EC);
+        fuxLLVM->module->print(output, nullptr);
+        output.close();
+    }
 }
 
 // *::codegen()
@@ -28,7 +32,7 @@ Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
 }
 
 Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) {
-    return fuxLLVM->builder->getInt32((_i32) value);
+    return fuxLLVM->builder->getInt64(value.__i64);
 }
 
 Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {

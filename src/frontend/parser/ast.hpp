@@ -38,6 +38,7 @@ public:
     virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
     virtual unique_ptr<ExprAST> analyse() = 0;
     virtual void debugPrint() = 0;
+
     // root functions
     virtual vector<unique_ptr<ExprAST>> getProg() = 0;
     virtual void addSub(unique_ptr<ExprAST> &sub) = 0;
@@ -68,12 +69,42 @@ public:
     Position pos = Position();
 };
 
-class NumberExprAST : public ExprAST {
+// used to represent values within a union
+struct ValueStruct {
+    // TODO: constructor for every type
+    ValueStruct(_i64 value) : type(FuxType(FuxType::I64)), __i64(value) {}
+    ValueStruct(_f64 value) : type(FuxType(FuxType::F64)), __f64(value) {}
+    
+    ~ValueStruct();
+
+    Value *getLLVMValue(LLVMWrapper* fuxLLVM);
+
     FuxType type;
-    double value;
+    union {
+        bool    __bool;
+        _i8     __i8;
+        _u8     __u8;
+        _c8     __c8;
+        _i16    __i16;
+        _u16    __u16;
+        _c16    __c16;
+        _i32    __i32;
+        _u32    __u32;
+        _f32    __f32;
+        _i64    __i64;
+        _u64    __u64;
+        _f64    __f64;
+        string  __str;
+    };
+};
+
+class NumberExprAST : public ExprAST {
+    ValueStruct value;
 
 public:
-    NumberExprAST(FuxType type, double value) : type(type), value(value) {}
+    template<typename T>
+    NumberExprAST(T value) : value(value) {}
+    ~NumberExprAST();
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;

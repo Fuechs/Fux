@@ -18,7 +18,6 @@ src
 │   │   ├── fuxmem.hpp - fux memory operations (llvm ir)
 │   │   ├── fuxstr.cpp - fux string type impl. (llvm ir)
 │   │   ├── fuxstr.hpp - fux string type (llvm ir)
-│   │   └── output.ll - llvm module dump (for predefined IR)
 │   ├── generator 
 │   │   ├── genarray.hpp - "template" class for array types
 │   │   ├── generator.cpp - generator & ExprAST::codegen impl.
@@ -49,6 +48,7 @@ src
 │       └── type.hpp - FuxType impl.
 ├── fux.hpp - standard includes and definitions
 ├── main.cpp - main file; bootstrap & repl
+├── output.ll - llvm module dump (for debug)
 ├── packages - fux included packages
 │   └── core - core package
 └── util - utility

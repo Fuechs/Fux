@@ -34,6 +34,22 @@ ExprList RootAST::getProg() {
     return std::move(program);
 }
 
+ValueStruct::~ValueStruct() {
+    if (type.kind == FuxType::STR)
+        __str.clear();
+    delete &type;
+}
+
+Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
+    // TODO: add all types
+    switch (type.kind) {
+        case FuxType::I64:      return fuxLLVM->builder->getInt64(__i64);
+        case FuxType::F64:      return ConstantFP::get(fuxLLVM->builder->getDoubleTy(), __f64);
+        default:                return nullptr;
+    }
+}
+
+NumberExprAST::~NumberExprAST() { delete &value; }
 
 PrototypeAST::~PrototypeAST() { name.clear(); }
 string PrototypeAST::getName() { return name; }

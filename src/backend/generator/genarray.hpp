@@ -16,7 +16,7 @@
 
 class FuxArray {
 public:
-    FuxArray(LLVMWrapper *fuxLLVM, Type *type) : elementType(type) {
+    FuxArray(LLVMWrapper *fuxLLVM, Type *type, const bool userDef = false) : elementType(type) {
         LLVMContext *context = fuxLLVM->context;
         Module *module = fuxLLVM->module;
         IRBuilder<> *builder =fuxLLVM->builder;
@@ -29,6 +29,13 @@ public:
             builder->getInt64Ty(),          // factor
         });
         arrayPtr = arrayType->getPointerTo();
+        
+        llvm::raw_string_ostream rso(prefix);
+        type->print(rso);
+        if (userDef)
+            prefix = "Usr_arr_"+rso.str()+"_";
+        else
+            prefix = "Fux_arr_"+rso.str()+"_";
     }
 
     Function *arr_create_default;
@@ -37,4 +44,7 @@ public:
     Type *arrayType;
     Type *arrayPtr;
     Type *elementType;
+
+private:
+    string prefix;
 };
