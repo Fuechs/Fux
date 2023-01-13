@@ -13,6 +13,8 @@
 
 #include "../fux.hpp"
 
+#include "../frontend/parser/type.hpp"
+
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/STLExtras.h>
 

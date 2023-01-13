@@ -45,7 +45,7 @@ public:
         CONSTANT,   // constant; value can't be changed
         SAFE,       // read-only outside of the class / module
         INTERN,     // only accessible from within the class / module
-        PUBLIC,     // read and write access for everyone / everywhere
+        PUBLIC,     // read and write access for everyone / everywhere & default (for values too)
     };
     
     FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, Access access = PUBLIC, string name = "")
