@@ -142,6 +142,7 @@ enum TokenType {
     KEY_VAR,
     KEY_ENUM,
     KEY_STRUCT,
+    KEY_UNION,
     KEY_CLASS,
 
     _EOF,           // end of file
@@ -276,6 +277,7 @@ static const char *TokenTypeString[] = {
     "KEY_VAR",
     "KEY_ENUM",
     "KEY_STRUCT",
+    "KEY_UNION",
     "KEY_CLASS",
 
     "EOF",           // end of file
@@ -410,6 +412,7 @@ static vector<string> TokenTypeValue = {
     "var",
     "enum",
     "struct",
+    "union",
     "class",
 
     "eof",           // end of file
