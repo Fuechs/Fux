@@ -74,7 +74,7 @@ You can get familiar with the file structure in the [`src/`](./src) folder.
 - [Space](#space)
 - [Types](#types)
 - [Using Namespaces](#using-namespaces)
-- [Using licensed Code](#using-licensed-code)
+- [Using Licensed Code](#using-licensed-code)
 - [LLVM IR](#llvm-ir)
 - [Commit Messages](#commit-messages)
 
@@ -223,7 +223,7 @@ SomeConstructor(ExprPtr &LHS, ExprPtr &RHS)
 
 All includes from the standard library are in `src/fux.hpp`. In this file is also `using namespace std;`. If you need to use `std::move` or similiar functions though, please use it with the prefix to make the call qualified.
 
-#### Using licensed Code
+#### Using Licensed Code
 
 If you add any licensed code (for example a utility header), include the license at the top of the file as a comment.
 

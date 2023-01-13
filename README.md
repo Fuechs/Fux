@@ -23,7 +23,7 @@
 
 ###### Flawless Unambiguous Programming
 
-## The Beautiful Alternative For C++
+## The Beautiful Alternative for C++
 
 ```rust
 main(): i64 {
@@ -45,7 +45,7 @@ main(): i64 {
 - At least as high performant as C++[^1][^4]
 - Using LLVM to compile and run on several platforms
 
-### Easy To Learn
+### Easy to Learn
 
 - Already known environment for developers with experience in C++
 - Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory management, optional dynamic types[^4][^5]
