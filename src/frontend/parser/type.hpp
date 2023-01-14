@@ -13,6 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
+#include "expr.hpp"
 
 class FuxType {
 public:
@@ -47,9 +48,18 @@ public:
         INTERN,     // only accessible from within the class / module
         PUBLIC,     // read and write access for everyone / everywhere & default (for values too)
     };
+
+    typedef vector<Access> AccessList;
+
+    FuxType(Kind kind = NO_TYPE, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, bool array = false, ExprPtr &arraySize = nullExpr, string name = "")
+    : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), arraySize(std::move(arraySize)), name(name) {}
+
+    FuxType(const FuxType &copy) { operator=(copy); }
     
-    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, Access access = PUBLIC, string name = "")
-    : kind(kind), pointerDepth(pointerDepth), access(access), name(name) {}
+    ~FuxType() {
+        access.clear();
+        name.clear();
+    }
 
     FuxType &operator=(FuxType copy) {
         this->kind = copy.kind;
@@ -61,24 +71,69 @@ public:
     bool operator!() { return kind == NO_TYPE; }
 
     Kind kind;
-    size_t pointerDepth;
-    Access access;
+    /**
+     * -1 --> Reference
+     *  0 --> Value
+     *  N --> Pointer with depth of N 
+     */
+    int64_t pointerDepth; 
+    AccessList access;
     string name; // string value of the type; relevant for user defined types
+    bool array; // is an array type
+    ExprPtr arraySize; // relevant for array types; nullExpr -> no size
+
+    // shorthand for normal types
+    static FuxType createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name) {
+        return FuxType(kind, pointerDepth, accessList, false, nullExpr, name);
+    }
+
+    // shorthand for reference types
+    static FuxType createRef(Kind kind, AccessList accessList, string name) {
+        return FuxType(kind, -1, accessList, false, nullExpr, name); 
+    }
+
+    // shorthand for array types
+    static FuxType createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize = nullExpr) {
+        return FuxType(kind, pointerDepth, accessList, true, arraySize, name);
+    }
     
-    // return string representation of this type (for debug purposes)
-    string str() {
+    // get -> | : + pointer depth for this type 
+    string prefix() {
+        switch (pointerDepth) {
+            case -1:    return " -> ";
+            case 0:     return ": ";
+            default: {
+                stringstream ss;
+                ss << ": ";
+                for (size_t pd = pointerDepth; pd --> 0;)
+                    ss << "*";
+                ss << " ";
+                return ss.str();
+            }
+        }
+    }
+
+    // get typename + accesslist for this type 
+    string suffix() {
         stringstream ss;
-        for (size_t pd = pointerDepth; pd --> 0;)
-            ss << "*";
 
         if (kind == CUSTOM)
             ss << "'" << name << "'";
         else
             ss << KindString[kind];
-            
-        ss << " (" << AccessString[access] << ")"; 
+        
+        if (array) 
+            ss << "[" << arraySize << "]";
+        
+        ss << " (";
+        for (Access &a : access)
+            ss << AccessString[a] << ",";
+        ss << ") ";
         return ss.str();
     }
+
+    // get prefix + suffix for this type
+    string str() { return prefix() + suffix(); }
 
 private:
     // string representations of enum elements

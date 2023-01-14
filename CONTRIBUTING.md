@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-13
+> Last updated on 2023-01-14
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -39,16 +39,25 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 
 #### Contributing Code
 
+> **Working on your first Pull Request?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://kcd.im/pull-request)
+
 - Follow the [Conventions](#conventions).
 - For large changes, create an issue or use an existing one (to get feedback).
 - For small changes[^1], creating an issue is not required, but leave a comment if one already exists.
 - Drastic changes[^2] should have a good reason.
+- Fork the repository and make all changes to your fork.
 - Verify that the modified code is working as expected.
-- Continue as described [here](#getting-started).
+- Create a pull request to the development branch[^3][^4].
+- Give us your agreement that your code will be licensed unter the [Apache License v2.0 with LLVM Expcetions](./LICENSE).
+- Your pull request will be reviewed, and if accepted merged.
 
 [^1]: A few lines of code, spelling errors, additional information in markup / text / comments.
 
 [^2]: Replacing e.g. a whole class, file or library. 
+
+[^3]: Right now, this is the `main` branch.
+
+[^4]: This does not apply to patches for released versions.
 
 ## Rules
 
@@ -142,7 +151,6 @@ int main(int argc, char **argv) {
 }
 ```
 
-- Do not introduce any unrequired classes.
 - When creating a class, the header file should only include the declaration with comments describing individual elements (There are some exceptions to this, e.g. small classes like FuxType).
 - If no body is required, constructors can be defined in the header file (using `: param(param), ... {}`) .
 - The definitions should be in the same order as the declarations in the header file.
@@ -151,6 +159,7 @@ int main(int argc, char **argv) {
 ```
 class ... 
     public ...
+        enum, typedef, etc.
         Constructors
         Destructor
         Operators
@@ -239,11 +248,3 @@ Functions that are part of a module, class or type have the name as an additiona
 #### Commit Messages
 
 Commit messages do not have to follow any conventions.
-
-## Getting Started
-
-> **Working on your first Pull Request?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://kcd.im/pull-request)
-
-After completing all necessary steps (and getting positive feedback), you can start with forking the repository. \
-After making all changes to your fork, create a pull request to the development (or experimental) branch (right now, this is the `main` branch). This does not apply to patches for released versions. You have to give us your written agreement that your code will be licensed under the [Apache License v2.0 with LLVM Exceptions](./LICENSE). 
-Your pull request will be reviewed and, if accepted, merged.

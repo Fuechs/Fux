@@ -105,7 +105,7 @@ void CallExprAST::debugPrint() {
 }
 
 void VariableDeclAST::debugPrint() {
-    cout << symbol << ": " << type.str() << "";
+    cout << symbol << type.str();
     if (value) {
         cout << " = ";
         value->debugPrint();
@@ -129,15 +129,15 @@ void IfElseAST::debugPrint() {
 void PrototypeAST::debugPrint() {
     cout << name << "( ";
     for (auto &param : args)
-        cout << param.second.str() << ", ";
-    cout << "): " << type.str();
+        cout << param.second.suffix() << ", ";
+    cout << ")" << type.str();
 }
 
 void FunctionAST::debugPrint() { 
     cout << proto->getName() << "( ";
     for (auto &param : proto->getArgs()) 
-        cout << param.first << ": " << param.second.str() << ", ";
-    cout << "): "<< proto->getType().str() << " {\n";
+        cout << param.first << param.second.str() << ", ";
+    cout << ")"<< proto->getType().str() << "{\n";
     for (ExprPtr &stmt : body) {
         cout << "\t";
         stmt->debugPrint();

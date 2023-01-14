@@ -1,6 +1,6 @@
 # File Structure of `src/`
 
-> Last updated on 2023-01-12
+> Last updated on 2023-01-14
 
 ```
 src
@@ -41,11 +41,15 @@ src
 │   │   ├── lexer.hpp - Lexer
 │   │   └── token.hpp - Token impl.
 │   └── parser
-│       ├── ast.cpp - AST impl.
+│       ├── ast.cpp - AST, Position impl.
 │       ├── ast.hpp - Abstract Syntax Tree
+│       ├── expr.hpp - Expr AST definition
 │       ├── parser.cpp - Parser impl.
 │       ├── parser.hpp - Parser
-│       └── type.hpp - FuxType impl.
+│       ├── position.hpp - Position class
+│       ├── type.hpp - FuxType impl.
+│       ├── value.cpp - ValueStruct impl.
+│       └── value.hpp - ValueStruct
 ├── fux.hpp - standard includes and definitions
 ├── main.cpp - main file; bootstrap & repl
 ├── output.ll - llvm module dump (for debug)

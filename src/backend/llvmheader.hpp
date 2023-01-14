@@ -13,8 +13,6 @@
 
 #include "../fux.hpp"
 
-#include "../frontend/parser/type.hpp"
-
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/STLExtras.h>
 
@@ -46,7 +44,6 @@ typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;
 typedef vector<Type *> TypeList;
 typedef map<string, Value *> ValueMap;
-typedef map<string, FuxType> ArgMap;
 
 // type definitions for generating objects
 typedef int8_t      _i8;

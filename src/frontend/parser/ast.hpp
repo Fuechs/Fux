@@ -12,46 +12,15 @@
 #pragma once
 
 #include "../../fux.hpp"
-#include "../lexer/token.hpp"
-#include "type.hpp"
-
 #include "../../backend/llvmheader.hpp"
 #include "../../backend/generator/wrapper.hpp"
+#include "../lexer/token.hpp"
+#include "type.hpp"
+#include "value.hpp"
+#include "position.hpp"
+#include "expr.hpp"
 
-// exact position of an AST for error tracking
-// TODO: implement in error and parser
-struct Position {
-    Position(size_t lStart = 1, size_t lEnd = 1, size_t colStart = 1, size_t colEnd = 1)
-    : lStart(lStart), lEnd(lEnd), colStart(colStart), colEnd(colEnd) {}
-
-    Position &operator=(Position pos);
-
-    size_t lStart; // first line
-    size_t lEnd; // last line
-    size_t colStart; // first column of first line
-    size_t colEnd; // last column of last line
-};
-
-class ExprAST {
-public:
-    virtual ~ExprAST() {}
-    virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
-    virtual unique_ptr<ExprAST> analyse() = 0;
-    virtual void debugPrint() = 0;
-
-    // root functions
-    virtual vector<unique_ptr<ExprAST>> getProg() = 0;
-    virtual void addSub(unique_ptr<ExprAST> &sub) = 0;
-
-    ExprAST &operator=(ExprAST &ast);
-
-    Position pos = Position();
-};
-
-typedef unique_ptr<ExprAST> ExprPtr;
-typedef vector<ExprPtr> ExprList;
-
-extern ExprPtr nullExpr;
+typedef map<string, FuxType> ArgMap;
 
 class RootAST : public ExprAST {
     ExprList program;
@@ -63,39 +32,9 @@ public:
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     ExprPtr analyse() override;
     void debugPrint() override;
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
-};
-
-// used to represent values within a union
-struct ValueStruct {
-    // TODO: constructor for every type
-    ValueStruct(_i64 value) : type(FuxType(FuxType::I64)), __i64(value) {}
-    ValueStruct(_f64 value) : type(FuxType(FuxType::F64)), __f64(value) {}
-    
-    ~ValueStruct();
-
-    Value *getLLVMValue(LLVMWrapper* fuxLLVM);
-
-    FuxType type;
-    union {
-        bool    __bool;
-        _i8     __i8;
-        _u8     __u8;
-        _c8     __c8;
-        _i16    __i16;
-        _u16    __u16;
-        _c16    __c16;
-        _i32    __i32;
-        _u32    __u32;
-        _f32    __f32;
-        _i64    __i64;
-        _u64    __u64;
-        _f64    __f64;
-        string  __str;
-    };
 };
 
 class NumberExprAST : public ExprAST {
@@ -111,7 +50,6 @@ public:
     void debugPrint() override;
     
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
@@ -129,7 +67,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
@@ -148,7 +85,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
@@ -167,7 +103,6 @@ public:
     void debugPrint() override; 
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
@@ -186,7 +121,6 @@ public:
     void debugPrint() override; 
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
@@ -206,7 +140,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
    
    Position pos = Position();
@@ -230,7 +163,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
@@ -250,7 +182,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
@@ -270,7 +201,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
@@ -297,7 +227,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
@@ -321,7 +250,6 @@ public:
     void debugPrint() override;
 
     // unused
-    ExprList getProg() override;
     void addSub(ExprPtr &sub) override;
     
     Position pos = Position();

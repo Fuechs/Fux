@@ -66,33 +66,31 @@ ExprPtr Parser::parsePutsStmt() {
 
 ExprPtr Parser::parseVariableDeclStmt() {
     // TODO: parse storage modifiers
-    FuxType::Access access = FuxType::PUBLIC;
+    FuxType::AccessList access = {FuxType::PUBLIC};
     // TODO: parse pointer depth
     size_t pointerDepth = 0;
 
     const string symbol = eat().value;
     FuxType type = FuxType();
 
-    if (current->type == COLON) {
-        ++current;
-        if (current->type >= KEY_VOID && current->type <= KEY_VAR || current->type == IDENTIFIER)
-            type = FuxType((FuxType::Kind) current->type, pointerDepth, access, eat().value); // the value only matters if it's a user defined type
-
-        if (current->type == EQUALS) { 
-            ++current;  
+    // TODO: check for this in parseStmt
+    if (check(COLON)) {
+        type = parseType(pointerDepth, access);
+        
+        if (check(EQUALS)) { // =
             if (!type)
+                type = FuxType(FuxType::AUTO, 0, access);
+        } else if (check(TRIPLE_EQUALS)) { // ===
+            if (!type) {
+                access.push_back(FuxType::CONSTANT);
                 type = FuxType(FuxType::AUTO, pointerDepth, access);
-        } else if (current->type == TRIPLE_EQUALS) { 
-            ++current; 
-            if (!type)
-                type = FuxType(FuxType::AUTO, pointerDepth, FuxType::CONSTANT);
-            else
-                type.access = FuxType::CONSTANT;
+            } else
+                type.access.push_back(FuxType::CONSTANT);
         }
     } else if (current->type == EQUALS || current->type == TRIPLE_EQUALS) { // assignment 
         --current; // get back to identifier
         return parseAssignmentExpr();
-    }
+    } else { /* TODO: add error or do something else */ }
 
     ExprPtr value = parseExpr();
     expect(SEMICOLON);
@@ -181,6 +179,22 @@ ExprPtr Parser::parsePrimaryExpr() {
     }
 }
 
+FuxType Parser::parseType(_i64 pointerDepth, FuxType::AccessList access) {
+    if (current->type >= KEY_VOID && current->type <= KEY_VAR || current->type == IDENTIFIER) {
+        Token typeToken = eat();
+        if (check(ARRAY_BRACKET))
+            return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
+        else if (check(LBRACKET)) {
+            ExprPtr size = parseExpr(); 
+            expect(RBRACKET, MISSING_BRACKET);
+            return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value, size);
+        } else
+            return FuxType::createStd((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
+    }
+    
+    return FuxType();
+}
+
 Token Parser::eat() {
     if (current->type == _EOF)
         return *current;
@@ -217,6 +231,14 @@ Token Parser::peek(size_t steps) {
     return ret;
 }
 
-bool Parser::notEOF() { 
+bool Parser::check(TokenType type) {
+    if (current->type != type) 
+        return false;
+    
+    ++current;
+    return true;
+}
+
+constexpr bool Parser::notEOF() { 
     return current->type != _EOF;
 }

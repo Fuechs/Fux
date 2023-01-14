@@ -16,8 +16,6 @@
 #include "../context/fuxstr.hpp"
 #include "../context/fuxio.hpp"
 
-typedef map<string, Value *> ValueMap;
-
 struct LLVMWrapper {
     LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder)
     : context(context), module(module), builder(builder), namedValues({}) {

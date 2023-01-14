@@ -13,6 +13,7 @@
 
 #include "../../fux.hpp"
 #include "ast.hpp"
+#include "type.hpp"
 #include "../error/error.hpp"
 #include "../lexer/lexer.hpp"
 #include "../lexer/token.hpp"
@@ -64,15 +65,20 @@ private:
     // x         , 1    , (...)
     ExprPtr parsePrimaryExpr();
     
+    // parse FuxType 
+    FuxType parseType(_i64 pointerDepth = 0, FuxType::AccessList access = {FuxType::PUBLIC});
+
     // get next token
     Token eat();
     // expect an token
     Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
     // peek to Nth token
     Token peek(size_t steps = 1);
+    // check current token and advance if true
+    bool check(TokenType type);
 
     // check wether end of file is reached
-    bool notEOF();
+    constexpr bool notEOF();
 
     void debugPrint(const string message);
 };
