@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
 }
 ```
 
-- When creating a class, the header file should only include the declaration with comments describing individual elements (There are some exceptions to this, e.g. small classes like FuxType).
+- When creating a class, the header file should only include the declaration with comments describing individual elements (There are some exceptions to this, e.g. small classes like Token).
 - If no body is required, constructors can be defined in the header file (using `: param(param), ... {}`) .
 - The definitions should be in the same order as the declarations in the header file.
 - The layout is as follows:

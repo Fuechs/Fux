@@ -430,11 +430,17 @@ public:
     string value;
     size_t line, start, end;
 
-    void debugPrint();
-
-    bool isKeyword() {
-        return (type >= KEY_GET && type <= KEY_CLASS);
+    string str() {
+        stringstream ss;
+        ss  << "<Token, " << TokenTypeString[type] << ", '"  
+            << value << "', "
+            << "Line " << line << ":" << start << ">";
+        // <Token, TYPE, 'value', Line ?:?>
     }
+
+    bool isKeyword() { return (type >= KEY_GET && type <= KEY_CLASS); }
+    bool isType() { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }
+    bool isModifier() { return (type >= KEY_SAFE && type <= KEY_FIXED); }
 };
 
 typedef vector<Token> TokenList;

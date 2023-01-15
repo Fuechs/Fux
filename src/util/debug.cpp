@@ -24,25 +24,13 @@
 
 // * LEXER
 
-void Token::debugPrint() {
-    if (!fux.options.debugMode)
-        return;
-
-    cout    
-        << debugText
-        << "<Token, " << TokenTypeString[type] << ", '"  
-        << value << "', "
-        << "Line " << line << ":" << start << ">\n";
-    // <Token, TYPE, 'value', Line ?:?>
-}
-
 void Lexer::debugPrint() {
     if (!fux.options.debugMode)
         return;
     
     cout << debugText << "Lexer:\n";
     for (Token &token : tokens)
-        token.debugPrint();
+        cout << token.str() << "\n";
 }
 
 // * PARSER

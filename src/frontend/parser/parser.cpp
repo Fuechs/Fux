@@ -180,7 +180,7 @@ ExprPtr Parser::parsePrimaryExpr() {
 }
 
 FuxType Parser::parseType(_i64 pointerDepth, FuxType::AccessList access) {
-    if (current->type >= KEY_VOID && current->type <= KEY_VAR || current->type == IDENTIFIER) {
+    if (current->isType()) {
         Token typeToken = eat();
         if (check(ARRAY_BRACKET))
             return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
