@@ -435,7 +435,8 @@ public:
         ss  << "<Token, " << TokenTypeString[type] << ", '"  
             << value << "', "
             << "Line " << line << ":" << start << ">";
-        // <Token, TYPE, 'value', Line ?:?>
+        // <Token, TYPE, 'value', Line line:start>
+        return ss.str();
     }
 
     bool isKeyword() { return (type >= KEY_GET && type <= KEY_CLASS); }
