@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-14
+> Last updated on 2023-01-15
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -47,6 +47,7 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 - Drastic changes[^2] should have a good reason.
 - Fork the repository and make all changes to your fork.
 - Verify that the modified code is working as expected.
+- Add yourself to the [authors list](./AUTHORS.md) using [this template](#author-template)[^5].
 - Create a pull request to the development branch[^3][^4].
 - Give us your agreement that your code will be licensed unter the [Apache License v2.0 with LLVM Expcetions](./LICENSE).
 - Your pull request will be reviewed, and if accepted merged.
@@ -59,10 +60,13 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 
 [^4]: This does not apply to patches for released versions.
 
+[^5]: This step is optional. The authors list is just for credit.
+
 ## Rules
 
 - Ensure compatibility of the code with MacOS & Linux.
 - For any changes regarding code, please create an issue (or use an existing issue) and describe your changes (to get feedback).
+- For any changes to markdown files, please change the "last updated" date at the top if there is one.
 - Follow the conventions for this project.
 
 ### Code of Conduct
@@ -86,6 +90,7 @@ You can get familiar with the file structure in the [`src/`](./src) folder.
 - [Using Licensed Code](#using-licensed-code)
 - [LLVM IR](#llvm-ir)
 - [Commit Messages](#commit-messages)
+- [Author Template](#author-template)
 
 C++ files should start with the following (doxygen generated) comment:
 
@@ -248,3 +253,14 @@ Functions that are part of a module, class or type have the name as an additiona
 #### Commit Messages
 
 Commit messages do not have to follow any conventions.
+
+#### Author Template
+
+When adding your self to the [authors list](./AUTHORS.md), please use this template and add your row at the bottom of the table.
+
+```md
+ID | Name | Date
+...
+[@YOUR.TAG](https://github.com/YOUR_TAG) | YOUR.NAME | `yyyy-mm-dd`
+[@example](https://github.com/example) | Example Guy | `2023-01-15`
+```
