@@ -52,7 +52,7 @@ void RootAST::debugPrint() {
         return;
 
     cout << debugText << "Root AST";
-    for (ExprPtr &sub : program) {
+    for (StmtPtr &sub : program) {
         cout << "\n";
         sub->debugPrint();
         cout << ";";
@@ -61,17 +61,17 @@ void RootAST::debugPrint() {
 }
 
 void NumberExprAST::debugPrint() {
-    switch (value.type.kind) {
-        case FuxType::I8:       cout << value.__i8; break;
-        case FuxType::U8:       cout << value.__u8; break;
-        case FuxType::I16:      cout << value.__i16; break;
-        case FuxType::U16:      cout << value.__u16; break;
-        case FuxType::I32:      cout << value.__i32; break;
-        case FuxType::U32:      cout << value.__u32; break;
-        case FuxType::F32:      cout << value.__f32; break;
-        case FuxType::I64:      cout << value.__i64; break;
-        case FuxType::U64:      cout << value.__u64; break;
-        case FuxType::F64:      cout << value.__f64; break;
+    switch (value->type.kind) {
+        case FuxType::I8:       cout << value->__i8; break;
+        case FuxType::U8:       cout << value->__u8; break;
+        case FuxType::I16:      cout << value->__i16; break;
+        case FuxType::U16:      cout << value->__u16; break;
+        case FuxType::I32:      cout << value->__i32; break;
+        case FuxType::U32:      cout << value->__u32; break;
+        case FuxType::F32:      cout << value->__f32; break;
+        case FuxType::I64:      cout << value->__i64; break;
+        case FuxType::U64:      cout << value->__u64; break;
+        case FuxType::F64:      cout << value->__f64; break;
         default:                cout << "?";
     }
 }

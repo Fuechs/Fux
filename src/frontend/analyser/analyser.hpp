@@ -19,15 +19,15 @@
 
 class Analyser {
 public:
-    Analyser(ErrorManager *error, ExprPtr &root) 
+    Analyser(ErrorManager *error, RootPtr &root) 
     : error(error), origin(root) {} 
 
     // analyse AST 
-    ExprPtr analyse();
+    StmtPtr analyse();
 
 private:
     ErrorManager *error;
-    ExprPtr &origin;
+    RootPtr &origin;
 
     void debugPrint(const string message);
 };

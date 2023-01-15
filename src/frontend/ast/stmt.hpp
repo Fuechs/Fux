@@ -11,9 +11,17 @@
 
 #pragma once
 
-/**
- * TODO: Properly seperate expressions from statements.
- * Expressions should be statements but statements shouldn't be expressions.
- * 
- */
-class StmtAST;
+class StmtAST {
+public:
+    virtual ~StmtAST() {}
+    virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
+    virtual unique_ptr<StmtAST> analyse() = 0;
+    virtual void debugPrint() = 0;
+
+    Position pos = Position();
+};
+
+typedef unique_ptr<StmtAST> StmtPtr;
+typedef vector<StmtPtr> StmtList;
+
+extern StmtPtr nullStmt;

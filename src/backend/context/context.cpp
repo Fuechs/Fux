@@ -11,7 +11,7 @@
 
 #include "context.hpp"
 
-FuxContext::FuxContext(ExprPtr &root) {
+FuxContext::FuxContext(RootPtr &root) {
     llvm::InitializeNativeTarget();
     LLVMContext *llvmContext = new LLVMContext();
     this->fuxLLVM = new LLVMWrapper(
@@ -28,7 +28,6 @@ FuxContext::FuxContext(ExprPtr &root) {
 
 FuxContext::~FuxContext() {
     delete fuxLLVM;
-    delete module;
     target.clear();
     delete compiler;
 }
@@ -52,5 +51,4 @@ void FuxContext::optimize() { return; }
 void FuxContext::compile() {
     delete generator;
     compiler = new Compiler("<placeholder>", module);
-
 }

@@ -20,7 +20,7 @@
 
 class Generator {
 public:
-    Generator(ExprPtr &root, LLVMWrapper *fuxLLVM) 
+    Generator(RootPtr &root, LLVMWrapper *fuxLLVM) 
     : root(std::move(root)), fuxLLVM(fuxLLVM) {}
 
     void generate();
@@ -29,7 +29,7 @@ public:
     static FuxArray *createArrayType(LLVMWrapper *fuxLLVM, FuxType type);
 
 private:
-    ExprPtr root;
+    RootPtr root;
     LLVMWrapper *fuxLLVM;
 
     void debugPrint(const string message);

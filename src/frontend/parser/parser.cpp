@@ -11,14 +11,14 @@
 
 #include "parser.hpp"
 
-ExprPtr Parser::parse() {
+RootPtr Parser::parse() {
     // lexing
     tokens = lexer->lex();
     lexer->debugPrint();
     
     current = tokens.begin();
 
-    ExprPtr branch;
+    StmtPtr branch;
     while (notEOF()) 
         if ((branch = parseStmt())) // check for nullptr in case of error
             root->addSub(branch);
@@ -26,22 +26,22 @@ ExprPtr Parser::parse() {
     return std::move(root);
 }
 
-ExprPtr Parser::parseStmt() {
+StmtPtr Parser::parseStmt() {
     return parseIfElseStmt();
 }
 
-ExprPtr Parser::parseIfElseStmt() {
-    ExprPtr stmt;
+StmtPtr Parser::parseIfElseStmt() {
+    StmtPtr stmt;
 
     if (current->type == KEY_IF) {
         eat();
         expect(LPAREN, ILLEGAL_BRACKET_MISMATCH);
-        ExprPtr condition = parseStmt(); // ! parse conditional here
+        ExprPtr condition = parseExpr();
         expect(LPAREN, MISSING_BRACKET);
-        ExprPtr thenBody = parseStmt(); // ! parse body or stmt here
+        StmtPtr thenBody = parseStmt(); 
         if (current->type == KEY_ELSE) {
             eat();
-            ExprPtr elseBody = parseStmt(); // ! parse body or stmt here
+            StmtPtr elseBody = parseStmt(); 
             stmt = make_unique<IfElseAST>(condition, thenBody, elseBody);
         } else
             stmt = make_unique<IfElseAST>(condition, thenBody);
@@ -51,8 +51,8 @@ ExprPtr Parser::parseIfElseStmt() {
     return stmt;
 }
 
-ExprPtr Parser::parsePutsStmt() {
-    ExprPtr call;
+StmtPtr Parser::parsePutsStmt() {
+    StmtPtr call;
     if (current->type == KEY_PUTS) {
         eat();
         ExprPtr arg = parseExpr();
@@ -64,7 +64,7 @@ ExprPtr Parser::parsePutsStmt() {
     return call;
 }
 
-ExprPtr Parser::parseVariableDeclStmt() {
+StmtPtr Parser::parseVariableDeclStmt() {
     // TODO: parse storage modifiers
     FuxType::AccessList access = {FuxType::PUBLIC};
     // TODO: parse pointer depth

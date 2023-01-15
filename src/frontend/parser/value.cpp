@@ -14,7 +14,8 @@
 ValueStruct::~ValueStruct() {
     if (type.kind == FuxType::STR)
         __str.clear();
-    delete &type;
+    // FIXME: "malloc: ... pointer being freed was not allocated" why?
+    // delete &type;
 }
 
 Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {

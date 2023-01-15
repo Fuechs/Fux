@@ -36,7 +36,7 @@ void SourceFile::parse() {
     parser = new Parser(error, filePath, contents, mainFile);
     root = parser->parse();
     analyser = new Analyser(error, root);
-    analyser->analyse();
+    analyser->analyse(); // TODO: catch modified AST
 }
 
 bool SourceFile::hasErrors() {

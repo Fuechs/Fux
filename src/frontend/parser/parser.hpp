@@ -34,20 +34,20 @@ public:
     }
 
     // parse the Tokens and return AST root
-    ExprPtr parse();
+    RootPtr parse();
 
 private:
     TokenList tokens;
     TokenIter current;
     ErrorManager *error;
     Lexer *lexer;
-    ExprPtr root;
+    RootPtr root;
     const bool mainFile;
 
-    ExprPtr parseStmt();
-    ExprPtr parseIfElseStmt();
-    ExprPtr parsePutsStmt();
-    ExprPtr parseVariableDeclStmt();
+    StmtPtr parseStmt();
+    StmtPtr parseIfElseStmt();
+    StmtPtr parsePutsStmt();
+    StmtPtr parseVariableDeclStmt();
 
     ExprPtr parseExpr();
     // <symbol> = <value>;

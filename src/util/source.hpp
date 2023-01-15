@@ -39,7 +39,7 @@ public:
     string filePath;
     string fileDir;
 
-    ExprPtr root;
+    RootPtr root;
     
 private:
     ErrorManager *error;

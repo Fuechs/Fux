@@ -11,19 +11,19 @@
 
 #include "analyser.hpp"
 
-ExprPtr Analyser::analyse() { 
+StmtPtr Analyser::analyse() { 
     return std::move(origin->analyse());
 }
 
-ExprPtr RootAST::analyse() { return std::move(nullExpr); }
-ExprPtr NumberExprAST::analyse() { return std::move(nullExpr); }
-ExprPtr VariableExprAST::analyse() { return std::move(nullExpr); }
-ExprPtr BinaryExprAST::analyse() { return std::move(nullExpr); }
-ExprPtr ComparisonExprAST::analyse() { return std::move(nullExpr); }
-ExprPtr LogicalExprAST::analyse() { return std::move(nullExpr); }
-ExprPtr CallExprAST::analyse() { return std::move(nullExpr); }
-ExprPtr VariableDeclAST::analyse() { return std::move(nullExpr); }
-ExprPtr PutsCallAST::analyse() { return std::move(nullExpr); }
-ExprPtr IfElseAST::analyse() { return std::move(nullExpr); }
-ExprPtr PrototypeAST::analyse() { return std::move(nullExpr); }
-ExprPtr FunctionAST::analyse() { return std::move(nullExpr); }
+StmtPtr RootAST::analyse() { return std::move(nullStmt); }
+StmtPtr NumberExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr VariableExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr BinaryExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr ComparisonExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr LogicalExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr CallExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr VariableDeclAST::analyse() { return std::move(nullStmt); }
+StmtPtr PutsCallAST::analyse() { return std::move(nullStmt); }
+StmtPtr IfElseAST::analyse() { return std::move(nullStmt); }
+StmtPtr PrototypeAST::analyse() { return std::move(nullStmt); }
+StmtPtr FunctionAST::analyse() { return std::move(nullStmt); }

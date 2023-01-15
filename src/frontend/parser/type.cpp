@@ -16,7 +16,6 @@ FuxType::FuxType(const FuxType &copy) { operator=(copy); }
 FuxType::~FuxType() {
     access.clear();
     name.clear();
-    delete &arraySize;
 }
 
 FuxType &FuxType::operator=(const FuxType &copy) {
@@ -72,8 +71,12 @@ string FuxType::suffix() {
     else
         ss << KindString[kind];
         
-    if (array) 
-        ss << "[" << arraySize << "]";
+    if (array) {
+        ss << "[";
+        if (arraySize != nullExpr)
+            arraySize->debugPrint();
+        ss << "]";
+    }
         
     ss << " (";
     for (Access &a : access)

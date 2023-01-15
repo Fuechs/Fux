@@ -11,7 +11,6 @@
 
 #include "generator.hpp"
 
-
 void Generator::generate() {
     // root->codegen(fuxLLVM);
 
@@ -25,14 +24,9 @@ void Generator::generate() {
 
 // *::codegen()
 
-Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
-    for (ExprPtr &sub : program)
-        sub->codegen(fuxLLVM);
-    return nullptr;
-}
-
 Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) {
-    return fuxLLVM->builder->getInt64(value.__i64);
+    // TODO: add all types
+    return fuxLLVM->builder->getInt64(value->__i64);
 }
 
 Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
@@ -137,5 +131,11 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
 
     // error reading body
     func->eraseFromParent();
+    return nullptr;
+}
+
+Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
+    for (StmtPtr &sub : program)
+        sub->codegen(fuxLLVM);
     return nullptr;
 }

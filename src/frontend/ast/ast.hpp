@@ -22,36 +22,20 @@
 
 typedef map<string, FuxType> ArgMap;
 
-class RootAST : public ExprAST {
-    ExprList program;
-
-public:
-    RootAST() : program(ExprList()) {}
-        
-    
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
-    void debugPrint() override;
-    void addSub(ExprPtr &sub) override;
-    
-    Position pos = Position();
-};
+/// EXPRESSIONS ///
 
 class NumberExprAST : public ExprAST {
-    ValueStruct value;
+    ValueStruct *value;
 
 public:
     template<typename T>
-    NumberExprAST(T value) : value(value) {}
+    NumberExprAST(T value) : value(new ValueStruct(value)) {}
     ~NumberExprAST();
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
     
-    // unused
-    void addSub(ExprPtr &sub) override;
-
     Position pos = Position();
 };
 
@@ -63,11 +47,8 @@ public:
     ~VariableExprAST() override { name.clear(); }
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
@@ -81,11 +62,8 @@ public:
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
@@ -99,11 +77,8 @@ public:
     : comp(comp), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override; 
-
-    // unused
-    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
@@ -117,12 +92,9 @@ public:
     : logical(logical), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override; 
 
-    // unused
-    void addSub(ExprPtr &sub) override;
-    
     Position pos = Position();
 };
 
@@ -136,16 +108,15 @@ public:
     ~CallExprAST() override { callee.clear(); }
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
    
-   Position pos = Position();
+    Position pos = Position();
 };
 
-class VariableDeclAST : public ExprAST {
+/// STATEMENTS ///
+
+class VariableDeclAST : public StmtAST {
     string symbol;
     FuxType type;
     ExprPtr value;
@@ -159,16 +130,13 @@ public:
     }
     
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
 };
 
-class PutsCallAST : public ExprAST {
+class PutsCallAST : public StmtAST {
     ExprPtr argument;
 
 public:
@@ -178,37 +146,31 @@ public:
     ExprPtr &getArgument();
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
 };
 
-class IfElseAST : public ExprAST {
+class IfElseAST : public StmtAST {
     ExprPtr condition;
-    ExprPtr thenBody;
-    ExprPtr elseBody;
+    StmtPtr thenBody;
+    StmtPtr elseBody;
 
 public:
-    IfElseAST(ExprPtr &condition, ExprPtr &thenBody, ExprPtr &elseBody = nullExpr)
+    IfElseAST(ExprPtr &condition, StmtPtr &thenBody, StmtPtr &elseBody = nullStmt)
     : condition(std::move(condition)), thenBody(std::move(thenBody)), elseBody(std::move(elseBody)) {}
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
 
     Position pos = Position();
 };
 
 // prototype of a function
 // name and arguments
-class PrototypeAST : public ExprAST {
+class PrototypeAST : public StmtAST {
     FuxType type;
     string name;
     ArgMap args;
@@ -223,18 +185,15 @@ public:
     FuxType getType();
     
     Function *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
     void debugPrint() override;
-
-    // unused
-    void addSub(ExprPtr &sub) override;
     
     Position pos = Position();
 };
 
 typedef unique_ptr<PrototypeAST> ProtoPtr;
 
-class FunctionAST : public ExprAST {
+class FunctionAST : public StmtAST {
     ProtoPtr proto;
     ExprList body;
 
@@ -246,11 +205,26 @@ public:
     : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;
-    ExprPtr analyse() override;
+    StmtPtr analyse() override;
+    void debugPrint() override;    
+
+    Position pos = Position();
+};
+
+class RootAST : public StmtAST {
+    StmtList program;
+
+public:
+    RootAST() : program(StmtList()) {}
+        
+    
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    StmtPtr analyse() override;
     void debugPrint() override;
 
-    // unused
-    void addSub(ExprPtr &sub) override;
+    void addSub(StmtPtr &sub);
     
     Position pos = Position();
 };
+
+typedef unique_ptr<RootAST> RootPtr;

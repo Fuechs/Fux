@@ -16,7 +16,7 @@
 
 __fux_struct fux;
 
-void createTestAST(ExprPtr &root);
+void createTestAST(RootPtr &root);
 
 int main(int argc, char **argv) {
     int result = 0;
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
     mainFile->parse();
-    ExprPtr &root = mainFile->root;
+    RootPtr root = std::move(mainFile->root);
     if (mainFile->hasErrors())
         goto end;
     root->debugPrint();
@@ -203,7 +203,7 @@ int repl() {
 
         ErrorManager *error = new ErrorManager("<stdin>", {input});
         Parser *parser = new Parser(error, "<stdin>", input, true);
-        ExprPtr root = parser->parse();
+        RootPtr root = parser->parse();
         root->debugPrint();
         error->panic();
         // TODO: generate and run ...
@@ -213,11 +213,11 @@ int repl() {
 }
 
 // create AST to test the generator without parser
-void createTestAST(ExprPtr &root) {
+void createTestAST(RootPtr &root) {
     // i32 mod(i32);
     ArgMap eArgs;
     eArgs["a"] = FuxType(FuxType::I32);
-    ExprPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::I32), "mod", eArgs);
+    StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::I32), "mod", eArgs);
     root->addSub(emptyF);
 
     // i32 main(i32 %x, i32 %y) {
@@ -241,7 +241,7 @@ void createTestAST(ExprPtr &root) {
     args["x"] = FuxType(FuxType::I32);
     args["y"] = FuxType(FuxType::I32);
     
-    ExprPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I32), "main", args, mBody);
+    StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I32), "main", args, mBody);
     root->addSub(mFunc);
 }
 

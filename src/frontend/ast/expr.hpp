@@ -13,18 +13,14 @@
 
 #include "../../backend/generator/wrapper.hpp"
 #include "position.hpp"
+#include "stmt.hpp"
 
-class ExprAST {
+class ExprAST : public StmtAST {
 public:
     virtual ~ExprAST() {}
     virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
-    virtual unique_ptr<ExprAST> analyse() = 0;
+    virtual StmtPtr analyse() = 0;
     virtual void debugPrint() = 0;
-
-    // root functions
-    virtual void addSub(unique_ptr<ExprAST> &sub) = 0;
-
-    ExprAST &operator=(ExprAST &ast);
 
     Position pos = Position();
 };
