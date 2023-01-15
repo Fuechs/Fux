@@ -90,6 +90,8 @@ main(): i64 {
     - [&check;] [`Threading`](./src/util/threading.hpp)
     - [&check;] [`Lexer`](./src/frontend/lexer/)
     - [...] [`Parser`](./src/frontend/parser/)
+        - [&check;] [`Value`](./src/frontend/parser/value.hpp)
+        - [&check;] [`Type`](./src/frontend/parser/type.hpp)
         - [...] [`AST`](./src/frontend/parser/ast.hpp)
         - [...] [`Parsing`](./src/frontend/parser/parser.hpp)
     - [&cross;] [`Analyser`](./src/frontend/analyser/)
