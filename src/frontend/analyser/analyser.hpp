@@ -15,6 +15,7 @@
 #include "../error/error.hpp"
 #include "../ast/ast.hpp"
 #include "../parser/type.hpp"
+#include "expectation.hpp"
 
 class Analyser {
 public:
@@ -38,4 +39,4 @@ private:
 // A list of predefined symbols ("objects") would be required for this.
 
 // The list of defined symbols needs to include details about the object
-// to be able to verify overrides
+// to be able to verify overrides.
