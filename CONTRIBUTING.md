@@ -11,7 +11,6 @@
     - [Code of Conduct](#code-of-conduct)
     - [Security Vulnerabilities](#security-vulnerabilities)
     - [Conventions](#conventions)
-- [Getting Started](#getting-started)
 
 ## Introduction
 
