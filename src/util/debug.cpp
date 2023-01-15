@@ -13,7 +13,7 @@
 
 #include "../frontend/lexer/token.hpp"
 #include "../frontend/lexer/lexer.hpp"
-#include "../frontend/parser/ast.hpp"
+#include "../frontend/ast/ast.hpp"
 #include "../frontend/parser/parser.hpp"
 #include "../frontend/analyser/analyser.hpp"
 #include "../frontend/error/error.hpp"
@@ -64,17 +64,14 @@ void NumberExprAST::debugPrint() {
     switch (value.type.kind) {
         case FuxType::I8:       cout << value.__i8; break;
         case FuxType::U8:       cout << value.__u8; break;
-        case FuxType::C8:       cout << "'" << value.__c8 << "'"; break;
         case FuxType::I16:      cout << value.__i16; break;
         case FuxType::U16:      cout << value.__u16; break;
-        case FuxType::C16:      cout << "'" << value.__c16 << "'"; break;
         case FuxType::I32:      cout << value.__i32; break;
         case FuxType::U32:      cout << value.__u32; break;
         case FuxType::F32:      cout << value.__f32; break;
         case FuxType::I64:      cout << value.__i64; break;
         case FuxType::U64:      cout << value.__u64; break;
         case FuxType::F64:      cout << value.__f64; break;
-        case FuxType::STR:      cout << '"' << value.__str << '"'; break;
         default:                cout << "?";
     }
 }

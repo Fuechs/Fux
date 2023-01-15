@@ -13,7 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../error/error.hpp"
-#include "../parser/ast.hpp"
+#include "../ast/ast.hpp"
 #include "../parser/type.hpp"
 
 class Analyser {

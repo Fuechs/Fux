@@ -37,15 +37,15 @@ bool FuxType::operator==(const FuxType &comp) {
 
 bool FuxType::operator!() { return kind == NO_TYPE; }
 
-constexpr FuxType FuxType::createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name) {
+FuxType FuxType::createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name) {
     return FuxType(kind, pointerDepth, accessList, false, nullExpr, name);
 }
 
-constexpr FuxType FuxType::createRef(Kind kind, AccessList accessList, string name) {
+FuxType FuxType::createRef(Kind kind, AccessList accessList, string name) {
     return FuxType(kind, -1, accessList, false, nullExpr, name); 
 }
 
-constexpr FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize = nullExpr) {
+FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize) {
     return FuxType(kind, pointerDepth, accessList, true, arraySize, name);
 }
 
@@ -82,7 +82,7 @@ string FuxType::suffix() {
     return ss.str();
 }
 
-constexpr string FuxType::str() { return prefix() + suffix(); }
+string FuxType::str() { return prefix() + suffix(); }
 
 bool FuxType::valid() {
     if (find(access, INTERN) != access.end() && find(access, SAFE) != access.end())
@@ -91,8 +91,11 @@ bool FuxType::valid() {
     if (kind == CUSTOM && name.empty())
         return false;
 
-    if (array && arraySize == nullExpr)
-        return false;
+    // TODO: "expectation" struct for analyser
+    // may look something like this:
+    // Expectation e( integer, binary expression, expression yielding integer, nullExpr, ... );
+    // if (array && !arraySize->analyse(e))
+    //      return false;
 
     return pointerDepth >= -1;
 }

@@ -13,7 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
-#include "../parser/ast.hpp"
+#include "../ast/ast.hpp"
 
 enum ErrorType {
     UNEXPECTED_SYMBOL,

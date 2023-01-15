@@ -15,8 +15,8 @@
 #include "../../backend/llvmheader.hpp"
 #include "../../backend/generator/wrapper.hpp"
 #include "../lexer/token.hpp"
-#include "type.hpp"
-#include "value.hpp"
+#include "../parser/type.hpp"
+#include "../parser/value.hpp"
 #include "position.hpp"
 #include "expr.hpp"
 

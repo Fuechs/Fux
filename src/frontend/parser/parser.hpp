@@ -12,7 +12,7 @@
 #pragma once
 
 #include "../../fux.hpp"
-#include "ast.hpp"
+#include "../ast/ast.hpp"
 #include "type.hpp"
 #include "../error/error.hpp"
 #include "../lexer/lexer.hpp"

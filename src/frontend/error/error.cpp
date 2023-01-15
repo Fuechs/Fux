@@ -10,7 +10,7 @@
  */
 
 #include "error.hpp"
-#include "../parser/ast.hpp"
+#include "../ast/ast.hpp"
 
 // * ParseError
 

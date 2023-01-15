@@ -13,7 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../llvmheader.hpp"
-#include "../../frontend/parser/ast.hpp"
+#include "../../frontend/ast/ast.hpp"
 #include "../context/fuxmem.hpp"
 #include "../context/fuxstr.hpp"
 #include "genarray.hpp"

@@ -13,7 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
-#include "expr.hpp"
+#include "../ast/expr.hpp"
 
 class FuxType {
 public:
@@ -73,18 +73,18 @@ public:
     ExprPtr arraySize; // relevant for array types; nullExpr -> no size
 
     // shorthand for normal types
-    constexpr static FuxType createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name);
+    static FuxType createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name);
     // shorthand for reference types
-    constexpr static FuxType createRef(Kind kind, AccessList accessList, string name);
+    static FuxType createRef(Kind kind, AccessList accessList, string name);
     // shorthand for array types
-    constexpr static FuxType createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize = nullExpr);    
+    static FuxType createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize = nullExpr);    
     
     // get -> | : + pointer depth for this type 
     string prefix();
     // get typename + accesslist for this type 
     string suffix();
     // get prefix + suffix for this type
-    constexpr string str();
+    string str();
     // check wether type is valid
     bool valid();
 
