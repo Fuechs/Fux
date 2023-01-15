@@ -17,9 +17,20 @@
 
 // used to represent values within a union
 struct ValueStruct {
-    // TODO: constructor for every type
+    ValueStruct(bool value) : type(FuxType(FuxType::BOOL)), __bool(value) {}
+    ValueStruct(_i8 value) : type(FuxType(FuxType::I8)), __i8(value) {}
+    ValueStruct(_u8 value) : type(FuxType(FuxType::U8)), __u8(value) {}
+    ValueStruct(_c8 value) : type(FuxType(FuxType::C8)), __c8(value) {}
+    ValueStruct(_i16 value) : type(FuxType(FuxType::I16)), __i16(value) {}
+    ValueStruct(_u16 value) : type(FuxType(FuxType::U16)), __u16(value) {}
+    ValueStruct(_c16 value) : type(FuxType(FuxType::C16)), __c16(value) {}
+    ValueStruct(_i32 value) : type(FuxType(FuxType::I32)), __i32(value) {}
+    ValueStruct(_u32 value) : type(FuxType(FuxType::U32)), __u32(value) {}
+    ValueStruct(_f32 value) : type(FuxType(FuxType::F32)), __f32(value) {}
     ValueStruct(_i64 value) : type(FuxType(FuxType::I64)), __i64(value) {}
+    ValueStruct(_u64 value) : type(FuxType(FuxType::U64)), __u64(value) {}
     ValueStruct(_f64 value) : type(FuxType(FuxType::F64)), __f64(value) {}
+    ValueStruct(string value) : type(FuxType(FuxType::STR)), __str(value) {}
     
     ~ValueStruct();
 

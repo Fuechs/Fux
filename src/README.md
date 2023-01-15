@@ -47,7 +47,8 @@ src
 │       ├── parser.cpp - Parser impl.
 │       ├── parser.hpp - Parser
 │       ├── position.hpp - Position class
-│       ├── type.hpp - FuxType impl.
+│       ├── type.cpp - FuxType impl.
+│       ├── type.hpp - FuxType
 │       ├── value.cpp - ValueStruct impl.
 │       └── value.hpp - ValueStruct
 ├── fux.hpp - standard includes and definitions
