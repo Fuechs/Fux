@@ -95,7 +95,7 @@ main(): i64 {
         - [&check;] [`Type`](./src/frontend/parser/type.hpp)
         - [...] [`Parsing`](./src/frontend/parser/parser.hpp)
     - [&cross;] [`Analyser`](./src/frontend/analyser/)
-        - [&cross] [`Expectation`](./src/frontend/analyser/expectation.hpp)
+        - [&cross;] [`Expectation`](./src/frontend/analyser/expectation.hpp)
     - [...] [`Context (LLVM)`](./src/backend/context/)
         - [...] [`Memory`](./src/backend/context/fuxmem.hpp)
         - [...] [`String`](./src/backend/context/fuxstr.hpp)
