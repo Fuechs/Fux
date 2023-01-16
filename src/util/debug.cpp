@@ -35,19 +35,6 @@ void Lexer::debugPrint() {
 
 // * PARSER
 
-void RootAST::debugPrint() {
-    if (!fux.options.debugMode)
-        return;
-
-    cout << debugText << "Root AST";
-    for (StmtPtr &sub : program) {
-        cout << "\n";
-        sub->debugPrint();
-        cout << ";";
-    }
-    cout << endl;
-}
-
 void NumberExprAST::debugPrint() {
     switch (value->type.kind) {
         case FuxType::I8:       cout << value->__i8; break;
@@ -122,6 +109,11 @@ void PutsCallAST::debugPrint() {
     argument->debugPrint();
 }
 
+void ReturnCallAST::debugPrint() {
+    cout << "return ";
+    value->debugPrint();
+}
+
 void IfElseAST::debugPrint() {
     cout << "if (";
     condition->debugPrint();
@@ -129,6 +121,17 @@ void IfElseAST::debugPrint() {
     thenBody->debugPrint();
     cout << " else ";
     elseBody->debugPrint();
+}
+
+// TODO: correct indentation for nested blocks
+void CodeBlockAST::debugPrint() {
+    cout << "{\n";
+    for (StmtPtr &stmt : body) {
+        cout << "\t";
+        stmt->debugPrint();
+        cout << ";\n";
+    }
+    cout << "}";
 }
 
 void PrototypeAST::debugPrint() {
@@ -143,13 +146,21 @@ void PrototypeAST::debugPrint() {
 
 void FunctionAST::debugPrint() { 
     proto->debugPrint();
-    cout << " {\n";
-    for (StmtPtr &stmt : body) {
-        cout << "\t";
-        stmt->debugPrint();
-        cout << ";\n";
+    cout << " ";
+    body->debugPrint();
+}
+
+void RootAST::debugPrint() {
+    if (!fux.options.debugMode)
+        return;
+
+    cout << debugText << "Root AST";
+    for (StmtPtr &sub : program) {
+        cout << "\n";
+        sub->debugPrint();
+        cout << ";";
     }
-    cout << "}";
+    cout << endl;
 }
 
 void Parser::debugPrint(const string message) {

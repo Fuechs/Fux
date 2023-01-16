@@ -215,36 +215,40 @@ int repl() {
 
 // create AST to test the generator without parser
 void createTestAST(RootPtr &root) {
-    // i32 mod(i32);
+    // modify(num -> i64): void;
     ArgMap eArgs = ArgMap();
-    eArgs["a"] = FuxType(FuxType::I32);
-    StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::I32), "mod", eArgs);
+    eArgs["num"] = FuxType::createRef(FuxType::I64);
+    StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::VOID), "modify", eArgs);
     root->addSub(emptyF);
 
-    // i32 main(i32 %x, i32 %y) {
-    //      %addtmp = add i32 %x, %y
-    //      ret i32 %addtmp
+    // main(argc: i64, argv: str[]): i64 {
+    //      x: i64 = argc + 1;
+    //      modify(x);
+    //      return x;
     // }
+    ArgMap args = ArgMap();
+    args["argc"] = FuxType(FuxType::I64);
+    args["argv"] = FuxType::createArray(FuxType::STR);
 
-    ExprPtr arg1 = make_unique<VariableExprAST>("x");
-    ExprPtr arg2 = make_unique<VariableExprAST>("y");
-    ExprPtr binOp = make_unique<BinaryExprAST>('+', arg1, arg2);
-    StmtPtr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I32), binOp);
-
-    ExprList callArgs;
-    ExprPtr num = make_unique<VariableExprAST>("x");
-    callArgs.push_back(std::move(num));
-    ExprPtr eCall = make_unique<CallExprAST>("mod", callArgs);
-
-    StmtList mBody;
-    mBody.push_back(std::move(decl));
-    mBody.push_back(std::move(eCall));
-
-    ArgMap args;
-    args["x"] = FuxType(FuxType::I32);
-    args["y"] = FuxType(FuxType::I32);
+    BlockPtr body = make_unique<CodeBlockAST>();
     
-    StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I32), "main", args, mBody);
+    ExprPtr variable = make_unique<VariableExprAST>("argc");
+    ExprPtr constant = make_unique<NumberExprAST, _i64>(1);
+    ExprPtr binop = make_unique<BinaryExprAST>('+', variable, constant);
+    StmtPtr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I64), binop);
+    body->addSub(decl);
+
+    variable = make_unique<VariableExprAST>("x");
+    ExprList pass = ExprList();
+    pass.push_back(std::move(variable));
+    StmtPtr call = make_unique<CallExprAST>("modify", pass);
+    body->addSub(call);
+
+    variable = make_unique<VariableExprAST>("x");
+    StmtPtr ret = make_unique<ReturnCallAST>(variable);
+    body->addSub(ret);
+    
+    StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
     root->addSub(mFunc);
 }
 

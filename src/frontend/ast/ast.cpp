@@ -35,4 +35,10 @@ string PrototypeAST::getName() { return name; }
 ArgMap PrototypeAST::getArgs() { return args; }
 FuxType PrototypeAST::getType() { return type; }
 
-void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
+void CodeBlockAST::addSub(StmtPtr &sub) { 
+    body.push_back(std::move(sub)); 
+}
+
+void RootAST::addSub(StmtPtr &sub) { 
+    program.push_back(std::move(sub)); 
+}

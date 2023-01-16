@@ -83,9 +83,13 @@ Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) {
     return fuxLLVM->builder->CreateCall(fuxLLVM->fuxIO->puts, {arg});
 }
 
+Value *ReturnCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Value *IfElseAST::codegen(LLVMWrapper *fuxLLVM) {
     return nullptr;
 }
+
+Value *CodeBlockAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
     TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
@@ -116,9 +120,7 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
 
     // FIXME: This does not work as expected, 
     // body of the function is missing in the IR
-    Value *retVal;
-    for (StmtPtr &stmt : body)
-        retVal = stmt->codegen(fuxLLVM);
+    Value *retVal = body->codegen(fuxLLVM);
     
     if (func->getReturnType()->isVoidTy()) {
         fuxLLVM->builder->CreateRetVoid();

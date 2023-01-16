@@ -168,6 +168,19 @@ public:
     Position pos = Position();
 };
 
+class ReturnCallAST : public StmtAST {
+    ExprPtr value;
+
+public:
+    ReturnCallAST(ExprPtr &value) : value(std::move(value)) {}
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    StmtPtr analyse() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
 class IfElseAST : public StmtAST {
     ExprPtr condition;
     StmtPtr thenBody;
@@ -183,6 +196,24 @@ public:
 
     Position pos = Position();
 };
+
+class CodeBlockAST : public StmtAST {
+    StmtList body;
+
+public:
+    CodeBlockAST() : body(StmtList()) {}
+    CodeBlockAST(StmtList &body) : body(std::move(body)) {}
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    StmtPtr analyse() override;
+    void debugPrint() override;
+
+    void addSub(StmtPtr &sub);
+
+    Position pos = Position();
+};
+
+typedef unique_ptr<CodeBlockAST> BlockPtr;
 
 // prototype of a function
 // name and arguments
@@ -211,13 +242,13 @@ typedef unique_ptr<PrototypeAST> ProtoPtr;
 
 class FunctionAST : public StmtAST {
     ProtoPtr proto;
-    StmtList body;
+    BlockPtr body;
 
 public:
-    FunctionAST(FuxType type, const string &name, ArgMap args, StmtList &body)
+    FunctionAST(FuxType type, const string &name, ArgMap args, BlockPtr &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
-    FunctionAST(ProtoPtr proto, StmtList &body)
+    FunctionAST(ProtoPtr proto, BlockPtr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;
@@ -226,6 +257,7 @@ public:
 
     Position pos = Position();
 };
+
 
 class RootAST : public StmtAST {
     StmtList program;

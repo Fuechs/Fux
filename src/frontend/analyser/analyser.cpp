@@ -31,7 +31,11 @@ StmtPtr VariableDeclAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr PutsCallAST::analyse() { return std::move(nullStmt); }
 
+StmtPtr ReturnCallAST::analyse() { return std::move(nullStmt); }
+
 StmtPtr IfElseAST::analyse() { return std::move(nullStmt); }
+
+StmtPtr CodeBlockAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr PrototypeAST::analyse() { return std::move(nullStmt); }
 

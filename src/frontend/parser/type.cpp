@@ -64,6 +64,9 @@ string FuxType::prefix() {
         if (access[i] != PUBLIC)
             ss << access[i] << " ";
     
+    if (pointerDepth == -1)
+        return ss.str();
+        
     for (size_t pd = pointerDepth; pd --> 0;)
         ss << "*";
     

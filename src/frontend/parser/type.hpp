@@ -71,11 +71,11 @@ public:
     bool operator!();
 
     // shorthand for normal types
-    static FuxType createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name);
+    static FuxType createStd(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "");
     // shorthand for reference types
-    static FuxType createRef(Kind kind, AccessList accessList, string name);
+    static FuxType createRef(Kind kind, AccessList accessList = {PUBLIC}, string name = "");
     // shorthand for array types
-    static FuxType createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize = nullExpr);    
+    static FuxType createArray(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "", ExprPtr &arraySize = nullExpr);    
     
     // return FuxType::Kind as string
     string kindAsString();
