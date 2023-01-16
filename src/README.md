@@ -38,8 +38,12 @@ src
 │   │   ├── position.hpp - Position struct
 │   │   └── stmt.hpp - StmtAST base
 │   ├── error
-│   │   ├── error.cpp - ErrorManager & ParseError impl.
-│   │   └── error.hpp - ErrorManager & ParseError
+│   │   ├── error.cpp - ErrorManager impl.
+│   │   ├── error.hpp - ErrorManager
+│   │   ├── note.cpp - ErrorNote impl.
+│   │   ├── note.hpp - ErrorNote
+│   │   ├── parseerror.cpp - ParseError impl.
+│   │   └── parseerror.hpp - ParseError
 │   ├── lexer
 │   │   ├── lexer.cpp - Lexer impl.
 │   │   ├── lexer.hpp - Lexer 

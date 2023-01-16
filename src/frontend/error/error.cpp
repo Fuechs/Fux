@@ -10,98 +10,6 @@
  */
 
 #include "error.hpp"
-#include "../ast/ast.hpp"
-
-// * ParseError
-
-ParseError::ParseError() {
-    reported = false;
-    warning = false;
-    aggressive = false;
-    type = NO_ERR;
-    message = "";
-    fileName = "";
-    lineContent = {};
-    pos = Position();
-}
-
-ParseError::ParseError(const ParseError &pe) {
-    operator=(pe);
-}
-
-ParseError::ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, vector<string> lineContent, string comment, bool warning, bool aggressive) {
-    this->type = type;
-    this->message = string(ErrorTypeString[type])+": "+comment;
-    this->fileName = fileName;
-    this->lineContent = {lineContent};
-    this->pos = Position(lStart, lEnd, colStart, colEnd);
-    this->reported = false;
-    this->warning = warning;
-    this->aggressive = aggressive;
-}
-
-ParseError::ParseError(ErrorType type, Token &token, string fileName, string lineContent, string comment, bool warning, bool aggressive) {
-    this->type = type;
-    this->pos = Position(token.line, token.line, token.start, token.end);
-    this->message = string(ErrorTypeString[type])+": "+comment;
-    this->fileName = fileName;
-    this->lineContent = {lineContent};
-    this->reported = false;
-    this->warning = warning;
-    this->aggressive = aggressive;
-}
-
-void ParseError::operator=(const ParseError &pe) {
-    reported = pe.reported;
-    warning = pe.warning;
-    aggressive = pe.aggressive;
-    type = pe.type;
-    message = pe.message;
-    fileName = pe.fileName;
-    lineContent = pe.lineContent;
-    pos = pe.pos;
-}
-
-void ParseError::free() {
-    message.clear();
-    fileName.clear();
-    lineContent.clear();
-}
-
-void ParseError::report() {
-    if ((aggressive && !fux.options.aggressiveErrors) || (warning && !fux.options.warnings) || reported) 
-        return;
-
-    if (fux.options.werrors)
-        warning = false;
-
-    stringstream errorMessage;
-    
-    errorMessage << SC::BOLD << fileName << ":" << pos.lStart << ":" << pos.colStart << ": ";
-    
-    if (warning)
-        errorMessage << CC::MAGENTA << "warning: ";
-    else
-        errorMessage << CC::RED << "error: ";
-    
-    errorMessage 
-        << CC::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
-        << SC::RESET << lineContent.at(0) << "\n\t";
-    
-    // TODO: correct position for multiple lines (see Position class)
-    size_t i;
-    for (i = 0; i < (pos.colStart - 1); i++) // -1 so arrow points at exact position
-        errorMessage << " ";
-    errorMessage << CC::GREEN << SC::BOLD;
-    while (i++ < pos.colEnd)
-        errorMessage << "^";
-    errorMessage << CC::DEFAULT << SC::RESET << endl;
-    
-    cerr << errorMessage.str();
-    reported = true;
-}
-
-// * ErrorManager
 
 ErrorManager::~ErrorManager() {
     fileName.clear();
@@ -169,6 +77,10 @@ void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string
 
 void ErrorManager::createWarning(ErrorType type, Token &token, string comment, bool aggressive) {
     addError(ParseError(type, token, fileName, {lines[token.line - 1]}, comment, true, aggressive));
+}
+
+void ErrorManager::addNote(size_t line, size_t col, string comment) {
+    errors.back().addNote(ErrorNote(comment, lines, line, line, col, col));
 }
 
 void ErrorManager::reportAll() {
