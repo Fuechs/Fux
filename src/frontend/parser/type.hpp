@@ -15,6 +15,16 @@
 #include "../lexer/token.hpp"
 #include "../ast/expr.hpp"
 
+// string representations of Access elements
+const vector<string> AccessString = {
+    "fixed",
+    "final",
+    "constant",
+    "safe",
+    "intern",
+    "public",
+};
+
 class FuxType {
 public:
     // Possible kinds of data types -- Mapped to respective keyword value
@@ -57,7 +67,7 @@ public:
     ~FuxType();
 
     FuxType &operator=(const FuxType &copy);
-    bool operator==(const FuxType &comp);
+    bool operator==(const FuxType &comp) const;
     bool operator!();
 
     Kind kind;
@@ -79,45 +89,15 @@ public:
     // shorthand for array types
     static FuxType createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize = nullExpr);    
     
-    // get -> | : + pointer depth for this type 
+    // return FuxType::Kind as string
+    string kindAsString();
+    // return storage modifier + pointer depth for this type
     string prefix();
-    // get typename + accesslist for this type 
+    // get : | -> + typename for this type
     string suffix();
-    // get prefix + suffix for this type
-    string str();
+    // get prefix + name + suffix for this type
+    // name = symbol
+    string str(const string &name);
     // check wether type is valid
     bool valid();
-
-private:
-    // string representations of enum elements
-    const vector<string> KindString = {
-        "", // custom, unreachable
-        "void",
-        "i8",
-        "u8",
-        "c8",
-        "i16",
-        "u16",
-        "c16",
-        "i32",
-        "u32",
-        "f32",
-        "i64",
-        "u64",
-        "f64",
-        "str",
-        "var",
-        "auto",
-        "no_type"
-    };
-
-
-    const vector<string> AccessString = {
-        "fixed",
-        "final",
-        "constant",
-        "safe",
-        "intern",
-        "public",
-    };
 };

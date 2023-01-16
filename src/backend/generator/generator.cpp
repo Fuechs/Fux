@@ -72,6 +72,8 @@ Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
     return fuxLLVM->builder->CreateCall(calleeFunc, argList, "calltmp");
 } 
 
+Value *AssignmentExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) {
@@ -115,8 +117,8 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     // FIXME: This does not work as expected, 
     // body of the function is missing in the IR
     Value *retVal;
-    for (ExprPtr &expr : body)
-        retVal = expr->codegen(fuxLLVM);
+    for (StmtPtr &stmt : body)
+        retVal = stmt->codegen(fuxLLVM);
     
     if (func->getReturnType()->isVoidTy()) {
         fuxLLVM->builder->CreateRetVoid();

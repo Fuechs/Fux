@@ -105,12 +105,28 @@ class CallExprAST : public ExprAST {
 public:
     CallExprAST(const string &callee, ExprList &args)
     : callee(callee), args(std::move(args)) {}
-    ~CallExprAST() override { callee.clear(); }
+    ~CallExprAST() override;
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
     void debugPrint() override;
    
+    Position pos = Position();
+};
+
+class AssignmentExprAST : public ExprAST {
+    ExprPtr dest;
+    ExprPtr value;
+    bool constant;
+
+public:
+    AssignmentExprAST(ExprPtr &dest, ExprPtr &value, const bool constant = false)
+    : dest(std::move(dest)), value(std::move(value)), constant(constant) {}
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    StmtPtr analyse() override;
+    void debugPrint() override;
+
     Position pos = Position();
 };
 
@@ -195,13 +211,13 @@ typedef unique_ptr<PrototypeAST> ProtoPtr;
 
 class FunctionAST : public StmtAST {
     ProtoPtr proto;
-    ExprList body;
+    StmtList body;
 
 public:
-    FunctionAST(FuxType type, const string &name, ArgMap args, ExprList &body)
+    FunctionAST(FuxType type, const string &name, ArgMap args, StmtList &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
-    FunctionAST(ProtoPtr proto, ExprList &body)
+    FunctionAST(ProtoPtr proto, StmtList &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;

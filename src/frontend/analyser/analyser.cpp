@@ -25,6 +25,8 @@ StmtPtr LogicalExprAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr CallExprAST::analyse() { return std::move(nullStmt); }
 
+StmtPtr AssignmentExprAST::analyse() { return std::move(nullStmt); }
+
 StmtPtr VariableDeclAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr PutsCallAST::analyse() { return std::move(nullStmt); }

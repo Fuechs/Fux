@@ -27,7 +27,7 @@ FuxType &FuxType::operator=(const FuxType &copy) {
     return *this;
 }
 
-bool FuxType::operator==(const FuxType &comp) {
+bool FuxType::operator==(const FuxType &comp) const {
     return (kind == comp.kind 
             && access == comp.access 
             && array == comp.array 
@@ -48,44 +48,49 @@ FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessL
     return FuxType(kind, pointerDepth, accessList, true, arraySize, name);
 }
 
-string FuxType::prefix() {
-    switch (pointerDepth) {
-        case -1:    return " -> ";
-        case 0:     return ": ";
-        default: {
-            stringstream ss;
-            ss << ": ";
-            for (size_t pd = pointerDepth; pd --> 0;)
-                ss << "*";
-            ss << " ";
-            return ss.str();
-        }
+string FuxType::kindAsString() {
+    switch (kind) {
+        case CUSTOM:    return "'"+name+"'";
+        case AUTO:      return "auto";
+        case NO_TYPE:   return "no_type";
+        default:        return TokenTypeValue[kind];
     }
+}
+
+string FuxType::prefix() {
+    stringstream ss;
+    
+    for (size_t i = 0; i < access.size(); i++) 
+        if (access[i] != PUBLIC)
+            ss << access[i] << " ";
+    
+    for (size_t pd = pointerDepth; pd --> 0;)
+        ss << "*";
+    
+    return ss.str();
 }
 
 string FuxType::suffix() {
     stringstream ss;
-
-    if (kind == CUSTOM)
-        ss << "'" << name << "'";
-    else
-        ss << KindString[kind];
-        
+    
+    switch (pointerDepth) {
+        case -1:    ss << " -> "; break;
+        default:    ss << ": "; break;
+    }
+    
+    ss << kindAsString();   
+    
     if (array) {
         ss << "[";
         if (arraySize != nullExpr)
             arraySize->debugPrint();
         ss << "]";
     }
-        
-    ss << " (";
-    for (Access &a : access)
-        ss << AccessString[a] << ",";
-    ss << ") ";
+    
     return ss.str();
 }
 
-string FuxType::str() { return prefix() + suffix(); }
+string FuxType::str(const string& name) { return prefix() + name + suffix(); }
 
 bool FuxType::valid() {
     if (find(access, INTERN) != access.end() && find(access, SAFE) != access.end())

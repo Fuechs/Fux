@@ -91,16 +91,26 @@ void LogicalExprAST::debugPrint() {
  }
 
 void CallExprAST::debugPrint() { 
-    cout << callee << "( ";
+    cout << callee << "(";
     for (ExprPtr &element : args) {
         element->debugPrint();
-        cout << ", ";
+        if (element != args.back())
+            cout << ", ";
     }
     cout << ")";
 }
 
+void AssignmentExprAST::debugPrint() {  
+    dest->debugPrint();
+    if (constant)
+        cout << " === ";
+    else
+        cout << " = ";
+    value->debugPrint();
+}
+
 void VariableDeclAST::debugPrint() {
-    cout << symbol << type.str();
+    cout << type.str(symbol);
     if (value) {
         cout << " = ";
         value->debugPrint();
@@ -122,21 +132,22 @@ void IfElseAST::debugPrint() {
 }
 
 void PrototypeAST::debugPrint() {
-    cout << name << "( ";
-    for (auto &param : args)
-        cout << param.second.suffix() << ", ";
-    cout << ")" << type.str();
+    cout << type.prefix() << name << "(";
+    for (auto &param : args) {
+        cout << param.second.str(param.first);
+        if (param != *--args.end())
+            cout << ", ";
+    }
+    cout << ")" << type.suffix();
 }
 
 void FunctionAST::debugPrint() { 
-    cout << proto->getName() << "( ";
-    for (auto &param : proto->getArgs()) 
-        cout << param.first << param.second.str() << ", ";
-    cout << ")"<< proto->getType().str() << "{\n";
-    for (ExprPtr &stmt : body) {
+    proto->debugPrint();
+    cout << " {\n";
+    for (StmtPtr &stmt : body) {
         cout << "\t";
         stmt->debugPrint();
-        cout << "\n";
+        cout << ";\n";
     }
     cout << "}";
 }

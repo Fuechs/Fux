@@ -24,11 +24,15 @@ Position &Position::operator=(Position pos) {
 
 NumberExprAST::~NumberExprAST() { delete value; }
 
-PrototypeAST::~PrototypeAST() { name.clear(); }
+CallExprAST::~CallExprAST() { callee.clear(); }
+
+PrototypeAST::~PrototypeAST() { 
+    name.clear(); 
+    args.clear();
+}
+
 string PrototypeAST::getName() { return name; }
 ArgMap PrototypeAST::getArgs() { return args; }
 FuxType PrototypeAST::getType() { return type; }
 
-void RootAST::addSub(StmtPtr &sub) {
-    program.push_back(std::move(sub));
-}
+void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }

@@ -63,6 +63,7 @@ int main(int argc, char **argv) {
 
     return result; // ! program ends here
 
+    // RootPtr root = make_unique<RootAST>();
     // createTestAST(root);    
     // root->debugPrint();
 
@@ -215,7 +216,7 @@ int repl() {
 // create AST to test the generator without parser
 void createTestAST(RootPtr &root) {
     // i32 mod(i32);
-    ArgMap eArgs;
+    ArgMap eArgs = ArgMap();
     eArgs["a"] = FuxType(FuxType::I32);
     StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::I32), "mod", eArgs);
     root->addSub(emptyF);
@@ -224,17 +225,19 @@ void createTestAST(RootPtr &root) {
     //      %addtmp = add i32 %x, %y
     //      ret i32 %addtmp
     // }
+
     ExprPtr arg1 = make_unique<VariableExprAST>("x");
     ExprPtr arg2 = make_unique<VariableExprAST>("y");
     ExprPtr binOp = make_unique<BinaryExprAST>('+', arg1, arg2);
+    StmtPtr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I32), binOp);
 
     ExprList callArgs;
-    ExprPtr num = make_unique<VariableExprAST>("addtmp");
+    ExprPtr num = make_unique<VariableExprAST>("x");
     callArgs.push_back(std::move(num));
     ExprPtr eCall = make_unique<CallExprAST>("mod", callArgs);
 
-    ExprList mBody;
-    mBody.push_back(std::move(binOp));
+    StmtList mBody;
+    mBody.push_back(std::move(decl));
     mBody.push_back(std::move(eCall));
 
     ArgMap args;
