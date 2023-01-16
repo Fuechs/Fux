@@ -215,8 +215,7 @@ class RootAST : public StmtAST {
     StmtList program;
 
 public:
-    RootAST() : program(StmtList()) {}
-        
+    RootAST() : program(StmtList()) {}        
     
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;

@@ -32,6 +32,7 @@ public:
     // check if file has errors
     bool hasErrors();
 
+    // return file size in bytes
     // from https://stackoverflow.com/a/32286531
     size_t getFileSize();
     
@@ -40,6 +41,7 @@ public:
     string fileDir;
 
     RootPtr root;
+    StmtPtr analysed;
     
 private:
     ErrorManager *error;
