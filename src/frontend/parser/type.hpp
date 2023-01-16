@@ -70,18 +70,6 @@ public:
     bool operator==(const FuxType &comp) const;
     bool operator!();
 
-    Kind kind;
-    /**
-     * -1 --> Reference
-     *  0 --> Value
-     *  N --> Pointer with depth of N 
-     */
-    int64_t pointerDepth; 
-    AccessList access;
-    string name; // string value of the type; relevant for user defined types
-    bool array; // is an array type
-    ExprPtr arraySize; // relevant for array types; nullExpr -> no size
-
     // shorthand for normal types
     static FuxType createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name);
     // shorthand for reference types
@@ -100,4 +88,16 @@ public:
     string str(const string &name);
     // check wether type is valid
     bool valid();
+    
+    Kind kind;
+    /**
+     * -1 --> Reference
+     *  0 --> Value
+     *  N --> Pointer with depth of N 
+     */
+    int64_t pointerDepth; 
+    AccessList access;
+    string name; // string value of the type; relevant for user defined types
+    bool array; // is an array type
+    ExprPtr arraySize; // relevant for array types; nullExpr -> no size
 };
