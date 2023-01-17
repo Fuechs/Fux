@@ -27,7 +27,9 @@ RootPtr Parser::parse() {
 }
 
 StmtPtr Parser::parseStmt() {
-    return parseIfElseStmt();
+    StmtPtr stmt = parseIfElseStmt();
+    expect(SEMICOLON);
+    return std::move(stmt);
 }
 
 StmtPtr Parser::parseIfElseStmt() {
@@ -90,16 +92,30 @@ StmtPtr Parser::parseVariableDeclStmt() {
     } else if (current->type == EQUALS || current->type == TRIPLE_EQUALS) { // assignment 
         --current; // get back to identifier
         return parseAssignmentExpr();
-    } else { /* TODO: add error or do something else */ }
+    } else
+        return parseExpr();
 
     ExprPtr value = parseExpr();
-    expect(SEMICOLON);
     return make_unique<VariableDeclAST>(symbol, type, value);
 }
 
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
 
-ExprPtr Parser::parseAssignmentExpr() { return parseMemberExpr(); }
+ExprPtr Parser::parseAssignmentExpr() { 
+    ExprPtr dest = parseMemberExpr();
+
+    if (check(EQUALS)) {
+        ExprPtr value = parseExpr();
+        return make_unique<AssignmentExprAST>(dest, value);
+    } 
+    
+    if (check(TRIPLE_EQUALS)) {
+        ExprPtr value = parseExpr();
+        return make_unique<AssignmentExprAST>(dest, value, true);
+    }
+    
+    return std::move(dest);
+}
 
 ExprPtr Parser::parseMemberExpr() { return parseCallExpr(); }
 
