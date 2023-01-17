@@ -57,11 +57,13 @@ int main(int argc, char **argv) {
 
     mainFile->parse();
     RootPtr root = std::move(mainFile->root);
-    if (mainFile->hasErrors())
+    if (mainFile->hasErrors()) {
+        delete mainFile;
         goto end;
+    }
     root->debugPrint();
 
-    return result; // ! program ends here
+    // return result; // ! program ends here
 
     // RootPtr root = make_unique<RootAST>();
     // createTestAST(root);    
@@ -195,7 +197,8 @@ int repl() {
     string input = "";
     for (;;) {
         cout << "> ";
-        getline(cin, input);
+        // getline(cin, input);
+        input = "1 - - 1";
 
         if (input.empty()) 
             continue;
@@ -205,9 +208,19 @@ int repl() {
         ErrorManager *error = new ErrorManager("<stdin>", {input});
         Parser *parser = new Parser(error, "<stdin>", input, true);
         RootPtr root = parser->parse();
-        root->debugPrint();
-        error->panic();
-        // TODO: generate and run ...
+        // Analyser *analyser = new Analyser(error, root);
+        // StmtPtr analysed = analyser->analyse();
+        delete parser;
+        // delete analyser;
+
+        if (error->hasErrors())
+            error->panic();
+        else {
+            root->debugPrint();
+            // TODO: generate and run ...
+        }
+
+        break;
     }
 
     return result;

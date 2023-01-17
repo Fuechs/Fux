@@ -53,6 +53,12 @@ void NumberExprAST::debugPrint() {
 
 void VariableExprAST::debugPrint() { cout << name; }
 
+void MemberExprAST::debugPrint() {
+    base->debugPrint();
+    cout << ".";
+    member->debugPrint();
+}
+
 void BinaryExprAST::debugPrint() {
     cout << "(";
     LHS->debugPrint();

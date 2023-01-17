@@ -36,6 +36,8 @@ Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
     return V;
 }
 
+Value *MemberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {
     Value *L = LHS->codegen(fuxLLVM);
     Value *R = RHS->codegen(fuxLLVM);

@@ -17,6 +17,8 @@ StmtPtr NumberExprAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr VariableExprAST::analyse() { return std::move(nullStmt); }
 
+StmtPtr MemberExprAST::analyse() { return std::move(nullStmt); } 
+
 StmtPtr BinaryExprAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr ComparisonExprAST::analyse() { return std::move(nullStmt); }

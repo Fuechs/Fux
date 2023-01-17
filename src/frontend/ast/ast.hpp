@@ -53,6 +53,21 @@ public:
     Position pos = Position();
 };
 
+class MemberExprAST : public ExprAST {
+    ExprPtr base;
+    ExprPtr member;
+
+public:
+    MemberExprAST(ExprPtr &base, ExprPtr &member) 
+    : base(std::move(base)), member(std::move(member)) {}
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    StmtPtr analyse() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
 class BinaryExprAST : public ExprAST {
     char op;
     ExprPtr LHS, RHS;

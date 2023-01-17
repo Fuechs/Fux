@@ -159,10 +159,19 @@ ExprPtr Parser::parseUnaryExpr() { return nullptr; }
 
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
+    // TODO: unary epxr
     switch (that.type) {
         case NUMBER:        return make_unique<NumberExprAST, _i64>(stoll(that.value));
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
-        case IDENTIFIER:    return make_unique<VariableExprAST>(that.value);
+        case IDENTIFIER:    {
+            ExprPtr primary = make_unique<VariableExprAST>(that.value);
+
+            if (!check(DOT)) 
+                return primary;
+            
+            ExprPtr member = parsePrimaryExpr(); 
+            return make_unique<MemberExprAST>(primary, member);
+        }
         case LPAREN: {
             ExprPtr expr = parseExpr();
             expect(RPAREN, MISSING_BRACKET);
@@ -174,23 +183,24 @@ ExprPtr Parser::parsePrimaryExpr() {
                 << "unexpected token " << TokenTypeString[that.type]
                 << " '" << that.value << "' while parsing primary expression";
             error->createError(UNEXPECTED_TOKEN, that, message.str());
-            return nullptr;
+            return parsePrimaryExpr();
         }
     }
 }
 
 FuxType Parser::parseType(_i64 pointerDepth, FuxType::AccessList access) {
-    if (current->isType()) {
-        Token typeToken = eat();
-        if (check(ARRAY_BRACKET))
-            return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
-        else if (check(LBRACKET)) {
-            ExprPtr size = parseExpr(); 
-            expect(RBRACKET, MISSING_BRACKET);
-            return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value, size);
-        } else
-            return FuxType::createStd((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
-    }
+    if (!current->isType()) 
+        return FuxType(); // = NO_TYPE; will be checked by analyser
+    
+    Token typeToken = eat();
+    if (check(ARRAY_BRACKET))
+        return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
+    else if (check(LBRACKET)) {
+        ExprPtr size = parseExpr(); 
+        expect(RBRACKET, MISSING_BRACKET);
+        return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value, size);
+    } else
+        return FuxType::createStd((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
     
     return FuxType();
 }
@@ -217,19 +227,7 @@ Token Parser::expect(TokenType type, ErrorType errType) {
     return curTok;
 }
 
-Token Parser::peek(size_t steps) {
-    size_t old = steps;
-
-    while (steps --> 0)
-        ++current;
-
-    Token ret = *current;
-
-    while (steps ++< old)
-        --current;
-
-    return ret;
-}
+Token Parser::peek(size_t steps) { return *(current + steps); }
 
 bool Parser::check(TokenType type) {
     if (current->type != type) 
@@ -239,6 +237,4 @@ bool Parser::check(TokenType type) {
     return true;
 }
 
-constexpr bool Parser::notEOF() { 
-    return current->type != _EOF;
-}
+constexpr bool Parser::notEOF() { return current->type != _EOF; }
