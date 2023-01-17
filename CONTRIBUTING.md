@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-15
+> Last updated on 2023-01-17
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -48,7 +48,7 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 - Verify that the modified code is working as expected.
 - Add yourself to the [authors list](./AUTHORS.md) using [this template](#author-template)[^5].
 - Create a pull request to the development branch[^3][^4].
-- Give us your agreement that your code will be licensed unter the [Apache License v2.0 with LLVM Expcetions](./LICENSE).
+- With contributing, you agree to the terms regarding contributions[^6] defined in the [Apache License v2.0 with LLVM Exceptions](./LICENSE).
 - Your pull request will be reviewed, and if accepted merged.
 
 [^1]: A few lines of code, spelling errors, additional information in markup / text / comments.
@@ -60,6 +60,8 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 [^4]: This does not apply to patches for released versions.
 
 [^5]: This step is optional. The authors list is just for credit.
+
+[^6]: This includes the terms `1`, `2`, `3`, `5`, `6` & `8`. 
 
 ## Rules
 
@@ -101,7 +103,7 @@ C++ files should start with the following (doxygen generated) comment:
  * @version X.X
  * @date yyyy-mm-dd 
  * 
- * @copyright Copyright (c) 2020-yyyy, Fux programming language and authors. All rights reserved.
+ * @copyright Copyright (c) 2020-yyyy, Fuechs and Contributors. All rights reserved.
  * 
  */
 ```

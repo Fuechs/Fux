@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2023-01-16
  * 
- * @copyright Copyright (c) 2020-2023, Fux programming language and authors. All rights reserved.
+ * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
  */
 

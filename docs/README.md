@@ -1,7 +1,7 @@
 # Design Documentation
 
 <!-- 
-    Copyright (c) 2020-2023, Fuechs. 
+    Copyright (c) 2020-2023, Fuechs and Contributors. 
     All rights reserved.
 -->
 
