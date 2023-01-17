@@ -125,4 +125,17 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     
     llvm::verifyFunction(*str_add_char);
     } // end of Fux_str_add_char
+
+    { // define i8* Fux_str_get_buffer(%str*)
+    FunctionType *FT = FunctionType::get(builder->getInt8PtrTy(), {ptr}, false);
+    str_get_buffer = Function::Create(FT, Function::ExternalLinkage, "Fux_str_get_buffer", *module);
+    BasicBlock *entry = BasicBlock::Create(*context, "entry", str_get_buffer);
+
+    builder->SetInsertPoint(entry);
+    Value *buffer_ptr = builder->CreateGEP(str, str_get_buffer->getArg(0), {builder->getInt64(0), builder->getInt32(0)}, "buffer_ptr");
+    Value *buffer = builder->CreateLoad(builder->getInt8PtrTy(), buffer_ptr, "buffer");
+    builder->CreateRet(buffer);
+
+    llvm::verifyFunction(*str_get_buffer);
+    } // end of Fux_str_get_buffer
 }

@@ -31,4 +31,5 @@ public:
     Function *str_delete = nullptr;
     Function *str_resize = nullptr;
     Function *str_add_char = nullptr;
+    Function *str_get_buffer = nullptr;
 };

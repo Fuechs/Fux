@@ -40,9 +40,7 @@ Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
             // *object = str();
             fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_create_default, {object});
             // *buffer: c8 = object.buffer;
-            Value *buffer_ptr = fuxLLVM->builder->CreateGEP(fuxLLVM->fuxStr->str, object, 
-                {fuxLLVM->builder->getInt64(0), fuxLLVM->builder->getInt32(0)});
-            Value *buffer = fuxLLVM->builder->CreateLoad(fuxLLVM->builder->getInt8PtrTy(), buffer_ptr);
+            Value *buffer = fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_get_buffer, {object});
             // *char_array: c8 = this->__str.c_str();
             Value *char_array = fuxLLVM->builder->CreateGlobalString(__str); 
             // resize(object, size + 1);

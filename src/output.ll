@@ -80,6 +80,13 @@ grow_close:                                       ; preds = %grow_begin, %entry
   ret void
 }
 
+define ptr @Fux_str_get_buffer(ptr %0) {
+entry:
+  %buffer_ptr = getelementptr %str, ptr %0, i64 0, i32 0
+  %buffer = load ptr, ptr %buffer_ptr, align 8
+  ret ptr %buffer
+}
+
 ; Function Attrs: nounwind
 declare i32 @puts(ptr nocapture) #0
 
