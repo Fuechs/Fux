@@ -50,16 +50,21 @@ private:
     StmtPtr parseVariableDeclStmt();
 
     ExprPtr parseExpr();
-    // <symbol> = <value>;
+    // <symbol> = <value>
     ExprPtr parseAssignmentExpr();
-    ExprPtr parseMemberExpr();
+    // <callee> ( <arguments> )
     ExprPtr parseCallExpr();
+    // ||, &&
     ExprPtr parseLogicalExpr();
+    // ==, !=, <, <=, >, >=
     ExprPtr parseComparisonExpr();
     // +, -
     ExprPtr parseAdditiveExpr();
     // *, /, %
     ExprPtr parseMultiplicativeExpr();
+    // ^
+    ExprPtr parsePowerExpr();
+    // -
     ExprPtr parseUnaryExpr();
     // identifier, value, sub expr
     // x         , 1    , (...)

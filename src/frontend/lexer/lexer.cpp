@@ -721,5 +721,5 @@ void Lexer::checkKeyword() {
     auto it = find(TokenTypeValue.begin(), TokenTypeValue.end(), currentToken.value);
   
     if (it != TokenTypeValue.end())
-        currentToken.value = TokenTypeValue[it - TokenTypeValue.begin()];
+        currentToken.type = (TokenType) (it - TokenTypeValue.begin());
 }

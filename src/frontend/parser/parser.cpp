@@ -58,10 +58,9 @@ StmtPtr Parser::parsePutsStmt() {
     if (current->type == KEY_PUTS) {
         eat();
         ExprPtr arg = parseExpr();
-        call = make_unique<PutsCallAST>(arg); // just parse expression for now
-        expect(SEMICOLON);
+        call = make_unique<PutsCallAST>(arg);
     } else 
-        call = parseExpr(); // ! skipping variabledeclstmt here
+        call = parseVariableDeclStmt();
 
     return call;
 }
@@ -102,7 +101,7 @@ StmtPtr Parser::parseVariableDeclStmt() {
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
 
 ExprPtr Parser::parseAssignmentExpr() { 
-    ExprPtr dest = parseMemberExpr();
+    ExprPtr dest = parseCallExpr();
 
     if (check(EQUALS)) {
         ExprPtr value = parseExpr();
@@ -116,8 +115,6 @@ ExprPtr Parser::parseAssignmentExpr() {
     
     return std::move(dest);
 }
-
-ExprPtr Parser::parseMemberExpr() { return parseCallExpr(); }
 
 ExprPtr Parser::parseCallExpr() { return parseAdditiveExpr(); } // ! skipping logicalexpr here
 
@@ -159,19 +156,30 @@ ExprPtr Parser::parseAdditiveExpr() {
 }
 
 ExprPtr Parser::parseMultiplicativeExpr() {
-    ExprPtr LHS = parsePrimaryExpr();
+    ExprPtr LHS = parsePowerExpr();
 
     while (current->type == ASTERISK || current->type == SLASH || current->type == PERCENT) {
         char op = current->value.front(); // get '*', '/', '%' 
         ++current;
-        ExprPtr RHS = parsePrimaryExpr();
+        ExprPtr RHS = parsePowerExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
     return LHS;
 }
 
-ExprPtr Parser::parseUnaryExpr() { return nullptr; }
+ExprPtr Parser::parsePowerExpr() { 
+    ExprPtr LHS = parseUnaryExpr();
+
+    while (check(CARET)) {
+        ExprPtr RHS = parseUnaryExpr();
+        LHS = make_unique<BinaryExprAST>('^', LHS, RHS);
+    }    
+
+    return LHS;
+}
+
+ExprPtr Parser::parseUnaryExpr() { return parsePrimaryExpr(); }
 
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
@@ -217,8 +225,6 @@ FuxType Parser::parseType(_i64 pointerDepth, FuxType::AccessList access) {
         return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value, size);
     } else
         return FuxType::createStd((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
-    
-    return FuxType();
 }
 
 Token Parser::eat() {
