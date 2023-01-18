@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-17
+> Last updated on 2023-01-18
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -84,9 +84,7 @@ Read our [Security Policy](./SECURITY.md).
 
 You can get familiar with the file structure in the [`src/`](./src) folder.
 
-- [Naming](#naming)
-- [Space](#space)
-- [Types](#types)
+- [Code](#code)
 - [Using Namespaces](#using-namespaces)
 - [Using Licensed Code](#using-licensed-code)
 - [LLVM IR](#llvm-ir)
@@ -108,97 +106,24 @@ C++ files should start with the following (doxygen generated) comment:
  */
 ```
 
-#### Naming
+#### Code
 
 - Class, function and variable names are in CamelCase. For classes, the first letter is capitalized.
 - Boolean variables can have a preceding `is`.
-
-``` cpp
-void doSomething();
-bool isRunning;
-size_t id;
-class SomeClass;
-```
-
-#### Space
-
 - One tab should be equivalent to 4 spaces.
-- The code should not include any unnecessary indentation or spaces. See the code below.
 - If possible, you can leave out code blocks.
 
 ```cpp
-// Sometimes the following style in functions or loops is prefered.
-// Not this:
-if (isRunning) {
-    // do stuff
-}
-
-// This:
-if (!isRunning)
-    return; // or break, continue, ...
-
-// do stuff
-
-// leave out code blocks 
 for (...)
     for (...)
-        return;
+        if (...)
 ```
 
 - If functions just have on short statement, it is ok to define everything in one line.
 
 ```cpp
-// please note that this is just an example
-int add(int x, int y) { return x + y; }
-
-int main(int argc, char **argv) {
-    int result = add(argc, 2);
-    return result;
-}
+bool someCheck() { return a == b; }
 ```
-
-- When creating a class, the header file should only include the declaration with comments describing individual elements (There are some exceptions to this, e.g. small classes like Token).
-- If no body is required, constructors can be defined in the header file (using `: param(param), ... {}`) .
-- The definitions should be in the same order as the declarations in the header file.
-- The layout is as follows:
-
-```
-class ... 
-    public ...
-        enum, typedef, etc.
-        Constructors
-        Destructor
-        Operators
-        Functions
-        Variables
-    private ...
-        Variables
-        Functions
-        ...
-```
-
-```cpp
-// someclass.hpp
-class SomeClass {
-public:
-    SomeClass();
-    ~SomeClass();
-
-    string getName();
-
-    string name;
-};
-
-// someclass.cpp
-
-SomeClass::SomeClass() { ... }
-
-SomeClass::~SomeClass() { ... }
-
-string SomeClass::getName() { ... }
-```
-
-#### Types
 
 - For any unsigned sizes the `size_t` type should be used.
 
@@ -210,23 +135,9 @@ size_t id;
 - The same goes for dynamic pointers, which end with `Ptr`.
 
 ```cpp
-typedef vector<Type> TypeList;
 typedef vector<SourceFile *> FileList;
 typedef vector<FileList> FileGroups;
-...
-FileList requiredFiles = ...;
-```
-
-- The asterisk denoting pointers should be seperated from the type. (e.g. `Type *`).
-- If possible, References are preferred.
-
-```cpp
-SourceFile *mainFile;
-
-void modifyValue(int &value) { ... }
-
-int myValue = 0;
-modifyValue(myValue);
+typedef unique_ptr<StmtAST> StmtPtr; 
 ```
 
 - (Especially regarding AST classes) Use references in the constructor for dynamic pointers and call `std::move` in the constructor.
@@ -235,6 +146,8 @@ modifyValue(myValue);
 SomeConstructor(ExprPtr &LHS, ExprPtr &RHS)
 : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 ```
+
+- For any further questions regarding the conventions, look at the code in [`src/`](./src/) or create an issue.
 
 #### Using Namespaces
 
