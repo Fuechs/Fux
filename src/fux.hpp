@@ -72,8 +72,10 @@ struct __options_struct {
     string out              = "a.out"; // output binary file
     string version          = "0.1";
     vector<string> libraries = {
-        #ifdef FUX_DARWIN
-            "/usr/local/include/fux/",
+        #if defined(FUX_LINUX)
+            "/usr/include/fux/"
+        #elif defined(FUX_DARWIN)
+            "/usr/local/include/fux/"
         #endif
     }; // library paths
 

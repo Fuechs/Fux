@@ -28,41 +28,62 @@ RootPtr Parser::parse() {
 
 StmtPtr Parser::parseStmt() {
     StmtPtr stmt = parseIfElseStmt();
-    expect(SEMICOLON);
-    return std::move(stmt);
+    if (stmt) // don't throw useless second error 
+        expect(SEMICOLON);
+    return stmt;
+}
+
+StmtPtr Parser::parseFunctionDeclStmt() {
+    return parseBlockStmt();
+}
+
+StmtPtr Parser::parseBlockStmt() {
+    if (check(LBRACE)) {
+        StmtList body;
+        while (!check(RBRACE)) {
+            if (!notEOF()) {
+                error->createError(MISSING_BRACKET, *(current - 1),
+                    "Code block was never closed.");
+                return nullptr; 
+            }
+            body.push_back(parseStmt());
+        }
+        return make_unique<CodeBlockAST>(body);
+    } 
+    
+    return parseIfElseStmt();
 }
 
 StmtPtr Parser::parseIfElseStmt() {
-    StmtPtr stmt;
-
-    if (current->type == KEY_IF) {
+    if (check(KEY_IF)) {
         eat();
         expect(LPAREN, ILLEGAL_BRACKET_MISMATCH);
         ExprPtr condition = parseExpr();
         expect(LPAREN, MISSING_BRACKET);
         StmtPtr thenBody = parseStmt(); 
-        if (current->type == KEY_ELSE) {
-            eat();
+        if (check(KEY_ELSE)) {
             StmtPtr elseBody = parseStmt(); 
-            stmt = make_unique<IfElseAST>(condition, thenBody, elseBody);
+            return make_unique<IfElseAST>(condition, thenBody, elseBody);
         } else
-            stmt = make_unique<IfElseAST>(condition, thenBody);
+            return make_unique<IfElseAST>(condition, thenBody);
     } else
-        stmt = parsePutsStmt();
-
-    return stmt;
+        return parsePutsStmt();
 }
 
 StmtPtr Parser::parsePutsStmt() {
-    StmtPtr call;
-    if (current->type == KEY_PUTS) {
-        eat();
+    if (check(KEY_PUTS)) {
         ExprPtr arg = parseExpr();
-        call = make_unique<PutsCallAST>(arg);
+        return make_unique<PutsCallAST>(arg);
     } else 
-        call = parseVariableDeclStmt();
+        return parseReturnStmt();
+}
 
-    return call;
+StmtPtr Parser::parseReturnStmt() {
+    if (check(KEY_RETURN)) {
+        ExprPtr arg = parseExpr();
+        return make_unique<ReturnCallAST>(arg);
+    } else
+        return parseVariableDeclStmt();
 }
 
 StmtPtr Parser::parseVariableDeclStmt() {
@@ -71,28 +92,42 @@ StmtPtr Parser::parseVariableDeclStmt() {
     // TODO: parse pointer depth
     size_t pointerDepth = 0;
 
-    const string symbol = eat().value;
-    FuxType type = FuxType();
-
-    // TODO: check for this in parseStmt
-    if (check(COLON)) {
-        type = parseType(pointerDepth, access);
-        
-        if (check(EQUALS)) { // =
-            if (!type)
-                type = FuxType(FuxType::AUTO, 0, access);
-        } else if (check(TRIPLE_EQUALS)) { // ===
-            if (!type) {
-                access.push_back(FuxType::CONSTANT);
-                type = FuxType(FuxType::AUTO, pointerDepth, access);
-            } else
-                type.access.push_back(FuxType::CONSTANT);
-        }
-    } else if (current->type == EQUALS || current->type == TRIPLE_EQUALS) { // assignment 
-        --current; // get back to identifier
-        return parseAssignmentExpr();
-    } else
+    if (!check(IDENTIFIER))
         return parseExpr();
+
+    const string symbol = peek(-1).value; // get value from identifier
+    FuxType type = FuxType();
+    
+    if (check(COLON))
+        type = parseType(pointerDepth, access);
+    else if (check(RPOINTER)) { // reference
+        if (pointerDepth > 0)
+            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
+                "given pointer depth will be ignored and a reference parsed instead");
+        type = parseType(-1, access);
+        if (!type) {
+            error->createError(UNEXPECTED_TOKEN, *current++, "expected a type after RPOINTER '->'");
+            error->addNote(peek(-2), "automatic typing is not supported for references yet");
+            return nullptr; // failed statement
+        }
+    } else {
+        --current;
+        return parseExpr();
+    }
+    
+    if (check(EQUALS)) { // =
+        if (!type)
+            type = FuxType(FuxType::AUTO, 0, access);
+    } else if (check(TRIPLE_EQUALS)) { // ===
+        if (!type) {
+            access.push_back(FuxType::CONSTANT);
+            type = FuxType(FuxType::AUTO, pointerDepth, access);
+        } else
+            type.access.push_back(FuxType::CONSTANT);
+    } else {
+        error->createError(UNEXPECTED_TOKEN, *current, "expected an EQUALS '=' or a TRIPLE_EQUALS '===' in variable declaration");
+        return nullptr;
+    }
 
     ExprPtr value = parseExpr();
     return make_unique<VariableDeclAST>(symbol, type, value);
@@ -213,7 +248,7 @@ ExprPtr Parser::parsePrimaryExpr() {
 }
 
 FuxType Parser::parseType(_i64 pointerDepth, FuxType::AccessList access) {
-    if (!current->isType()) 
+    if (!notEOF() || !current->isType()) 
         return FuxType(); // = NO_TYPE; will be checked by analyser
     
     Token typeToken = eat();
@@ -249,13 +284,21 @@ Token Parser::expect(TokenType type, ErrorType errType) {
     return curTok;
 }
 
-Token Parser::peek(size_t steps) { return *(current + steps); }
+Token &Parser::peek(size_t steps) { return *(current + steps); }
 
 bool Parser::check(TokenType type) {
-    if (current->type != type) 
+    if (!notEOF() || current->type != type) 
         return false;
     
     ++current;
+    return true;
+}
+
+bool Parser::check(TokenType type, TokenType type0) {
+    if (current->type != type || peek().type != type0)
+        return false;
+    
+    current += 2;
     return true;
 }
 

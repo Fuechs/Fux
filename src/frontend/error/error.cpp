@@ -83,6 +83,10 @@ void ErrorManager::addNote(size_t line, size_t col, string comment) {
     errors.back().addNote(ErrorNote(comment, lines, line, line, col, col));
 }
 
+void ErrorManager::addNote(Token &token, string comment) {
+    errors.back().addNote(ErrorNote(comment, lines, token.line, token.line, token.start, token.end));
+}
+
 void ErrorManager::reportAll() {
     for (ParseError &error : errors)
         error.report();

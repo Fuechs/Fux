@@ -125,6 +125,8 @@ void IfElseAST::debugPrint() {
     condition->debugPrint();
     cout << ") ";
     thenBody->debugPrint();
+    if (!elseBody)
+        return;
     cout << " else ";
     elseBody->debugPrint();
 }

@@ -38,6 +38,8 @@ public:
 
     // add note to recent ParseError
     void addNote(size_t line, size_t col, string comment = "");
+    // add not to recent ParseError with token position
+    void addNote(Token &tooken, string comment = "");
 
     // report all errors and warnings
     void reportAll();

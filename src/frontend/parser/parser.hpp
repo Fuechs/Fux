@@ -45,11 +45,16 @@ private:
     const bool mainFile;
 
     StmtPtr parseStmt();
+    StmtPtr parseFunctionDeclStmt();
+    StmtPtr parseBlockStmt();
     StmtPtr parseIfElseStmt();
     StmtPtr parsePutsStmt();
+    StmtPtr parseReturnStmt();
     StmtPtr parseVariableDeclStmt();
 
     ExprPtr parseExpr();
+    // <expr>, <expr>, ...
+    ExprPtr parseExprList();
     // <symbol> = <value>
     ExprPtr parseAssignmentExpr();
     // <callee> ( <arguments> )
@@ -78,9 +83,11 @@ private:
     // expect an token
     Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
     // peek to Nth token
-    Token peek(size_t steps = 1);
+    Token &peek(size_t steps = 1);
     // check current token and advance if true
     bool check(TokenType type);
+    // check curret and next token ...
+    bool check(TokenType type, TokenType type0);
 
     // check wether end of file is reached
     constexpr bool notEOF();

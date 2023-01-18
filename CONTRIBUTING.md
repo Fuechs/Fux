@@ -127,7 +127,7 @@ class SomeClass;
 - If possible, you can leave out code blocks.
 
 ```cpp
-// In functions or loops!
+// Sometimes the following style in functions or loops is prefered.
 // Not this:
 if (isRunning) {
     // do stuff

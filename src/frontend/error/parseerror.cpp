@@ -19,6 +19,7 @@ ParseError::ParseError() {
     message = "";
     fileName = "";
     lines = {};
+    notes = {};
     pos = Position();
 }
 
@@ -54,6 +55,7 @@ void ParseError::operator=(const ParseError &pe) {
     message = pe.message;
     fileName = pe.fileName;
     lines = pe.lines;
+    notes = pe.notes;
     pos = pe.pos;
 }
 

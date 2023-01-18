@@ -62,7 +62,7 @@ string FuxType::prefix() {
     
     for (size_t i = 0; i < access.size(); i++) 
         if (access[i] != PUBLIC)
-            ss << access[i] << " ";
+            ss << AccessString[access[i]] << " ";
     
     if (pointerDepth == -1)
         return ss.str();
