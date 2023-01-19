@@ -15,6 +15,8 @@ StmtPtr Analyser::analyse() { return std::move(origin->analyse()); }
 
 StmtPtr NumberExprAST::analyse() { return std::move(nullStmt); }
 
+StmtPtr StringExprAST::analyse() { return std::move(nullStmt); }
+
 StmtPtr VariableExprAST::analyse() { return std::move(nullStmt); }
 
 StmtPtr MemberExprAST::analyse() { return std::move(nullStmt); } 

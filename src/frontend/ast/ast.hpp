@@ -34,8 +34,24 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
     
+    Position pos = Position();
+};
+
+class StringExprAST : public ExprAST {
+    string value;
+
+public:
+    StringExprAST(string &value) : value(value) {}
+    ~StringExprAST();
+
+    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+
     Position pos = Position();
 };
 
@@ -44,10 +60,11 @@ class VariableExprAST : public ExprAST {
 
 public:
     VariableExprAST(const string& name) : name(name) {}
-    ~VariableExprAST() override { name.clear(); }
+    ~VariableExprAST() override;
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -63,6 +80,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -78,6 +96,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -93,6 +112,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override; 
 
     Position pos = Position();
@@ -108,6 +128,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override; 
 
     Position pos = Position();
@@ -124,6 +145,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
    
     Position pos = Position();
@@ -140,6 +162,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -155,13 +178,11 @@ class VariableDeclAST : public StmtAST {
 public:
     VariableDeclAST(string symbol, FuxType type = FuxType(), ExprPtr &value = nullExpr) 
     : symbol(symbol), type(type), value(std::move(value)) {}
-    ~VariableDeclAST() { 
-        symbol.clear(); 
-        delete &value; 
-    }
+    ~VariableDeclAST() override;
     
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
     
     Position pos = Position();
@@ -172,12 +193,12 @@ class PutsCallAST : public StmtAST {
 
 public:
     PutsCallAST(ExprPtr &argument) : argument(std::move(argument)) {}
-    ~PutsCallAST() { delete &argument; }
 
     ExprPtr &getArgument();
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
     
     Position pos = Position();
@@ -191,6 +212,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -207,6 +229,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     Position pos = Position();
@@ -221,6 +244,7 @@ public:
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     void addSub(StmtPtr &sub);
@@ -248,6 +272,7 @@ public:
     
     Function *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
     
     Position pos = Position();
@@ -268,6 +293,7 @@ public:
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;    
 
     Position pos = Position();
@@ -282,6 +308,7 @@ public:
     
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
+    AST getASTType() override;
     void debugPrint() override;
 
     void addSub(StmtPtr &sub);

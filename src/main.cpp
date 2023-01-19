@@ -11,8 +11,8 @@
 
 #include "fux.hpp"
 #include "util/source.hpp"
-#include "util/threading.hpp"
-#include "backend/context/context.hpp"
+// #include "util/threading.hpp"
+// #include "backend/context/context.hpp"
 
 __fux_struct fux;
 
@@ -71,10 +71,10 @@ int main(int argc, char **argv) {
 
     // return result; // ! program ends here
 
-    { // own scope so it can be skipped by goto -- c++ calls destructor at end of scope
-        FuxContext *context = new FuxContext(root);
-        context->run();
-    }
+    // { // own scope so it can be skipped by goto -- c++ calls destructor at end of scope
+    //     FuxContext *context = new FuxContext(root);
+    //     context->run();
+    // }
 
     end:
         return result;

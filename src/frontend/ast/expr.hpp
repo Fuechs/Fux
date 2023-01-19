@@ -20,6 +20,7 @@ public:
     virtual ~ExprAST() {}
     virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
     virtual StmtPtr analyse() = 0;
+    virtual AST getASTType() = 0;
     virtual void debugPrint() = 0;
 
     Position pos = Position();

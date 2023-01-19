@@ -27,8 +27,8 @@ RootPtr Parser::parse() {
 }
 
 StmtPtr Parser::parseStmt() {
-    StmtPtr stmt = parseIfElseStmt();
-    if (stmt) // don't throw useless second error 
+    StmtPtr stmt = parseFunctionDeclStmt();
+    if (stmt && stmt->getASTType() != AST::CodeBlockAST) // don't throw useless errors
         expect(SEMICOLON);
     return stmt;
 }
@@ -222,6 +222,7 @@ ExprPtr Parser::parsePrimaryExpr() {
     switch (that.type) {
         case NUMBER:        return make_unique<NumberExprAST, _i64>(stoll(that.value));
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
+        case STRING:        return make_unique<StringExprAST>(that.value); 
         case IDENTIFIER:    {
             ExprPtr primary = make_unique<VariableExprAST>(that.value);
 
@@ -236,6 +237,7 @@ ExprPtr Parser::parsePrimaryExpr() {
             expect(RPAREN, MISSING_BRACKET);
             return expr;
         }
+        case _EOF: return nullptr;
         default: {        
             stringstream message;
             message 
