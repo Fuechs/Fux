@@ -1,6 +1,6 @@
 # File Structure of `src/`
 
-> Last updated on 2023-01-16
+> Last updated on 2023-01-19
 
 ```
 src
@@ -19,8 +19,9 @@ src
 │   │   ├── fuxstr.cpp - fux string type impl. (llvm ir)
 │   │   └── fuxstr.hpp - fux string type (llvm ir)
 │   ├── generator
+│   │   ├── codegen.cpp - StmtAST::codegen() impl.
 │   │   ├── genarray.hpp - "template" class for array types (llvm ir)
-│   │   ├── generator.cpp - generator & StmtAST::codegen
+│   │   ├── generator.cpp - generator impl.
 │   │   ├── generator.hpp - generator
 │   │   ├── gentype.cpp - Generator::getType & FuxArray impl. (llvm ir)
 │   │   └── wrapper.hpp - custom LLVMWrapper for StmtAST::codegen()
