@@ -69,6 +69,7 @@ You can help resolving issues by implementing fixes ([with these steps](#contrib
 - For any changes regarding code, please create an issue (or use an existing issue) and describe your changes (to get feedback).
 - For any changes to markdown files, please change the "last updated" date at the top if there is one.
 - Follow the conventions for this project.
+- When you're taking over an issue, assign yourself to it.
 
 ### Code of Conduct
 
