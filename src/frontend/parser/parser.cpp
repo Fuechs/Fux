@@ -253,6 +253,7 @@ FuxType Parser::parseType(TypePrefix typePrefix) {
     else if (check(LBRACKET)) {
         ExprPtr size = parseExpr(); 
         expect(RBRACKET, MISSING_BRACKET);
+        // FIXME: array size turns into a nullptr, probably in FuxType::operator=()
         return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value, size);
     } else
         return FuxType::createStd((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);

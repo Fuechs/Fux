@@ -105,7 +105,7 @@ void AssignmentExprAST::debugPrint() {
 }
 
 void VariableDeclAST::debugPrint() {
-    cout << type.str(symbol);
+    type.debugPrint(symbol);
     if (value) {
         cout << " = ";
         value->debugPrint();
@@ -145,13 +145,15 @@ void CodeBlockAST::debugPrint() {
 }
 
 void PrototypeAST::debugPrint() {
-    cout << type.prefix() << name << "(";
+    type.prefix();
+    cout << name << "(";
     for (auto &param : args) {
-        cout << param.second.str(param.first);
+        param.second.debugPrint(param.first);
         if (param != *--args.end())
             cout << ", ";
     }
-    cout << ")" << type.suffix();
+    cout << ")";
+    type.suffix();
 }
 
 void FunctionAST::debugPrint() { 

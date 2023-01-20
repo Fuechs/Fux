@@ -82,12 +82,12 @@ public:
     // return FuxType::Kind as string
     string kindAsString();
     // return storage modifier + pointer depth for this type
-    string prefix();
-    // get : | -> + typename for this type
-    string suffix();
-    // get prefix + name + suffix for this type
+    void prefix();
+    // print : | -> + typename for this type
+    void suffix();
+    // print prefix + name + suffix for this type
     // name = symbol
-    string str(const string &name);
+    void debugPrint(const string &name);
     // check wether type is valid
     bool valid();
     

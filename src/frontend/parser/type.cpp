@@ -71,41 +71,37 @@ string FuxType::kindAsString() {
     }
 }
 
-string FuxType::prefix() {
-    stringstream ss;
-    
-    ss << accessAsString();
+void FuxType::prefix() {
+    cout << accessAsString();
     
     if (pointerDepth == -1)
-        return ss.str();
+        return;
         
     for (size_t pd = pointerDepth; pd --> 0;)
-        ss << "*";
-    
-    return ss.str();
+        cout << "*";
 }
 
-string FuxType::suffix() {
-    stringstream ss;
-    
+void FuxType::suffix() {    
     switch (pointerDepth) {
-        case -1:    ss << " -> "; break;
-        default:    ss << ": "; break;
+        case -1:    cout << " -> "; break;
+        default:    cout << ": "; break;
     }
     
-    ss << kindAsString();   
+    cout << kindAsString();   
     
     if (array) {
-        ss << "[";
+        cout << "[";
         if (arraySize != nullExpr)
             arraySize->debugPrint();
-        ss << "]";
+        cout << "]";
     }
-    
-    return ss.str();
 }
 
-string FuxType::str(const string& name) { return prefix() + name + suffix(); }
+void FuxType::debugPrint(const string& name) {
+    prefix();
+    cout << name;
+    suffix();
+}
 
 bool FuxType::valid() {
     if (find(access, INTERN) != access.end() && find(access, SAFE) != access.end())
