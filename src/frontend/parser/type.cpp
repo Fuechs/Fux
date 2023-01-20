@@ -22,6 +22,7 @@ FuxType &FuxType::operator=(const FuxType &copy) {
     this->kind = copy.kind;
     this->pointerDepth = copy.pointerDepth;
     this->access = copy.access;
+    this->name = copy.name;
     this->array = copy.array;
     this->arraySize = std::move(arraySize);
     return *this;
