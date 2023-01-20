@@ -34,6 +34,13 @@ StmtPtr Parser::parseStmt() {
 }
 
 StmtPtr Parser::parseFunctionDeclStmt() {
+    TypePrefix typePrefix = parseTypePrefix();
+
+    if (check(IDENTIFIER) && *current != LPAREN) {
+        typePrefix.first = true;
+        return parseVariableDeclStmt(typePrefix);
+    }
+    
     return parseBlockStmt();
 }
 
@@ -86,25 +93,33 @@ StmtPtr Parser::parseReturnStmt() {
         return parseVariableDeclStmt();
 }
 
-StmtPtr Parser::parseVariableDeclStmt() {
-    // TODO: parse storage modifiers
-    FuxType::AccessList access = {FuxType::PUBLIC};
-    // TODO: parse pointer depth
-    size_t pointerDepth = 0;
+StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
+    if (typePrefix.first)
+        goto actual;
 
-    if (!check(IDENTIFIER))
-        return parseExpr();
+    typePrefix = parseTypePrefix();
 
+    if (!check(IDENTIFIER)) {
+        if (!typePrefix.first) // check wether a type prefix was actually parsed
+            return parseExpr();
+
+        error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
+        error->addNote(peek(-1), "type prefix found here");
+        return nullptr;
+    }
+
+    actual:
     const string symbol = peek(-1).value; // get value from identifier
     FuxType type = FuxType();
     
     if (check(COLON))
-        type = parseType(pointerDepth, access);
+        type = parseType(typePrefix);
     else if (check(RPOINTER)) { // reference
-        if (pointerDepth > 0)
+        if (typePrefix.second.first > 0)
             error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
                 "given pointer depth will be ignored and a reference parsed instead");
-        type = parseType(-1, access);
+        typePrefix.second.first = -1;
+        type = parseType(typePrefix);
         if (!type) {
             error->createError(UNEXPECTED_TOKEN, *current++, "expected a type after RPOINTER '->'");
             error->addNote(peek(-2), "automatic typing is not supported for references yet");
@@ -117,11 +132,11 @@ StmtPtr Parser::parseVariableDeclStmt() {
     
     if (check(EQUALS)) { // =
         if (!type)
-            type = FuxType(FuxType::AUTO, 0, access);
+            type = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
     } else if (check(TRIPLE_EQUALS)) { // ===
         if (!type) {
-            access.push_back(FuxType::CONSTANT);
-            type = FuxType(FuxType::AUTO, pointerDepth, access);
+            typePrefix.second.second.push_back(FuxType::CONSTANT);
+            type = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
         } else
             type.access.push_back(FuxType::CONSTANT);
     } else {
@@ -134,6 +149,8 @@ StmtPtr Parser::parseVariableDeclStmt() {
 }
 
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
+
+ExprPtr Parser::parseExprList() { return nullptr; }
 
 ExprPtr Parser::parseAssignmentExpr() { 
     ExprPtr dest = parseCallExpr();
@@ -151,39 +168,18 @@ ExprPtr Parser::parseAssignmentExpr() {
     return std::move(dest);
 }
 
-ExprPtr Parser::parseCallExpr() { return parseAdditiveExpr(); } // ! skipping logicalexpr here
+ExprPtr Parser::parseCallExpr() { return parseLogicalExpr(); } 
 
-ExprPtr Parser::parseLogicalExpr() {
-    ExprPtr LHS = parseComparisonExpr();
+ExprPtr Parser::parseLogicalExpr() { return parseComparisonExpr(); }
 
-    while (current->type == AND || current->type == OR) {
-        TokenType logical = eat().type;
-        ExprPtr RHS = parseComparisonExpr();
-        LHS = make_unique<LogicalExprAST>(logical, LHS, RHS);
-    }
-
-    return LHS;
-}
-
-ExprPtr Parser::parseComparisonExpr() {
-    ExprPtr LHS = parseExpr();
-
-    while (current->type >= EQUALS_EQUALS && current->type <= GTEQUALS) {
-        TokenType comp = eat().type;
-        ExprPtr RHS = parseExpr();
-        LHS = make_unique<ComparisonExprAST>(comp, LHS, RHS);
-    }
-
-    return LHS;
-} 
+ExprPtr Parser::parseComparisonExpr() { return parseAdditiveExpr(); }
 
 ExprPtr Parser::parseAdditiveExpr() {
     ExprPtr LHS = parseMultiplicativeExpr();
 
     while (current->type == PLUS || current->type == MINUS) {
-        char op = current->value.front(); // get '+' or '-' 
-        ++current;
-        ExprPtr RHS = parseMultiplicativeExpr();
+        char op = eat().value.front(); // get '+' or '-' 
+        ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -193,10 +189,9 @@ ExprPtr Parser::parseAdditiveExpr() {
 ExprPtr Parser::parseMultiplicativeExpr() {
     ExprPtr LHS = parsePowerExpr();
 
-    while (current->type == ASTERISK || current->type == SLASH || current->type == PERCENT) {
-        char op = current->value.front(); // get '*', '/', '%' 
-        ++current;
-        ExprPtr RHS = parsePowerExpr();
+    while (*current == ASTERISK || *current == SLASH || *current == PERCENT) {
+        char op = eat().value.front(); // get '*', '/', '%' 
+        ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -207,7 +202,7 @@ ExprPtr Parser::parsePowerExpr() {
     ExprPtr LHS = parseUnaryExpr();
 
     while (check(CARET)) {
-        ExprPtr RHS = parseUnaryExpr();
+        ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>('^', LHS, RHS);
     }    
 
@@ -218,7 +213,6 @@ ExprPtr Parser::parseUnaryExpr() { return parsePrimaryExpr(); }
 
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
-    // TODO: unary epxr
     switch (that.type) {
         case NUMBER:        return make_unique<NumberExprAST, _i64>(stoll(that.value));
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
@@ -249,30 +243,46 @@ ExprPtr Parser::parsePrimaryExpr() {
     }
 }
 
-FuxType Parser::parseType(_i64 pointerDepth, FuxType::AccessList access) {
-    if (!notEOF() || !current->isType()) 
+FuxType Parser::parseType(TypePrefix typePrefix) {
+    if (!current->isType()) 
         return FuxType(); // = NO_TYPE; will be checked by analyser
     
     Token typeToken = eat();
     if (check(ARRAY_BRACKET))
-        return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
+        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);
     else if (check(LBRACKET)) {
         ExprPtr size = parseExpr(); 
         expect(RBRACKET, MISSING_BRACKET);
-        return FuxType::createArray((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value, size);
+        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value, size);
     } else
-        return FuxType::createStd((FuxType::Kind) typeToken.type, pointerDepth, access, typeToken.value);
+        return FuxType::createStd((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);
 }
 
-Token Parser::eat() {
-    if (current->type == _EOF)
+Parser::TypePrefix Parser::parseTypePrefix() {
+
+    FuxType::AccessList access = {FuxType::PUBLIC};
+
+    while (current->isModifier())
+        access.push_back((FuxType::Access) eat().type);
+
+    _i64 pointerDepth = 0;
+    while (check(ASTERISK))
+        ++pointerDepth;
+
+    bool moved = (access != FuxType::AccessList({FuxType::PUBLIC}) || pointerDepth != 0);
+
+    return TypePrefix(moved, {pointerDepth, access});
+}
+
+Token &Parser::eat() {
+    if (*current == _EOF)
         return *current;
     return *current++;
 }
 
 Token Parser::expect(TokenType type, ErrorType errType) {
     Token curTok = eat();
-    if (curTok.type != type) {
+    if (curTok != type) {
         stringstream err;
         err 
             << "expected " << TokenTypeString[type] 
@@ -289,19 +299,19 @@ Token Parser::expect(TokenType type, ErrorType errType) {
 Token &Parser::peek(size_t steps) { return *(current + steps); }
 
 bool Parser::check(TokenType type) {
-    if (!notEOF() || current->type != type) 
+    if (*current != type) 
         return false;
-    
+
     ++current;
     return true;
 }
 
 bool Parser::check(TokenType type, TokenType type0) {
-    if (current->type != type || peek().type != type0)
+    if (*current != type || peek() != type0)
         return false;
     
     current += 2;
     return true;
 }
 
-constexpr bool Parser::notEOF() { return current->type != _EOF; }
+constexpr bool Parser::notEOF() { return *current != _EOF; }

@@ -48,6 +48,19 @@ FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessL
     return FuxType(kind, pointerDepth, accessList, true, arraySize, name);
 }
 
+string FuxType::accessAsString() {
+    stringstream ss;
+
+    for (Access &a : access)
+        switch (a) {
+            case CONSTANT:  ss << "const "; break;
+            case PUBLIC:    ss << "public "; break;
+            default:        ss << TokenTypeValue[a] << " "; break;
+        }
+
+    return ss.str();
+}
+
 string FuxType::kindAsString() {
     switch (kind) {
         case CUSTOM:    return "'"+name+"'";
@@ -60,9 +73,7 @@ string FuxType::kindAsString() {
 string FuxType::prefix() {
     stringstream ss;
     
-    for (size_t i = 0; i < access.size(); i++) 
-        if (access[i] != PUBLIC)
-            ss << AccessString[access[i]] << " ";
+    ss << accessAsString();
     
     if (pointerDepth == -1)
         return ss.str();
