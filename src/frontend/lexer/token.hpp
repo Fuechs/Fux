@@ -426,6 +426,9 @@ public:
 
     ~Token() { value.clear(); }
 
+    bool operator==(TokenType type) { return this->type == type; }
+    bool operator!=(TokenType type) { return this->type != type; }
+
     TokenType type;
     string value;
     size_t line, start, end;
@@ -442,6 +445,7 @@ public:
     bool isKeyword() { return (type >= KEY_GET && type <= KEY_CLASS); }
     bool isType() { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }
     bool isModifier() { return (type >= KEY_SAFE && type <= KEY_FIXED); }
+    bool isComparison() { return (type >= EQUALS_EQUALS && type <= GTEQUALS); }
 };
 
 typedef vector<Token> TokenList;

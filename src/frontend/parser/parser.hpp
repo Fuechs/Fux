@@ -20,6 +20,8 @@
 
 class Parser {
 public:
+    typedef pair<bool, pair<_i64, FuxType::AccessList>> TypePrefix; 
+
     Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false) 
     : error(error), mainFile(mainFile) {
         lexer = new Lexer(source, fileName, error);
@@ -45,23 +47,24 @@ private:
     const bool mainFile;
 
     StmtPtr parseStmt();
+    // TODO: function declaration
     StmtPtr parseFunctionDeclStmt();
     StmtPtr parseBlockStmt();
     StmtPtr parseIfElseStmt();
     StmtPtr parsePutsStmt();
     StmtPtr parseReturnStmt();
-    StmtPtr parseVariableDeclStmt();
+    StmtPtr parseVariableDeclStmt(TypePrefix typePrefix = TypePrefix(false, {}));
 
     ExprPtr parseExpr();
-    // <expr>, <expr>, ...
+    // TODO: <expr>, <expr>, ...
     ExprPtr parseExprList();
     // <symbol> = <value>
     ExprPtr parseAssignmentExpr();
-    // <callee> ( <arguments> )
+    // TODO: <callee> ( <arguments> )
     ExprPtr parseCallExpr();
-    // ||, &&
+    // TODO: ||, &&
     ExprPtr parseLogicalExpr();
-    // ==, !=, <, <=, >, >=
+    // TODO: ==, !=, <, <=, >, >=
     ExprPtr parseComparisonExpr();
     // +, -
     ExprPtr parseAdditiveExpr();
@@ -69,17 +72,19 @@ private:
     ExprPtr parseMultiplicativeExpr();
     // ^
     ExprPtr parsePowerExpr();
-    // -
+    // TODO: -, !
     ExprPtr parseUnaryExpr();
     // identifier, value, sub expr
     // x         , 1    , (...)
     ExprPtr parsePrimaryExpr();
     
     // parse FuxType 
-    FuxType parseType(_i64 pointerDepth = 0, FuxType::AccessList access = {FuxType::PUBLIC});
+    FuxType parseType(TypePrefix typePrefix);
+    // parse access and pointer depth
+    TypePrefix parseTypePrefix();
 
     // get next token
-    Token eat();
+    Token &eat();
     // expect an token
     Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
     // peek to Nth token

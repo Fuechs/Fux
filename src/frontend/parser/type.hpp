@@ -51,12 +51,12 @@ public:
     };
 
     enum Access {
-        FIXED,      // does not modify the class it's defined within
-        FINAL,      // will turn into a constant after initialisation
-        CONSTANT,   // constant; value can't be changed
-        SAFE,       // read-only outside of the class / module
-        INTERN,     // only accessible from within the class / module
-        PUBLIC,     // read and write access for everyone / everywhere & default (for values too)
+        SAFE        = KEY_SAFE,     // read-only outside of the class / module
+        INTERN      = KEY_INTERN,   // only accessible from within the class / module
+        FINAL       = KEY_FINAL,    // will turn into a constant after initialisation
+        FIXED       = KEY_FIXED,    // does not modify the class it's defined within
+        CONSTANT,                   // constant; value can't be changed
+        PUBLIC,                     // read and write access for everyone / everywhere & default (for values too)
     };
 
     typedef vector<Access> AccessList;
@@ -77,6 +77,8 @@ public:
     // shorthand for array types
     static FuxType createArray(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "", ExprPtr &arraySize = nullExpr);    
     
+    // return FuxType::AccessList as string
+    string accessAsString();
     // return FuxType::Kind as string
     string kindAsString();
     // return storage modifier + pointer depth for this type
