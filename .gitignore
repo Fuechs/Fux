@@ -1,7 +1,7 @@
 .DS_Store
 .vscode
 
-# executables / debugger
+# executeables / debugger
 fux
 main
 *.dSYM
