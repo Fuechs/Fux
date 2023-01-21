@@ -22,18 +22,8 @@ class Parser {
 public:
     typedef pair<bool, pair<_i64, FuxType::AccessList>> TypePrefix; 
 
-    Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false) 
-    : error(error), mainFile(mainFile) {
-        lexer = new Lexer(source, fileName, error);
-        if (mainFile) 
-            fux.options.fileLines = lexer->getLines();
-        root = make_unique<RootAST>();
-    }
-
-    ~Parser() {
-        delete lexer;
-        tokens.clear();
-    }
+    Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false);
+    ~Parser();
 
     // parse the Tokens and return AST root
     RootPtr parse();

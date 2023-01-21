@@ -41,10 +41,10 @@ public:
 };
 
 class StringExprAST : public ExprAST {
-    string value;
+    ValueStruct *value;
 
 public:
-    StringExprAST(string &value) : value(value) {}
+    StringExprAST(string &value) : value(new ValueStruct(value)) {}
     ~StringExprAST();
 
     Value *codegen(LLVMWrapper *fuxLLVM) override;

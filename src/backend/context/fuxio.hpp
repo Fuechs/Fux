@@ -12,6 +12,8 @@
 #pragma once
 
 #include "../llvmheader.hpp"    
+
+#ifdef FUX_BACKEND
 #include "fuxmem.hpp"
 #include "fuxstr.hpp"
 
@@ -25,3 +27,4 @@ public:
     Function *puts = nullptr;
     Function *read = nullptr;
 };
+#endif

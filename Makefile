@@ -6,12 +6,9 @@ ex = src/examples
  
 main = 		src/main.cpp
 frontend = 	$(wildcard src/frontend/*/*.cpp)
-# backend = 	$(wildcard src/backend/*/*.cpp)
-backend = src/backend/generator/codegen.cpp
-# util = 		$(wildcard src/util/*.cpp)
-util = src/util/debug.cpp src/util/io.cpp src/util/source.cpp
+backend = 	$(wildcard src/backend/*/*.cpp)
+util = 		$(wildcard src/util/*.cpp)
 src = 		$(main) $(frontend) $(backend) $(util)
-#! backend & threading are currently not being compiled to save time 
 
 # Copyright (c) 2020-2023, Fuechs and Contributors.
 # All rights reserved.

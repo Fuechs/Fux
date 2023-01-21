@@ -11,6 +11,8 @@
 
 #include "fuxstr.hpp"
 
+#ifdef FUX_BACKEND
+
 FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem) {
     // %str = type { i8*, i64, i64, i64 }
     str = StructType::create(*context, {
@@ -139,3 +141,5 @@ FuxStr::FuxStr(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMe
     llvm::verifyFunction(*str_get_buffer);
     } // end of Fux_str_get_buffer
 }
+
+#endif

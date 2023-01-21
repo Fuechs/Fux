@@ -15,12 +15,15 @@
 #include "../frontend/lexer/lexer.hpp"
 #include "../frontend/ast/ast.hpp"
 #include "../frontend/parser/parser.hpp"
+#include "../frontend/parser/value.hpp"
 #include "../frontend/analyser/analyser.hpp"
 #include "../frontend/error/error.hpp"
-// #include "../backend/context/context.hpp"
-// #include "../backend/generator/generator.hpp"
-// #include "../backend/compiler/compiler.hpp"
-// #include "threading.hpp"
+#ifdef FUX_BACKEND
+#include "../backend/context/context.hpp"
+#include "../backend/generator/generator.hpp"
+#include "../backend/compiler/compiler.hpp"
+#include "threading.hpp"
+#endif
 
 // * LEXER
 
@@ -35,23 +38,9 @@ void Lexer::debugPrint() {
 
 // * PARSER
 
-void NumberExprAST::debugPrint() {
-    switch (value->type.kind) {
-        case FuxType::I8:       cout << value->__i8; break;
-        case FuxType::U8:       cout << value->__u8; break;
-        case FuxType::I16:      cout << value->__i16; break;
-        case FuxType::U16:      cout << value->__u16; break;
-        case FuxType::I32:      cout << value->__i32; break;
-        case FuxType::U32:      cout << value->__u32; break;
-        case FuxType::F32:      cout << value->__f32; break;
-        case FuxType::I64:      cout << value->__i64; break;
-        case FuxType::U64:      cout << value->__u64; break;
-        case FuxType::F64:      cout << value->__f64; break;
-        default:                cout << "?";
-    }
-}
+void NumberExprAST::debugPrint() { value->debugPrint(); }
 
-void StringExprAST::debugPrint() { cout << "\"" << value << "\""; }
+void StringExprAST::debugPrint() { value->debugPrint(); }
 
 void VariableExprAST::debugPrint() { cout << name; }
 
@@ -185,6 +174,26 @@ void Parser::debugPrint(const string message) {
     cout << "\n";
 }
 
+void ValueStruct::debugPrint() {
+    switch (type.kind) {
+        case FuxType::BOOL:     cout << __bool; break;
+        case FuxType::I8:       cout << __i8; break;
+        case FuxType::U8:       cout << __u8; break;
+        case FuxType::C8:       cout << "'" << to_string(__c8) << "'"; break;
+        case FuxType::I16:      cout << __i16; break;
+        case FuxType::U16:      cout << __u16; break;
+        case FuxType::C16:      cout << "'" << to_string(__c16) << "'"; break;
+        case FuxType::I32:      cout << __i32; break;
+        case FuxType::U32:      cout << __u32; break;
+        case FuxType::F32:      cout << __f32; break;
+        case FuxType::I64:      cout << __i64; break;
+        case FuxType::U64:      cout << __u64; break;
+        case FuxType::F64:      cout << __f64; break;
+        case FuxType::STR:      cout << '"' << __str << '"'; break;
+        default:                cout << "???"; break;
+    }
+}
+
 // * ANALYSER
 
 void Analyser::debugPrint(const string message) {
@@ -201,60 +210,64 @@ void Analyser::debugPrint(const string message) {
 
 void ErrorManager::debugPrint() { return; }
 
-// // * CONTEXT
+#ifdef FUX_BACKEND
 
-// void FuxContext::debugPrint(const string message) {
-//     if (!fux.options.debugMode)
-//         return;
+// * CONTEXT
+
+void FuxContext::debugPrint(const string message) {
+    if (!fux.options.debugMode)
+        return;
     
-//     cout << debugText << "FuxContext";
-//     if (!message.empty())
-//         cout << ": " << message;
-//     cout << "\n";
-// }
+    cout << debugText << "FuxContext";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
 
-// // * GENERATOR
+// * GENERATOR
 
-// void Generator::debugPrint(const string message) {
-//     if (!fux.options.debugMode)
-//         return;
+void Generator::debugPrint(const string message) {
+    if (!fux.options.debugMode)
+        return;
 
-//     cout << debugText << "Generator";
-//     if (!message.empty())
-//         cout << ": " << message;
-//     cout << "\n";
-// }
+    cout << debugText << "Generator";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
 
-// // * COMPILER
+// * COMPILER
 
-// void Compiler::debugPrint(const string message) {
-//     if (!fux.options.debugMode)
-//         return;
+void Compiler::debugPrint(const string message) {
+    if (!fux.options.debugMode)
+        return;
         
-//     cout << debugText << "Compiler";
-//     if (!message.empty())
-//         cout << ": " << message;
-//     cout << "\n";
-// }
+    cout << debugText << "Compiler";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
 
-// // * THREADING
+// * THREADING
 
-// void fuxThread::Thread::debugPrint(const string message) {  
-//     if (!fux.options.debugMode)
-//         return;
+void fuxThread::Thread::debugPrint(const string message) {  
+    if (!fux.options.debugMode)
+        return;
             
-//     cout << debugText << "Thread '" << name << "' (" << id << ")";
-//     if (!message.empty())
-//         cout << ": " << message;
-//     cout << "\n";
-// }
+    cout << debugText << "Thread '" << name << "' (" << id << ")";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
 
-// void fuxThread::ThreadManager::debugPrint(const string message) {
-//     if (!fux.options.debugMode)
-//         return;
+void fuxThread::ThreadManager::debugPrint(const string message) {
+    if (!fux.options.debugMode)
+        return;
         
-//     cout << debugText << "ThreadManager";
-//     if (!message.empty())
-//         cout << ": " << message;
-//     cout << "\n";
-// }
+    cout << debugText << "ThreadManager";
+    if (!message.empty())
+        cout << ": " << message;
+    cout << "\n";
+}
+
+#endif

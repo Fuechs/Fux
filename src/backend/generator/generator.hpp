@@ -12,6 +12,7 @@
 #pragma once
 
 #include "../../fux.hpp"
+#ifdef FUX_BACKEND
 #include "../llvmheader.hpp"
 #include "../../frontend/ast/ast.hpp"
 #include "../context/fuxmem.hpp"
@@ -34,3 +35,5 @@ private:
 
     void debugPrint(const string message);
 };
+
+#endif

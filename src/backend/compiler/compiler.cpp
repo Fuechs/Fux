@@ -11,6 +11,8 @@
 
 #include "compiler.hpp"
 
+#ifdef FUX_BACKEND
+
 Compiler::Compiler(const string &fileName, Module *module) 
 : fileName(fileName), module(module) {}
 
@@ -22,3 +24,5 @@ Compiler::~Compiler() {
 void Compiler::compile() {
     return;
 }
+
+#endif

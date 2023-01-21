@@ -11,6 +11,8 @@
 
 #include "fuxmem.hpp"
 
+#ifdef FUX_BACKEND
+
 FuxMem::FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder) {
     // temporary   
     FunctionType *FT = nullptr;
@@ -34,3 +36,5 @@ FuxMem::FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder) {
     memcpy = Function::Create(FT, Function::ExternalLinkage, "memcpy", *module);
     llvm::verifyFunction(*memcpy);
 }
+
+#endif

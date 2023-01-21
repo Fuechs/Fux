@@ -11,6 +11,8 @@
 
 #include "fuxio.hpp"
 
+#ifdef FUX_BACKEND
+
 FuxIO::FuxIO(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem *fuxMem, FuxStr *fuxStr) {
     { // declare i32 puts(i8* nocapture) nounwind
     FunctionType *FT = FunctionType::get(builder->getInt32Ty(), {builder->getInt8PtrTy()}, false);
@@ -46,3 +48,5 @@ FuxIO::FuxIO(LLVMContext *context, Module *module, IRBuilder<> *builder, FuxMem 
     llvm::verifyFunction(*read);
     } // end of read
 }
+
+#endif

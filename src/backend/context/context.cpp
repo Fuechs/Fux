@@ -11,6 +11,8 @@
 
 #include "context.hpp"
 
+#ifdef FUX_BACKEND
+
 FuxContext::FuxContext(RootPtr &root) {
     llvm::InitializeNativeTarget();
     LLVMContext *llvmContext = new LLVMContext();
@@ -52,3 +54,5 @@ void FuxContext::compile() {
     delete generator;
     compiler = new Compiler("<placeholder>", module);
 }
+
+#endif

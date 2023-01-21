@@ -36,6 +36,9 @@
 #include "util/color.hpp"
 #include "util/io.hpp"
 
+//! backend & threading are currently not being compiled to save time 
+// #define FUX_BACKEND
+
 #if defined(_WIN32) || defined(_WIN64) || (defined(__CYGWIN__) && defined(_WIN32))
     #ifndef _WIN64
         #define FUX_WIN_INVALID

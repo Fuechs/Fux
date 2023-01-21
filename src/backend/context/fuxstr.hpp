@@ -12,6 +12,8 @@
 #pragma once
 
 #include "../llvmheader.hpp"
+
+#ifdef FUX_BACKEND
 #include "fuxmem.hpp"
 
 /**
@@ -33,3 +35,5 @@ public:
     Function *str_add_char = nullptr;
     Function *str_get_buffer = nullptr;
 };
+
+#endif

@@ -13,6 +13,8 @@
 
 #include "../fux.hpp"
 
+#ifdef FUX_BACKEND
+
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/STLExtras.h>
 
@@ -37,6 +39,13 @@
 
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
+
+#else
+
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/IRBuilder.h>
+
+#endif
 
 using namespace llvm;
 

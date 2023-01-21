@@ -11,8 +11,10 @@
 
 #include "fux.hpp"
 #include "util/source.hpp"
-// #include "util/threading.hpp"
-// #include "backend/context/context.hpp"
+#ifdef FUX_BACKEND
+#include "util/threading.hpp"
+#include "backend/context/context.hpp"
+#endif
 
 __fux_struct fux;
 
@@ -38,6 +40,9 @@ int main(int argc, char **argv) {
             cout << "Unix";
         #elif defined(FUX_DARWIN)
             cout << "Darwin (MacOS)";
+        #endif
+        #ifndef FUX_BACKEND
+            cout << " without the backend";
         #endif
         cout << ".\n";
     }
@@ -71,10 +76,12 @@ int main(int argc, char **argv) {
 
     // return result; // ! program ends here
 
-    // { // own scope so it can be skipped by goto -- c++ calls destructor at end of scope
-    //     FuxContext *context = new FuxContext(root);
-    //     context->run();
-    // }
+    #ifdef FUX_BACKEND
+    { // own scope so it can be skipped by goto -- c++ calls destructor at end of scope
+        FuxContext *context = new FuxContext(root);
+        context->run();
+    }
+    #endif
 
     end:
         return result;

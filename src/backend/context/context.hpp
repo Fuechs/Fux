@@ -12,6 +12,8 @@
 #pragma once
 
 #include "../llvmheader.hpp"
+
+#ifdef FUX_BACKEND
 #include "../generator/generator.hpp"
 #include "../compiler/compiler.hpp"
 #include "../generator/wrapper.hpp"
@@ -42,3 +44,4 @@ private:
 
     void debugPrint(const string message);
 };
+#endif

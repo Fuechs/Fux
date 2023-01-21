@@ -14,13 +14,13 @@
 ValueStruct::~ValueStruct() {
     if (type.kind == FuxType::STR)
         __str.clear();
-    // FIXME: "malloc: ... pointer being freed was not allocated" why?
-    // delete &type;
 }
 
+#ifdef FUX_BACKEND
 Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
     // TODO: how to implement pointer types?
     switch (type.kind) {
+        case FuxType::BOOL:     return fuxLLVM->builder->getInt1(__bool);
         case FuxType::I8:       return fuxLLVM->builder->getInt8(__i8);
         case FuxType::U8:       return fuxLLVM->builder->getInt8(__u8);
         case FuxType::C8:       return fuxLLVM->builder->getInt8(__c8);
@@ -33,24 +33,25 @@ Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
         case FuxType::I64:      return fuxLLVM->builder->getInt64(__i64);
         case FuxType::U64:      return fuxLLVM->builder->getInt64(__u64);
         case FuxType::F64:      return ConstantFP::get(fuxLLVM->builder->getDoubleTy(), __f64);
-        // case FuxType::STR:      {
-        //     // TODO: this is just "dummy" code; don't know wether it actually works.
-        //     // *object: str;
-        //     Value *object = fuxLLVM->builder->CreateAlloca(fuxLLVM->fuxStr->str); 
-        //     // *object = str();
-        //     fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_create_default, {object});
-        //     // *buffer: c8 = object.buffer;
-        //     Value *buffer = fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_get_buffer, {object});
-        //     // *char_array: c8 = this->__str.c_str();
-        //     Value *char_array = fuxLLVM->builder->CreateGlobalString(__str); 
-        //     // resize(object, size + 1);
-        //     fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_resize,
-        //         {object, fuxLLVM->builder->getInt64(__str.size() + 1)});
-        //     // memcpy(buffer, char_array, size + 1);
-        //     fuxLLVM->builder->CreateCall(fuxLLVM->fuxMem->memcpy, 
-        //         {buffer, char_array, fuxLLVM->builder->getInt64(__str.size() + 1)});
-        //     return object;
-        // }
+        case FuxType::STR:      {
+            // TODO: this is just "dummy" code; don't know wether it actually works.
+            // *object: str;
+            Value *object = fuxLLVM->builder->CreateAlloca(fuxLLVM->fuxStr->str); 
+            // *object = str();
+            fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_create_default, {object});
+            // *buffer: c8 = object.buffer;
+            Value *buffer = fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_get_buffer, {object});
+            // *char_array: c8 = this->__str.c_str();
+            Value *char_array = fuxLLVM->builder->CreateGlobalString(__str); 
+            // resize(object, size + 1);
+            fuxLLVM->builder->CreateCall(fuxLLVM->fuxStr->str_resize,
+                {object, fuxLLVM->builder->getInt64(__str.size() + 1)});
+            // memcpy(buffer, char_array, size + 1);
+            fuxLLVM->builder->CreateCall(fuxLLVM->fuxMem->memcpy, 
+                {buffer, char_array, fuxLLVM->builder->getInt64(__str.size() + 1)});
+            return object;
+        }
         default:                return nullptr;
     }
 }
+#endif

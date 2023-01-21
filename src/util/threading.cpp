@@ -10,7 +10,8 @@
  */
 
 #include "threading.hpp"
-#include "../fux.hpp"
+
+#ifdef FUX_BACKEND
 
 namespace fuxThread {
 
@@ -112,3 +113,5 @@ namespace fuxThread {
     }
 
 }
+
+#endif

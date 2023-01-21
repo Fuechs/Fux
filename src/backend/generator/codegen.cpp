@@ -11,12 +11,33 @@
 
 #include "../../frontend/ast/ast.hpp"
 
-Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) {
-    // TODO: add all types
-    return fuxLLVM->builder->getInt64(value->__i64);
-}
+#ifndef FUX_BACKEND
 
+Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 Value *StringExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *MemberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *ComparisonExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *LogicalExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; } 
+Value *AssignmentExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
+Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *ReturnCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *IfElseAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *CodeBlockAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
+Value *RootAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; } 
+
+#else
+
+Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
+
+Value *StringExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
 
 Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
     Value *V = fuxLLVM->namedValues[name];
@@ -134,3 +155,5 @@ Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
         sub->codegen(fuxLLVM);
     return nullptr;
 }
+
+#endif

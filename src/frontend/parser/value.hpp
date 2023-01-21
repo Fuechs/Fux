@@ -34,7 +34,12 @@ struct ValueStruct {
     
     ~ValueStruct();
 
+    #ifdef FUX_BACKEND
     Value *getLLVMValue(LLVMWrapper* fuxLLVM);
+    #endif
+
+    // output saved value
+    void debugPrint();
 
     FuxType type;
     union {

@@ -11,6 +11,8 @@
 
 #include "generator.hpp"
 
+#ifdef FUX_BACKEND
+
 void Generator::generate() {
     // root->codegen(fuxLLVM);
 
@@ -21,3 +23,5 @@ void Generator::generate() {
         output.close();
     }
 }
+
+#endif

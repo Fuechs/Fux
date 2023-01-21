@@ -11,6 +11,8 @@
 
 #include "generator.hpp"
 
+#ifdef FUX_BACKEND
+
 Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
     IRBuilder<> *builder = fuxLLVM->builder;
     Type* ret;
@@ -44,3 +46,5 @@ Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
 FuxArray *Generator::createArrayType(LLVMWrapper *fuxLLVM, FuxType type) { 
     return new FuxArray(fuxLLVM, getType(fuxLLVM, type)); 
 }
+
+#endif

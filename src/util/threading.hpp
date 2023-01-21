@@ -13,6 +13,8 @@
 
 #include "source.hpp"
 
+#ifdef FUX_BACKEND
+
 namespace fuxThread {
 
     class Thread {
@@ -63,3 +65,5 @@ namespace fuxThread {
     };
 
 }
+
+#endif

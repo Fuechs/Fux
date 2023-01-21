@@ -12,16 +12,20 @@
 #pragma once
 
 #include "../llvmheader.hpp"
-// #include "../context/fuxmem.hpp"
-// #include "../context/fuxstr.hpp"
-// #include "../context/fuxio.hpp"
+#ifdef FUX_BACKEND
+#include "../context/fuxmem.hpp"
+#include "../context/fuxstr.hpp"
+#include "../context/fuxio.hpp"
+#endif
 
 struct LLVMWrapper {
     LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder)
     : context(context), module(module), builder(builder), namedValues({}) {
-        // fuxMem = new FuxMem(context, module, builder);
-        // fuxStr = new FuxStr(context, module, builder, fuxMem);
-        // fuxIO = new FuxIO(context, module, builder, fuxMem, fuxStr);
+        #ifdef FUX_BACKEND
+        fuxMem = new FuxMem(context, module, builder);
+        fuxStr = new FuxStr(context, module, builder, fuxMem);
+        fuxIO = new FuxIO(context, module, builder, fuxMem, fuxStr);
+        #endif
     }
 
     ~LLVMWrapper() {
@@ -35,9 +39,11 @@ struct LLVMWrapper {
     Module *module;
     IRBuilder<> *builder;
 
-    // FuxMem *fuxMem;
-    // FuxStr *fuxStr;
-    // FuxIO *fuxIO;
+    #ifdef FUX_BACKEND
+    FuxMem *fuxMem;
+    FuxStr *fuxStr;
+    FuxIO *fuxIO;
+    #endif
 
     ValueMap namedValues;
 };

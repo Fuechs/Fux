@@ -13,6 +13,8 @@
 
 #include "../llvmheader.hpp"
 
+#ifdef FUX_BACKEND
+
 class FuxMem {
 public:
     FuxMem(LLVMContext *context, Module *module, IRBuilder<> *builder);
@@ -21,3 +23,5 @@ public:
     Function *free = nullptr;
     Function *memcpy = nullptr;
 };
+
+#endif

@@ -11,8 +11,9 @@
 
 #pragma once
 
-#include "../../fux.hpp"
 #include "../llvmheader.hpp"
+
+#ifdef FUX_BACKEND
 
 class Compiler {
 public:
@@ -27,3 +28,5 @@ private:
 
     void debugPrint(const string message);
 };
+
+#endif

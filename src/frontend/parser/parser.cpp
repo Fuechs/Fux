@@ -11,6 +11,19 @@
 
 #include "parser.hpp"
 
+Parser::Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile) 
+: error(error), mainFile(mainFile) {
+    lexer = new Lexer(source, fileName, error);
+    if (mainFile)
+        fux.options.fileLines = lexer->getLines();
+    root = make_unique<RootAST>();
+}
+
+Parser::~Parser() {
+    delete lexer;
+    tokens.clear();
+}
+
 RootPtr Parser::parse() {
     // lexing
     tokens = lexer->lex();
