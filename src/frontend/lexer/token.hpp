@@ -144,6 +144,7 @@ enum TokenType {
     KEY_STRUCT,
     KEY_UNION,
     KEY_CLASS,
+    KEY_TEMPLATE,
 
     _EOF,           // end of file
     NONE,
@@ -279,6 +280,7 @@ static const char *TokenTypeString[] = {
     "KEY_STRUCT",
     "KEY_UNION",
     "KEY_CLASS",
+    "KEY_TEMPLATE",
 
     "EOF",           // end of file
     "NONE",
@@ -414,6 +416,7 @@ static vector<string> TokenTypeValue = {
     "struct",
     "union",
     "class",
+    "template",
 
     "eof",           // end of file
     "none",
@@ -426,14 +429,14 @@ public:
 
     ~Token() { value.clear(); }
 
-    bool operator==(TokenType type) { return this->type == type; }
-    bool operator!=(TokenType type) { return this->type != type; }
+    constexpr bool operator==(TokenType type) const { return this->type == type; }
+    constexpr bool operator!=(TokenType type) const { return this->type != type; }
 
     TokenType type;
     string value;
     size_t line, start, end;
 
-    string str() {
+    string str() const {
         stringstream ss;
         ss  << "<Token, " << TokenTypeString[type] << ", '"  
             << value << "', "
@@ -442,10 +445,10 @@ public:
         return ss.str();
     }
 
-    bool isKeyword() { return (type >= KEY_GET && type <= KEY_CLASS); }
-    bool isType() { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }
-    bool isModifier() { return (type >= KEY_SAFE && type <= KEY_FIXED); }
-    bool isComparison() { return (type >= EQUALS_EQUALS && type <= GTEQUALS); }
+    constexpr bool isKeyword() const { return (type >= KEY_GET && type <= KEY_CLASS); }
+    constexpr bool isType() const { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }
+    constexpr bool isModifier() const { return (type >= KEY_SAFE && type <= KEY_FIXED); }
+    constexpr bool isComparison() const { return (type >= EQUALS_EQUALS && type <= GTEQUALS); }
 };
 
 typedef vector<Token> TokenList;
