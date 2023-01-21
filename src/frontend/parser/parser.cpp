@@ -49,12 +49,37 @@ StmtPtr Parser::parseStmt() {
 StmtPtr Parser::parseFunctionDeclStmt() {
     TypePrefix typePrefix = parseTypePrefix();
 
-    if (check(IDENTIFIER) && *current != LPAREN) {
+    if (*current != IDENTIFIER)
+        return parseBlockStmt();
+
+    if (peek() != LPAREN) {
         typePrefix.first = true;
         return parseVariableDeclStmt(typePrefix);
     }
 
+    const string symbol = eat().value;
 
+    expect(LPAREN);
+    // TODO: should be statement list or support all necessary information
+    ArgMap args = ArgMap();
+    do {
+        if (*current == RPAREN)
+            break;
+        VarDeclPtr arg = parseVariableDeclStmt();
+        args[arg->getSymbol()] = arg->getType();
+    } while (check(COMMA));
+    expect(RPAREN);
+
+    OptType type = parseTypeSuffix(typePrefix);
+
+    if (!type.first) {
+        error->createError(UNEXPECTED_TOKEN, *current,
+            "automatic typing for functions not supported yet");
+        return nullptr;
+    }
+
+    if (*current == SEMICOLON)
+        return make_unique<PrototypeAST>(type.second, symbol, args);
     
     return parseBlockStmt();
 }
@@ -110,28 +135,27 @@ StmtPtr Parser::parseReturnStmt() {
         return parseVariableDeclStmt();
 }
 
-StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
+VarDeclPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
     if (typePrefix.first)
         goto actual;
 
     typePrefix = parseTypePrefix();
 
     if (!check(IDENTIFIER)) {
-        if (!typePrefix.first) // check wether a type prefix was actually parsed
-            return parseExpr();
-
-        error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
-        error->addNote(peek(-1), "type prefix found here");
+        if (typePrefix.first) { // check wether a type prefix was actually parsed
+            error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
+            error->addNote(peek(-1), "type prefix found here");
+        }
         return nullptr;
     }
 
     actual:
-    const string symbol = peek(-1).value; // get value from identifier
+    const string symbol = eat().value; // get value from identifier
     OptType type = parseTypeSuffix(typePrefix);
     
     if (!type.first) {
         --current;
-        return parseExpr();
+        return nullptr;
     }
     
     if (check(EQUALS)) { // =

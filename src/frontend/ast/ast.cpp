@@ -46,6 +46,9 @@ AST AssignmentExprAST::getASTType() { return AST::AssignmentExprAST; }
 
 VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
+string &VariableDeclAST::getSymbol() { return symbol; }
+FuxType &VariableDeclAST::getType() { return type; }
+ExprPtr &VariableDeclAST::getValue() { return value; }
 
 AST PutsCallAST::getASTType() { return AST::PutsCallAST; }
 

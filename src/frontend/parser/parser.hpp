@@ -44,7 +44,7 @@ private:
     StmtPtr parseIfElseStmt();
     StmtPtr parsePutsStmt();
     StmtPtr parseReturnStmt();
-    StmtPtr parseVariableDeclStmt(TypePrefix typePrefix = TypePrefix(false, {}));
+    VarDeclPtr parseVariableDeclStmt(TypePrefix typePrefix = TypePrefix(false, {}));
 
     ExprPtr parseExpr();
     // TODO: <expr>, <expr>, ...

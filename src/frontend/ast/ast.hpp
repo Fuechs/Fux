@@ -180,6 +180,10 @@ public:
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() override;
     
+    string &getSymbol();
+    FuxType &getType();
+    ExprPtr &getValue();
+
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
     AST getASTType() override;
@@ -187,6 +191,8 @@ public:
     
     Position pos = Position();
 };
+
+typedef unique_ptr<VariableDeclAST> VarDeclPtr; 
 
 class PutsCallAST : public StmtAST {
     ExprPtr argument;
