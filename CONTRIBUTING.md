@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-20
+> Last updated on 2023-01-21
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -152,7 +152,7 @@ SomeConstructor(ExprPtr &LHS, ExprPtr &RHS)
 
 #### Using Namespaces
 
-All includes from the standard library are in `src/fux.hpp`. In this file is also `using namespace std;`. If you need to use `std::move` or similiar functions though, please use it with the prefix to make the call qualified.
+All includes from the standard library are in `src/fux.hpp`.
 
 #### Using Licensed Code
 

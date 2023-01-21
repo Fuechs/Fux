@@ -102,7 +102,9 @@ StmtPtr Parser::parsePutsStmt() {
 
 StmtPtr Parser::parseReturnStmt() {
     if (check(KEY_RETURN)) {
-        ExprPtr arg = parseExpr();
+        ExprPtr arg = nullptr;
+        if (*current != SEMICOLON)
+            arg = parseExpr();
         return make_unique<ReturnCallAST>(arg);
     } else
         return parseVariableDeclStmt();

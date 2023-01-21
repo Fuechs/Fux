@@ -36,6 +36,19 @@
 #include "util/color.hpp"
 #include "util/io.hpp"
 
+using std::string;
+using std::to_string;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::vector;
+using std::unique_ptr;
+using std::make_unique;
+using std::map;
+using std::pair;
+using std::stringstream;
+using std::exception;
+
 //! backend & threading are currently not being compiled to save time 
 // #define FUX_BACKEND
 
@@ -55,8 +68,6 @@
 #else
     #define FUX_UNKNOWN_PLATFORM
 #endif
-
-using namespace std;
 
 // compiler options / flags
 struct __options_struct {
