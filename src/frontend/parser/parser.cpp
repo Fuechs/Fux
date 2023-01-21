@@ -53,6 +53,8 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         typePrefix.first = true;
         return parseVariableDeclStmt(typePrefix);
     }
+
+
     
     return parseBlockStmt();
 }
@@ -123,42 +125,29 @@ StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
 
     actual:
     const string symbol = peek(-1).value; // get value from identifier
-    FuxType type = FuxType();
+    OptType type = parseTypeSuffix(typePrefix);
     
-    if (check(COLON))
-        type = parseType(typePrefix);
-    else if (check(RPOINTER)) { // reference
-        if (typePrefix.second.first > 0)
-            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
-                "given pointer depth will be ignored and a reference parsed instead");
-        typePrefix.second.first = -1;
-        type = parseType(typePrefix);
-        if (!type) {
-            error->createError(UNEXPECTED_TOKEN, *current++, "expected a type after RPOINTER '->'");
-            error->addNote(peek(-2), "automatic typing is not supported for references yet");
-            return nullptr; // failed statement
-        }
-    } else {
+    if (!type.first) {
         --current;
         return parseExpr();
     }
     
     if (check(EQUALS)) { // =
-        if (!type)
-            type = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
+        if (!type.second)
+            type.second = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
     } else if (check(TRIPLE_EQUALS)) { // ===
-        if (!type) {
+        if (!type.second) {
             typePrefix.second.second.push_back(FuxType::CONSTANT);
-            type = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
+            type.second = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
         } else
-            type.access.push_back(FuxType::CONSTANT);
+            type.second.access.push_back(FuxType::CONSTANT);
     } else {
         error->createError(UNEXPECTED_TOKEN, *current, "expected an EQUALS '=' or a TRIPLE_EQUALS '===' in variable declaration");
         return nullptr;
     }
 
     ExprPtr value = parseExpr();
-    return make_unique<VariableDeclAST>(symbol, type, value);
+    return make_unique<VariableDeclAST>(symbol, type.second, value);
 }
 
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
@@ -256,7 +245,7 @@ ExprPtr Parser::parsePrimaryExpr() {
     }
 }
 
-FuxType Parser::parseType(TypePrefix typePrefix) {
+FuxType Parser::parseTypeName(TypePrefix &typePrefix) {
     if (!current->isType()) 
         return FuxType(); // = NO_TYPE; will be checked by analyser
     
@@ -286,6 +275,34 @@ Parser::TypePrefix Parser::parseTypePrefix() {
     bool moved = (access != FuxType::AccessList({FuxType::PUBLIC}) || pointerDepth != 0);
 
     return TypePrefix(moved, {pointerDepth, access});
+}
+
+Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
+    FuxType type = FuxType();
+    bool success = true;
+
+    if (check(COLON)) 
+        type = parseTypeName(typePrefix);
+    else if (check(RPOINTER)) {
+        if (typePrefix.second.first > 0) {
+            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
+                "given pointer depth will be ignored and a reference parsed instead");
+            error->addNote(peek(-3), "pointer depth defined here");
+        }
+        typePrefix.second.first = -1;
+        type = parseTypeName(typePrefix);
+
+        if (!type) {
+            // don't advance so var decl will be pased normally
+            error->createError(UNEXPECTED_TOKEN, *current, "expected a type after RPOINTER '->'");
+            error->addNote(peek(-2), "automatic typing is not supported for references yet");
+            // we are not setting success to false here because 
+            // the parser should continue parsing the declaration
+        }
+    } else
+        success = false;
+    
+    return OptType(success, type);
 }
 
 Token &Parser::eat() {

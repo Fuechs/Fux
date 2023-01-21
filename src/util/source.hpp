@@ -32,6 +32,9 @@ public:
     // check if file has errors
     bool hasErrors();
 
+    // report all errors (for warnings actually)
+    void reportErrors();
+
     // return file size in bytes
     // from https://stackoverflow.com/a/32286531
     size_t getFileSize();

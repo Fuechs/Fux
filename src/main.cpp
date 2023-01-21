@@ -65,7 +65,8 @@ int main(int argc, char **argv) {
     if (mainFile->hasErrors()) {
         delete mainFile;
         goto end;
-    }
+    } 
+    mainFile->reportErrors();
     root->debugPrint();
 
     // return result; // ! program ends here

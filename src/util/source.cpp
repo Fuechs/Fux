@@ -39,9 +39,9 @@ void SourceFile::parse() {
     analysed = analyser->analyse();
 }
 
-bool SourceFile::hasErrors() {
-    return error->hasErrors();
-}
+bool SourceFile::hasErrors() { return error->hasErrors(); }
+
+void SourceFile::reportErrors() { error->reportAll(); }
 
 size_t SourceFile::getFileSize() {
     std::__fs::filesystem::path p {filePath};
