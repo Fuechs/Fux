@@ -1,11 +1,11 @@
 main(): i64 {
     size: u8 = 100;
     board[size]: u8;
-    board[size - 2] = true;
+    board[size - 2] = 1;
 
     for (for i: u8; i < size - 2; i++) {
         for (value -> u8 in board)
-            putch value == 1 ? '*' : ' ';
+            putch value ? '*' : ' ';
         putch '\n';
 
         pattern: u8 = (board[0] <| 1) | board[1];
