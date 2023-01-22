@@ -76,6 +76,9 @@ private:
     // parse type suffix (: | -> ...)
     OptType parseTypeSuffix(TypePrefix &typePrefix);
 
+    // parse number wit correct type
+    ExprPtr parseNumberExpr(Token &tok);
+
     // get next token
     Token &eat();
     // expect an token

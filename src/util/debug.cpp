@@ -180,8 +180,8 @@ void ValueStruct::debugPrint() {
     switch (type.kind) {
         case FuxType::BOOL:     cout << __bool; break;
         case FuxType::I8:       cout << __i8; break;
-        case FuxType::U8:       cout << __u8; break;
-        case FuxType::C8:       cout << "'" << to_string(__c8) << "'"; break;
+        case FuxType::U8:       cout << to_string(__u8); break;
+        case FuxType::C8:       cout << "'" << __c8 << "'"; break;
         case FuxType::I16:      cout << __i16; break;
         case FuxType::U16:      cout << __u16; break;
         case FuxType::C16:      cout << "'" << to_string(__c16) << "'"; break;
@@ -192,7 +192,7 @@ void ValueStruct::debugPrint() {
         case FuxType::U64:      cout << __u64; break;
         case FuxType::F64:      cout << __f64; break;
         case FuxType::STR:      cout << '"' << __str << '"'; break;
-        default:                cout << "???"; break;
+        default:                cout << "???";
     }
 }
 

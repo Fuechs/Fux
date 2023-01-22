@@ -44,7 +44,8 @@ class CharExprAST : public ExprAST {
     ValueStruct *value;
 
 public:
-    CharExprAST(_c16 &value) : value(new ValueStruct(value)) {}
+    template<typename T>
+    CharExprAST(T value) : value(new ValueStruct(value)) {}
     ~CharExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)

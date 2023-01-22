@@ -249,9 +249,12 @@ ExprPtr Parser::parseUnaryExpr() { return parsePrimaryExpr(); }
 ExprPtr Parser::parsePrimaryExpr() {
     Token that = eat();
     switch (that.type) {
-        case NUMBER:        return make_unique<NumberExprAST, _i64>(stoll(that.value));
+        case HEXADECIMAL:
+        case NUMBER:        
+        case OCTAL:
+        case BINARY:        return parseNumberExpr(that);
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
-        case CHAR:          return make_unique<CharExprAST>(that.value.front());
+        case CHAR:          return make_unique<CharExprAST>((_c8) that.value.front()); // TODO: parse c16
         case STRING:        return make_unique<StringExprAST>(that.value); 
         case IDENTIFIER:    {
             ExprPtr primary = make_unique<VariableExprAST>(that.value);
@@ -338,6 +341,29 @@ Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
     }
     
     return OptType(success, type);
+}
+
+ExprPtr Parser::parseNumberExpr(Token &tok) {
+    _u64 value;
+    switch (tok.type) {
+        case HEXADECIMAL:   value = std::stoull(tok.value, nullptr, 16); break;
+        case NUMBER:        value = std::stoull(tok.value); break;
+        case OCTAL:         
+            tok.value.erase(1, 1); // "0o..." -> "0..."
+            value = std::stoull(tok.value, nullptr, 8); 
+            break;
+        case BINARY:        
+            tok.value.erase(0, 2); // "0b..." -> "..."
+            value = std::stoull(tok.value, nullptr, 2); 
+            break;
+        default:            break; // unreachable
+    }
+    size_t bits = (size_t) log2(value) + 1;
+    if      (bits <= 8)     return make_unique<NumberExprAST, _u8>(value);
+    else if (bits <= 16)    return make_unique<NumberExprAST, _u16>(value);
+    else if (bits <= 32)    return make_unique<NumberExprAST, _u32>(value);
+    else if (bits <= 64)    return make_unique<NumberExprAST>(value);
+    else                    return nullptr; // unreachable   
 }
 
 Token &Parser::eat() {
