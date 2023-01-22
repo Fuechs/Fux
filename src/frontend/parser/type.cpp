@@ -104,7 +104,8 @@ void FuxType::debugPrint(const string& name) {
 }
 
 bool FuxType::valid() {
-    if (find(access, INTERN) != access.end() && find(access, SAFE) != access.end())
+    if (std::find(access.begin(), access.end(), INTERN) != access.end() 
+    && std::find(access.begin(), access.end(), SAFE) != access.end())
         return false;
 
     if (kind == CUSTOM && name.empty())

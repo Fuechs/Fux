@@ -40,19 +40,14 @@
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
 
-#else
-
-#include <llvm/IR/LLVMContext.h>
-#include <llvm/IR/IRBuilder.h>
-
-#endif
-
 using namespace llvm;
 
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;
 typedef vector<Type *> TypeList;
 typedef map<string, Value *> ValueMap;
+#endif
+
 
 // type definitions for generating objects
 typedef int8_t      _i8;
