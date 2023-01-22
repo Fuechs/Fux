@@ -36,7 +36,7 @@ main(): i64 {
     <a href="./docs/examples.md"><img src="https://img.shields.io/badge/-Examples-fcaa68?style=for-the-badge"/></a>
     <a href="./docs/state.md"><img src="https://img.shields.io/badge/-Language_State-fcaa68?style=for-the-badge" /></a>
     <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Documentation-fcaa68?style=for-the-badge" /></a>
-    <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/-Contributing-fcaa68?style=for-the-badge" /></a>
+    <a href="./docs/CONTRIBUTING.md"><img src="https://img.shields.io/badge/-Contributing-fcaa68?style=for-the-badge" /></a>
 </p>
 
 ## Why Fux?
@@ -85,7 +85,7 @@ main(): i64 {
     <a href="./docs/examples.md"><img src="https://img.shields.io/badge/-Examples-fcaa68?style=for-the-badge"/></a>
     <a href="./docs/state.md"><img src="https://img.shields.io/badge/-Language_State-fcaa68?style=for-the-badge" /></a>
     <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Documentation-fcaa68?style=for-the-badge" /></a>
-    <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/-Contributing-fcaa68?style=for-the-badge" /></a>
+    <a href="./docs/CONTRIBUTING.md"><img src="https://img.shields.io/badge/-Contributing-fcaa68?style=for-the-badge" /></a>
 </p>
 
 ---
