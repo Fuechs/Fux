@@ -1,1 +1,4 @@
-main(argc: u64): i64;
+main(): i64 {
+    puts "Hello World!\n";
+    return 0;
+}
