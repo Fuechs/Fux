@@ -37,7 +37,7 @@ enum class AST {
 class StmtAST {
 public:
     virtual ~StmtAST() {}
-    virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;
+    FUX_BC(virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;)
     virtual unique_ptr<StmtAST> analyse() = 0;
     virtual AST getASTType() = 0;
     virtual void debugPrint() = 0;

@@ -52,6 +52,14 @@ using std::exception;
 //! backend & threading are currently not being compiled to save time 
 // #define FUX_BACKEND
 
+#ifdef FUX_BACKEND
+    // do nothing
+    #define FUX_BC(code) code
+#else
+    // remove redundant (backend) code
+    #define FUX_BC(code)
+#endif
+
 #if defined(_WIN32) || defined(_WIN64) || (defined(__CYGWIN__) && defined(_WIN32))
     #ifndef _WIN64
         #define FUX_WIN_INVALID

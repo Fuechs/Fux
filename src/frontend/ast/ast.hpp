@@ -32,7 +32,7 @@ public:
     NumberExprAST(T value) : value(new ValueStruct(value)) {}
     ~NumberExprAST();
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -47,7 +47,7 @@ public:
     StringExprAST(string &value) : value(new ValueStruct(value)) {}
     ~StringExprAST();
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -62,7 +62,7 @@ public:
     VariableExprAST(const string& name) : name(name) {}
     ~VariableExprAST() override;
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -78,7 +78,7 @@ public:
     MemberExprAST(ExprPtr &base, ExprPtr &member) 
     : base(std::move(base)), member(std::move(member)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -94,7 +94,7 @@ public:
     BinaryExprAST(char op, ExprPtr &LHS, ExprPtr &RHS) 
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -110,7 +110,7 @@ public:
     ComparisonExprAST(TokenType comp, ExprPtr &LHS, ExprPtr &RHS)
     : comp(comp), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override; 
@@ -126,7 +126,7 @@ public:
     LogicalExprAST(TokenType logical, ExprPtr &LHS, ExprPtr &RHS)
     : logical(logical), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override; 
@@ -143,7 +143,7 @@ public:
     : callee(callee), args(std::move(args)) {}
     ~CallExprAST() override;
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -160,7 +160,7 @@ public:
     AssignmentExprAST(ExprPtr &dest, ExprPtr &value, const bool constant = false)
     : dest(std::move(dest)), value(std::move(value)), constant(constant) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -184,7 +184,7 @@ public:
     FuxType &getType();
     ExprPtr &getValue();
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -202,7 +202,7 @@ public:
 
     ExprPtr &getArgument();
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -216,7 +216,7 @@ class ReturnCallAST : public StmtAST {
 public:
     ReturnCallAST(ExprPtr &value) : value(std::move(value)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -233,7 +233,7 @@ public:
     IfElseAST(ExprPtr &condition, StmtPtr &thenBody, StmtPtr &elseBody = nullStmt)
     : condition(std::move(condition)), thenBody(std::move(thenBody)), elseBody(std::move(elseBody)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -248,7 +248,7 @@ public:
     CodeBlockAST() : body(StmtList()) {}
     CodeBlockAST(StmtList &body) : body(std::move(body)) {}
 
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -276,7 +276,7 @@ public:
     StmtList &getArgs();
     FuxType &getType();
     
-    Function *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
@@ -297,7 +297,7 @@ public:
     FunctionAST(ProtoPtr &proto, StmtPtr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
-    Function *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;    
@@ -312,7 +312,7 @@ class RootAST : public StmtAST {
 public:
     RootAST() : program(StmtList()) {}        
     
-    Value *codegen(LLVMWrapper *fuxLLVM) override;
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;

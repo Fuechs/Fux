@@ -62,6 +62,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     const string symbol = eat().value;
 
     expect(LPAREN);
+    // TODO: check wether this is a call expression
     StmtList args = StmtList();
     do {
         if (*current == RPAREN)
