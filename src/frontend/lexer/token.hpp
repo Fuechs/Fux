@@ -424,31 +424,23 @@ static vector<string> TokenTypeValue = {
 
 class Token {
 public:
-    Token(TokenType type = NONE, string value = "")
-    : type(type), value(value), line(1), start(1), end(1) {}
+    Token(TokenType type = NONE, string value = "");
+    ~Token();
 
-    ~Token() { value.clear(); }
-
-    constexpr bool operator==(TokenType type) const { return this->type == type; }
-    constexpr bool operator!=(TokenType type) const { return this->type != type; }
+    Token &operator=(const Token &copy);
+    bool operator==(TokenType type) const;
+    bool operator!=(TokenType type) const;
 
     TokenType type;
     string value;
     size_t line, start, end;
 
-    string str() const {
-        stringstream ss;
-        ss  << "<Token, " << TokenTypeString[type] << ", '"  
-            << value << "', "
-            << "Line " << line << ":" << start << ">";
-        // <Token, TYPE, 'value', Line line:start>
-        return ss.str();
-    }
+    string str() const;
 
-    constexpr bool isKeyword() const { return (type >= KEY_GET && type <= KEY_CLASS); }
-    constexpr bool isType() const { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }
-    constexpr bool isModifier() const { return (type >= KEY_SAFE && type <= KEY_FIXED); }
-    constexpr bool isComparison() const { return (type >= EQUALS_EQUALS && type <= GTEQUALS); }
+    bool isKeyword() const;
+    bool isType() const;
+    bool isModifier() const;
+    bool isComparison() const;
 };
 
 typedef vector<Token> TokenList;

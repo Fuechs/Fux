@@ -60,20 +60,23 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     const string symbol = eat().value;
 
     expect(LPAREN);
-    // TODO: should be statement list or support all necessary information
-    ArgMap args = ArgMap();
+    StmtList args = StmtList();
     do {
         if (*current == RPAREN)
             break;
-        VarDeclPtr arg = parseVariableDeclStmt();
-        args[arg->getSymbol()] = arg->getType();
+        StmtPtr arg = parseVariableDeclStmt();
+        if (!arg)
+            continue;
+        args.push_back(std::move(arg));
     } while (check(COMMA));
-    expect(RPAREN);
+    expect(RPAREN, MISSING_BRACKET);
 
     OptType type = parseTypeSuffix(typePrefix);
 
     if (!type.first) {
-        error->createError(UNEXPECTED_TOKEN, *current,
+        error->createError(UNEXPECTED_TOKEN, eat(),
+            "expected a COLON ':' or RPOINTER '->'");
+        error->addNote(peek(-2), 
             "automatic typing for functions not supported yet");
         return nullptr;
     }
@@ -135,17 +138,17 @@ StmtPtr Parser::parseReturnStmt() {
         return parseVariableDeclStmt();
 }
 
-VarDeclPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
+StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
     if (typePrefix.first)
         goto actual;
 
     typePrefix = parseTypePrefix();
 
-    if (!check(IDENTIFIER)) {
-        if (typePrefix.first) { // check wether a type prefix was actually parsed
-            error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
-            error->addNote(peek(-1), "type prefix found here");
-        }
+    if (*current != IDENTIFIER) {
+        if (!typePrefix.first) // check wether a type prefix was actually parsed
+            return parseExpr();
+        error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
+        error->addNote(peek(-1), "type prefix found here");
         return nullptr;
     }
 
@@ -168,8 +171,7 @@ VarDeclPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
         } else
             type.second.access.push_back(FuxType::CONSTANT);
     } else {
-        error->createError(UNEXPECTED_TOKEN, *current, "expected an EQUALS '=' or a TRIPLE_EQUALS '===' in variable declaration");
-        return nullptr;
+        return make_unique<VariableDeclAST>(symbol, type.second);
     }
 
     ExprPtr value = parseExpr();
@@ -307,9 +309,9 @@ Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
     FuxType type = FuxType();
     bool success = true;
 
-    if (check(COLON)) 
+    if (check(COLON)) {
         type = parseTypeName(typePrefix);
-    else if (check(RPOINTER)) {
+    } else if (check(RPOINTER)) {
         if (typePrefix.second.first > 0) {
             error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
                 "given pointer depth will be ignored and a reference parsed instead");
@@ -325,8 +327,9 @@ Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
             // we are not setting success to false here because 
             // the parser should continue parsing the declaration
         }
-    } else
+    } else {
         success = false;
+    }
     
     return OptType(success, type);
 }

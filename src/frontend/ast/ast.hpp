@@ -265,16 +265,16 @@ typedef unique_ptr<CodeBlockAST> BlockPtr;
 class PrototypeAST : public StmtAST {
     FuxType type;
     string name;
-    ArgMap args;
+    StmtList args;
 
 public:
-    PrototypeAST(FuxType type, const string &name, ArgMap args)
-    : type(type), name(name), args(args) {}
+    PrototypeAST(FuxType type, const string &name, StmtList &args)
+    : type(type), name(name), args(std::move(args)) {}
     ~PrototypeAST() override;
     
-    string getName();
-    ArgMap getArgs();
-    FuxType getType();
+    string &getName();
+    StmtList &getArgs();
+    FuxType &getType();
     
     Function *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
@@ -291,10 +291,10 @@ class FunctionAST : public StmtAST {
     BlockPtr body;
 
 public:
-    FunctionAST(FuxType type, const string &name, ArgMap args, BlockPtr &body)
+    FunctionAST(FuxType type, const string &name, StmtList &args, BlockPtr &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
-    FunctionAST(ProtoPtr proto, BlockPtr &body)
+    FunctionAST(ProtoPtr &proto, BlockPtr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;

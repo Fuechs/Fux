@@ -48,7 +48,8 @@ src
 │   ├── lexer
 │   │   ├── lexer.cpp - Lexer impl.
 │   │   ├── lexer.hpp - Lexer 
-│   │   └── token.hpp - Token impl.
+│   │   ├── token.cpp - Token impl. 
+│   │   └── token.hpp - Token
 │   └── parser
 │       ├── parser.cpp - Parser impl.
 │       ├── parser.hpp - Parser

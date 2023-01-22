@@ -136,8 +136,8 @@ void CodeBlockAST::debugPrint() {
 void PrototypeAST::debugPrint() {
     type.prefix();
     cout << name << "(";
-    for (auto &param : args) {
-        param.second.debugPrint(param.first);
+    for (StmtPtr &param : args) {
+        param->debugPrint();
         if (param != *--args.end())
             cout << ", ";
     }

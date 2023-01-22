@@ -1,1 +1,1 @@
-main();
+main(argc: u64): i64;

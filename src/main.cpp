@@ -237,8 +237,8 @@ int repl() {
 // create AST to test the generator without parser
 void createTestAST(RootPtr &root) {
     // modify(num -> i64): void;
-    ArgMap eArgs = ArgMap();
-    eArgs["num"] = FuxType::createRef(FuxType::I64);
+    StmtList eArgs = StmtList();
+    eArgs.push_back(make_unique<VariableDeclAST>("num", FuxType::createRef(FuxType::I64)));
     StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::VOID), "modify", eArgs);
     root->addSub(emptyF);
 
@@ -247,9 +247,9 @@ void createTestAST(RootPtr &root) {
     //      modify(x);
     //      return x;
     // }
-    ArgMap args = ArgMap();
-    args["argc"] = FuxType(FuxType::I64);
-    args["argv"] = FuxType::createArray(FuxType::STR);
+    StmtList args = StmtList();
+    args.push_back(make_unique<VariableDeclAST>("argc", FuxType::createStd(FuxType::U64, 0, {FuxType::FINAL})));
+    args.push_back(make_unique<VariableDeclAST>("argv", FuxType::createArray(FuxType::STR, 0, {FuxType::FINAL})));
 
     BlockPtr body = make_unique<CodeBlockAST>();
     
