@@ -180,6 +180,10 @@ public:
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() override;
     
+    string &getSymbol();
+    FuxType &getType();
+    ExprPtr &getValue();
+
     Value *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
     AST getASTType() override;
@@ -187,6 +191,8 @@ public:
     
     Position pos = Position();
 };
+
+typedef unique_ptr<VariableDeclAST> VarDeclPtr; 
 
 class PutsCallAST : public StmtAST {
     ExprPtr argument;
@@ -259,16 +265,16 @@ typedef unique_ptr<CodeBlockAST> BlockPtr;
 class PrototypeAST : public StmtAST {
     FuxType type;
     string name;
-    ArgMap args;
+    StmtList args;
 
 public:
-    PrototypeAST(FuxType type, const string &name, ArgMap args)
-    : type(type), name(name), args(args) {}
+    PrototypeAST(FuxType type, const string &name, StmtList &args)
+    : type(type), name(name), args(std::move(args)) {}
     ~PrototypeAST() override;
     
-    string getName();
-    ArgMap getArgs();
-    FuxType getType();
+    string &getName();
+    StmtList &getArgs();
+    FuxType &getType();
     
     Function *codegen(LLVMWrapper *fuxLLVM) override;
     StmtPtr analyse() override;
@@ -282,13 +288,13 @@ typedef unique_ptr<PrototypeAST> ProtoPtr;
 
 class FunctionAST : public StmtAST {
     ProtoPtr proto;
-    BlockPtr body;
+    StmtPtr body;
 
 public:
-    FunctionAST(FuxType type, const string &name, ArgMap args, BlockPtr &body)
+    FunctionAST(FuxType type, const string &name, StmtList &args, StmtPtr &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
-    FunctionAST(ProtoPtr proto, BlockPtr &body)
+    FunctionAST(ProtoPtr &proto, StmtPtr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;

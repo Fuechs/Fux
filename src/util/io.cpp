@@ -11,25 +11,25 @@
 
 #include "io.hpp"
 
-const string readFile(const string& path) {
-    ifstream file(path);
+const std::string readFile(const std::string& path) {
+    std::ifstream file(path);
     if (!file.is_open()) {
-        cerr << "could not open file '" << path << "'\n";
+        std::cerr << "could not open file '" << path << "'\n";
         exit(1);
     }
-    stringstream buffer;
+    std::stringstream buffer;
     buffer << file.rdbuf();
     return buffer.str();
 }
 
-const string getDirectory(const string path) {
-    string directory = "";
+const std::string getDirectory(const std::string path) {
+    std::string directory = "";
     const size_t lastSlashIdx = path.rfind('/');
-    if (lastSlashIdx != string::npos)
+    if (lastSlashIdx != std::string::npos)
         directory = path.substr(0, lastSlashIdx);
     return directory;
 }
 
-const string getFileName(const string &path) {
+const std::string getFileName(const std::string &path) {
     return path.substr(path.find_last_of("/") + 1);
 }

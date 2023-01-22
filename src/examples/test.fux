@@ -1,1 +1,4 @@
-intern safe final fixed **num: custom_int[1] = 4 ^ (1 / 2); 
+main(final argc -> u64, final argv -> str[]): i64 {
+    puts "Hello World!\n";
+    return 0;
+}

@@ -1,6 +1,6 @@
 cc = clang++
 exec = fux
-cflags = -g -O3 -std=c++20
+cflags = -g -O3 -std=c++20 -stdlib=libc++
 llvmflags = `llvm-config --cxxflags --ldflags --system-libs --libs core`
 ex = src/examples
  

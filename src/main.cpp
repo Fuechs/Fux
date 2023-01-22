@@ -65,7 +65,8 @@ int main(int argc, char **argv) {
     if (mainFile->hasErrors()) {
         delete mainFile;
         goto end;
-    }
+    } 
+    mainFile->reportErrors();
     root->debugPrint();
 
     // return result; // ! program ends here
@@ -236,8 +237,8 @@ int repl() {
 // create AST to test the generator without parser
 void createTestAST(RootPtr &root) {
     // modify(num -> i64): void;
-    ArgMap eArgs = ArgMap();
-    eArgs["num"] = FuxType::createRef(FuxType::I64);
+    StmtList eArgs = StmtList();
+    eArgs.push_back(make_unique<VariableDeclAST>("num", FuxType::createRef(FuxType::I64)));
     StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::VOID), "modify", eArgs);
     root->addSub(emptyF);
 
@@ -246,28 +247,29 @@ void createTestAST(RootPtr &root) {
     //      modify(x);
     //      return x;
     // }
-    ArgMap args = ArgMap();
-    args["argc"] = FuxType(FuxType::I64);
-    args["argv"] = FuxType::createArray(FuxType::STR);
+    StmtList args = StmtList();
+    args.push_back(make_unique<VariableDeclAST>("argc", FuxType::createStd(FuxType::U64, 0, {FuxType::FINAL})));
+    args.push_back(make_unique<VariableDeclAST>("argv", FuxType::createArray(FuxType::STR, 0, {FuxType::FINAL})));
 
-    BlockPtr body = make_unique<CodeBlockAST>();
+    StmtList bodyList = StmtList();
     
     ExprPtr variable = make_unique<VariableExprAST>("argc");
     ExprPtr constant = make_unique<NumberExprAST, _i64>(1);
     ExprPtr binop = make_unique<BinaryExprAST>('+', variable, constant);
     StmtPtr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I64), binop);
-    body->addSub(decl);
+    bodyList.push_back(std::move(decl));
 
     variable = make_unique<VariableExprAST>("x");
     ExprList pass = ExprList();
     pass.push_back(std::move(variable));
     StmtPtr call = make_unique<CallExprAST>("modify", pass);
-    body->addSub(call);
+    bodyList.push_back(std::move(call));
 
     variable = make_unique<VariableExprAST>("x");
     StmtPtr ret = make_unique<ReturnCallAST>(variable);
-    body->addSub(ret);
-    
+    bodyList.push_back(std::move(ret));
+
+    StmtPtr body = make_unique<CodeBlockAST>(bodyList);
     StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
     root->addSub(mFunc);
 }

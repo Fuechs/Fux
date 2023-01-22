@@ -41,7 +41,9 @@ RootPtr Parser::parse() {
 
 StmtPtr Parser::parseStmt() {
     StmtPtr stmt = parseFunctionDeclStmt();
-    if (stmt && stmt->getASTType() != AST::CodeBlockAST) // don't throw useless errors
+    if (stmt 
+    && stmt->getASTType() != AST::CodeBlockAST 
+    && stmt->getASTType() != AST::FunctionAST) // don't throw useless errors
         expect(SEMICOLON);
     return stmt;
 }
@@ -49,12 +51,44 @@ StmtPtr Parser::parseStmt() {
 StmtPtr Parser::parseFunctionDeclStmt() {
     TypePrefix typePrefix = parseTypePrefix();
 
-    if (check(IDENTIFIER) && *current != LPAREN) {
+    if (*current != IDENTIFIER)
+        return parseBlockStmt();
+
+    if (peek() != LPAREN) {
         typePrefix.first = true;
         return parseVariableDeclStmt(typePrefix);
     }
+
+    const string symbol = eat().value;
+
+    expect(LPAREN);
+    StmtList args = StmtList();
+    do {
+        if (*current == RPAREN)
+            break;
+        StmtPtr arg = parseVariableDeclStmt();
+        if (!arg)
+            continue;
+        args.push_back(std::move(arg));
+    } while (check(COMMA));
+    expect(RPAREN, MISSING_BRACKET);
+
+    OptType type = parseTypeSuffix(typePrefix);
+
+    if (!type.first) {
+        error->createError(UNEXPECTED_TOKEN, eat(),
+            "expected a COLON ':' or RPOINTER '->'");
+        error->addNote(peek(-2), 
+            "automatic typing for functions not supported yet");
+        return nullptr;
+    }
+
+    if (*current == SEMICOLON)
+        return make_unique<PrototypeAST>(type.second, symbol, args);
+
+    StmtPtr body = parseBlockStmt();
     
-    return parseBlockStmt();
+    return make_unique<FunctionAST>(type.second, symbol, args, body);
 }
 
 StmtPtr Parser::parseBlockStmt() {
@@ -100,7 +134,9 @@ StmtPtr Parser::parsePutsStmt() {
 
 StmtPtr Parser::parseReturnStmt() {
     if (check(KEY_RETURN)) {
-        ExprPtr arg = parseExpr();
+        ExprPtr arg = nullptr;
+        if (*current != SEMICOLON)
+            arg = parseExpr();
         return make_unique<ReturnCallAST>(arg);
     } else
         return parseVariableDeclStmt();
@@ -112,53 +148,38 @@ StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
 
     typePrefix = parseTypePrefix();
 
-    if (!check(IDENTIFIER)) {
+    if (*current != IDENTIFIER) {
         if (!typePrefix.first) // check wether a type prefix was actually parsed
             return parseExpr();
-
         error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
         error->addNote(peek(-1), "type prefix found here");
         return nullptr;
     }
 
     actual:
-    const string symbol = peek(-1).value; // get value from identifier
-    FuxType type = FuxType();
+    const string symbol = eat().value; // get value from identifier
+    OptType type = parseTypeSuffix(typePrefix);
     
-    if (check(COLON))
-        type = parseType(typePrefix);
-    else if (check(RPOINTER)) { // reference
-        if (typePrefix.second.first > 0)
-            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
-                "given pointer depth will be ignored and a reference parsed instead");
-        typePrefix.second.first = -1;
-        type = parseType(typePrefix);
-        if (!type) {
-            error->createError(UNEXPECTED_TOKEN, *current++, "expected a type after RPOINTER '->'");
-            error->addNote(peek(-2), "automatic typing is not supported for references yet");
-            return nullptr; // failed statement
-        }
-    } else {
+    if (!type.first) {
         --current;
-        return parseExpr();
+        return nullptr;
     }
     
     if (check(EQUALS)) { // =
-        if (!type)
-            type = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
+        if (!type.second)
+            type.second = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
     } else if (check(TRIPLE_EQUALS)) { // ===
-        if (!type) {
+        if (!type.second) {
             typePrefix.second.second.push_back(FuxType::CONSTANT);
-            type = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
+            type.second = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
         } else
-            type.access.push_back(FuxType::CONSTANT);
+            type.second.access.push_back(FuxType::CONSTANT);
     } else {
-        error->createError(UNEXPECTED_TOKEN, *current, "expected an EQUALS '=' or a TRIPLE_EQUALS '===' in variable declaration");
-        return nullptr;
+        return make_unique<VariableDeclAST>(symbol, type.second);
     }
 
     ExprPtr value = parseExpr();
-    return make_unique<VariableDeclAST>(symbol, type, value);
+    return make_unique<VariableDeclAST>(symbol, type.second, value);
 }
 
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
@@ -256,7 +277,7 @@ ExprPtr Parser::parsePrimaryExpr() {
     }
 }
 
-FuxType Parser::parseType(TypePrefix typePrefix) {
+FuxType Parser::parseTypeName(TypePrefix &typePrefix) {
     if (!current->isType()) 
         return FuxType(); // = NO_TYPE; will be checked by analyser
     
@@ -286,6 +307,35 @@ Parser::TypePrefix Parser::parseTypePrefix() {
     bool moved = (access != FuxType::AccessList({FuxType::PUBLIC}) || pointerDepth != 0);
 
     return TypePrefix(moved, {pointerDepth, access});
+}
+
+Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
+    FuxType type = FuxType();
+    bool success = true;
+
+    if (check(COLON)) {
+        type = parseTypeName(typePrefix);
+    } else if (check(RPOINTER)) {
+        if (typePrefix.second.first > 0) {
+            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
+                "given pointer depth will be ignored and a reference parsed instead");
+            error->addNote(peek(-3), "pointer depth defined here");
+        }
+        typePrefix.second.first = -1;
+        type = parseTypeName(typePrefix);
+
+        if (!type) {
+            // don't advance so var decl will be pased normally
+            error->createError(UNEXPECTED_TOKEN, *current, "expected a type after RPOINTER '->'");
+            error->addNote(peek(-2), "automatic typing is not supported for references yet");
+            // we are not setting success to false here because 
+            // the parser should continue parsing the declaration
+        }
+    } else {
+        success = false;
+    }
+    
+    return OptType(success, type);
 }
 
 Token &Parser::eat() {

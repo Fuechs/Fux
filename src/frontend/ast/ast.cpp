@@ -46,6 +46,9 @@ AST AssignmentExprAST::getASTType() { return AST::AssignmentExprAST; }
 
 VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
+string &VariableDeclAST::getSymbol() { return symbol; }
+FuxType &VariableDeclAST::getType() { return type; }
+ExprPtr &VariableDeclAST::getValue() { return value; }
 
 AST PutsCallAST::getASTType() { return AST::PutsCallAST; }
 
@@ -61,9 +64,9 @@ PrototypeAST::~PrototypeAST() {
     args.clear();
 }
 
-string PrototypeAST::getName() { return name; }
-ArgMap PrototypeAST::getArgs() { return args; }
-FuxType PrototypeAST::getType() { return type; }
+string &PrototypeAST::getName() { return name; }
+StmtList &PrototypeAST::getArgs() { return args; }
+FuxType &PrototypeAST::getType() { return type; }
 AST PrototypeAST::getASTType() { return AST::PrototypeAST; }
 
 AST FunctionAST::getASTType() { return AST::FunctionAST; }
