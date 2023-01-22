@@ -414,16 +414,16 @@ void Lexer::getToken() {
         
         case '\'':
             currentToken.type = CHAR;
-            if (!isalpha(peek()))
+            advance();
+            if (!isalpha(current()))
                 error->createError(EXPECTED_CHAR_LITERAL_EOF, line, col, "expected actual character");
             else {
-                advance();
                 currentToken.value = current();
-                if (peek() != '\'')
+                advance();
+                if (current() != '\'')
                     error->createError(ILLEGAL_CHAR_LITERAL_FORMAT, line, col, "expected ending quote");
-                else
-                    advance();
             }
+            advance();
             break;
          
         case '"':

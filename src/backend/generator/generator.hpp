@@ -12,6 +12,7 @@
 #pragma once
 
 #include "../../fux.hpp"
+
 #ifdef FUX_BACKEND
 #include "../llvmheader.hpp"
 #include "../../frontend/ast/ast.hpp"

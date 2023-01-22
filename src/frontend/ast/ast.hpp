@@ -40,6 +40,21 @@ public:
     Position pos = Position();
 };
 
+class CharExprAST : public ExprAST {
+    ValueStruct *value;
+
+public:
+    CharExprAST(_c16 &value) : value(new ValueStruct(value)) {}
+    ~CharExprAST();
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
 class StringExprAST : public ExprAST {
     ValueStruct *value;
 

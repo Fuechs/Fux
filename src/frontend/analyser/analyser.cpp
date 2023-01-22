@@ -13,36 +13,38 @@
 
 StmtPtr Analyser::analyse() { return std::move(origin->analyse()); }
 
-StmtPtr NumberExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr NumberExprAST::analyse() { return nullptr; }
 
-StmtPtr StringExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr CharExprAST::analyse() { return nullptr; }
 
-StmtPtr VariableExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr StringExprAST::analyse() { return nullptr; }
 
-StmtPtr MemberExprAST::analyse() { return std::move(nullStmt); } 
+StmtPtr VariableExprAST::analyse() { return nullptr; }
 
-StmtPtr BinaryExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr MemberExprAST::analyse() { return nullptr; }
 
-StmtPtr ComparisonExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr BinaryExprAST::analyse() { return nullptr; }
 
-StmtPtr LogicalExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr ComparisonExprAST::analyse() { return nullptr; }
 
-StmtPtr CallExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr LogicalExprAST::analyse() { return nullptr; }
 
-StmtPtr AssignmentExprAST::analyse() { return std::move(nullStmt); }
+StmtPtr CallExprAST::analyse() { return nullptr; }
 
-StmtPtr VariableDeclAST::analyse() { return std::move(nullStmt); }
+StmtPtr AssignmentExprAST::analyse() { return nullptr; }
 
-StmtPtr PutsCallAST::analyse() { return std::move(nullStmt); }
+StmtPtr VariableDeclAST::analyse() { return nullptr; }
 
-StmtPtr ReturnCallAST::analyse() { return std::move(nullStmt); }
+StmtPtr PutsCallAST::analyse() { return nullptr; }
 
-StmtPtr IfElseAST::analyse() { return std::move(nullStmt); }
+StmtPtr ReturnCallAST::analyse() { return nullptr; }
 
-StmtPtr CodeBlockAST::analyse() { return std::move(nullStmt); }
+StmtPtr IfElseAST::analyse() { return nullptr; }
 
-StmtPtr PrototypeAST::analyse() { return std::move(nullStmt); }
+StmtPtr CodeBlockAST::analyse() { return nullptr; }
 
-StmtPtr FunctionAST::analyse() { return std::move(nullStmt); }
+StmtPtr PrototypeAST::analyse() { return nullptr; }
 
-StmtPtr RootAST::analyse() { return std::move(nullStmt); }
+StmtPtr FunctionAST::analyse() { return nullptr; }
+
+StmtPtr RootAST::analyse() { return nullptr; }

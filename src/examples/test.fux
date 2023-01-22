@@ -1,6 +1,1 @@
-modify(num -> i64): void;
-
-main(final argc -> u64, final argv -> str[]): i64 {
-    x: i64 = argc + 1;
-    return x;
-}
+'a'

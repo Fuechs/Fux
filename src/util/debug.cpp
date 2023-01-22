@@ -40,6 +40,8 @@ void Lexer::debugPrint() {
 
 void NumberExprAST::debugPrint() { value->debugPrint(); }
 
+void CharExprAST::debugPrint() { value->debugPrint(); }
+
 void StringExprAST::debugPrint() { value->debugPrint(); }
 
 void VariableExprAST::debugPrint() { cout << name; }

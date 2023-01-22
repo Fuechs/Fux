@@ -251,6 +251,7 @@ ExprPtr Parser::parsePrimaryExpr() {
     switch (that.type) {
         case NUMBER:        return make_unique<NumberExprAST, _i64>(stoll(that.value));
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
+        case CHAR:          return make_unique<CharExprAST>(that.value.front());
         case STRING:        return make_unique<StringExprAST>(that.value); 
         case IDENTIFIER:    {
             ExprPtr primary = make_unique<VariableExprAST>(that.value);

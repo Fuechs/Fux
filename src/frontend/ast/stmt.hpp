@@ -14,6 +14,7 @@
 enum class AST {
     // expressions
     NumberExprAST,
+    CharExprAST,
     StringExprAST,
     VariableExprAST,
     MemberExprAST,

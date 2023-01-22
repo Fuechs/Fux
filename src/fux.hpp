@@ -11,43 +11,32 @@
 
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <stdexcept>
-// #include <algorithm>
-#include <sstream>
 #include <fstream>
-#include <memory>
-#include <map>
-// #include <system_error>
-#include <utility>
-// #include <optional>
-// #include <mutex>
 #include <future>
-
-// #include <cstdio>
-// #include <cstring>
-// #include <cstdint>
-// #include <cstdlib>
-// #include <cassert>
-// #include <cctype>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "util/color.hpp"
 #include "util/io.hpp"
 
-using std::string;
-using std::to_string;
 using std::cout;
 using std::cerr;
 using std::endl;
-using std::vector;
-using std::unique_ptr;
+using std::exception;
 using std::make_unique;
 using std::map;
 using std::pair;
+using std::string;
 using std::stringstream;
-using std::exception;
+using std::to_string;
+using std::unique_ptr;
+using std::vector;
 
 //! backend & threading are currently not being compiled to save time 
 // #define FUX_BACKEND

@@ -25,6 +25,9 @@ Position &Position::operator=(Position pos) {
 NumberExprAST::~NumberExprAST() { delete value; }
 AST NumberExprAST::getASTType() { return AST::NumberExprAST; }
 
+CharExprAST::~CharExprAST() { delete value; }
+AST CharExprAST::getASTType() { return AST::CharExprAST; }
+
 StringExprAST::~StringExprAST() { delete value; }
 AST StringExprAST::getASTType() { return AST::StringExprAST; }
 

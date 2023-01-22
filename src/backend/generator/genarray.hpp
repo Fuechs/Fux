@@ -11,10 +11,11 @@
 
 #pragma once
 
-#include "wrapper.hpp"
 #include "../llvmheader.hpp"
 
 #ifdef FUX_BACKEND
+#include "wrapper.hpp"
+
 class FuxArray {
 public:
     FuxArray(LLVMWrapper *fuxLLVM, Type *type, const bool userDef = false) : elementType(type) {
