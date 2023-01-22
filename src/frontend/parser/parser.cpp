@@ -87,7 +87,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     if (*current == SEMICOLON)
         return make_unique<PrototypeAST>(type.second, symbol, args);
 
-    StmtPtr body = parseBlockStmt();
+    StmtPtr body = parseStmt();
     
     return make_unique<FunctionAST>(type.second, symbol, args, body);
 }

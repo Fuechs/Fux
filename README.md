@@ -33,8 +33,8 @@ main(): i64 {
 ```
 
 <p align="center">
-    <a href="#examples"><img src="https://img.shields.io/badge/-Examples-fcaa68?style=for-the-badge"/></a>
-    <a href="#state"><img src="https://img.shields.io/badge/-Language_State-fcaa68?style=for-the-badge" /></a>
+    <a href="./docs/examples.md"><img src="https://img.shields.io/badge/-Examples-fcaa68?style=for-the-badge"/></a>
+    <a href="./docs/state.md"><img src="https://img.shields.io/badge/-Language_State-fcaa68?style=for-the-badge" /></a>
     <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Documentation-fcaa68?style=for-the-badge" /></a>
     <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/-Contributing-fcaa68?style=for-the-badge" /></a>
 </p>
@@ -79,96 +79,13 @@ main(): i64 {
 
 [^5]: Feature(s) are not included for sure in the final language.
 
-## State 
+---
 
-### Roadmap
-
-- **Stage I** --- [`Turing Complete in C++`](./src/examples/rule110.fux)
-    - [...] [`Syntax`](./docs/)
-    - [&check;] [`Error System`](./src/frontend/error/)
-    - [&check;] [`Source Management`](./src/util/source.hpp)
-    - [&check;] [`Threading`](./src/util/threading.hpp)
-    - [&check;] [`Lexer`](./src/frontend/lexer/)
-    - [...] [`AST`](./src/frontend/ast/)
-    - [...] [`Parser`](./src/frontend/parser/)
-        - [&check;] [`Value`](./src/frontend/parser/value.hpp)
-        - [&check;] [`Type`](./src/frontend/parser/type.hpp)
-        - [...] [`Parsing`](./src/frontend/parser/parser.hpp)
-    - [&cross;] [`Analyser`](./src/frontend/analyser/)
-        - [&cross;] [`Expectation`](./src/frontend/analyser/expectation.hpp)
-    - [...] [`Context (LLVM)`](./src/backend/context/)
-        - [...] [`Memory`](./src/backend/context/fuxmem.hpp)
-        - [...] [`String`](./src/backend/context/fuxstr.hpp)
-        - [...] [`Input / Output`](./src/backend/context/fuxio.hpp)
-    - [...] [`Generator (LLVM)`](./src/backend/generator/)
-        - [...] [`Array Types`](./src/backend/generator/genarray.hpp)
-        - [...] [`Code Generation`](./src/backend/generator/generator.cpp)
-    - [&cross;] [`Optimizer (LLVM)`](./src/backend/)
-    - [&cross;] [`Compiler (LLVM)`](./src/backend/compiler/)
-- **Stage II** --- [`Core Package`](./src/packages/core/)
-- **Stage III** --- `Alpha Release`
-- *Soon ...*
-
-> __Note__ \
-> The Fux programming language is under the [Apache License v2.0 with LLVM Exceptions](./LICENSE).       
-
-Fux is currently still in early development. There is no working compiler available for this language. \
-**Fux is not supposed to be a superset of C++.**
-
-As of now, I am focusing on refining the syntax of Fux, since some aspects are not yet clear. The compiler is being developed alongside this process. 
-
-I have been inspired by [C++](https://isocpp.org/), [Python](https://python.org/), [Odin](https://odin-lang.org/), [Elixir](https://elixir-lang.org/) and [Carbon](https://github.com/carbon-language/carbon-lang).
-
-## Contributing
-
-More information [here](./CONTRIBUTING.md).
-
-## Examples
-
-### Arrays
-
-```rust
-array: i32[]; // {}
-array[] << 1; // {1}
-array[] << 3; // {1, 3}
-```
-
-### Reading Files
-
-```rust
-get core.file;
-
-using file;
-...
-filePath := "path/to/file.txt";
-file: File(filePath, 'r');
-contents := file.read();
-```
-
-### Formatted Print
-
-```rust
-get core.io;
-...
-res := 1;
-io.putf("Result: %i", res);
-```
-
-### Fibonacci
-
-```rust
-get core.io;
-
-fib(num: i32): i32 {
-    if (num < 2)
-    	return num;    
-    return fib(num-1) + fib(num-2);
-}
-
-main(): i64 {
-    io.getint() >> fib() >> io.putln();
-    return 0;
-}
-```
+<p align="center">
+    <a href="./docs/examples.md"><img src="https://img.shields.io/badge/-Examples-fcaa68?style=for-the-badge"/></a>
+    <a href="./docs/state.md"><img src="https://img.shields.io/badge/-Language_State-fcaa68?style=for-the-badge" /></a>
+    <a href="./docs/README.md"><img src="https://img.shields.io/badge/-Documentation-fcaa68?style=for-the-badge" /></a>
+    <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/-Contributing-fcaa68?style=for-the-badge" /></a>
+</p>
 
 ---
