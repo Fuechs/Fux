@@ -41,7 +41,9 @@ RootPtr Parser::parse() {
 
 StmtPtr Parser::parseStmt() {
     StmtPtr stmt = parseFunctionDeclStmt();
-    if (stmt && stmt->getASTType() != AST::CodeBlockAST) // don't throw useless errors
+    if (stmt 
+    && stmt->getASTType() != AST::CodeBlockAST 
+    && stmt->getASTType() != AST::FunctionAST) // don't throw useless errors
         expect(SEMICOLON);
     return stmt;
 }
@@ -83,8 +85,10 @@ StmtPtr Parser::parseFunctionDeclStmt() {
 
     if (*current == SEMICOLON)
         return make_unique<PrototypeAST>(type.second, symbol, args);
+
+    StmtPtr body = parseBlockStmt();
     
-    return parseBlockStmt();
+    return make_unique<FunctionAST>(type.second, symbol, args, body);
 }
 
 StmtPtr Parser::parseBlockStmt() {

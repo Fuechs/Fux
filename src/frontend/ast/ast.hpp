@@ -288,13 +288,13 @@ typedef unique_ptr<PrototypeAST> ProtoPtr;
 
 class FunctionAST : public StmtAST {
     ProtoPtr proto;
-    BlockPtr body;
+    StmtPtr body;
 
 public:
-    FunctionAST(FuxType type, const string &name, StmtList &args, BlockPtr &body)
+    FunctionAST(FuxType type, const string &name, StmtList &args, StmtPtr &body)
     : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
 
-    FunctionAST(ProtoPtr &proto, BlockPtr &body)
+    FunctionAST(ProtoPtr &proto, StmtPtr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     Function *codegen(LLVMWrapper *fuxLLVM) override;

@@ -251,24 +251,25 @@ void createTestAST(RootPtr &root) {
     args.push_back(make_unique<VariableDeclAST>("argc", FuxType::createStd(FuxType::U64, 0, {FuxType::FINAL})));
     args.push_back(make_unique<VariableDeclAST>("argv", FuxType::createArray(FuxType::STR, 0, {FuxType::FINAL})));
 
-    BlockPtr body = make_unique<CodeBlockAST>();
+    StmtList bodyList = StmtList();
     
     ExprPtr variable = make_unique<VariableExprAST>("argc");
     ExprPtr constant = make_unique<NumberExprAST, _i64>(1);
     ExprPtr binop = make_unique<BinaryExprAST>('+', variable, constant);
     StmtPtr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I64), binop);
-    body->addSub(decl);
+    bodyList.push_back(std::move(decl));
 
     variable = make_unique<VariableExprAST>("x");
     ExprList pass = ExprList();
     pass.push_back(std::move(variable));
     StmtPtr call = make_unique<CallExprAST>("modify", pass);
-    body->addSub(call);
+    bodyList.push_back(std::move(call));
 
     variable = make_unique<VariableExprAST>("x");
     StmtPtr ret = make_unique<ReturnCallAST>(variable);
-    body->addSub(ret);
-    
+    bodyList.push_back(std::move(ret));
+
+    StmtPtr body = make_unique<CodeBlockAST>(bodyList);
     StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
     root->addSub(mFunc);
 }
