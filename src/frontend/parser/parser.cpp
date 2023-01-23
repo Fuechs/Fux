@@ -52,15 +52,14 @@ StmtPtr Parser::parseStmt() {
 }
 
 StmtPtr Parser::parseFunctionDeclStmt() {
-    TypePrefix typePrefix = parseTypePrefix();
+    OptTypePrefix optTypePrefix = parseTypePrefix();
+    TypePrefix typePrefix = optTypePrefix.value();
 
     if (*current != IDENTIFIER)
         return parseBlockStmt();
 
-    if (peek() != LPAREN) {
-        typePrefix.first = true;
+    if (peek() != LPAREN) 
         return parseVariableDeclStmt(typePrefix);
-    }
 
     const string symbol = eat().value;
 
@@ -79,7 +78,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
 
     OptType type = parseTypeSuffix(typePrefix);
 
-    if (!type.first) {
+    if (!type.has_value()) {
         error->createError(UNEXPECTED_TOKEN, eat(),
             "expected a COLON ':' or RPOINTER '->'");
         error->addNote(peek(-2), 
@@ -88,11 +87,11 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     }
 
     if (*current == SEMICOLON)
-        return make_unique<PrototypeAST>(type.second, symbol, args);
+        return make_unique<PrototypeAST>(type.value(), symbol, args);
 
     StmtPtr body = parseStmt();
     
-    return make_unique<FunctionAST>(type.second, symbol, args, body);
+    return make_unique<FunctionAST>(type.value(), symbol, args, body);
 }
 
 StmtPtr Parser::parseBlockStmt() {
@@ -147,43 +146,47 @@ StmtPtr Parser::parseReturnStmt() {
 }
 
 StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
-    if (typePrefix.first)
+    if (typePrefix != TypePrefix())
         goto actual;
 
-    typePrefix = parseTypePrefix();
+    {OptTypePrefix optTypePrefix = parseTypePrefix();
 
     if (*current != IDENTIFIER) {
-        if (!typePrefix.first) // check wether a type prefix was actually parsed
+        if (!optTypePrefix.has_value()) // check wether a type prefix was actually parsed
             return parseExpr();
         error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
         error->addNote(peek(-1), "type prefix found here");
         return nullptr;
     }
+    
+    typePrefix = optTypePrefix.value();}
 
     actual:
     const string symbol = eat().value; // get value from identifier
-    OptType type = parseTypeSuffix(typePrefix);
+    OptType optType = parseTypeSuffix(typePrefix);
     
-    if (!type.first) {
+    if (!optType.has_value()) {
         --current;
         return nullptr;
     }
+
+    FuxType type = optType.value();
     
     if (check(EQUALS)) { // =
-        if (!type.second)
-            type.second = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
+        if (!type)
+            type = FuxType(FuxType::AUTO, 0, typePrefix.second);
     } else if (check(TRIPLE_EQUALS)) { // ===
-        if (!type.second) {
-            typePrefix.second.second.push_back(FuxType::CONSTANT);
-            type.second = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
+        if (!type) {
+            typePrefix.second.push_back(FuxType::CONSTANT);
+            type = FuxType(FuxType::AUTO, typePrefix.first, typePrefix.second);
         } else
-            type.second.access.push_back(FuxType::CONSTANT);
+            type.access.push_back(FuxType::CONSTANT);
     } else {
-        return make_unique<VariableDeclAST>(symbol, type.second);
+        return make_unique<VariableDeclAST>(symbol, type);
     }
 
     ExprPtr value = parseExpr();
-    return make_unique<VariableDeclAST>(symbol, type.second, value);
+    return make_unique<VariableDeclAST>(symbol, type, value);
 }
 
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
@@ -294,17 +297,17 @@ FuxType Parser::parseTypeName(TypePrefix &typePrefix) {
     
     Token typeToken = eat();
     if (check(ARRAY_BRACKET))
-        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);
+        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.first, typePrefix.second, typeToken.value);
     else if (check(LBRACKET)) {
         ExprPtr size = parseExpr(); 
         expect(RBRACKET, MISSING_BRACKET);
         // FIXME: array size turns into a nullptr, probably in FuxType::operator=()
-        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value, size);
+        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.first, typePrefix.second, typeToken.value, size);
     } else
-        return FuxType::createStd((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);
+        return FuxType::createStd((FuxType::Kind) typeToken.type, typePrefix.first, typePrefix.second, typeToken.value);
 }
 
-Parser::TypePrefix Parser::parseTypePrefix() {
+Parser::OptTypePrefix Parser::parseTypePrefix() {
 
     FuxType::AccessList access = {FuxType::PUBLIC};
 
@@ -317,22 +320,21 @@ Parser::TypePrefix Parser::parseTypePrefix() {
 
     bool moved = (access != FuxType::AccessList({FuxType::PUBLIC}) || pointerDepth != 0);
 
-    return TypePrefix(moved, {pointerDepth, access});
+    return TypePrefix(pointerDepth, access);
 }
 
 Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
     FuxType type = FuxType();
-    bool success = true;
 
     if (check(COLON)) {
         type = parseTypeName(typePrefix);
     } else if (check(RPOINTER)) {
-        if (typePrefix.second.first > 0) {
+        if (typePrefix.first > 0) {
             error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
                 "given pointer depth will be ignored and a reference parsed instead");
             error->addNote(peek(-3), "pointer depth defined here");
         }
-        typePrefix.second.first = -1;
+        typePrefix.first = -1;
         type = parseTypeName(typePrefix);
 
         if (!type) {
@@ -342,11 +344,10 @@ Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
             // we are not setting success to false here because 
             // the parser should continue parsing the declaration
         }
-    } else {
-        success = false;
-    }
+    } else
+        return OptType();
     
-    return OptType(success, type);
+    return FuxType(type);
 }
 
 ExprPtr Parser::parseNumberExpr(Token &tok) {

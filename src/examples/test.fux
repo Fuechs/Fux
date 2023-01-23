@@ -1,6 +1,2 @@
-if (true) 
-    return true;
-else if (false)
-    return false;
-else 
-    return null;
+main(final argc -> u64, final argv -> str[]): i64 
+    return 0;

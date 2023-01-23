@@ -20,8 +20,9 @@
 
 class Parser {
 public:
-    typedef pair<bool, pair<_i64, FuxType::AccessList>> TypePrefix; 
-    typedef pair<bool, FuxType> OptType; 
+    typedef pair<_i64, FuxType::AccessList> TypePrefix;
+    typedef std::optional<TypePrefix> OptTypePrefix;
+    typedef std::optional<FuxType> OptType;
 
     Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false);
     ~Parser();
@@ -38,7 +39,6 @@ private:
     const bool mainFile;
 
     StmtPtr parseStmt();
-    // TODO: function declaration
     StmtPtr parseFunctionDeclStmt();
     StmtPtr parseBlockStmt();
     StmtPtr parseIfElseStmt();
@@ -72,11 +72,11 @@ private:
     // parse type name + array types
     FuxType parseTypeName(TypePrefix &typePrefix);
     // parse access and pointer depth
-    TypePrefix parseTypePrefix();
+    OptTypePrefix parseTypePrefix();
     // parse type suffix (: | -> ...)
     OptType parseTypeSuffix(TypePrefix &typePrefix);
 
-    // parse number wit correct type
+    // parse number with correct type
     ExprPtr parseNumberExpr(Token &tok);
 
     // get next token
