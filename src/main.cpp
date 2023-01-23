@@ -11,14 +11,15 @@
 
 #include "fux.hpp"
 #include "util/source.hpp"
+
 #ifdef FUX_BACKEND
 #include "util/threading.hpp"
 #include "backend/context/context.hpp"
-#endif
-
-__fux_struct fux;
 
 void createTestAST(RootPtr &root);
+#endif
+
+FuxStruct fux;
 
 int main(int argc, char **argv) {
     int result = 0;
@@ -234,6 +235,7 @@ int repl() {
     return result;
 }
 
+#ifdef FUX_BACKEND
 // create AST to test the generator without parser
 void createTestAST(RootPtr &root) {
     // modify(num -> i64): void;
@@ -273,6 +275,7 @@ void createTestAST(RootPtr &root) {
     StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
     root->addSub(mFunc);
 }
+#endif
 
 void clearConsole() {
     #ifdef FUX_WIN

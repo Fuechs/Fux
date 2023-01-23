@@ -25,18 +25,9 @@
 #include "util/color.hpp"
 #include "util/io.hpp"
 
-using std::cout;
-using std::cerr;
-using std::endl;
-using std::exception;
-using std::make_unique;
-using std::map;
-using std::pair;
-using std::string;
-using std::stringstream;
-using std::to_string;
-using std::unique_ptr;
-using std::vector;
+using std::cout, std::cerr, std::endl, std::exception, std::make_unique,
+        std::map, std::pair, std::string, std::stringstream, std::to_string,
+        std::unique_ptr, std::vector;
 
 //! backend & threading are currently not being compiled to save time 
 // #define FUX_BACKEND
@@ -67,9 +58,9 @@ using std::vector;
 #endif
 
 // compiler options / flags
-struct __options_struct {
+struct FuxOptions {
 
-    ~__options_struct() { 
+    ~FuxOptions() { 
         fileName.clear();
         fileLines.clear();
         out.clear(); 
@@ -111,7 +102,7 @@ struct __options_struct {
 };
 
 // fux metadata for the compiler
-struct __fux_struct {
+struct FuxStruct {
 
     // enumeration of all supported fux versions; can be targeted through compiler flags
     enum version {
@@ -123,10 +114,10 @@ struct __fux_struct {
     const version current = ALPHA;
     const string latest = "Alpha (0)";
 
-    __options_struct options;  
+    FuxOptions options;  
 };
 
-extern __fux_struct fux;
+extern FuxStruct fux;
 
 // read flags and data from call arguments
 int bootstrap(int argc, char **argv);
