@@ -11,7 +11,11 @@
 
 #include "analyser.hpp"
 
-StmtPtr Analyser::analyse() { return std::move(origin->analyse()); }
+StmtPtr Analyser::analyse() { return origin->analyse(); }
+
+StmtPtr NullExprAST::analyse() { return nullptr; }
+
+StmtPtr BoolExprAST::analyse() { return nullptr; }
 
 StmtPtr NumberExprAST::analyse() { return nullptr; }
 

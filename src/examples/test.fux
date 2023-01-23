@@ -1,2 +1,6 @@
-main(): i64
-    return 0;
+if (true) 
+    return true;
+else if (false)
+    return false;
+else 
+    return null;

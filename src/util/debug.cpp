@@ -38,6 +38,10 @@ void Lexer::debugPrint() {
 
 // * PARSER
 
+void NullExprAST::debugPrint() { cout << "null"; }
+
+void BoolExprAST::debugPrint() { value->debugPrint(); }
+
 void NumberExprAST::debugPrint() { value->debugPrint(); }
 
 void CharExprAST::debugPrint() { value->debugPrint(); }
@@ -120,9 +124,9 @@ void IfElseAST::debugPrint() {
     thenBody->debugPrint();
     if (!elseBody)
         return;
-    cout << " else ";
+    cout << ";\nelse ";
     elseBody->debugPrint();
-}
+} 
 
 // TODO: correct indentation for nested blocks
 void CodeBlockAST::debugPrint() {
@@ -178,7 +182,7 @@ void Parser::debugPrint(const string message) {
 
 void ValueStruct::debugPrint() {
     switch (type.kind) {
-        case FuxType::BOOL:     cout << __bool; break;
+        case FuxType::BOOL:     cout << (__bool ? "true" : "false"); break;
         case FuxType::I8:       cout << __i8; break;
         case FuxType::U8:       cout << to_string(__u8); break;
         case FuxType::C8:       cout << "'" << __c8 << "'"; break;

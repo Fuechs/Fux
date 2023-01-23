@@ -39,11 +39,14 @@ RootPtr Parser::parse() {
     return std::move(root);
 }
 
+// FIXME: error reporting: errors resulting out of other errors shouldn't be reported
 StmtPtr Parser::parseStmt() {
     StmtPtr stmt = parseFunctionDeclStmt();
+    // TODO: get rid of this if
     if (stmt 
     && stmt->getASTType() != AST::CodeBlockAST 
-    && stmt->getASTType() != AST::FunctionAST) // don't throw useless errors
+    && stmt->getASTType() != AST::FunctionAST
+    && stmt->getASTType() != AST::IfElseAST) // don't throw useless errors
         expect(SEMICOLON);
     return stmt;
 }
@@ -111,18 +114,18 @@ StmtPtr Parser::parseBlockStmt() {
 
 StmtPtr Parser::parseIfElseStmt() {
     if (check(KEY_IF)) {
-        eat();
-        expect(LPAREN, ILLEGAL_BRACKET_MISMATCH);
+        expect(LPAREN);
         ExprPtr condition = parseExpr();
-        expect(LPAREN, MISSING_BRACKET);
+        expect(RPAREN, MISSING_BRACKET);
         StmtPtr thenBody = parseStmt(); 
         if (check(KEY_ELSE)) {
             StmtPtr elseBody = parseStmt(); 
             return make_unique<IfElseAST>(condition, thenBody, elseBody);
-        } else
-            return make_unique<IfElseAST>(condition, thenBody);
-    } else
-        return parsePutsStmt();
+        } 
+        return make_unique<IfElseAST>(condition, thenBody);
+    } 
+
+    return parsePutsStmt();
 }
 
 StmtPtr Parser::parsePutsStmt() {
@@ -200,7 +203,7 @@ ExprPtr Parser::parseAssignmentExpr() {
         return make_unique<AssignmentExprAST>(dest, value, true);
     }
     
-    return std::move(dest);
+    return dest;
 }
 
 ExprPtr Parser::parseCallExpr() { return parseLogicalExpr(); } 
@@ -256,6 +259,9 @@ ExprPtr Parser::parsePrimaryExpr() {
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
         case CHAR:          return make_unique<CharExprAST>((_c8) that.value.front()); // TODO: parse c16
         case STRING:        return make_unique<StringExprAST>(that.value); 
+        case KEY_TRUE:      return make_unique<BoolExprAST>(true);
+        case KEY_FALSE:     return make_unique<BoolExprAST>(false);
+        case KEY_NULL:      return make_unique<NullExprAST>();
         case IDENTIFIER:    {
             ExprPtr primary = make_unique<VariableExprAST>(that.value);
 

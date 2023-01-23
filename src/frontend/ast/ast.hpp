@@ -24,6 +24,31 @@ typedef map<string, FuxType> ArgMap;
 
 /// EXPRESSIONS ///
 
+class NullExprAST : public ExprAST {
+public:    
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+    
+    Position pos = Position();
+};
+
+class BoolExprAST : public ExprAST {
+    ValueStruct *value;
+
+public:
+    BoolExprAST(bool value) : value(new ValueStruct(value)) {}
+    ~BoolExprAST();
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+    
+    Position pos = Position();
+};
+
 class NumberExprAST : public ExprAST {
     ValueStruct *value;
 

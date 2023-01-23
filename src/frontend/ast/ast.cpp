@@ -22,6 +22,11 @@ Position &Position::operator=(Position pos) {
     return *this; 
 }
 
+AST NullExprAST::getASTType() { return AST::NullExprAST; }
+
+BoolExprAST::~BoolExprAST() { delete value; }
+AST BoolExprAST::getASTType() { return AST::BoolExprAST; }
+
 NumberExprAST::~NumberExprAST() { delete value; }
 AST NumberExprAST::getASTType() { return AST::NumberExprAST; }
 
