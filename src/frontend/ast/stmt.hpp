@@ -45,6 +45,8 @@ public:
     virtual AST getASTType() = 0;
     virtual void debugPrint() = 0;
 
+    bool isExpr();
+
     Position pos = Position();
 };
 

@@ -81,3 +81,8 @@ AST FunctionAST::getASTType() { return AST::FunctionAST; }
 
 void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
 AST RootAST::getASTType() { return AST::RootAST; }
+
+bool StmtAST::isExpr() { 
+    return (this->getASTType() >= AST::NullExprAST 
+        && this->getASTType() <= AST::AssignmentExprAST);  
+}

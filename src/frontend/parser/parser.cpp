@@ -72,6 +72,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         StmtPtr arg = parseVariableDeclStmt();
         if (!arg)
             continue;
+        if (arg->isExpr()) { /* TODO: parse call expression */ }
         args.push_back(std::move(arg));
     } while (check(COMMA));
     expect(RPAREN, MISSING_BRACKET);
