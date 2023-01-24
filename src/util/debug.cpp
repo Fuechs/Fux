@@ -82,9 +82,9 @@ void LogicalExprAST::debugPrint() {
 
 void CallExprAST::debugPrint() { 
     cout << callee << "(";
-    for (ExprPtr &element : args) {
-        element->debugPrint();
-        if (element != args.back())
+    for (StmtPtr &arg : args) {
+        arg->debugPrint();
+        if (arg != args.back())
             cout << ", ";
     }
     cout << ")";

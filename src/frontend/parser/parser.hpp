@@ -20,9 +20,8 @@
 
 class Parser {
 public:
-    typedef pair<_i64, FuxType::AccessList> TypePrefix;
-    typedef std::optional<TypePrefix> OptTypePrefix;
-    typedef std::optional<FuxType> OptType;
+    typedef pair<bool, pair<_i64, FuxType::AccessList>> TypePrefix;
+    typedef pair<bool, FuxType> OptType;
 
     Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false);
     ~Parser();
@@ -51,8 +50,8 @@ private:
     ExprPtr parseExprList();
     // <symbol> = <value>
     ExprPtr parseAssignmentExpr();
-    // TODO: <callee> ( <arguments> )
-    ExprPtr parseCallExpr();
+    // <callee> ( <arguments> )
+    ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());
     // TODO: ||, &&
     ExprPtr parseLogicalExpr();
     // TODO: ==, !=, <, <=, >, >=
@@ -72,7 +71,7 @@ private:
     // parse type name + array types
     FuxType parseTypeName(TypePrefix &typePrefix);
     // parse access and pointer depth
-    OptTypePrefix parseTypePrefix();
+    TypePrefix parseTypePrefix();
     // parse type suffix (: | -> ...)
     OptType parseTypeSuffix(TypePrefix &typePrefix);
 

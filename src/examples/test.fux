@@ -1,2 +1,7 @@
-main(final argc -> u64, final argv -> str[]): i64 
-    return 0;
+modify(x -> i64): void;
+
+main(final argc -> u64, final argv -> str[]): i64 {
+    x: i64 = argc + 1;
+    modify(x);
+    return x;
+}

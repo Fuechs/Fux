@@ -177,10 +177,10 @@ public:
 
 class CallExprAST : public ExprAST {
     string callee;
-    ExprList args;
+    StmtList args;
 
 public:
-    CallExprAST(const string &callee, ExprList &args)
+    CallExprAST(const string &callee, StmtList &args)
     : callee(callee), args(std::move(args)) {}
     ~CallExprAST() override;
 
