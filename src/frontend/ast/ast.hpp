@@ -128,49 +128,17 @@ public:
 };
 
 class BinaryExprAST : public ExprAST {
-    char op;
+    TokenType op;
     ExprPtr LHS, RHS;
 
 public:
-    BinaryExprAST(char op, ExprPtr &LHS, ExprPtr &RHS) 
+    BinaryExprAST(TokenType &op, ExprPtr &LHS, ExprPtr &RHS) 
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
-
-    Position pos = Position();
-};
-
-class ComparisonExprAST : public ExprAST {
-    TokenType comp;
-    ExprPtr LHS, RHS;
-
-public:
-    ComparisonExprAST(TokenType comp, ExprPtr &LHS, ExprPtr &RHS)
-    : comp(comp), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
-    AST getASTType() override;
-    void debugPrint() override; 
-
-    Position pos = Position();
-};
-
-class LogicalExprAST : public ExprAST {
-    TokenType logical;
-    ExprPtr LHS, RHS;
-
-public:
-    LogicalExprAST(TokenType logical, ExprPtr &LHS, ExprPtr &RHS)
-    : logical(logical), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
-    AST getASTType() override;
-    void debugPrint() override; 
 
     Position pos = Position();
 };
@@ -189,23 +157,6 @@ public:
     AST getASTType() override;
     void debugPrint() override;
    
-    Position pos = Position();
-};
-
-class AssignmentExprAST : public ExprAST {
-    ExprPtr dest;
-    ExprPtr value;
-    bool constant;
-
-public:
-    AssignmentExprAST(ExprPtr &dest, ExprPtr &value, const bool constant = false)
-    : dest(std::move(dest)), value(std::move(value)), constant(constant) {}
-
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
-    AST getASTType() override;
-    void debugPrint() override;
-
     Position pos = Position();
 };
 

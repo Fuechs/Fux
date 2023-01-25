@@ -29,13 +29,7 @@ StmtPtr MemberExprAST::analyse() { return nullptr; }
 
 StmtPtr BinaryExprAST::analyse() { return nullptr; }
 
-StmtPtr ComparisonExprAST::analyse() { return nullptr; }
-
-StmtPtr LogicalExprAST::analyse() { return nullptr; }
-
 StmtPtr CallExprAST::analyse() { return nullptr; }
-
-StmtPtr AssignmentExprAST::analyse() { return nullptr; }
 
 StmtPtr VariableDeclAST::analyse() { return nullptr; }
 

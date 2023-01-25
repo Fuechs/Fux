@@ -64,22 +64,6 @@ void BinaryExprAST::debugPrint() {
     cout << ")";
 }
 
-void ComparisonExprAST::debugPrint() { 
-    cout << "(";
-    LHS->debugPrint();
-    cout << " " << comp << " ";
-    RHS->debugPrint();
-    cout << ")";
-}
-
-void LogicalExprAST::debugPrint() { 
-    cout << "(";
-    LHS->debugPrint();
-    cout << " " << logical << " ";
-    RHS->debugPrint();
-    cout << ")";
- }
-
 void CallExprAST::debugPrint() { 
     cout << callee << "(";
     for (StmtPtr &arg : args) {
@@ -88,15 +72,6 @@ void CallExprAST::debugPrint() {
             cout << ", ";
     }
     cout << ")";
-}
-
-void AssignmentExprAST::debugPrint() {  
-    dest->debugPrint();
-    if (constant)
-        cout << " === ";
-    else
-        cout << " = ";
-    value->debugPrint();
 }
 
 void VariableDeclAST::debugPrint() {

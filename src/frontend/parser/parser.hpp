@@ -48,22 +48,50 @@ private:
     ExprPtr parseExpr();
     // TODO: <expr>, <expr>, ...
     ExprPtr parseExprList();
-    // <symbol> = <value>
+    // TODO: <symbol> [...]= <value>
     ExprPtr parseAssignmentExpr();
-    // <callee> ( <arguments> )
-    ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());
-    // TODO: ||, &&
-    ExprPtr parseLogicalExpr();
-    // TODO: ==, !=, <, <=, >, >=
-    ExprPtr parseComparisonExpr();
+    // TODO: <bool> ? <expr> : <expr>
+    ExprPtr parseTernaryExpr();
+    // TODO: ||
+    ExprPtr parseLogicalOrExpr();
+    // TODO: &&
+    ExprPtr parseLogicalAndExpr();
+    // TODO: |
+    ExprPtr parseBitwiseOrExpr();
+    // TODO: bitwise or, no operator yet, ^ is taken by pow
+    ExprPtr parseBitwiseXorExpr();
+    // TODO: &
+    ExprPtr parseBitwiseAndExpr();
+    // TODO: ==, !=
+    ExprPtr parseEqualityExpr();
+    // TODO: <, <=, >, >=
+    ExprPtr parseRelationalExpr();
+    // TODO: <|, |>
+    ExprPtr parseBitwiseShiftExpr();
     // +, -
     ExprPtr parseAdditiveExpr();
     // *, /, %
     ExprPtr parseMultiplicativeExpr();
     // ^
     ExprPtr parsePowerExpr();
-    // TODO: -, !
-    ExprPtr parseUnaryExpr();
+    // TODO: & <variable>
+    ExprPtr parseAddressExpr();
+    // TODO: * <address>
+    ExprPtr parseDereferenceExpr();
+    // TODO: ( <type> ) <value>
+    ExprPtr parseTypeCastExpr();
+    // TODO: ! (log not), ~ (bit not)
+    ExprPtr parseLogBitUnaryExpr();
+    // TODO: +, -
+    ExprPtr parsePlusMinusUnaryExpr();
+    // TODO: ++x, --x
+    ExprPtr parsePreIncDecExpr();
+    // TODO:  <array> [ <index> ]
+    ExprPtr parseIndexExpr();
+    // <callee> ( <arguments> )
+    ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());
+    // TODO: x++, x--
+    ExprPtr parsePostIncDecExpr();
     // identifier, value, sub expr
     // x         , 1    , (...)
     ExprPtr parsePrimaryExpr();

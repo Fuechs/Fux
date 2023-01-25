@@ -43,14 +43,8 @@ AST MemberExprAST::getASTType() { return AST::MemberExprAST; }
 
 AST BinaryExprAST::getASTType() { return AST::BinaryExprAST; }
 
-AST ComparisonExprAST::getASTType() { return AST::ComparisonExprAST; }
-
-AST LogicalExprAST::getASTType() { return AST::LogicalExprAST; }
-
 CallExprAST::~CallExprAST() { callee.clear(); }
 AST CallExprAST::getASTType() { return AST::StringExprAST; }
-
-AST AssignmentExprAST::getASTType() { return AST::AssignmentExprAST; }
 
 VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
