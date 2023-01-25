@@ -209,16 +209,8 @@ ExprPtr Parser::parseExprList() { return parseAssignmentExpr(); }
 ExprPtr Parser::parseAssignmentExpr() { 
     ExprPtr dest = parseTernaryExpr();
 
-    // TODO: add other assignments
-
-    if (check(EQUALS)) {
-        TokenType op = EQUALS;
-        ExprPtr value = parseExpr();
-        return make_unique<BinaryExprAST>(op, dest, value);
-    } 
-    
-    if (check(TRIPLE_EQUALS)) {
-        TokenType op = TRIPLE_EQUALS;
+    if (current->isAssignment()) {
+        TokenType op = eat().type;
         ExprPtr value = parseExpr();
         return make_unique<BinaryExprAST>(op, dest, value);
     }

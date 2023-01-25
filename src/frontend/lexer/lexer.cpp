@@ -186,6 +186,13 @@ void Lexer::getToken() {
             }
             
             if (peek() == '|') {
+                if (peek(2) == '=') {
+                    currentToken.type = LSH_EQUALS;
+                    currentToken.value = "<|=";
+                    advance(3);
+                    break;
+                } 
+
                 currentToken.type = BIT_LSHIFT;
                 currentToken.value = "<|";
                 advance(2);
@@ -332,6 +339,11 @@ void Lexer::getToken() {
             currentToken.type = PERCENT;
             advance();
             break;
+
+        case '~':
+            currentToken.type = BIT_NOT;
+            advance();
+            break;
     
         case '|':
             if (peek() == '|') {
@@ -349,6 +361,13 @@ void Lexer::getToken() {
             }
             
             if (peek() == '>') {
+                if (peek(2) == '=') {
+                    currentToken.type = RSH_EQUALS;
+                    currentToken.value = "|>=";
+                    advance(3);
+                    break;
+                }
+                
                 currentToken.type = BIT_RSHIFT;
                 currentToken.value = "|>";
                 advance(2);

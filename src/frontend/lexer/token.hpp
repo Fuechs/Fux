@@ -44,6 +44,8 @@ enum TokenType {
     PERCENT_EQUALS, // %=
     OR_EQUALS,      // |=
     AND_EQUALS,     // &=
+    LSH_EQUALS,     // <|=
+    RSH_EQUALS,     // |>=
     SWAP,           // <>
 
     // condition
@@ -67,6 +69,7 @@ enum TokenType {
     PERCENT,        // %
 
     // bitwise operation
+    BIT_NOT,        // ~
     BIT_OR,         // |
     BIT_AND,        // &
     BIT_LSHIFT,     // <|
@@ -180,6 +183,8 @@ static const char *TokenTypeString[] = {
     "PERCENT_EQUALS", // %=
     "OR_EQUALS",      // |=
     "AND_EQUALS",     // &=
+    "LHS_EQUALS", 
+    "RHS_EQUALS",
     "SWAP",           // <>
 
     // condition
@@ -203,6 +208,7 @@ static const char *TokenTypeString[] = {
     "PERCENT",        // %
 
     // bitwise operation
+    "BIT_NOT",     
     "BIT_OR",         // |
     "BIT_AND",        // &
     "BIT_LSHIFT",
@@ -316,6 +322,8 @@ static vector<string> TokenTypeValue = {
     "%=", // %=
     "|=",      // |=
     "&=",     // &=
+    "<|=",
+    "=|>",
     "<>", 
 
     // condition
@@ -339,6 +347,7 @@ static vector<string> TokenTypeValue = {
     "%",        // %
 
     // bitwise operation
+    "~",
     "|",         // |
     "&",        // &
     "<|",
@@ -441,6 +450,7 @@ public:
     bool isType() const;
     bool isModifier() const;
     bool isComparison() const;
+    bool isAssignment() const;
 };
 
 typedef vector<Token> TokenList;

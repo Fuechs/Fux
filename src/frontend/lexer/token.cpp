@@ -46,3 +46,5 @@ bool Token::isType() const { return ((type >= KEY_VOID && type <= KEY_VAR) || ty
 bool Token::isModifier() const { return (type >= KEY_SAFE && type <= KEY_FIXED); }
 
 bool Token::isComparison() const { return (type >= EQUALS_EQUALS && type <= GTEQUALS); }
+
+bool Token::isAssignment() const { return (type >= EQUALS && type <= SWAP); }

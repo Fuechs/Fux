@@ -80,7 +80,7 @@ private:
     ExprPtr parseDereferenceExpr();
     // TODO: ( <type> ) <value>
     ExprPtr parseTypeCastExpr();
-    // TODO: ! (log not), ~ (bit not)
+    // TODO: ! (log not), ~ (bit not), ? (existence)
     ExprPtr parseLogBitUnaryExpr();
     // TODO: +, -
     ExprPtr parsePlusMinusUnaryExpr();
