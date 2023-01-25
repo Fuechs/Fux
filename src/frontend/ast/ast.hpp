@@ -127,6 +127,21 @@ public:
     Position pos = Position();
 };
 
+class UnaryExprAST : public ExprAST {
+    TokenType op;
+    ExprPtr expr;
+
+public:
+    UnaryExprAST(TokenType &op, ExprPtr &expr) : op(op), expr(std::move(expr)) {}
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
 class BinaryExprAST : public ExprAST {
     TokenType op;
     ExprPtr LHS, RHS;

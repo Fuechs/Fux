@@ -75,19 +75,19 @@ private:
     // ^
     ExprPtr parsePowerExpr();
 
-    // TODO: & <variable>
+    // & <variable>
     ExprPtr parseAddressExpr();
-    // TODO: * <address>
+    // * <address>
     ExprPtr parseDereferenceExpr();
     // TODO: ( <type> ) <value>
     ExprPtr parseTypeCastExpr();
-    // TODO: ! (log not), ~ (bit not), ? (existence)
+    //° ! (log not), ~ (bit not), ? (existence)
     ExprPtr parseLogBitUnaryExpr();
-    // TODO: +, -
+    // +, -
     ExprPtr parsePlusMinusUnaryExpr();
     // TODO: ++x, --x
     ExprPtr parsePreIncDecExpr();
-    // TODO:  <array> [ <index> ]
+    // TODO: <array> [ <index> ]
     ExprPtr parseIndexExpr();
     // <callee> ( <arguments> )
     ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());

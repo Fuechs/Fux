@@ -41,6 +41,8 @@ AST VariableExprAST::getASTType() { return AST::VariableExprAST; }
 
 AST MemberExprAST::getASTType() { return AST::MemberExprAST; }
 
+AST UnaryExprAST::getASTType() { return AST::UnaryExprAST; }
+
 AST BinaryExprAST::getASTType() { return AST::BinaryExprAST; }
 
 CallExprAST::~CallExprAST() { callee.clear(); }

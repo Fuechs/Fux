@@ -20,9 +20,8 @@ enum class AST {
     StringExprAST,
     VariableExprAST,
     MemberExprAST,
+    UnaryExprAST,
     BinaryExprAST,
-    ComparisonExprAST,
-    LogicalExprAST,
     CallExprAST,
     AssignmentExprAST,
 

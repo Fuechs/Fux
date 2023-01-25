@@ -56,6 +56,12 @@ void MemberExprAST::debugPrint() {
     member->debugPrint();
 }
 
+void UnaryExprAST::debugPrint() {
+    cout << TokenTypeValue[op] << "(";
+    expr->debugPrint();
+    cout << ")";
+}
+
 void BinaryExprAST::debugPrint() {
     cout << "(";
     LHS->debugPrint();

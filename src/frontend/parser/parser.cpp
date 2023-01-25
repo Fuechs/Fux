@@ -181,7 +181,8 @@ StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
     OptType type = parseTypeSuffix(typePrefix);
     
     if (!type.first) {
-        --current;
+        for (int64_t i = 0; i < typePrefix.second.first + 1; i++) // get the '*'s and identifier back
+            --current;
         return parseExpr();
     }
     
@@ -223,8 +224,8 @@ ExprPtr Parser::parseTernaryExpr() { return parseLogicalOrExpr(); }
 ExprPtr Parser::parseLogicalOrExpr() { 
     ExprPtr LHS = parseLogicalAndExpr();
 
-    while (*current == OR) {
-        TokenType op = eat().type;
+    while (check(OR)) {
+        TokenType op = OR;
         ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
@@ -235,8 +236,8 @@ ExprPtr Parser::parseLogicalOrExpr() {
 ExprPtr Parser::parseLogicalAndExpr() { 
     ExprPtr LHS = parseBitwiseOrExpr();
 
-    while (*current == AND) {
-        TokenType op = eat().type;
+    while (check(AND)) {
+        TokenType op = AND;
         ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
@@ -247,8 +248,8 @@ ExprPtr Parser::parseLogicalAndExpr() {
 ExprPtr Parser::parseBitwiseOrExpr() {
     ExprPtr LHS = parseBitwiseXorExpr();
 
-    while (*current == BIT_OR) {
-        TokenType op = eat().type;
+    while (check(BIT_OR)) {
+        TokenType op = BIT_OR;
         ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
@@ -261,8 +262,8 @@ ExprPtr Parser::parseBitwiseXorExpr() { return parseBitwiseAndExpr(); }
 ExprPtr Parser::parseBitwiseAndExpr() { 
     ExprPtr LHS = parseEqualityExpr();
 
-    while (*current == BIT_AND) {
-        TokenType op = eat().type;
+    while (check(BIT_AND)) {
+        TokenType op = BIT_AND;
         ExprPtr RHS = parseExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
@@ -342,15 +343,49 @@ ExprPtr Parser::parsePowerExpr() {
     return LHS;
 }
 
-ExprPtr Parser::parseAddressExpr() { return parseDereferenceExpr(); }
+ExprPtr Parser::parseAddressExpr() { 
+    cout << "Parsing:" << current->str() << "\n";
+    if (check(BIT_AND)) {
+        TokenType op = BIT_AND;
+        ExprPtr expr = parseExpr();
+        return make_unique<UnaryExprAST>(op, expr);
+    }
 
-ExprPtr Parser::parseDereferenceExpr() { return parseTypeCastExpr(); }
+    return parseDereferenceExpr(); 
+}
+
+ExprPtr Parser::parseDereferenceExpr() { 
+    cout << "Parsing:" << current->str() << "\n";
+    if (check(ASTERISK)) {
+        TokenType op = ASTERISK;
+        ExprPtr expr = parseExpr();
+        return make_unique<UnaryExprAST>(op, expr);
+    }
+
+    return parseTypeCastExpr(); 
+}
 
 ExprPtr Parser::parseTypeCastExpr() { return parseLogBitUnaryExpr(); }
 
-ExprPtr Parser::parseLogBitUnaryExpr() { return parsePlusMinusUnaryExpr(); }
+ExprPtr Parser::parseLogBitUnaryExpr() { 
+    if (*current == EXCLAMATION || *current == BIT_NOT || *current == QUESTION) {
+        TokenType op = eat().type;
+        ExprPtr expr = parseExpr();
+        return make_unique<UnaryExprAST>(op, expr);
+    }
 
-ExprPtr Parser::parsePlusMinusUnaryExpr() { return parsePreIncDecExpr(); }
+    return parsePlusMinusUnaryExpr(); 
+}
+
+ExprPtr Parser::parsePlusMinusUnaryExpr() { 
+    if (*current == PLUS || *current == MINUS) {
+        TokenType op = eat().type;
+        ExprPtr expr = parseExpr();
+        return make_unique<UnaryExprAST>(op, expr);
+    }
+    
+    return parsePreIncDecExpr(); 
+}
 
 ExprPtr Parser::parsePreIncDecExpr() { return parseIndexExpr(); }
 
