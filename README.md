@@ -26,7 +26,7 @@
 ## The Beautiful Alternative for C++
 
 ```rust
-main(): i64 {
+main(argc: u64, argv: str[]): i64 {
     puts "Hello World!\n";
     return 0;
 }

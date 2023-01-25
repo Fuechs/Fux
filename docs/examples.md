@@ -5,7 +5,7 @@
 ```rust
 array: i64[]; // {}
 
-main(): i64 {
+main(argc: u64, argv: str[]): i64 {
     array[] << 1; // {1}
     array[] << 3; // {1, 3}
     return 0;
@@ -18,7 +18,7 @@ main(): i64 {
 get core.file;
 using file;
 
-main(): i64 {
+main(argc: u64, argv: str[]): i64 {
     filePath := "path/to/file.txt";
     file := File(filePath, 'r');
     contents := file.read();
@@ -31,7 +31,7 @@ main(): i64 {
 ```rust
 get core.io;
 
-main(): i64 {
+main(argc: u64, argv: str[]): i64 {
     res := 1;
     io.putf("Result: %i", res);
     return 0;
@@ -47,7 +47,7 @@ fib(num: i64): i64
     return num < 2 ? num : fib(num-1) + fib(num-2);
 
 
-main(): i64 {
+main(argc: u64, argv: str[]): i64 {
     io.getint() >> fib() >> io.putln();
     return 0;
 }
