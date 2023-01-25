@@ -449,7 +449,7 @@ public:
     bool isKeyword() const;
     bool isType() const;
     bool isModifier() const;
-    bool isComparison() const;
+    bool isRelational() const;
     bool isAssignment() const;
 };
 

@@ -220,21 +220,91 @@ ExprPtr Parser::parseAssignmentExpr() {
 
 ExprPtr Parser::parseTernaryExpr() { return parseLogicalOrExpr(); }
 
-ExprPtr Parser::parseLogicalOrExpr() { return parseLogicalAndExpr(); }
+ExprPtr Parser::parseLogicalOrExpr() { 
+    ExprPtr LHS = parseLogicalAndExpr();
 
-ExprPtr Parser::parseLogicalAndExpr() { return parseBitwiseOrExpr(); }
+    while (*current == OR) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
 
-ExprPtr Parser::parseBitwiseOrExpr() { return parseBitwiseXorExpr(); }
+    return LHS;
+ }
+
+ExprPtr Parser::parseLogicalAndExpr() { 
+    ExprPtr LHS = parseBitwiseOrExpr();
+
+    while (*current == AND) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+ }
+
+ExprPtr Parser::parseBitwiseOrExpr() {
+    ExprPtr LHS = parseBitwiseXorExpr();
+
+    while (*current == BIT_OR) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+}
 
 ExprPtr Parser::parseBitwiseXorExpr() { return parseBitwiseAndExpr(); }
 
-ExprPtr Parser::parseBitwiseAndExpr() { return parseEqualityExpr(); }
+ExprPtr Parser::parseBitwiseAndExpr() { 
+    ExprPtr LHS = parseEqualityExpr();
 
-ExprPtr Parser::parseEqualityExpr() { return parseRelationalExpr(); }
+    while (*current == BIT_AND) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
 
-ExprPtr Parser::parseRelationalExpr() { return parseBitwiseShiftExpr(); }
+    return LHS;
+}
 
-ExprPtr Parser::parseBitwiseShiftExpr() { return parseAdditiveExpr(); }
+ExprPtr Parser::parseEqualityExpr() {
+    ExprPtr LHS = parseRelationalExpr();
+
+    while (*current == EQUALS_EQUALS || *current == NOT_EQUALS) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+}
+
+ExprPtr Parser::parseRelationalExpr() {
+    ExprPtr LHS = parseBitwiseShiftExpr();
+
+    while (current->isRelational()) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+}
+
+ExprPtr Parser::parseBitwiseShiftExpr() {
+    ExprPtr LHS = parseAdditiveExpr();
+
+    while (*current == BIT_LSHIFT || *current == BIT_RSHIFT) {
+        TokenType op = eat().type;
+        ExprPtr RHS = parseExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+}
 
 ExprPtr Parser::parseAdditiveExpr() {
     ExprPtr LHS = parseMultiplicativeExpr();

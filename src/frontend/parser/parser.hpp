@@ -48,25 +48,25 @@ private:
     ExprPtr parseExpr();
     // TODO: <expr>, <expr>, ...
     ExprPtr parseExprList();
-    // TODO: <symbol> [...]= <value>
+    // <symbol> [...]= <value>
     ExprPtr parseAssignmentExpr();
     // TODO: <bool> ? <expr> : <expr>
     ExprPtr parseTernaryExpr();
-    // TODO: ||
+    // |
     ExprPtr parseLogicalOrExpr();
-    // TODO: &&
+    // &&
     ExprPtr parseLogicalAndExpr();
-    // TODO: |
+    // |
     ExprPtr parseBitwiseOrExpr();
     // TODO: bitwise or, no operator yet, ^ is taken by pow
     ExprPtr parseBitwiseXorExpr();
-    // TODO: &
+    // &
     ExprPtr parseBitwiseAndExpr();
-    // TODO: ==, !=
+    // ==, !=
     ExprPtr parseEqualityExpr();
-    // TODO: <, <=, >, >=
+    // <, <=, >, >=
     ExprPtr parseRelationalExpr();
-    // TODO: <|, |>
+    // <|, |>
     ExprPtr parseBitwiseShiftExpr();
     // +, -
     ExprPtr parseAdditiveExpr();
@@ -74,6 +74,7 @@ private:
     ExprPtr parseMultiplicativeExpr();
     // ^
     ExprPtr parsePowerExpr();
+
     // TODO: & <variable>
     ExprPtr parseAddressExpr();
     // TODO: * <address>
