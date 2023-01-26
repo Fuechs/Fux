@@ -5,3 +5,5 @@ main(final argc -> u64, final argv -> str[]): i64 {
     modify(x);
     return x;
 }
+
+intern *test; // FIXME: parser won't recognize the access modifier and parse the '*' as a dereference instead

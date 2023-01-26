@@ -54,8 +54,16 @@ StmtPtr Parser::parseStmt() {
 StmtPtr Parser::parseFunctionDeclStmt() {
     TypePrefix typePrefix = parseTypePrefix();
 
-    if (*current != IDENTIFIER)
+    if (*current != IDENTIFIER) {
+        if (typePrefix.first) {
+            error->createError(UNEXPECTED_TOKEN, eat(),
+                "expected an identifier after type prefix"); 
+            error->addNote(peek(-2), "type prefix found here");
+            return nullptr;
+        }
+
         return parseBlockStmt();
+    }
 
     if (peek() != LPAREN) {
         typePrefix.first = true;
@@ -82,7 +90,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         // analyser will check for statements in arguments later
         if (args.back()->isExpr()) {
             if (typePrefix.first) {
-                error->createError(UNEXPECTED_TOKEN, symbolTok, 
+                error->createWarning(UNEXPECTED_TOKEN, symbolTok, 
                     "unexpected function call after access modifiers, expected a function declaration instead.");
                 error->addNote(peek(-1), "parsed an expression approximately here, making this statement a function call");
                 // TODO: exact position
@@ -96,11 +104,17 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     OptType type = parseTypeSuffix(typePrefix);
 
     if (!type.first) {
-        error->createError(UNEXPECTED_TOKEN, eat(),
-            "expected a COLON ':' or RPOINTER '->'");
-        error->addNote(peek(-2), 
-            "automatic typing for functions not supported yet");
-        return nullptr;
+        if (typePrefix.first) {
+            error->createError(INCOMPATIBLE_TYPES, eat(),
+                "expected a type here since access modifiers and/or a pointer depth were previously parsed");
+            return nullptr;
+        }        
+
+        // TODO: how to solve this?
+        error->createWarning(INCOMPATIBLE_TYPES, *current,
+            "automatic typing for functions not supported yet, a function call will be parsed instead");
+        error->addNote(*current, "would have expected a COLON ':' or RPOINTER '->' here to make this a function declaration");
+        return parseCallExpr(symbol, std::move(args));
     }
 
     if (*current == SEMICOLON)
@@ -178,6 +192,7 @@ StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
     
     actual:
     const string symbol = eat().value; // get value from identifier
+    // FIXME: typePrefix is always empty here
     OptType type = parseTypeSuffix(typePrefix);
     
     if (!type.first) {
@@ -391,7 +406,7 @@ ExprPtr Parser::parsePreIncDecExpr() {
 ExprPtr Parser::parseIndexExpr() { return parseCallExpr(); }
 
 ExprPtr Parser::parseCallExpr(string symbol, StmtList arguments) { 
-    if (!symbol.empty() && !arguments.empty())
+    if (!symbol.empty() || !arguments.empty())
         goto pre_parsed;
 
     {if (*current != IDENTIFIER || peek() != LPAREN)
@@ -412,12 +427,14 @@ ExprPtr Parser::parseCallExpr(string symbol, StmtList arguments) {
     return make_unique<CallExprAST>(symbol, arguments);}
 
     pre_parsed:
-    while (check(COMMA)) {
-        ExprPtr arg = parseExpr();
-        if (arg)
-            arguments.push_back(std::move(arg));
-    } 
-    expect(RPAREN, MISSING_BRACKET);
+    if (peek(-1) != RPAREN) {
+        while (check(COMMA)) {
+            ExprPtr arg = parseExpr();
+            if (arg)
+                arguments.push_back(std::move(arg));
+        } 
+        expect(RPAREN, MISSING_BRACKET);
+    }
 
     return make_unique<CallExprAST>(symbol, arguments);
 } 
@@ -507,23 +524,22 @@ Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
     if (check(COLON)) {
         type = parseTypeName(typePrefix);
     } else if (check(RPOINTER)) {
-        if (typePrefix.second.first > 0) {
+        if (typePrefix.second.first > 0) 
             error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
                 "given pointer depth will be ignored and a reference parsed instead");
-            error->addNote(peek(-3), "pointer depth defined here");
-        }
         typePrefix.second.first = -1;
         type = parseTypeName(typePrefix);
 
         if (!type) {
-            // don't advance so var decl will be pased normally
+            // don't advance so var decl will be parsed normally
             error->createError(UNEXPECTED_TOKEN, *current, "expected a type after RPOINTER '->'");
-            error->addNote(peek(-2), "automatic typing is not supported for references yet");
+            error->addNote(peek(-1), "automatic typing is not supported for references yet");
             // we are not setting success to false here because 
             // the parser should continue parsing the declaration
         }
-    } else
+    } else {
         success = false;
+    }
     
     return OptType(success, type);
 }

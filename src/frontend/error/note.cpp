@@ -21,7 +21,7 @@ string ErrorNote::str() {
     stringstream ss;
     ss 
         << CC::GRAY << SC::BOLD << "note: " << CC::DEFAULT << SC::RESET << message
-        << "\n\t" << lines.at(0) << "\n\t";
+        << "\n\t" << lines.at(pos.lStart - 1) << "\n\t";
     
     size_t i;
     for (i = 0; i < (pos.colStart - 1); i++) // -1 so arrow points at exact position
