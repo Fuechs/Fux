@@ -22,6 +22,8 @@
 #include <utility>
 #include <vector>
 
+#include <cassert>
+
 #include "util/color.hpp"
 #include "util/io.hpp"
 

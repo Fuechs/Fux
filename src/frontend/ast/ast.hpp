@@ -202,6 +202,8 @@ public:
 
 typedef unique_ptr<VariableDeclAST> VarDeclPtr; 
 
+// TODO: replace Puts, Return with one AST
+
 class PutsCallAST : public StmtAST {
     ExprPtr argument;
 

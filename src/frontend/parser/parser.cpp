@@ -52,29 +52,16 @@ StmtPtr Parser::parseStmt() {
 }
 
 StmtPtr Parser::parseFunctionDeclStmt() {
-    TypePrefix typePrefix = parseTypePrefix();
-
-    if (*current != IDENTIFIER) {
-        if (typePrefix.first) {
-            error->createError(UNEXPECTED_TOKEN, eat(),
-                "expected an identifier after type prefix"); 
-            error->addNote(peek(-2), "type prefix found here");
-            return nullptr;
-        }
-
+    if (*current != IDENTIFIER) 
         return parseBlockStmt();
-    }
 
-    if (peek() != LPAREN) {
-        typePrefix.first = true;
-        return parseVariableDeclStmt(typePrefix);
-    }
+    if (peek() != LPAREN) 
+        return parseVariableDeclStmt();
 
     Token &symbolTok = eat(); // for error tracking
     const string &symbol = symbolTok.value;
 
     expect(LPAREN);
-    // TODO: check wether this is a call expression
     StmtList args = StmtList();
     do {
         if (*current == RPAREN)
@@ -88,41 +75,26 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         args.push_back(std::move(arg));
 
         // analyser will check for statements in arguments later
-        if (args.back()->isExpr()) {
-            if (typePrefix.first) {
-                error->createWarning(UNEXPECTED_TOKEN, symbolTok, 
-                    "unexpected function call after access modifiers, expected a function declaration instead.");
-                error->addNote(peek(-1), "parsed an expression approximately here, making this statement a function call");
-                // TODO: exact position
-                return nullptr;
-            }
+        if (args.back()->isExpr()) 
             return parseCallExpr(symbol, std::move(args));
-        }
     } while (check(COMMA));
     expect(RPAREN, MISSING_BRACKET);
 
-    OptType type = parseTypeSuffix(typePrefix);
+    FuxType type = parseType();
 
-    if (!type.first) {
-        if (typePrefix.first) {
-            error->createError(INCOMPATIBLE_TYPES, eat(),
-                "expected a type here since access modifiers and/or a pointer depth were previously parsed");
-            return nullptr;
-        }        
-
+    if (type.kind == FuxType::AUTO) {
         // TODO: how to solve this?
         error->createWarning(INCOMPATIBLE_TYPES, *current,
             "automatic typing for functions not supported yet, a function call will be parsed instead");
-        error->addNote(*current, "would have expected a COLON ':' or RPOINTER '->' here to make this a function declaration");
+        error->addNote(*current, "would have expected a type here to make this a function declaration");
         return parseCallExpr(symbol, std::move(args));
     }
 
     if (*current == SEMICOLON)
-        return make_unique<PrototypeAST>(type.second, symbol, args);
+        return make_unique<PrototypeAST>(type, symbol, args);
 
-    StmtPtr body = parseStmt();
-    
-    return make_unique<FunctionAST>(type.second, symbol, args, body);
+    StmtPtr body = parseStmt();    
+    return make_unique<FunctionAST>(type, symbol, args, body);
 }
 
 StmtPtr Parser::parseBlockStmt() {
@@ -176,46 +148,20 @@ StmtPtr Parser::parseReturnStmt() {
         return parseVariableDeclStmt();
 }
 
-StmtPtr Parser::parseVariableDeclStmt(TypePrefix typePrefix) {
-    if (typePrefix.first)
-        goto actual;
-
-    typePrefix = parseTypePrefix();
-
-    if (*current != IDENTIFIER) {
-        if (!typePrefix.first) // check wether a type prefix was actually parsed
-            return parseExpr();
-        error->createError(UNEXPECTED_TOKEN, eat(), "expected an identifier after type prefix");
-        error->addNote(peek(-1), "type prefix found here");
-        return nullptr;
-    }
-    
-    actual:
-    const string symbol = eat().value; // get value from identifier
-    // FIXME: typePrefix is always empty here
-    OptType type = parseTypeSuffix(typePrefix);
-    
-    if (!type.first) {
-        for (int64_t i = 0; i < typePrefix.second.first + 1; i++) // get the '*'s and identifier back
-            --current;
+StmtPtr Parser::parseVariableDeclStmt() {
+    if (*current != IDENTIFIER || (peek() != COLON && peek() != RPOINTER))
         return parseExpr();
-    }
     
-    if (check(EQUALS)) { // =
-        if (!type.second)
-            type.second = FuxType(FuxType::AUTO, 0, typePrefix.second.second);
-    } else if (check(TRIPLE_EQUALS)) { // ===
-        if (!type.second) {
-            typePrefix.second.second.push_back(FuxType::CONSTANT);
-            type.second = FuxType(FuxType::AUTO, typePrefix.second.first, typePrefix.second.second);
-        } else
-            type.second.access.push_back(FuxType::CONSTANT);
-    } else {
-        return make_unique<VariableDeclAST>(symbol, type.second);
-    }
+    const string symbol = eat().value; // get value from identifier
+    FuxType type = parseType();
+
+    if (check(TRIPLE_EQUALS)) // ===
+        type.access.push_back(FuxType::CONSTANT);
+    else if (!check(EQUALS))
+        return make_unique<VariableDeclAST>(symbol, type);
 
     ExprPtr value = parseExpr();
-    return make_unique<VariableDeclAST>(symbol, type.second, value);
+    return make_unique<VariableDeclAST>(symbol, type, value);
 }
 
 ExprList Parser::parseExprList() { return ExprList(); }
@@ -486,62 +432,62 @@ ExprPtr Parser::parsePrimaryExpr() {
     }
 }
 
-FuxType Parser::parseTypeName(TypePrefix &typePrefix) {
-    if (!current->isType()) 
-        return FuxType(); // = NO_TYPE; will be checked by analyser
-    
-    Token typeToken = eat();
-    if (check(ARRAY_BRACKET))
-        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);
-    else if (check(LBRACKET)) {
-        ExprPtr size = parseExpr(); 
-        expect(RBRACKET, MISSING_BRACKET);
-        // FIXME: array size turns into a nullptr, probably in FuxType::operator=()
-        return FuxType::createArray((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value, size);
-    } else
-        return FuxType::createStd((FuxType::Kind) typeToken.type, typePrefix.second.first, typePrefix.second.second, typeToken.value);
-}
-
-Parser::TypePrefix Parser::parseTypePrefix() {
-
+FuxType Parser::parseType() {
     FuxType::AccessList access = {FuxType::PUBLIC};
+    int64_t pointerDepth;
+
+    Token &typeDenotion = eat(); // ':' or '->' for error tracking
+    switch (typeDenotion.type) {
+        case COLON:     pointerDepth = 0; break;
+        case RPOINTER:  pointerDepth = -1; break;
+        default:        
+            error->createError(UNEXPECTED_TOKEN, typeDenotion,
+                "expected a COLON ':' or RPOINTER '->' here");
+            return FuxType();
+    }
 
     while (current->isModifier())
         access.push_back((FuxType::Access) eat().type);
-
-    _i64 pointerDepth;
-    for (pointerDepth = 0; check(ASTERISK); pointerDepth++);
-
-    bool moved = (access != FuxType::AccessList({FuxType::PUBLIC}) || pointerDepth != 0);
-
-    return TypePrefix(moved, std::pair<_i64, FuxType::AccessList>(pointerDepth, access));
-}
-
-Parser::OptType Parser::parseTypeSuffix(TypePrefix &typePrefix) {
-    FuxType type = FuxType();
-    bool success = true;
-
-    if (check(COLON)) {
-        type = parseTypeName(typePrefix);
-    } else if (check(RPOINTER)) {
-        if (typePrefix.second.first > 0) 
-            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
-                "given pointer depth will be ignored and a reference parsed instead");
-        typePrefix.second.first = -1;
-        type = parseTypeName(typePrefix);
-
-        if (!type) {
-            // don't advance so var decl will be parsed normally
-            error->createError(UNEXPECTED_TOKEN, *current, "expected a type after RPOINTER '->'");
-            error->addNote(peek(-1), "automatic typing is not supported for references yet");
-            // we are not setting success to false here because 
-            // the parser should continue parsing the declaration
-        }
-    } else {
-        success = false;
-    }
     
-    return OptType(success, type);
+    while (check(ASTERISK)) {
+        if (pointerDepth != -1) {
+            ++pointerDepth;
+            break;
+        }
+
+        while(check(ASTERISK)); // skip all '*'
+        error->createWarning(INCOMPATIBLE_TYPES, peek(-1),
+            "given pointer depth wil be ignored and a reference parsed instead");
+        error->addNote(typeDenotion, "the reference got declared here");
+    }
+
+    if (!current->isType()) {
+        // if (typeDenotion == RPOINTER) {
+        //     error->createError(UNEXPECTED_TOKEN, eat(), "expected a type after RPOINTER '->'");
+        //     error->addNote(typeDenotion, "automatic typing is not supported for references yet");
+        //     return FuxType(); 
+        // } 
+
+        if (pointerDepth > 0)
+            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
+                "given pointer depth will be ignored for automatic type");
+        return FuxType::createStd(FuxType::AUTO, 0, access);
+    }
+
+    const FuxType::Kind kind = (FuxType::Kind) current->type;
+    const string &value = eat().value;
+
+    if (check(ARRAY_BRACKET)) 
+        return FuxType::createArray(kind, pointerDepth, access, value);
+    else if (check(LBRACKET)) {
+        ExprPtr size = parseExpr();
+        // FIXME: array size turns into a nullptr, probably in FuxType::operator=()
+        expect(RBRACKET, MISSING_BRACKET);
+        return FuxType::createArray(kind, pointerDepth, access, value, size);
+    } else 
+        return FuxType::createStd(kind, pointerDepth, access, value);
+
+    assert(false && "unreachable");
 }
 
 ExprPtr Parser::parseNumberExpr(Token &tok) {
@@ -559,7 +505,7 @@ ExprPtr Parser::parseNumberExpr(Token &tok) {
             break;
         default:            break; // unreachable
     }
-    size_t bits = (size_t) log2(value) + 1;
+    size_t bits = (size_t) log2(value) + 1; // get amount of bits in (binary) value
     if      (bits <= 8)     return make_unique<NumberExprAST, _u8>(value);
     else if (bits <= 16)    return make_unique<NumberExprAST, _u16>(value);
     else if (bits <= 32)    return make_unique<NumberExprAST, _u32>(value);

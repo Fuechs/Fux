@@ -1,1 +1,1 @@
-main(final argc -> u64, final argv -> str[]): i64;
+main(argc -> final u64, argv -> final str[]): i64;

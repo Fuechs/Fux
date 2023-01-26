@@ -87,7 +87,8 @@ void CallExprAST::debugPrint() {
 }
 
 void VariableDeclAST::debugPrint() {
-    type.debugPrint(symbol);
+    cout << symbol;
+    type.debugPrint();
     if (value) {
         cout << " = ";
         value->debugPrint();
@@ -127,7 +128,6 @@ void CodeBlockAST::debugPrint() {
 }
 
 void PrototypeAST::debugPrint() {
-    type.prefix();
     cout << name << "(";
     for (StmtPtr &param : args) {
         param->debugPrint();
@@ -135,7 +135,7 @@ void PrototypeAST::debugPrint() {
             cout << ", ";
     }
     cout << ")";
-    type.suffix();
+    type.debugPrint();
 }
 
 void FunctionAST::debugPrint() { 

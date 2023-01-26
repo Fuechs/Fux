@@ -26,7 +26,7 @@ class SomeClass : SomeParent {
         self.someParam === someParam;
     }
 
-    safe someParam: i32;
+    someParam: safe i32;
 }
 ```
 
@@ -42,13 +42,13 @@ class SomeClass : SomeParent {
         delete &someParam;
     }
 
-    safe someParam: i32;
+    someParam: safe i32;
 }
 ```
 
 ### Access Modifiers
 
-`intern` and `safe` also work on namespaces.
+`intern` and `safe` also work in namespaces.
 
 - `intern` - Inaccessible outside of class
 - `safe` - Read-only access outside of class
@@ -57,11 +57,11 @@ class SomeClass : SomeParent {
 ```rust
 class SomeClass { ...
 
-intern value: f64;
-safe symbol: str;
-fixed something: bool = true;
+value: intern f64;
+symbol: safe str;
+something: fixed bool = true;
 
-fixed printNumber(n: i32) {
+printNumber(n: i32): fixed void {
     puts (str) n;
 }
 

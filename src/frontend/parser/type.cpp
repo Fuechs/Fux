@@ -71,23 +71,15 @@ string FuxType::kindAsString() {
     }
 }
 
-void FuxType::prefix() {
+void FuxType::debugPrint() {
+    cout << (pointerDepth == -1 ? " -> " : ": ");
     cout << accessAsString();
-    
-    if (pointerDepth == -1)
-        return;
-        
-    for (size_t pd = pointerDepth; pd --> 0;)
-        cout << "*";
-}
 
-void FuxType::suffix() {    
-    switch (pointerDepth) {
-        case -1:    cout << " -> "; break;
-        default:    cout << ": "; break;
-    }
+    if (pointerDepth > 0) 
+        for (size_t pd = pointerDepth; pd --> 0;)
+            cout << "*";
     
-    cout << kindAsString();   
+    cout << kindAsString();
     
     if (array) {
         cout << "[";
@@ -95,12 +87,6 @@ void FuxType::suffix() {
             arraySize->debugPrint();
         cout << "]";
     }
-}
-
-void FuxType::debugPrint(const string& name) {
-    prefix();
-    cout << name;
-    suffix();
 }
 
 bool FuxType::valid() {
