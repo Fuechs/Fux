@@ -19,6 +19,7 @@
 #include "../parser/value.hpp"
 #include "position.hpp"
 #include "expr.hpp"
+#include "op.hpp"
 
 typedef map<string, FuxType> ArgMap;
 
@@ -128,11 +129,11 @@ public:
 };
 
 class UnaryExprAST : public ExprAST {
-    TokenType op;
+    UnaryOp op;
     ExprPtr expr;
 
 public:
-    UnaryExprAST(TokenType &op, ExprPtr &expr) : op(op), expr(std::move(expr)) {}
+    UnaryExprAST(UnaryOp op, ExprPtr &expr) : op(op), expr(std::move(expr)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
@@ -143,11 +144,11 @@ public:
 };
 
 class BinaryExprAST : public ExprAST {
-    TokenType op;
+    BinaryOp op;
     ExprPtr LHS, RHS;
 
 public:
-    BinaryExprAST(TokenType &op, ExprPtr &LHS, ExprPtr &RHS) 
+    BinaryExprAST(BinaryOp op, ExprPtr &LHS, ExprPtr &RHS) 
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)

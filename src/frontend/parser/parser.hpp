@@ -45,9 +45,10 @@ private:
     StmtPtr parseReturnStmt();
     StmtPtr parseVariableDeclStmt(TypePrefix typePrefix = TypePrefix(false, {}));
 
-    ExprPtr parseExpr();
     // TODO: <expr>, <expr>, ...
-    ExprPtr parseExprList();
+    ExprList parseExprList();
+
+    ExprPtr parseExpr();
     // <symbol> [...]= <value>
     ExprPtr parseAssignmentExpr();
     // TODO: <bool> ? <expr> : <expr>
@@ -85,13 +86,13 @@ private:
     ExprPtr parseLogBitUnaryExpr();
     // +, -
     ExprPtr parsePlusMinusUnaryExpr();
-    // TODO: ++x, --x
+    // ++x, --x
     ExprPtr parsePreIncDecExpr();
     // TODO: <array> [ <index> ]
     ExprPtr parseIndexExpr();
     // <callee> ( <arguments> )
     ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());
-    // TODO: x++, x--
+    // x++, x--
     ExprPtr parsePostIncDecExpr();
     // identifier, value, sub expr
     // x         , 1    , (...)

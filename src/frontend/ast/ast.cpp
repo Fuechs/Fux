@@ -82,3 +82,15 @@ bool StmtAST::isExpr() {
     return (this->getASTType() >= AST::NullExprAST 
         && this->getASTType() <= AST::AssignmentExprAST);  
 }
+
+string BinaryOpValue(BinaryOp &op) { return TokenTypeValue[(TokenType) op]; }
+
+string UnaryOpValue(UnaryOp &op) { 
+    switch (op) {
+        case UnaryOp::PINC:
+        case UnaryOp::SINC:     return "++";
+        case UnaryOp::PDEC:
+        case UnaryOp::SDEC:     return "--";
+        default:                return TokenTypeValue[(TokenType) op]; 
+    }
+}

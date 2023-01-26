@@ -57,15 +57,21 @@ void MemberExprAST::debugPrint() {
 }
 
 void UnaryExprAST::debugPrint() {
-    cout << TokenTypeValue[op] << "(";
-    expr->debugPrint();
-    cout << ")";
+    if (op == UnaryOp::SINC || op == UnaryOp::SDEC) {
+        cout << "(";
+        expr->debugPrint();
+        cout << ")" << UnaryOpValue(op);
+    } else {
+        cout << UnaryOpValue(op) << "(";
+        expr->debugPrint();
+        cout << ")";
+    }
 }
 
 void BinaryExprAST::debugPrint() {
     cout << "(";
     LHS->debugPrint();
-    cout << " " << TokenTypeValue[op] << " ";
+    cout << " " << BinaryOpValue(op) << " ";
     RHS->debugPrint();
     cout << ")";
 }
