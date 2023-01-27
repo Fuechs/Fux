@@ -1,6 +1,6 @@
-# File Structure of `src/`
+# `src/` Tree
 
-> Last updated on 2023-01-22
+> Last updated on 2023-01-27
 
 ```
 src
@@ -33,9 +33,10 @@ src
 │   │   ├── analyser.hpp - AST analyser 
 │   │   └── expectation.hpp - epectation struct
 │   ├── ast
-│   │   ├── ast.cpp - AST impl.
+│   │   ├── ast.cpp - AST & Binary/UnaryOp impl.
 │   │   ├── ast.hpp - Abstract Syntax Tree
 │   │   ├── expr.hpp - ExprAST base
+│   │   ├── op.hpp - Binary/UnaryOp
 │   │   ├── position.hpp - Position struct
 │   │   └── stmt.hpp - StmtAST base
 │   ├── error
