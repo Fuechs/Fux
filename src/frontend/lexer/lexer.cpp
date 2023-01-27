@@ -434,14 +434,14 @@ void Lexer::getToken() {
         case '\'':
             currentToken.type = CHAR;
             advance();
-            if (!isalpha(current()))
-                error->createError(EXPECTED_CHAR_LITERAL_EOF, line, col, "expected actual character");
-            else {
-                currentToken.value = current();
+            currentToken.value = current();
+            if (current() == '\\') { // get escape sequences
                 advance();
-                if (current() != '\'')
-                    error->createError(ILLEGAL_CHAR_LITERAL_FORMAT, line, col, "expected ending quote");
+                currentToken.value.push_back(current());
             }
+            advance();
+            if (current() != '\'')
+                error->createError(ILLEGAL_CHAR_LITERAL_FORMAT, line, col, "expected ending quote");
             advance();
             break;
          
@@ -714,6 +714,8 @@ bool Lexer::skipComment() {
         resetPos();
         return true;
     }
+
+    // FIXME: multiline comments aren't recognized properly
 
     if (peek() == '*') { // multi line comment '/*'
                                         // check for '*/'

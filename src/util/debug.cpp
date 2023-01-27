@@ -86,7 +86,8 @@ void BinaryExprAST::debugPrint() {
 }
 
 void CallExprAST::debugPrint() { 
-    cout << callee << "(";
+    callee->debugPrint();
+    cout << "(";
     for (StmtPtr &arg : args) {
         arg->debugPrint();
         if (arg != args.back())
@@ -154,7 +155,8 @@ void CodeBlockAST::debugPrint() {
 }
 
 void PrototypeAST::debugPrint() {
-    cout << name << "(";
+    symbol->debugPrint();
+    cout << "(";
     for (StmtPtr &param : args) {
         param->debugPrint();
         if (param != *--args.end())

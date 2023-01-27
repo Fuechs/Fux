@@ -34,16 +34,27 @@ private:
     RootPtr root;
     const bool mainFile;
 
+    // parse a statement
     StmtPtr parseStmt();
+    // function declaration
     StmtPtr parseFunctionDeclStmt();
+    // for (-each) loop
+    StmtPtr parseForLoopStmt();
+    // (do) while loop
+    StmtPtr parseWhileLoopStmt();
+    // code block {}
     StmtPtr parseBlockStmt();
+    // if statement
     StmtPtr parseIfElseStmt();
+    // inbuilt call 
     StmtPtr parseInbuiltCallStmt();
+    // variable declaration
     StmtPtr parseVariableDeclStmt();
 
     // TODO: <expr>, <expr>, ...
     ExprList parseExprList();
 
+    // parse an expression
     ExprPtr parseExpr();
     // <symbol> [...]= <value>
     ExprPtr parseAssignmentExpr();
@@ -89,7 +100,7 @@ private:
     // <array> [ <index> ]
     ExprPtr parseIndexExpr();
     // <callee> ( <arguments> )
-    ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());
+    ExprPtr parseCallExpr(ExprPtr &symbol = nullExpr, StmtList arguments = StmtList());
     // x++, x--
     ExprPtr parsePostIncDecExpr();
     // identifier, value, sub expr

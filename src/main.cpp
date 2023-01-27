@@ -48,16 +48,13 @@ int main(int argc, char **argv) {
         cout << ".\n";
     }
 
-    // result = bootstrap(argc, argv);
-    // switch (result) {
-    //     case -1:    return repl();
-    //     case 0:     break;
-    //     default:    return result;
-    // }
-
-    // return repl(); // ! program ends here
-
-    fux.options.fileName = "/Users/fuechs/Documents/GitHub/Fux/src/examples/test.fux"; // debugger
+    result = bootstrap(argc, argv);
+    switch (result) {
+        case -1:    return repl();
+        case 0:     break;
+        default:    return result;
+    }
+    
     SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 

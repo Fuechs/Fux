@@ -53,15 +53,16 @@ StmtPtr Parser::parseStmt() {
 
 StmtPtr Parser::parseFunctionDeclStmt() {
     if (*current != IDENTIFIER) 
-        return parseBlockStmt();
+        return parseForLoopStmt();
 
-    if (peek() != LPAREN) 
-        return parseVariableDeclStmt();
+    TokenIter backToken = current;
+    ExprPtr symbolExpr = parsePrimaryExpr(); 
 
-    Token &symbolTok = eat(); // for error tracking
-    const string &symbol = symbolTok.value;
+    if (!check(LPAREN)) {
+        current = backToken;
+        return parseForLoopStmt();
+    }
 
-    expect(LPAREN);
     StmtList args = StmtList();
     do {
         if (*current == RPAREN)
@@ -76,7 +77,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
 
         // analyser will check for statements in arguments later
         if (args.back()->isExpr()) 
-            return parseCallExpr(symbol, std::move(args));
+            return parseCallExpr(symbolExpr, std::move(args));
     } while (check(COMMA));
     expect(RPAREN, MISSING_BRACKET);
 
@@ -87,15 +88,19 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         error->createWarning(INCOMPATIBLE_TYPES, *current,
             "automatic typing for functions not supported yet, a function call will be parsed instead");
         error->addNote(*current, "would have expected a type here to make this a function declaration");
-        return parseCallExpr(symbol, std::move(args));
+        return parseCallExpr(symbolExpr, std::move(args));
     }
 
     if (*current == SEMICOLON)
-        return make_unique<PrototypeAST>(type, symbol, args);
+        return make_unique<PrototypeAST>(type, symbolExpr, args);
 
     StmtPtr body = parseStmt();    
-    return make_unique<FunctionAST>(type, symbol, args, body);
+    return make_unique<FunctionAST>(type, symbolExpr, args, body);
 }
+
+StmtPtr Parser::parseForLoopStmt() { return parseWhileLoopStmt(); }
+
+StmtPtr Parser::parseWhileLoopStmt() { return parseBlockStmt(); }
 
 StmtPtr Parser::parseBlockStmt() {
     if (check(LBRACE)) {
@@ -397,15 +402,21 @@ ExprPtr Parser::parseIndexExpr() {
     return expr;
 }
 
-ExprPtr Parser::parseCallExpr(string symbol, StmtList arguments) { 
-    if (!symbol.empty() || !arguments.empty())
+ExprPtr Parser::parseCallExpr(ExprPtr &symbol, StmtList arguments) { 
+    if (symbol || !arguments.empty())
         goto pre_parsed;
 
-    {if (*current != IDENTIFIER || peek() != LPAREN)
+    {if (*current != IDENTIFIER)
         return parsePostIncDecExpr();
 
-    symbol = eat().value;
-    eat(); // (
+    TokenIter backTok = current;
+    ExprPtr symbolExpr = parsePrimaryExpr(); // don't overwrite null expr symbol
+    
+    if (!check(LPAREN)) {
+        current = backTok;
+        return parsePostIncDecExpr();
+    }
+
     StmtList arguments = StmtList();
     do {
         if (*current == RPAREN)
@@ -416,7 +427,7 @@ ExprPtr Parser::parseCallExpr(string symbol, StmtList arguments) {
             arguments.push_back(std::move(arg));
     } while (check(COMMA));
     expect(RPAREN, MISSING_BRACKET);
-    return make_unique<CallExprAST>(symbol, arguments);}
+    return make_unique<CallExprAST>(symbolExpr, arguments);}
 
     pre_parsed:
     if (peek(-1) != RPAREN) {
@@ -466,7 +477,10 @@ ExprPtr Parser::parsePrimaryExpr() {
             expect(RPAREN, MISSING_BRACKET);
             return expr;
         }
-        case _EOF: return nullptr;
+        case _EOF: {
+            error->createError(UNEXPECTED_EOF, that, "did not expect end of file here.");
+            return nullptr;
+        }
         default: {        
             stringstream message;
             message 

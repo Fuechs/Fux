@@ -5,3 +5,4 @@ main(argc -> final u64, argv -> final str[]): i64 {
     modify(x);
     return x > 0 ? x : -1;
 }
+

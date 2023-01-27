@@ -45,7 +45,6 @@ AST UnaryExprAST::getASTType() { return AST::UnaryExprAST; }
 
 AST BinaryExprAST::getASTType() { return AST::BinaryExprAST; }
 
-CallExprAST::~CallExprAST() { callee.clear(); }
 AST CallExprAST::getASTType() { return AST::StringExprAST; }
 
 AST TypeCastExprAST::getASTType() { return AST::TypeCastExprAST; }
@@ -65,12 +64,9 @@ AST IfElseAST::getASTType() { return AST::IfElseAST; }
 void CodeBlockAST::addSub(StmtPtr &sub) { body.push_back(std::move(sub)); }
 AST CodeBlockAST::getASTType() { return AST::CodeBlockAST; }
 
-PrototypeAST::~PrototypeAST() { 
-    name.clear(); 
-    args.clear();
-}
+PrototypeAST::~PrototypeAST() { args.clear(); }
 
-string &PrototypeAST::getName() { return name; }
+ExprPtr &PrototypeAST::getSymbol() { return symbol; }
 StmtList &PrototypeAST::getArgs() { return args; }
 FuxType &PrototypeAST::getType() { return type; }
 AST PrototypeAST::getASTType() { return AST::PrototypeAST; }

@@ -18,8 +18,11 @@ all: comp
 comp:
 	$(cc) $(src) -o $(exec) $(llvmflags) $(cflags) 
 
+# can be set with f=... when compiling
+f = test
+
 run: comp
-	./$(exec)
+	./$(exec) -d src/examples/$(f).fux
 
 clean:
 	-rm $(exec)

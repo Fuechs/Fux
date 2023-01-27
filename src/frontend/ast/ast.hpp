@@ -129,13 +129,14 @@ public:
 };
 
 class CallExprAST : public ExprAST {
-    string callee;
+    ExprPtr callee;
     StmtList args;
 
 public:
     CallExprAST(const string &callee, StmtList &args)
-    : callee(callee), args(std::move(args)) {}
-    ~CallExprAST() override;
+    : callee(make_unique<VariableExprAST>(callee)), args(std::move(args)) {}
+    CallExprAST(ExprPtr &callee, StmtList &args)
+    : callee(std::move(callee)), args(std::move(args)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
@@ -291,15 +292,17 @@ typedef unique_ptr<CodeBlockAST> BlockPtr;
 // name and arguments
 class PrototypeAST : public StmtAST {
     FuxType type;
-    string name;
+    ExprPtr symbol;
     StmtList args;
 
 public:
-    PrototypeAST(FuxType type, const string &name, StmtList &args)
-    : type(type), name(name), args(std::move(args)) {}
+    PrototypeAST(FuxType type, const string &symbol, StmtList &args)
+    : type(type), symbol(make_unique<VariableExprAST>(symbol)), args(std::move(args)) {}
+    PrototypeAST(FuxType type, ExprPtr &symbol, StmtList &args)
+    : type(type), symbol(std::move(symbol)), args(std::move(args)) {}
     ~PrototypeAST() override;
     
-    string &getName();
+    ExprPtr &getSymbol();
     StmtList &getArgs();
     FuxType &getType();
     
@@ -318,9 +321,10 @@ class FunctionAST : public StmtAST {
     StmtPtr body;
 
 public:
-    FunctionAST(FuxType type, const string &name, StmtList &args, StmtPtr &body)
-    : proto(make_unique<PrototypeAST>(type, name, args)), body(std::move(body)) {}
-
+    FunctionAST(FuxType type, const string &symbol, StmtList &args, StmtPtr &body)
+    : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
+    FunctionAST(FuxType type, ExprPtr &symbol, StmtList &args, StmtPtr &body)
+    : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
     FunctionAST(ProtoPtr &proto, StmtPtr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
