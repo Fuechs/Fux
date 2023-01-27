@@ -74,14 +74,7 @@ Value *AssignmentExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *PutsCallAST::codegen(LLVMWrapper *fuxLLVM) {
-    Value *arg = argument->codegen(fuxLLVM);
-    // if (arg->getType() != fuxLLVM->fuxStr->str)
-        return nullptr;
-    // return fuxLLVM->builder->CreateCall(fuxLLVM->fuxIO->puts, {arg});
-}
-
-Value *ReturnCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *IfElseAST::codegen(LLVMWrapper *fuxLLVM) {
     return nullptr;

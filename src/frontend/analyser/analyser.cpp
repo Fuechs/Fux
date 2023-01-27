@@ -35,9 +35,7 @@ StmtPtr CallExprAST::analyse() { return nullptr; }
 
 StmtPtr VariableDeclAST::analyse() { return nullptr; }
 
-StmtPtr PutsCallAST::analyse() { return nullptr; }
-
-StmtPtr ReturnCallAST::analyse() { return nullptr; }
+StmtPtr InbuiltCallAST::analyse() { return nullptr; }
 
 StmtPtr IfElseAST::analyse() { return nullptr; }
 

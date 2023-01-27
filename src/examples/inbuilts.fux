@@ -1,0 +1,8 @@
+return x;
+throw x;
+exit x;
+puts x;
+putch x;
+read x;
+label x;
+goto x;

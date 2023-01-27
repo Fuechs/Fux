@@ -38,8 +38,7 @@ private:
     StmtPtr parseFunctionDeclStmt();
     StmtPtr parseBlockStmt();
     StmtPtr parseIfElseStmt();
-    StmtPtr parsePutsStmt();
-    StmtPtr parseReturnStmt();
+    StmtPtr parseInbuiltCallStmt();
     StmtPtr parseVariableDeclStmt();
 
     // TODO: <expr>, <expr>, ...
@@ -56,7 +55,7 @@ private:
     ExprPtr parseLogicalAndExpr();
     // |
     ExprPtr parseBitwiseOrExpr();
-    // TODO: bitwise or, no operator yet, ^ is taken by pow
+    // TODO: bitwise xor, no operator yet, ^ is taken by pow
     ExprPtr parseBitwiseXorExpr();
     // &
     ExprPtr parseBitwiseAndExpr();

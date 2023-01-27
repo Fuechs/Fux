@@ -69,3 +69,16 @@ enum class UnaryOp {
 };
 
 string UnaryOpValue(UnaryOp &op);
+
+enum class Inbuilts {
+    RETURN = KEY_RETURN,    // return <expr>;
+    THROW = KEY_THROW,      // throw <expr>;
+    EXIT = KEY_EXIT,        // exit <expr>;
+    PUTS = KEY_PUTS,        // puts <expr>;
+    PUTCH = KEY_PUTCH,      // putch <expr>;
+    READ = KEY_READ,        // read <address>;
+    LABEL = KEY_LABEL,      // label <identifier>;
+    GOTO = KEY_GOTO,        // goto <label>;
+};
+
+string InbuiltsValue(Inbuilts &inbuilt);

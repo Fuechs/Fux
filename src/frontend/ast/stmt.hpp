@@ -27,8 +27,7 @@ enum class AST {
 
     // statements
     VariableDeclAST,
-    PutsCallAST,
-    ReturnCallAST,
+    InbuiltCallAST,
     IfElseAST,
     CodeBlockAST,
     PrototypeAST,

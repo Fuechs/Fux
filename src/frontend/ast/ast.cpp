@@ -54,9 +54,7 @@ string &VariableDeclAST::getSymbol() { return symbol; }
 FuxType &VariableDeclAST::getType() { return type; }
 ExprPtr &VariableDeclAST::getValue() { return value; }
 
-AST PutsCallAST::getASTType() { return AST::PutsCallAST; }
-
-AST ReturnCallAST::getASTType() { return AST::ReturnCallAST; }
+AST InbuiltCallAST::getASTType() { return AST::InbuiltCallAST; }
 
 AST IfElseAST::getASTType() { return AST::IfElseAST; }
 
@@ -94,3 +92,5 @@ string UnaryOpValue(UnaryOp &op) {
         default:                return TokenTypeValue[(TokenType) op]; 
     }
 }
+
+string InbuiltsValue(Inbuilts &inbuilt) { return TokenTypeValue[(TokenType) inbuilt]; }

@@ -95,14 +95,15 @@ void VariableDeclAST::debugPrint() {
     }
 }
 
-void PutsCallAST::debugPrint() {
-    cout << "puts ";
-    argument->debugPrint();
-}
-
-void ReturnCallAST::debugPrint() {
-    cout << "return ";
-    value->debugPrint();
+void InbuiltCallAST::debugPrint() {
+    cout << InbuiltsValue(callee);
+    cout << " (";
+    for (ExprPtr &arg : arguments) {
+        arg->debugPrint();
+        if (arg != arguments.back())
+            cout << " ,";
+    }
+    cout << ")";
 }
 
 void IfElseAST::debugPrint() {

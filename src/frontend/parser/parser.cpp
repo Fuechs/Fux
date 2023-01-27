@@ -127,25 +127,17 @@ StmtPtr Parser::parseIfElseStmt() {
         return make_unique<IfElseAST>(condition, thenBody);
     } 
 
-    return parsePutsStmt();
+    return parseInbuiltCallStmt();
 }
 
-StmtPtr Parser::parsePutsStmt() {
-    if (check(KEY_PUTS)) {
-        ExprPtr arg = parseExpr();
-        return make_unique<PutsCallAST>(arg);
-    } else 
-        return parseReturnStmt();
-}
+StmtPtr Parser::parseInbuiltCallStmt() {
+    if (current->isInbuiltCall()) {
+        Inbuilts callee = (Inbuilts) eat().type;
+        ExprList args = parseExprList();
+        return make_unique<InbuiltCallAST>(callee, args);
+    }
 
-StmtPtr Parser::parseReturnStmt() {
-    if (check(KEY_RETURN)) {
-        ExprPtr arg = nullptr;
-        if (*current != SEMICOLON)
-            arg = parseExpr();
-        return make_unique<ReturnCallAST>(arg);
-    } else
-        return parseVariableDeclStmt();
+    return parseVariableDeclStmt();
 }
 
 StmtPtr Parser::parseVariableDeclStmt() {
@@ -164,7 +156,13 @@ StmtPtr Parser::parseVariableDeclStmt() {
     return make_unique<VariableDeclAST>(symbol, type, value);
 }
 
-ExprList Parser::parseExprList() { return ExprList(); }
+ExprList Parser::parseExprList() { 
+    ExprList list = ExprList();
+    ExprPtr expr = parseExpr();
+    list.push_back(std::move(expr));
+    return list;
+}
+ 
 
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
 

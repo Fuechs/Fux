@@ -202,35 +202,19 @@ public:
 
 typedef unique_ptr<VariableDeclAST> VarDeclPtr; 
 
-// TODO: replace Puts, Return with one AST
-
-class PutsCallAST : public StmtAST {
-    ExprPtr argument;
+class InbuiltCallAST : public StmtAST {
+    Inbuilts callee;
+    ExprList arguments;
 
 public:
-    PutsCallAST(ExprPtr &argument) : argument(std::move(argument)) {}
-
-    ExprPtr &getArgument();
+    InbuiltCallAST(Inbuilts callee, ExprList &arguments) 
+    : callee(callee), arguments(std::move(arguments)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;
     
-    Position pos = Position();
-};
-
-class ReturnCallAST : public StmtAST {
-    ExprPtr value;
-
-public:
-    ReturnCallAST(ExprPtr &value) : value(std::move(value)) {}
-
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
-    AST getASTType() override;
-    void debugPrint() override;
-
     Position pos = Position();
 };
 
