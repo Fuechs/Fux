@@ -1,9 +1,9 @@
-main(): i64 {
+main(argc: u64, argv: str[]): i64 {
     size: u8 = 100;
-    board[size]: u8;
+    board: u8[size];
     board[size - 2] = 1;
 
-    for (for i: u8; i < size - 2; i++) {
+    for (i: u8; i < size - 2; i++) {
         for (value -> u8 in board)
             putch value ? '*' : ' ';
         putch '\n';
