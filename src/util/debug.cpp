@@ -128,7 +128,7 @@ void InbuiltCallAST::debugPrint() {
     for (ExprPtr &arg : arguments) {
         arg->debugPrint();
         if (arg != arguments.back())
-            cout << " ,"; 
+            cout << ", "; 
     }
 }
 

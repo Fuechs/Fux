@@ -38,9 +38,9 @@ private:
     StmtPtr parseStmt();
     // function declaration
     StmtPtr parseFunctionDeclStmt();
-    // for (-each) loop
+    // TODO: for (-each) loop
     StmtPtr parseForLoopStmt();
-    // (do) while loop
+    // TODO: (do) while loop
     StmtPtr parseWhileLoopStmt();
     // code block {}
     StmtPtr parseBlockStmt();
@@ -51,7 +51,7 @@ private:
     // variable declaration
     StmtPtr parseVariableDeclStmt();
 
-    // TODO: <expr>, <expr>, ...
+    // <expr>, <expr>, ...
     ExprList parseExprList();
 
     // parse an expression

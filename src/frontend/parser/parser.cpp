@@ -164,6 +164,10 @@ StmtPtr Parser::parseVariableDeclStmt() {
 ExprList Parser::parseExprList() { 
     ExprList list = ExprList();
     ExprPtr expr = parseExpr();
+    while (check(COMMA)) {
+        list.push_back(std::move(expr));
+        expr = parseExpr();
+    }
     list.push_back(std::move(expr));
     return list;
 }
@@ -418,14 +422,8 @@ ExprPtr Parser::parseCallExpr(ExprPtr &symbol, StmtList arguments) {
     }
 
     StmtList arguments = StmtList();
-    do {
-        if (*current == RPAREN)
-            break;
-
-        ExprPtr arg = parseExpr();
-        if (arg)
-            arguments.push_back(std::move(arg));
-    } while (check(COMMA));
+    for (ExprPtr &arg : parseExprList())
+        arguments.push_back(std::move(arg));
     expect(RPAREN, MISSING_BRACKET);
     return make_unique<CallExprAST>(symbolExpr, arguments);}
 
