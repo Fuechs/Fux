@@ -57,22 +57,31 @@ void MemberExprAST::debugPrint() {
 }
 
 void UnaryExprAST::debugPrint() {
+    cout << "(";
     if (op == UnaryOp::SINC || op == UnaryOp::SDEC) {
-        cout << "(";
         expr->debugPrint();
-        cout << ")" << UnaryOpValue(op);
+        cout << UnaryOpValue(op);
     } else {
-        cout << UnaryOpValue(op) << "(";
+        cout << UnaryOpValue(op);
         expr->debugPrint();
-        cout << ")";
     }
+    cout << ")";
 }
 
 void BinaryExprAST::debugPrint() {
     cout << "(";
     LHS->debugPrint();
-    cout << " " << BinaryOpValue(op) << " ";
-    RHS->debugPrint();
+    if (op == BinaryOp::IDX) { // handle <expr>[<expr>] and <expr>[]
+        if (!RHS) cout << "[]";
+        else {        
+            cout << "[";
+            RHS->debugPrint();
+            cout << "]";
+        }
+    } else {
+        cout << " " << BinaryOpValue(op) << " ";
+        RHS->debugPrint();
+    }
     cout << ")";
 }
 
@@ -86,6 +95,24 @@ void CallExprAST::debugPrint() {
     cout << ")";
 }
 
+void TypeCastExprAST::debugPrint() {
+    cout << "((";
+    type.debugPrint(true);
+    cout << ") ";
+    expr->debugPrint();
+    cout << ")";
+}
+
+void TernaryExprAST::debugPrint() {
+    cout << "(";
+    condition->debugPrint();
+    cout << " ? ";
+    thenExpr->debugPrint();
+    cout << " : ";
+    elseExpr->debugPrint();
+    cout << ")";
+}
+
 void VariableDeclAST::debugPrint() {
     cout << symbol;
     type.debugPrint();
@@ -96,14 +123,12 @@ void VariableDeclAST::debugPrint() {
 }
 
 void InbuiltCallAST::debugPrint() {
-    cout << InbuiltsValue(callee);
-    cout << " (";
+    cout << InbuiltsValue(callee) << " ";
     for (ExprPtr &arg : arguments) {
         arg->debugPrint();
         if (arg != arguments.back())
-            cout << " ,";
+            cout << " ,"; 
     }
-    cout << ")";
 }
 
 void IfElseAST::debugPrint() {

@@ -27,11 +27,15 @@ StmtPtr VariableExprAST::analyse() { return nullptr; }
 
 StmtPtr MemberExprAST::analyse() { return nullptr; }
 
+StmtPtr CallExprAST::analyse() { return nullptr; }
+
 StmtPtr UnaryExprAST::analyse() { return nullptr; }
 
 StmtPtr BinaryExprAST::analyse() { return nullptr; }
 
-StmtPtr CallExprAST::analyse() { return nullptr; }
+StmtPtr TypeCastExprAST::analyse() { return nullptr; }
+
+StmtPtr TernaryExprAST::analyse() { return nullptr; }
 
 StmtPtr VariableDeclAST::analyse() { return nullptr; }
 

@@ -1,9 +1,7 @@
 modify(x -> i64): void;
 
 main(argc -> final u64, argv -> final str[]): i64 {
-    x: i64 = argc + 1;
+    x: i64 = (i64) argc + 1;
     modify(x);
-    return x;
+    return x > 0 ? x : -1;
 }
-
-test: intern *;

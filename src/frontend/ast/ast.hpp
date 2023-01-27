@@ -128,6 +128,23 @@ public:
     Position pos = Position();
 };
 
+class CallExprAST : public ExprAST {
+    string callee;
+    StmtList args;
+
+public:
+    CallExprAST(const string &callee, StmtList &args)
+    : callee(callee), args(std::move(args)) {}
+    ~CallExprAST() override;
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+   
+    Position pos = Position();
+};
+
 class UnaryExprAST : public ExprAST {
     UnaryOp op;
     ExprPtr expr;
@@ -148,7 +165,7 @@ class BinaryExprAST : public ExprAST {
     ExprPtr LHS, RHS;
 
 public:
-    BinaryExprAST(BinaryOp op, ExprPtr &LHS, ExprPtr &RHS) 
+    BinaryExprAST(BinaryOp op, ExprPtr &LHS, ExprPtr &RHS = nullExpr) 
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
@@ -159,14 +176,30 @@ public:
     Position pos = Position();
 };
 
-class CallExprAST : public ExprAST {
-    string callee;
-    StmtList args;
+class TypeCastExprAST : public ExprAST {
+    FuxType type;
+    ExprPtr expr;
 
 public:
-    CallExprAST(const string &callee, StmtList &args)
-    : callee(callee), args(std::move(args)) {}
-    ~CallExprAST() override;
+    TypeCastExprAST(FuxType type, ExprPtr &expr) 
+    : type(type), expr(std::move(expr)) {}
+    
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+   
+    Position pos = Position();
+};
+
+class TernaryExprAST : public ExprAST {
+    ExprPtr condition;
+    ExprPtr thenExpr;
+    ExprPtr elseExpr;
+
+public:
+    TernaryExprAST(ExprPtr &condition, ExprPtr &thenExpr, ExprPtr &elseExpr)
+    : condition(std::move(condition)), thenExpr(std::move(thenExpr)), elseExpr(std::move(elseExpr)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;

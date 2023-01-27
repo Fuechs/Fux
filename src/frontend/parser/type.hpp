@@ -76,13 +76,15 @@ public:
     static FuxType createRef(Kind kind, AccessList accessList = {PUBLIC}, string name = "");
     // shorthand for array types
     static FuxType createArray(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "", ExprPtr &arraySize = nullExpr);    
-    
+    // shorthand for primitive types (e.g. for values)
+    static FuxType createPrimitive(Kind kind, int64_t pointerDepth = 0, bool array = false, string name = "");
+
     // return FuxType::AccessList as string
     string accessAsString();
     // return FuxType::Kind as string
     string kindAsString();
     // output string representation of type
-    void debugPrint();
+    void debugPrint(bool primitive = false);
 
     // check wether type is valid
     bool valid();

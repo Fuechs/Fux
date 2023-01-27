@@ -50,6 +50,8 @@ enum class BinaryOp {
     BAND = BIT_AND,     // bitwise and &
     LSH = BIT_LSHIFT,   // bitwise left shift <|
     RSH = BIT_RSHIFT,   // bitwise right shift |>
+
+    IDX = ARRAY_BRACKET, // index expression <expr>[<expr>] 
 };
 
 string BinaryOpValue(BinaryOp &op);

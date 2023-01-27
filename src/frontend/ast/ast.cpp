@@ -48,6 +48,10 @@ AST BinaryExprAST::getASTType() { return AST::BinaryExprAST; }
 CallExprAST::~CallExprAST() { callee.clear(); }
 AST CallExprAST::getASTType() { return AST::StringExprAST; }
 
+AST TypeCastExprAST::getASTType() { return AST::TypeCastExprAST; }
+
+AST TernaryExprAST::getASTType() { return AST::TernaryExprAST; }
+
 VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
 string &VariableDeclAST::getSymbol() { return symbol; }
@@ -78,7 +82,7 @@ AST RootAST::getASTType() { return AST::RootAST; }
 
 bool StmtAST::isExpr() { 
     return (this->getASTType() >= AST::NullExprAST 
-        && this->getASTType() <= AST::AssignmentExprAST);  
+        && this->getASTType() <= AST::TernaryExprAST);  
 }
 
 string BinaryOpValue(BinaryOp &op) { return TokenTypeValue[(TokenType) op]; }

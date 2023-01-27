@@ -32,26 +32,6 @@ Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
 
 Value *MemberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *UnaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
-
-Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {
-    Value *L = LHS->codegen(fuxLLVM);
-    Value *R = RHS->codegen(fuxLLVM);
-    if (!L || !R)
-        return nullptr;
-
-    switch (op) {
-        case '+':   return fuxLLVM->builder->CreateAdd(L, R, "addtmp");
-        case '-':   return fuxLLVM->builder->CreateSub(L, R, "subtmp");
-        case '*':   return fuxLLVM->builder->CreateMul(L, R, "multmp");
-        case '/':   return fuxLLVM->builder->CreateFDiv(L, R, "divtmp");
-        default:    return nullptr;
-    }
-}
-
-Value *ComparisonExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
-Value *LogicalExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
-
 Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
     Function *calleeFunc = fuxLLVM->module->getFunction(callee);
     if (!calleeFunc)
@@ -70,7 +50,26 @@ Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
     return fuxLLVM->builder->CreateCall(calleeFunc, argList, "calltmp");
 } 
 
-Value *AssignmentExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *UnaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
+Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *L = LHS->codegen(fuxLLVM);
+    Value *R = RHS->codegen(fuxLLVM);
+    if (!L || !R)
+        return nullptr;
+
+    switch (op) {
+        case '+':   return fuxLLVM->builder->CreateAdd(L, R, "addtmp");
+        case '-':   return fuxLLVM->builder->CreateSub(L, R, "subtmp");
+        case '*':   return fuxLLVM->builder->CreateMul(L, R, "multmp");
+        case '/':   return fuxLLVM->builder->CreateFDiv(L, R, "divtmp");
+        default:    return nullptr;
+    }
+}
+
+Value *TypeCastExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
+Value *TernaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 

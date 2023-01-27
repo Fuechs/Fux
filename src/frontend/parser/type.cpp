@@ -49,13 +49,18 @@ FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessL
     return FuxType(kind, pointerDepth, accessList, true, arraySize, name);
 }
 
+FuxType FuxType::createPrimitive(Kind kind, int64_t pointerDepth, bool array, string name) {
+    return FuxType(kind, pointerDepth, AccessList(), array, nullExpr, name);
+}
+
+
 string FuxType::accessAsString() {
     stringstream ss;
 
     for (Access &a : access)
         switch (a) {
             case CONSTANT:  ss << "const "; break;
-            case PUBLIC:    ss << "public "; break;
+            case PUBLIC:    ss << "pub "; break;
             default:        ss << TokenTypeValue[a] << " "; break;
         }
 
@@ -71,7 +76,15 @@ string FuxType::kindAsString() {
     }
 }
 
-void FuxType::debugPrint() {
+void FuxType::debugPrint(bool primitive) {
+    if (primitive) {
+        if (pointerDepth > 0)
+            for (size_t pd = pointerDepth; pd --> 0;)
+                cout << "*";
+        cout << kindAsString();
+        return;
+    }
+
     cout << (pointerDepth == -1 ? " -> " : ": ");
     cout << accessAsString();
 

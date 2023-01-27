@@ -167,24 +167,47 @@ ExprList Parser::parseExprList() {
 ExprPtr Parser::parseExpr() { return parseAssignmentExpr(); }
 
 ExprPtr Parser::parseAssignmentExpr() { 
-    ExprPtr dest = parseTernaryExpr();
+    ExprPtr dest = parsePipeExpr();
 
     if (current->isAssignment()) {
         BinaryOp op = (BinaryOp) eat().type;
-        ExprPtr value = parseExpr();
-        return make_unique<BinaryExprAST>(op, dest, value);
+        ExprPtr value = parsePipeExpr();
+        dest = make_unique<BinaryExprAST>(op, dest, value);
     }
     
     return dest;
 }
 
-ExprPtr Parser::parseTernaryExpr() { return parseLogicalOrExpr(); }
+ExprPtr Parser::parsePipeExpr() {
+    ExprPtr LHS = parseTernaryExpr();
+
+    while (*current == LSHIFT || *current == RSHIFT) {
+        BinaryOp op = (BinaryOp) eat().type;
+        ExprPtr RHS = parseTernaryExpr();
+        LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
+    }
+
+    return LHS;
+}
+
+ExprPtr Parser::parseTernaryExpr() { 
+    ExprPtr condition = parseLogicalOrExpr();
+
+    while (check(QUESTION)) {
+        ExprPtr thenExpr = parseLogicalOrExpr();
+        expect(COLON);
+        ExprPtr elseExpr = parseLogicalOrExpr();
+        condition = make_unique<TernaryExprAST>(condition, thenExpr, elseExpr);
+    }
+
+    return condition; 
+}
 
 ExprPtr Parser::parseLogicalOrExpr() { 
     ExprPtr LHS = parseLogicalAndExpr();
 
     while (check(OR)) {
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseLogicalAndExpr();
         LHS = make_unique<BinaryExprAST>(BinaryOp::LOR, LHS, RHS);
     }
 
@@ -195,7 +218,7 @@ ExprPtr Parser::parseLogicalAndExpr() {
     ExprPtr LHS = parseBitwiseOrExpr();
 
     while (check(AND)) {
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseBitwiseOrExpr();
         LHS = make_unique<BinaryExprAST>(BinaryOp::LAND, LHS, RHS);
     }
 
@@ -206,7 +229,7 @@ ExprPtr Parser::parseBitwiseOrExpr() {
     ExprPtr LHS = parseBitwiseXorExpr();
 
     while (check(BIT_OR)) {
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseBitwiseXorExpr();
         LHS = make_unique<BinaryExprAST>(BinaryOp::BOR, LHS, RHS);
     }
 
@@ -219,7 +242,7 @@ ExprPtr Parser::parseBitwiseAndExpr() {
     ExprPtr LHS = parseEqualityExpr();
 
     while (check(BIT_AND)) {
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseEqualityExpr();
         LHS = make_unique<BinaryExprAST>(BinaryOp::BAND, LHS, RHS);
     }
 
@@ -231,7 +254,7 @@ ExprPtr Parser::parseEqualityExpr() {
 
     while (*current == EQUALS_EQUALS || *current == NOT_EQUALS) {
         BinaryOp op = (BinaryOp) eat().type;
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseRelationalExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -243,7 +266,7 @@ ExprPtr Parser::parseRelationalExpr() {
 
     while (current->isRelational()) {
         BinaryOp op = (BinaryOp) eat().type;
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseBitwiseShiftExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -255,7 +278,7 @@ ExprPtr Parser::parseBitwiseShiftExpr() {
 
     while (*current == BIT_LSHIFT || *current == BIT_RSHIFT) {
         BinaryOp op = (BinaryOp) eat().type;
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseAdditiveExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -267,7 +290,7 @@ ExprPtr Parser::parseAdditiveExpr() {
 
     while (*current == PLUS || *current == MINUS) {
         BinaryOp op = (BinaryOp) eat().type;
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseMultiplicativeExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -279,7 +302,7 @@ ExprPtr Parser::parseMultiplicativeExpr() {
 
     while (*current == ASTERISK || *current == SLASH || *current == PERCENT) {
         BinaryOp op = (BinaryOp) eat().type;
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parsePowerExpr();
         LHS = make_unique<BinaryExprAST>(op, LHS, RHS);
     }
 
@@ -290,7 +313,7 @@ ExprPtr Parser::parsePowerExpr() {
     ExprPtr LHS = parseAddressExpr();
 
     while (check(CARET)) {
-        ExprPtr RHS = parseExpr();
+        ExprPtr RHS = parseAddressExpr();
         LHS = make_unique<BinaryExprAST>(BinaryOp::POW, LHS, RHS);
     }    
 
@@ -315,7 +338,20 @@ ExprPtr Parser::parseDereferenceExpr() {
     return parseTypeCastExpr(); 
 }
 
-ExprPtr Parser::parseTypeCastExpr() { return parseLogBitUnaryExpr(); }
+ExprPtr Parser::parseTypeCastExpr() { 
+    if (check(LPAREN)) {
+        FuxType type = parseType(true); // analyser will check wether type is primitive or not
+        if (!type || *current != RPAREN) { // TODO: test more possible cases
+            current -= (type.pointerDepth + 2); // get '*'s, identifier and '(' back
+            return parseLogBitUnaryExpr();
+        }
+        expect(RPAREN, MISSING_BRACKET);
+        ExprPtr expr = parseExpr();
+        return make_unique<TypeCastExprAST>(type, expr);
+    }
+   
+    return parseLogBitUnaryExpr(); 
+}
 
 ExprPtr Parser::parseLogBitUnaryExpr() { 
     if (*current == EXCLAMATION || *current == BIT_NOT || *current == QUESTION) {
@@ -347,7 +383,19 @@ ExprPtr Parser::parsePreIncDecExpr() {
     return parseIndexExpr(); 
 }
 
-ExprPtr Parser::parseIndexExpr() { return parseCallExpr(); }
+ExprPtr Parser::parseIndexExpr() { 
+    ExprPtr expr = parseCallExpr(); 
+    
+    if (check(ARRAY_BRACKET)) 
+        return make_unique<BinaryExprAST>(BinaryOp::IDX, expr);
+    else if (check(LBRACKET)) {
+        ExprPtr index = parseExpr();
+        expect(RBRACKET, MISSING_BRACKET);
+        return make_unique<BinaryExprAST>(BinaryOp::IDX, expr, index);
+    }
+
+    return expr;
+}
 
 ExprPtr Parser::parseCallExpr(string symbol, StmtList arguments) { 
     if (!symbol.empty() || !arguments.empty())
@@ -430,7 +478,18 @@ ExprPtr Parser::parsePrimaryExpr() {
     }
 }
 
-FuxType Parser::parseType() {
+FuxType Parser::parseType(bool primitive) {
+    if (primitive) {
+        int64_t pointerDepth = 0;
+        while(check(ASTERISK)) 
+            ++pointerDepth;
+        if (!current->isType()) 
+            return FuxType(FuxType::NO_TYPE, pointerDepth);
+        const FuxType::Kind kind = (FuxType::Kind) current->type;
+        const string &value = eat().value;
+        return FuxType::createPrimitive(kind, pointerDepth, check(ARRAY_BRACKET), value);
+    }
+
     FuxType::AccessList access = {FuxType::PUBLIC};
     int64_t pointerDepth;
 

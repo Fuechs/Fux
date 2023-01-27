@@ -33,10 +33,10 @@ src
 │   │   ├── analyser.hpp - AST analyser 
 │   │   └── expectation.hpp - epectation struct
 │   ├── ast
-│   │   ├── ast.cpp - AST & Binary/UnaryOp impl.
+│   │   ├── ast.cpp - AST & BinaryOp/UnaryOp/Inbuilts impl.
 │   │   ├── ast.hpp - Abstract Syntax Tree
 │   │   ├── expr.hpp - ExprAST base
-│   │   ├── op.hpp - Binary/UnaryOp
+│   │   ├── op.hpp - BinaryOp/UnaryOp/Inbuilts
 │   │   ├── position.hpp - Position struct
 │   │   └── stmt.hpp - StmtAST base
 │   ├── error

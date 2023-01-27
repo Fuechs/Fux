@@ -47,7 +47,9 @@ private:
     ExprPtr parseExpr();
     // <symbol> [...]= <value>
     ExprPtr parseAssignmentExpr();
-    // TODO: <bool> ? <expr> : <expr>
+    // <expr> <<|>> <expr>
+    ExprPtr parsePipeExpr();
+    // <bool> ? <expr> : <expr>
     ExprPtr parseTernaryExpr();
     // |
     ExprPtr parseLogicalOrExpr();
@@ -76,7 +78,7 @@ private:
     ExprPtr parseAddressExpr();
     // * <address>
     ExprPtr parseDereferenceExpr();
-    // TODO: ( <type> ) <value>
+    // ( <type> ) <value>
     ExprPtr parseTypeCastExpr();
     //° ! (log not), ~ (bit not), ? (existence)
     ExprPtr parseLogBitUnaryExpr();
@@ -84,7 +86,7 @@ private:
     ExprPtr parsePlusMinusUnaryExpr();
     // ++x, --x
     ExprPtr parsePreIncDecExpr();
-    // TODO: <array> [ <index> ]
+    // <array> [ <index> ]
     ExprPtr parseIndexExpr();
     // <callee> ( <arguments> )
     ExprPtr parseCallExpr(string symbol = "", StmtList arguments = StmtList());
@@ -94,8 +96,9 @@ private:
     // x         , 1    , (...)
     ExprPtr parsePrimaryExpr();
 
-    // parse : | -> + pointer depth + type name + array
-    FuxType parseType();
+    // parse : | -> + access + pointer depth + type name + array
+    // primitive: only parse pointer depth + type name + array
+    FuxType parseType(bool primitive = false);
 
     // parse number with correct type
     ExprPtr parseNumberExpr(Token &tok);

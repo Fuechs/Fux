@@ -23,7 +23,8 @@ enum class AST {
     UnaryExprAST,
     BinaryExprAST,
     CallExprAST,
-    AssignmentExprAST,
+    TypeCastExprAST,
+    TernaryExprAST,
 
     // statements
     VariableDeclAST,
