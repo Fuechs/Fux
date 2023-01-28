@@ -47,6 +47,7 @@ enum class BinaryOp {
     POW = CARET,        // power ^
     MOD = PERCENT,      // modulus %
     BOR = BIT_OR,       // bitwise or |
+    BXOR = BIT_XOR,     // bitwise xor ><
     BAND = BIT_AND,     // bitwise and &
     LSH = BIT_LSHIFT,   // bitwise left shift <|
     RSH = BIT_RSHIFT,   // bitwise right shift |>

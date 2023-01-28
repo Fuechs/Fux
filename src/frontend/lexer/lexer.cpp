@@ -218,6 +218,13 @@ void Lexer::getToken() {
                 break;
             }
 
+            if (peek() == '<') {
+                currentToken.type = BIT_XOR;
+                currentToken.value = "><";
+                advance(2);
+                break;
+            }
+
             currentToken.type = GREATERTHAN;
             advance();
             break;
@@ -698,33 +705,20 @@ void Lexer::getNumber() {
 }
 
 bool Lexer::skipComment() {
-    if (current() == '#') { // ignore #!...
-        if (peek() != '!') // not a #!
-            return false;
-
-        do advance(); while (idx < source.length() && current() != '\n');
-        advance();
+    if (current() == '#' && peek() == '!') { // ignore '#!...'
+        do advance(); while (idx < source.length() && peek(-1) != '\n'); // peek(-1) so '\n' gets skipped
         resetPos();
         return true;
-    } 
-    
-    if (peek() == '/') { // single line comment '//'
-        do advance(); while (idx < source.length() && current() != '\n');
-        advance();
+    } else if (peek() == '/') { // single line comment '// ...'
+        do advance(); while (idx < source.length() && peek(-1) != '\n'); // peek(-1) so '\n' gets skipped
         resetPos();
         return true;
-    }
-
-    // FIXME: multiline comments aren't recognized properly
-
-    if (peek() == '*') { // multi line comment '/*'
-                                        // check for '*/'
-        while (idx < source.length() && current() != '*' && peek() != '/') {
-            if (current() == '\n') {
-                resetPos();
-                --idx;
-            }
+    } else if (peek() == '*') { // multi line comment '/* ... */'
+                                                // check for  '*/'
+        while (idx < source.length() && (current() != '*' || peek() != '/')) {
             advance();
+            if (peek(-1) == '\n') 
+                resetPos();
         }
         
         if (idx >= source.length())

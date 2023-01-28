@@ -245,7 +245,16 @@ ExprPtr Parser::parseBitwiseOrExpr() {
     return LHS;
 }
 
-ExprPtr Parser::parseBitwiseXorExpr() { return parseBitwiseAndExpr(); }
+ExprPtr Parser::parseBitwiseXorExpr() { 
+    ExprPtr LHS = parseBitwiseAndExpr(); 
+
+    while (check(BIT_XOR)) {
+        ExprPtr RHS = parseBitwiseAndExpr();
+        LHS = make_unique<BinaryExprAST>(BinaryOp::BXOR, LHS, RHS);
+    }
+
+    return LHS;
+}
 
 ExprPtr Parser::parseBitwiseAndExpr() { 
     ExprPtr LHS = parseEqualityExpr();

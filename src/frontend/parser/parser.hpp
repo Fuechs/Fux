@@ -60,51 +60,50 @@ private:
     ExprPtr parseAssignmentExpr();
     // <expr> <<|>> <expr>
     ExprPtr parsePipeExpr();
-    // <bool> ? <expr> : <expr>
+    // <expr> ? <expr> : <expr>
     ExprPtr parseTernaryExpr();
-    // |
+    // <expr> || <expr>
     ExprPtr parseLogicalOrExpr();
-    // &&
+    // <expr> && <expr> 
     ExprPtr parseLogicalAndExpr();
-    // |
+    // <expr> | <expr> 
     ExprPtr parseBitwiseOrExpr();
-    // TODO: bitwise xor, no operator yet, ^ is taken by pow
+    // <expr> >< <expr> 
     ExprPtr parseBitwiseXorExpr();
-    // &
+    // <expr> & <expr> 
     ExprPtr parseBitwiseAndExpr();
-    // ==, !=
+    // <expr> == <expr> , <expr> != <expr> 
     ExprPtr parseEqualityExpr();
-    // <, <=, >, >=
+    // <expr> < <expr> , <expr> <= <expr> , <expr> > <expr> , <expr> >= <expr> 
     ExprPtr parseRelationalExpr();
-    // <|, |>
+    // <expr> <| <expr> , <expr> |> <expr> 
     ExprPtr parseBitwiseShiftExpr();
-    // +, -
+    // <expr> + <expr> , <expr> - <expr> 
     ExprPtr parseAdditiveExpr();
-    // *, /, %
+    // <expr> * <expr> , <expr> / <expr> , <expr> % <expr> 
     ExprPtr parseMultiplicativeExpr();
-    // ^
+    // <expr> ^ <expr> 
     ExprPtr parsePowerExpr();
 
-    // & <variable>
+    // & <expr>
     ExprPtr parseAddressExpr();
-    // * <address>
+    // * <expr>
     ExprPtr parseDereferenceExpr();
-    // ( <type> ) <value>
+    // ( <type> ) <expr>
     ExprPtr parseTypeCastExpr();
     //° ! (log not), ~ (bit not), ? (existence)
     ExprPtr parseLogBitUnaryExpr();
-    // +, -
+    // + <expr> , - <expr> 
     ExprPtr parsePlusMinusUnaryExpr();
-    // ++x, --x
+    // ++<expr> , --<expr> 
     ExprPtr parsePreIncDecExpr();
-    // <array> [ <index> ]
+    // <expr> [ <expr> ]
     ExprPtr parseIndexExpr();
-    // <callee> ( <arguments> )
+    // <expr>  ( <expr>, <expr>, ... )
     ExprPtr parseCallExpr(ExprPtr &symbol = nullExpr, StmtList arguments = StmtList());
-    // x++, x--
+    // <expr>++, <expr>--
     ExprPtr parsePostIncDecExpr();
-    // identifier, value, sub expr
-    // x         , 1    , (...)
+    // <identifier>, <value>, (<expr>)
     ExprPtr parsePrimaryExpr();
 
     // parse : | -> + access + pointer depth + type name + array

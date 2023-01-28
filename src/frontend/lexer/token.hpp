@@ -71,6 +71,7 @@ enum TokenType {
     // bitwise operation
     BIT_NOT,        // ~
     BIT_OR,         // |
+    BIT_XOR,        // ><
     BIT_AND,        // &
     BIT_LSHIFT,     // <|
     BIT_RSHIFT,     // |>
@@ -211,6 +212,7 @@ static const char *TokenTypeString[] = {
     // bitwise operation
     "BIT_NOT",     
     "BIT_OR",         // |
+    "BIT_XOR",
     "BIT_AND",        // &
     "BIT_LSHIFT",
     "BIT_RSHIFT",
@@ -350,7 +352,8 @@ static vector<string> TokenTypeValue = {
 
     // bitwise operation
     "~",
-    "|",         
+    "|",   
+    "><",      
     "&",       
     "<|",
     "|>",
