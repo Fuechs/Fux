@@ -1,4 +1,6 @@
-## Language State
+# Language State
+
+### Built with [![C++][cpp-badge]](https://isocpp.org/)&nbsp;[![LLVM][llvm-badge]](https://llvm.org/)
 
 Fux is currently still in early development. There is no working compiler available for this language. \
 **Fux is not supposed to be a superset of C++.**
@@ -24,13 +26,16 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
         - [...] Statements
         - [...] Expressions
 - [&cross;] Analyser
-- [&cross;] Context (LLVM)
-- [&cross;] Generator (LLVM)
-- [&cross;] Optimizer (LLVM)
-- [&cross;] Compiler (LLVM)
+- [&cross;] Context [![LLVM][llvm-badge]](https://llvm.org/)
+- [&cross;] Generator [![LLVM][llvm-badge]](https://llvm.org/)
+- [&cross;] Optimizer [![LLVM][llvm-badge]](https://llvm.org/)
+- [&cross;] Compiler [![LLVM][llvm-badge]](https://llvm.org/)
 
 I consider the language turing complete once it is able to compile and run [Rule 110](../src/examples/rule110.fux). To set a realistic goal though, it is not planned that Fux will support more complex structures, such as classes, as well as pythonic features at that point. 
 
 ###### [&cross;] Stage II - Core Package
 
 ###### [&cross;] Stage III - Alpha Release
+
+[llvm-badge]: https://img.shields.io/badge/LLVM-4c1717?logo=llvm&logoColor=white
+[cpp-badge]: https://img.shields.io/badge/C++-1a3b63?logo=cplusplus&logoColor=white
