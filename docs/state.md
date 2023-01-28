@@ -19,12 +19,12 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [&check;] Threading
 - [&check;] Lexer
 - [...] Abstract Syntax Tree
+    - [&check;] Expressions
+    - [...] Statements
 - [...] Parser
     - [&check;] Value
     - [&check;] Type
     - [...] Parsing
-        - [...] Statements
-        - [...] Expressions
 - [&cross;] Analyser
 - [&cross;] Context [![LLVM][llvm-badge]](https://llvm.org/)
 - [&cross;] Generator [![LLVM][llvm-badge]](https://llvm.org/)
