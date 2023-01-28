@@ -64,6 +64,10 @@ AST IfElseAST::getASTType() { return AST::IfElseAST; }
 void CodeBlockAST::addSub(StmtPtr &sub) { body.push_back(std::move(sub)); }
 AST CodeBlockAST::getASTType() { return AST::CodeBlockAST; }
 
+AST WhileLoopAST::getASTType() { return AST::WhileLoopAST; }
+
+AST ForLoopAST::getASTType() { return AST::ForLoopAST; }
+
 PrototypeAST::~PrototypeAST() { args.clear(); }
 
 ExprPtr &PrototypeAST::getSymbol() { return symbol; }
@@ -72,8 +76,6 @@ FuxType &PrototypeAST::getType() { return type; }
 AST PrototypeAST::getASTType() { return AST::PrototypeAST; }
 
 AST FunctionAST::getASTType() { return AST::FunctionAST; }
-
-AST WhileLoopAST::getASTType() { return AST::WhileLoopAST; }
 
 void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
 AST RootAST::getASTType() { return AST::RootAST; }

@@ -35,10 +35,10 @@ private:
     const bool mainFile;
 
     // parse a statement
-    StmtPtr parseStmt();
+    StmtPtr parseStmt(bool expectSemicolon = true);
     // function declaration
     StmtPtr parseFunctionDeclStmt();
-    // TODO: for (each) loop
+    // for (each) loop
     StmtPtr parseForLoopStmt();
     // while loop, TODO: do ... while
     StmtPtr parseWhileLoopStmt();

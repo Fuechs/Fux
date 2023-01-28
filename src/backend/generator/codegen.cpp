@@ -81,6 +81,10 @@ Value *IfElseAST::codegen(LLVMWrapper *fuxLLVM) {
 
 Value *CodeBlockAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
+Value *WhileLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
+Value *ForLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
     TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
     FunctionType *funcType /*= FunctionType::get(Generator::getType(fuxLLVM, type), argTypes, false)*/ ;
@@ -127,8 +131,6 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     func->eraseFromParent();
     return nullptr;
 }
-
-Value *WhileLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
     for (StmtPtr &sub : program)

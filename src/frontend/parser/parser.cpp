@@ -40,14 +40,21 @@ RootPtr Parser::parse() {
 }
 
 // FIXME: error reporting: errors resulting out of other errors shouldn't be reported
-StmtPtr Parser::parseStmt() {
+StmtPtr Parser::parseStmt(bool expectSemicolon) {
+    if (*current == SEMICOLON) { // handle while (...); or for (;;);
+        if (expectSemicolon)
+            eat();
+        return nullptr;
+    }
+
     StmtPtr stmt = parseFunctionDeclStmt();
     // TODO: get rid of this if
-    if (stmt 
+    if (expectSemicolon && stmt 
     && stmt->getASTType() != AST::CodeBlockAST 
     && stmt->getASTType() != AST::FunctionAST
     && stmt->getASTType() != AST::IfElseAST
-    && stmt->getASTType() != AST::WhileLoopAST) // don't throw useless errors
+    && stmt->getASTType() != AST::WhileLoopAST
+    && stmt->getASTType() != AST::ForLoopAST) // don't throw useless errors
         expect(SEMICOLON);
     return stmt;
 }
@@ -99,7 +106,37 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     return make_unique<FunctionAST>(type, symbolExpr, args, body);
 }
 
-StmtPtr Parser::parseForLoopStmt() { return parseWhileLoopStmt(); }
+StmtPtr Parser::parseForLoopStmt() { 
+    bool forEach = false;
+    StmtPtr init = nullptr;
+    ExprPtr cond = nullptr;
+    ExprPtr iter = nullptr;
+
+    if (!check(KEY_FOR))
+        return parseWhileLoopStmt();
+
+    expect(LPAREN);
+
+    init = parseStmt(false);
+
+    if (check(KEY_IN)) {
+        forEach = true;
+        iter = parseExpr();
+    } else {
+        expect(SEMICOLON); 
+        if (!check(SEMICOLON)) {
+            cond = parseExpr();
+            expect(SEMICOLON);
+        }
+        if (*current != RPAREN)
+            iter = parseExpr();
+    }
+
+    expect(RPAREN, MISSING_BRACKET);
+    StmtPtr body = parseStmt();
+    if (forEach)    return make_unique<ForLoopAST>(init, iter, body);
+    else            return make_unique<ForLoopAST>(init, cond, iter, body);
+}
 
 StmtPtr Parser::parseWhileLoopStmt() {
     // TODO: do .. while
@@ -112,6 +149,7 @@ StmtPtr Parser::parseWhileLoopStmt() {
     ExprPtr condition = parseExpr();
     expect(RPAREN, MISSING_BRACKET);
     StmtPtr body = parseStmt();
+    
     return make_unique<WhileLoopAST>(condition, body, postCondition);
 }
 
@@ -443,8 +481,9 @@ ExprPtr Parser::parseCallExpr(ExprPtr &symbol, StmtList arguments) {
         }
 
         StmtList arguments = StmtList();
-        for (ExprPtr &arg : parseExprList())
-            arguments.push_back(std::move(arg));
+        if (*current != RPAREN)
+            for (ExprPtr &arg : parseExprList())
+                arguments.push_back(std::move(arg));
         expect(RPAREN, MISSING_BRACKET);
         return make_unique<CallExprAST>(symbolExpr, arguments);
     }

@@ -45,10 +45,12 @@ StmtPtr IfElseAST::analyse() { return nullptr; }
 
 StmtPtr CodeBlockAST::analyse() { return nullptr; }
 
+StmtPtr WhileLoopAST::analyse() { return nullptr; }
+
+StmtPtr ForLoopAST::analyse() { return nullptr; }
+
 StmtPtr PrototypeAST::analyse() { return nullptr; }
 
 StmtPtr FunctionAST::analyse() { return nullptr; }
-
-StmtPtr WhileLoopAST::analyse() { return nullptr; }
 
 StmtPtr RootAST::analyse() { return nullptr; }

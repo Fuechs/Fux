@@ -154,6 +154,30 @@ void CodeBlockAST::debugPrint() {
     cout << "}";
 }
 
+void WhileLoopAST::debugPrint() {
+    cout << "while (";
+    condition->debugPrint();
+    cout << ") ";
+    if (body) body->debugPrint();
+}
+
+void ForLoopAST::debugPrint() {
+    cout << "for (";
+    if (initial) initial->debugPrint();
+    if (forEach) {
+        cout << " in ";
+        if (iterator) iterator->debugPrint();
+    } else {
+        cout << "; ";
+        if (condition) condition->debugPrint();
+        cout << "; ";
+        if (iterator) iterator->debugPrint();
+    }
+
+    cout << ") ";
+    if (body) body->debugPrint();
+}
+
 void PrototypeAST::debugPrint() {
     symbol->debugPrint();
     cout << "(";
@@ -169,13 +193,6 @@ void PrototypeAST::debugPrint() {
 void FunctionAST::debugPrint() { 
     proto->debugPrint();
     cout << " ";
-    body->debugPrint();
-}
-
-void WhileLoopAST::debugPrint() {
-    cout << "while (";
-    condition->debugPrint();
-    cout << ") ";
     body->debugPrint();
 }
 

@@ -1,0 +1,16 @@
+for (x: i8 in y) {
+    puts (str) x;
+}
+
+for (i: i8; i < size(); i++)
+    puts (str) i;
+
+for (;;);
+
+for (x: c8 in a);
+
+// TODO: should the second ; be required or not?
+for (for(;;);; ; 1+1) {
+    while (true)    
+        putch '\n';
+}

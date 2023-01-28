@@ -286,6 +286,46 @@ public:
     Position pos = Position();
 };
 
+class WhileLoopAST : public StmtAST {
+    ExprPtr condition;
+    StmtPtr body;
+    bool postCondition;
+
+public:
+    WhileLoopAST(ExprPtr &condition, StmtPtr &body, bool postCondition = false)
+    : condition(std::move(condition)), body(std::move(body)), postCondition(postCondition) {}
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
+class ForLoopAST : public StmtAST {
+    bool forEach;
+    /*for (*/StmtPtr initial; 
+            ExprPtr condition; 
+            ExprPtr iterator;//) {
+        StmtPtr body;
+    // }
+public:
+    ForLoopAST(StmtPtr &initial, ExprPtr &iterator, StmtPtr &body)
+    : forEach(true), initial(std::move(initial)), condition(nullptr), 
+        iterator(std::move(iterator)), body(std::move(body)) {}
+    ForLoopAST(StmtPtr &initial, ExprPtr &condition, ExprPtr &iterator, StmtPtr &body)
+    : forEach(false), initial(std::move(initial)), condition(std::move(condition)),
+        iterator(std::move(iterator)), body(std::move(body)) {}
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
+
 typedef unique_ptr<CodeBlockAST> BlockPtr;
 
 // prototype of a function
@@ -332,23 +372,6 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint() override;    
-
-    Position pos = Position();
-};
-
-class WhileLoopAST : public StmtAST {
-    ExprPtr condition;
-    StmtPtr body;
-    bool postCondition;
-
-public:
-    WhileLoopAST(ExprPtr &condition, StmtPtr &body, bool postCondition = false)
-    : condition(std::move(condition)), body(std::move(body)), postCondition(postCondition) {}
-
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
-    AST getASTType() override;
-    void debugPrint() override;
 
     Position pos = Position();
 };

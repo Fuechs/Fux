@@ -34,6 +34,7 @@ enum class AST {
     PrototypeAST,
     FunctionAST,
     WhileLoopAST,
+    ForLoopAST,
     RootAST,
 };
 
