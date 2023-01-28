@@ -46,7 +46,8 @@ StmtPtr Parser::parseStmt() {
     if (stmt 
     && stmt->getASTType() != AST::CodeBlockAST 
     && stmt->getASTType() != AST::FunctionAST
-    && stmt->getASTType() != AST::IfElseAST) // don't throw useless errors
+    && stmt->getASTType() != AST::IfElseAST
+    && stmt->getASTType() != AST::WhileLoopAST) // don't throw useless errors
         expect(SEMICOLON);
     return stmt;
 }
@@ -100,7 +101,19 @@ StmtPtr Parser::parseFunctionDeclStmt() {
 
 StmtPtr Parser::parseForLoopStmt() { return parseWhileLoopStmt(); }
 
-StmtPtr Parser::parseWhileLoopStmt() { return parseBlockStmt(); }
+StmtPtr Parser::parseWhileLoopStmt() {
+    // TODO: do .. while
+    bool postCondition = false;
+
+    if (!check(KEY_WHILE))
+        return parseBlockStmt(); 
+
+    expect(LPAREN);
+    ExprPtr condition = parseExpr();
+    expect(RPAREN, MISSING_BRACKET);
+    StmtPtr body = parseStmt();
+    return make_unique<WhileLoopAST>(condition, body, postCondition);
+}
 
 StmtPtr Parser::parseBlockStmt() {
     if (check(LBRACE)) {
@@ -158,7 +171,7 @@ StmtPtr Parser::parseVariableDeclStmt() {
         return make_unique<VariableDeclAST>(symbol, type);
 
     ExprPtr value = parseExpr();
-    return make_unique<VariableDeclAST>(symbol, type, value);
+    return  make_unique<VariableDeclAST>(symbol, type, value);
 }
 
 ExprList Parser::parseExprList() { 
@@ -357,10 +370,11 @@ ExprPtr Parser::parseDereferenceExpr() {
 }
 
 ExprPtr Parser::parseTypeCastExpr() { 
+    TokenIter backToken = current;
     if (check(LPAREN)) {
         FuxType type = parseType(true); // analyser will check wether type is primitive or not
         if (!type || *current != RPAREN) { // TODO: test more possible cases
-            current -= (type.pointerDepth + 2); // get '*'s, identifier and '(' back
+            current = backToken; // get '*'s, identifier and '(' back
             return parseLogBitUnaryExpr();
         }
         expect(RPAREN, MISSING_BRACKET);

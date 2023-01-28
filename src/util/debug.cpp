@@ -172,6 +172,13 @@ void FunctionAST::debugPrint() {
     body->debugPrint();
 }
 
+void WhileLoopAST::debugPrint() {
+    cout << "while (";
+    condition->debugPrint();
+    cout << ") ";
+    body->debugPrint();
+}
+
 void RootAST::debugPrint() {
     if (!fux.options.debugMode)
         return;

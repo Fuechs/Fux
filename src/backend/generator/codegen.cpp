@@ -128,6 +128,8 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     return nullptr;
 }
 
+Value *WhileLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
     for (StmtPtr &sub : program)
         sub->codegen(fuxLLVM);

@@ -336,6 +336,22 @@ public:
     Position pos = Position();
 };
 
+class WhileLoopAST : public StmtAST {
+    ExprPtr condition;
+    StmtPtr body;
+    bool postCondition;
+
+public:
+    WhileLoopAST(ExprPtr &condition, StmtPtr &body, bool postCondition = false)
+    : condition(std::move(condition)), body(std::move(body)), postCondition(postCondition) {}
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtPtr analyse() override;
+    AST getASTType() override;
+    void debugPrint() override;
+
+    Position pos = Position();
+};
 
 class RootAST : public StmtAST {
     StmtList program;

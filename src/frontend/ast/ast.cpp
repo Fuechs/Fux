@@ -73,6 +73,8 @@ AST PrototypeAST::getASTType() { return AST::PrototypeAST; }
 
 AST FunctionAST::getASTType() { return AST::FunctionAST; }
 
+AST WhileLoopAST::getASTType() { return AST::WhileLoopAST; }
+
 void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
 AST RootAST::getASTType() { return AST::RootAST; }
 

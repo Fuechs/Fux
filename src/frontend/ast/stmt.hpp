@@ -33,6 +33,7 @@ enum class AST {
     CodeBlockAST,
     PrototypeAST,
     FunctionAST,
+    WhileLoopAST,
     RootAST,
 };
 
