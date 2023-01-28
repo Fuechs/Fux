@@ -18,9 +18,15 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [&check;] Source Management
 - [&check;] Threading
 - [&check;] Lexer
-- [&check;] Abstract Syntax Tree
+- [...] Abstract Syntax Tree
+    - [&check;] Expressions
+    - [&check;] Statements
+    - [...] Position 
 - [&check;] Parser
 - [...] Analyser
+    - [...] Expressions
+    - [...] Statements
+    - [...] Expectation
 - [&cross;] Context [![LLVM][llvm-badge]](https://llvm.org/)
 - [&cross;] Generator [![LLVM][llvm-badge]](https://llvm.org/)
 - [&cross;] Optimizer [![LLVM][llvm-badge]](https://llvm.org/)

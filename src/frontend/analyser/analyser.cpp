@@ -53,4 +53,10 @@ StmtPtr PrototypeAST::analyse() { return nullptr; }
 
 StmtPtr FunctionAST::analyse() { return nullptr; }
 
-StmtPtr RootAST::analyse() { return nullptr; }
+StmtPtr RootAST::analyse() {
+    RootPtr mod = make_unique<RootAST>();
+    StmtPtr modStmt = nullptr;
+    for (StmtPtr &stmt : program) 
+        mod->addSub((modStmt = stmt->analyse()));  
+    return mod;
+}
