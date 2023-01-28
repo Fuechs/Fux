@@ -416,27 +416,25 @@ ExprPtr Parser::parseIndexExpr() {
 }
 
 ExprPtr Parser::parseCallExpr(ExprPtr &symbol, StmtList arguments) { 
-    if (symbol || !arguments.empty())
-        goto pre_parsed;
+    if (!symbol && arguments.empty()) {
+        if (*current != IDENTIFIER)
+            return parsePostIncDecExpr();
 
-    {if (*current != IDENTIFIER)
-        return parsePostIncDecExpr();
+        TokenIter backTok = current;
+        ExprPtr symbolExpr = parsePrimaryExpr(); // don't overwrite null expr symbol
+        
+        if (!check(LPAREN)) {
+            current = backTok;
+            return parsePostIncDecExpr();
+        }
 
-    TokenIter backTok = current;
-    ExprPtr symbolExpr = parsePrimaryExpr(); // don't overwrite null expr symbol
-    
-    if (!check(LPAREN)) {
-        current = backTok;
-        return parsePostIncDecExpr();
+        StmtList arguments = StmtList();
+        for (ExprPtr &arg : parseExprList())
+            arguments.push_back(std::move(arg));
+        expect(RPAREN, MISSING_BRACKET);
+        return make_unique<CallExprAST>(symbolExpr, arguments);
     }
 
-    StmtList arguments = StmtList();
-    for (ExprPtr &arg : parseExprList())
-        arguments.push_back(std::move(arg));
-    expect(RPAREN, MISSING_BRACKET);
-    return make_unique<CallExprAST>(symbolExpr, arguments);}
-
-    pre_parsed:
     if (peek(-1) != RPAREN) {
         while (check(COMMA)) {
             ExprPtr arg = parseExpr();

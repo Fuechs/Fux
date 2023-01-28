@@ -38,7 +38,7 @@ private:
     StmtPtr parseStmt();
     // function declaration
     StmtPtr parseFunctionDeclStmt();
-    // TODO: for (-each) loop
+    // TODO: for (each) loop
     StmtPtr parseForLoopStmt();
     // TODO: (do) while loop
     StmtPtr parseWhileLoopStmt();

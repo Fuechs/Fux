@@ -16,7 +16,7 @@
 #include "util/threading.hpp"
 #include "backend/context/context.hpp"
 
-void createTestAST(RootPtr &root);
+RootPtr createTestAST();
 #endif
 
 FuxStruct fux;
@@ -62,28 +62,20 @@ int main(int argc, char **argv) {
     RootPtr root = std::move(mainFile->root);
     if (mainFile->hasErrors()) {
         delete mainFile;
-        goto end;
+        return result;
     } 
     mainFile->reportErrors();
     root->debugPrint();
 
-    // return result; // ! program ends here
-
-    // RootPtr root = make_unique<RootAST>();
-    // createTestAST(root);    
+    // RootPtr root = createTestAST();    
     // root->debugPrint();
 
-    // return result; // ! program ends here
-
-    #ifdef FUX_BACKEND
-    { // own scope so it can be skipped by goto -- c++ calls destructor at end of scope
-        FuxContext *context = new FuxContext(root);
-        context->run();
-    }
+    #ifdef FUX_BACKEND 
+    FuxContext *context = new FuxContext(root);
+    context->run();
     #endif
 
-    end:
-        return result;
+    return result;
 }
 
 int bootstrap(int argc, char **argv) {
@@ -234,7 +226,9 @@ int repl() {
 
 #ifdef FUX_BACKEND
 // create AST to test the generator without parser
-void createTestAST(RootPtr &root) {
+RootPtr createTestAST() {
+    RootPtr root = make_unique<RootAST>();
+
     // modify(num -> i64): void;
     StmtList eArgs = StmtList();
     eArgs.push_back(make_unique<VariableDeclAST>("num", FuxType::createRef(FuxType::I64)));
@@ -271,6 +265,8 @@ void createTestAST(RootPtr &root) {
     StmtPtr body = make_unique<CodeBlockAST>(bodyList);
     StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
     root->addSub(mFunc);
+
+    return root;
 }
 #endif
 
