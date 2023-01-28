@@ -31,7 +31,7 @@ src
 │   ├── analyser 
 │   │   ├── analyser.cpp - AST analyser impl.
 │   │   ├── analyser.hpp - AST analyser 
-│   │   └── expectation.hpp - epectation struct
+│   │   └── expectation.hpp - expectation struct
 │   ├── ast
 │   │   ├── ast.cpp - AST & BinaryOp/UnaryOp/Inbuilts impl.
 │   │   ├── ast.hpp - Abstract Syntax Tree
