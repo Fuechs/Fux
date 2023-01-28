@@ -9,9 +9,9 @@
 -->
 
 <div align="center">
-<img width="200" src="./assets/fux-material-icon-435.svg" />
+<img width="150" src="./assets/fux-material-icon-435.svg" />
 
-# Flawless Unambiguous Programming
+## Flawless Unambiguous Programming
 
 <!-- ![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68&style=for-the-badge)x -->
 [![version](https://img.shields.io/badge/pre--alpha-fcaa68?colorA=151515&style=for-the-badge)](./docs/state.md)
