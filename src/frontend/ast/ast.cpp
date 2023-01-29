@@ -77,8 +77,13 @@ AST PrototypeAST::getASTType() { return AST::PrototypeAST; }
 
 AST FunctionAST::getASTType() { return AST::FunctionAST; }
 
-void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
 AST RootAST::getASTType() { return AST::RootAST; }
+
+void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
+ExprPtr &RootAST::addSizeExpr(ExprPtr &sizeExpr) {
+    arraySizeExprs.push_back(std::move(sizeExpr));
+    return arraySizeExprs.back();
+}
 
 bool StmtAST::isExpr() { 
     return (this->getASTType() >= AST::NullExprAST 

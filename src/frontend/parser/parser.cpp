@@ -610,9 +610,9 @@ FuxType Parser::parseType(bool primitive) {
         return FuxType::createArray(kind, pointerDepth, access, value);
     else if (check(LBRACKET)) {
         ExprPtr size = parseExpr();
-        // FIXME: array size turns into a nullptr, probably in FuxType::operator=()
+        ExprPtr &sizeRef = root->addSizeExpr(size);
         expect(RBRACKET, MISSING_BRACKET);
-        return FuxType::createArray(kind, pointerDepth, access, value, size);
+        return FuxType::createArray(kind, pointerDepth, access, value, sizeRef);
     } else 
         return FuxType::createStd(kind, pointerDepth, access, value);
 

@@ -62,8 +62,8 @@ public:
     typedef vector<Access> AccessList;
 
     FuxType(Kind kind = NO_TYPE, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, bool array = false, ExprPtr &arraySize = nullExpr, string name = "")
-    : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), arraySize(std::move(arraySize)), name(name) {}
-    FuxType(const FuxType &copy);
+    : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), arraySize(std::ref(arraySize)), name(name) {}
+    // FuxType(const FuxType &copy);
     ~FuxType();
 
     FuxType &operator=(const FuxType &copy);
@@ -96,8 +96,15 @@ public:
      *  N --> Pointer with depth of N 
      */
     int64_t pointerDepth; 
+    // access modifiers
     AccessList access;
-    string name; // string value of the type; relevant for user defined types
-    bool array; // is an array type
-    ExprPtr arraySize; // relevant for array types; nullExpr -> no size
+    // string value of the type
+    // relevant for user defined types and debugPrint()
+    string name;
+    // is an array type
+    bool array; 
+    // relevant for array types
+    // nullExpr -> no size
+    // reference_wrapper so other ExprPtrs won't get deleted when copying
+    reference_wrapper<ExprPtr> arraySize; 
 };

@@ -378,6 +378,9 @@ public:
 
 class RootAST : public StmtAST {
     StmtList program;
+    // resting place for array size expressions
+    // references to these are in FuxTypes
+    ExprList arraySizeExprs; 
 
 public:
     RootAST() : program(StmtList()) {}        
@@ -388,6 +391,7 @@ public:
     void debugPrint() override;
 
     void addSub(StmtPtr &sub);
+    ExprPtr &addSizeExpr(ExprPtr &sizeExpr);
     
     Position pos = Position();
 };

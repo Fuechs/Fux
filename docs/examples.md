@@ -7,7 +7,7 @@
 - [Fibonacci](#fibonacci)
 - [Rule 110](#rule-110)
 
-### Arrays
+###### Arrays
 
 ```rust
 array: i64[]; // {}
@@ -19,7 +19,7 @@ main(argc: u64, argv: str[]): i64 {
 }
 ```
 
-### Reading Files
+###### Reading Files
 
 ```rust
 get core.file;
@@ -33,7 +33,7 @@ main(argc: u64, argv: str[]): i64 {
 }
 ```
 
-### Formatted Print
+###### Formatted Print
 
 ```rust
 get core.io;
@@ -45,7 +45,7 @@ main(argc: u64, argv: str[]): i64 {
 }
 ```
 
-### Buffered IO
+###### Buffered IO
 
 ```rust
 get core.io;
@@ -60,7 +60,7 @@ main(argc: u64, argv: str[]): i64 {
 
 ```
 
-### Fibonacci
+###### Fibonacci
 
 ```rust
 get core.io;
@@ -75,7 +75,7 @@ main(argc: u64, argv: str[]): i64 {
 }
 ```
 
-### Rule 110
+###### Rule 110
 
 ```rust
 main(argc: u64, argv: str[]): i64 {

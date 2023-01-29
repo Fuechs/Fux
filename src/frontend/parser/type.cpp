@@ -11,12 +11,12 @@
 
 #include "type.hpp"
 
-FuxType::FuxType(const FuxType &copy) { operator=(copy); }
-
 FuxType::~FuxType() {
     access.clear();
     name.clear();
 }
+
+// FuxType::FuxType(const FuxType &copy) {}
 
 FuxType &FuxType::operator=(const FuxType &copy) {
     this->kind = copy.kind;
@@ -24,7 +24,7 @@ FuxType &FuxType::operator=(const FuxType &copy) {
     this->access = copy.access;
     this->name = copy.name;
     this->array = copy.array;
-    this->arraySize = std::move(arraySize);
+    this->arraySize = copy.arraySize;
     return *this;
 }
 
@@ -32,7 +32,7 @@ bool FuxType::operator==(const FuxType &comp) const {
     return (kind == comp.kind 
             && access == comp.access 
             && array == comp.array 
-            && arraySize == comp.arraySize);
+            && arraySize.get() == comp.arraySize.get());
 }
 
 bool FuxType::operator!() { return kind == NO_TYPE; }
@@ -96,8 +96,8 @@ void FuxType::debugPrint(bool primitive) {
     
     if (array) {
         cout << "[";
-        if (arraySize != nullExpr)
-            arraySize->debugPrint();
+        if (arraySize.get())
+            arraySize.get()->debugPrint();
         cout << "]";
     }
 }

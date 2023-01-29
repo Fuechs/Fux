@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <fstream>
 #include <future>
 #include <iostream>
@@ -21,15 +22,14 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <cassert>
+#include <functional>
 
 #include "util/color.hpp"
 #include "util/io.hpp"
 
 using std::cout, std::cerr, std::endl, std::exception, std::make_unique,
-        std::map, std::pair, std::string, std::stringstream, std::to_string,
-        std::unique_ptr, std::vector;
+        std::map, std::pair, std::reference_wrapper, std::string, std::stringstream, 
+        std::to_string, std::unique_ptr, std::vector;
 
 //! backend & threading are currently not being compiled to save time 
 // #define FUX_BACKEND
