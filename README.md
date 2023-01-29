@@ -34,7 +34,7 @@ main(argc: u64, argv: str[]): i64 {
 
 <div align="center">
 <a href="./docs/state.md">Language State</a> ·
-<a href="./docs/contributing.md">Contributing</a> ·
+<a href="./docs/CONTRIBUTING.md">Contributing</a> ·
 <a href="./docs/README.md">Documentation</a> ·
 <a href="./docs/examples.md">Examples</a>
 </div>
@@ -42,7 +42,7 @@ main(argc: u64, argv: str[]): i64 {
 
 > __Warning__ \
 > Fux is still in early development. \
-> As of now only MacOS & Linux will be supported.
+> As of now only MacOS and Linux will be supported.
 
 Fux is a static typed language that can be as low-level as Rust and as high-level as Python.
 
