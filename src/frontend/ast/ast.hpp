@@ -30,7 +30,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
     
     Position pos = Position();
 };
@@ -45,7 +45,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
     
     Position pos = Position();
 };
@@ -61,7 +61,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
     
     Position pos = Position();
 };
@@ -77,7 +77,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -92,7 +92,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -107,7 +107,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -123,7 +123,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -141,7 +141,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
    
     Position pos = Position();
 };
@@ -156,7 +156,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -172,7 +172,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -188,7 +188,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
    
     Position pos = Position();
 };
@@ -205,7 +205,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
    
     Position pos = Position();
 };
@@ -229,7 +229,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
     
     Position pos = Position();
 };
@@ -247,7 +247,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
     
     Position pos = Position();
 };
@@ -264,7 +264,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -279,7 +279,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     void addSub(StmtPtr &sub);
 
@@ -298,7 +298,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -321,7 +321,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     Position pos = Position();
 };
@@ -349,7 +349,7 @@ public:
     FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
     
     Position pos = Position();
 };
@@ -371,7 +371,7 @@ public:
     FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;    
+    void debugPrint(size_t indent = 0) override;    
 
     Position pos = Position();
 };
@@ -388,7 +388,7 @@ public:
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtPtr analyse() override;
     AST getASTType() override;
-    void debugPrint() override;
+    void debugPrint(size_t indent = 0) override;
 
     void addSub(StmtPtr &sub);
     ExprPtr &addSizeExpr(ExprPtr &sizeExpr);

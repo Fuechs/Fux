@@ -44,7 +44,7 @@ public:
     FUX_BC(virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;)
     virtual unique_ptr<StmtAST> analyse() = 0;
     virtual AST getASTType() = 0;
-    virtual void debugPrint() = 0;
+    virtual void debugPrint(size_t indent = 0) = 0;
 
     bool isExpr();
 

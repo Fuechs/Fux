@@ -38,39 +38,93 @@ void Lexer::debugPrint() {
 
 // * PARSER
 
-void NullExprAST::debugPrint() { cout << "null"; }
-
-void BoolExprAST::debugPrint() { value->debugPrint(); }
-
-void NumberExprAST::debugPrint() { value->debugPrint(); }
-
-void CharExprAST::debugPrint() { value->debugPrint(); }
-
-void StringExprAST::debugPrint() { value->debugPrint(); }
-
-void VariableExprAST::debugPrint() { cout << name; }
-
-void MemberExprAST::debugPrint() {
-    base->debugPrint();
-    cout << ".";
-    member->debugPrint();
+void debugIndent(size_t indent, string message = "") {
+    while (indent --> 0)
+        cout << "   ";
+    if (!message.empty())
+        cout << message;
 }
 
-void UnaryExprAST::debugPrint() {
-    cout << "(";
+void callASTDebug(size_t indent, StmtPtr &ast) {
+    debugIndent(indent);
+    if (ast)
+        ast->debugPrint(indent);
+    else
+        cout << CC::RED << "NULLSTMT" << CC::DEFAULT;
+}
+
+void callASTDebug(size_t indent, ProtoPtr &ast) {
+    debugIndent(indent);
+    if (ast)
+        ast->debugPrint(indent);
+    else
+        cout << CC::RED << "NULLPROTO" << CC::DEFAULT;
+}
+
+void callASTDebug(size_t indent, ExprPtr &ast) {
+    debugIndent(indent);
+    if (ast)
+        ast->debugPrint();
+    else
+        cout << CC::RED << "NULLEXPR" << CC::DEFAULT;
+}
+
+void debugBody(size_t indent, StmtPtr &ast) {
+    debugIndent(indent);
+    if (ast) {
+        if (ast->getASTType() == AST::CodeBlockAST)
+            ast->debugPrint(indent);
+        else
+            ast->debugPrint(indent + 1);
+    } else 
+        cout << CC::RED << "NULLBODY" << CC::DEFAULT;
+} 
+
+void NullExprAST::debugPrint(size_t indent) { debugIndent(indent, "null"); }
+
+void BoolExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent);
+    value->debugPrint(); 
+}
+
+void NumberExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent);
+    value->debugPrint(); 
+}
+
+void CharExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent);
+    value->debugPrint(); 
+}
+
+void StringExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent);
+    value->debugPrint(); 
+}
+
+void VariableExprAST::debugPrint(size_t indent) { debugIndent(indent, name); }
+
+void MemberExprAST::debugPrint(size_t indent) {
+    callASTDebug(indent, base);
+    cout << ".";
+    callASTDebug(0, member);
+}
+
+void UnaryExprAST::debugPrint(size_t indent) {
+    debugIndent(indent, "(");
     if (op == UnaryOp::SINC || op == UnaryOp::SDEC) {
-        expr->debugPrint();
+        callASTDebug(0, expr);
         cout << UnaryOpValue(op);
     } else {
         cout << UnaryOpValue(op);
-        expr->debugPrint();
+        callASTDebug(0, expr);
     }
     cout << ")";
 }
 
-void BinaryExprAST::debugPrint() {
-    cout << "(";
-    LHS->debugPrint();
+void BinaryExprAST::debugPrint(size_t indent) {
+    debugIndent(indent, "(");
+    callASTDebug(0, LHS);
     if (op == BinaryOp::IDX) { // handle <expr>[<expr>] and <expr>[]
         if (!RHS) cout << "[]";
         else {        
@@ -80,32 +134,32 @@ void BinaryExprAST::debugPrint() {
         }
     } else {
         cout << " " << BinaryOpValue(op) << " ";
-        RHS->debugPrint();
+        callASTDebug(0, RHS);
     }
     cout << ")";
 }
 
-void CallExprAST::debugPrint() { 
-    callee->debugPrint();
+void CallExprAST::debugPrint(size_t indent) { 
+    callASTDebug(indent, callee);
     cout << "(";
     for (StmtPtr &arg : args) {
-        arg->debugPrint();
+        callASTDebug(0, arg);
         if (arg != args.back())
             cout << ", ";
     }
     cout << ")";
 }
 
-void TypeCastExprAST::debugPrint() {
-    cout << "((";
+void TypeCastExprAST::debugPrint(size_t indent) {
+    debugIndent(indent, "((");
     type.debugPrint(true);
     cout << ") ";
     expr->debugPrint();
     cout << ")";
 }
 
-void TernaryExprAST::debugPrint() {
-    cout << "(";
+void TernaryExprAST::debugPrint(size_t indent) {
+    debugIndent(indent, "(");
     condition->debugPrint();
     cout << " ? ";
     thenExpr->debugPrint();
@@ -114,8 +168,8 @@ void TernaryExprAST::debugPrint() {
     cout << ")";
 }
 
-void VariableDeclAST::debugPrint() {
-    cout << symbol;
+void VariableDeclAST::debugPrint(size_t indent) {
+    debugIndent(indent, symbol);
     type.debugPrint();
     if (value) {
         cout << " = ";
@@ -123,87 +177,87 @@ void VariableDeclAST::debugPrint() {
     }
 }
 
-void InbuiltCallAST::debugPrint() {
-    cout << InbuiltsValue(callee) << " ";
+void InbuiltCallAST::debugPrint(size_t indent) {
+    debugIndent(indent, InbuiltsValue(callee));
+    cout << " ";
     for (ExprPtr &arg : arguments) {
-        arg->debugPrint();
+        callASTDebug(0, arg);
         if (arg != arguments.back())
             cout << ", "; 
     }
 }
 
-void IfElseAST::debugPrint() {
-    cout << "if (";
-    condition->debugPrint();
-    cout << ") ";
-    thenBody->debugPrint();
+void IfElseAST::debugPrint(size_t indent) {
+    debugIndent(indent, "if (");
+    callASTDebug(0, condition);
+    cout << ")\n";
+    debugBody(indent, thenBody);
     if (!elseBody)
         return;
-    cout << ";\nelse ";
-    elseBody->debugPrint();
+    cout << ";\n";
+    debugIndent(indent, "else\n");
+    debugBody(indent, elseBody);
 } 
 
-// TODO: correct indentation for nested blocks
-void CodeBlockAST::debugPrint() {
-    cout << "{\n";
+void CodeBlockAST::debugPrint(size_t indent) {
+    debugIndent(indent, "{\n");
     for (StmtPtr &stmt : body) {
-        cout << "\t";
-        stmt->debugPrint();
+        callASTDebug(indent + 1, stmt);
         cout << ";\n";
     }
-    cout << "}";
+    debugIndent(indent*2, "}"); // i have no idea why *2 is required here, but it works
 }
 
-void WhileLoopAST::debugPrint() {
-    cout << "while (";
-    condition->debugPrint();
-    cout << ") ";
-    if (body) body->debugPrint();
+void WhileLoopAST::debugPrint(size_t indent) {
+    debugIndent(indent, "while (");
+    callASTDebug(0, condition);
+    cout << ")\n";
+    debugBody(indent, body);
 }
 
-void ForLoopAST::debugPrint() {
-    cout << "for (";
-    if (initial) initial->debugPrint();
+void ForLoopAST::debugPrint(size_t indent) {
+    debugIndent(indent, "for (");
+    callASTDebug(0, initial);
     if (forEach) {
         cout << " in ";
-        if (iterator) iterator->debugPrint();
+        callASTDebug(0, iterator);
     } else {
         cout << "; ";
-        if (condition) condition->debugPrint();
+        callASTDebug(0, condition);
         cout << "; ";
-        if (iterator) iterator->debugPrint();
+        callASTDebug(0, iterator);
     }
 
-    cout << ") ";
-    if (body) body->debugPrint();
+    cout << ")\n";
+    debugBody(indent, body);
 }
 
-void PrototypeAST::debugPrint() {
-    symbol->debugPrint();
+void PrototypeAST::debugPrint(size_t indent) {
+    callASTDebug(indent, symbol);
     cout << "(";
     for (StmtPtr &param : args) {
-        param->debugPrint();
-        if (param != *--args.end())
+        callASTDebug(0, param);
+        if (param != args.back())
             cout << ", ";
     }
     cout << ")";
     type.debugPrint();
 }
 
-void FunctionAST::debugPrint() { 
-    proto->debugPrint();
-    cout << " ";
-    body->debugPrint();
+void FunctionAST::debugPrint(size_t indent) { 
+    callASTDebug(indent, proto);
+    cout << "\n";
+    debugBody(indent, body);
 }
 
-void RootAST::debugPrint() {
+void RootAST::debugPrint(size_t indent) {
     if (!fux.options.debugMode)
         return;
 
     cout << debugText << "Root AST";
-    for (StmtPtr &sub : program) {
+    for (StmtPtr &stmt : program) {
         cout << "\n";
-        sub->debugPrint();
+        callASTDebug(0, stmt);
         cout << ";";
     }
     cout << endl;
