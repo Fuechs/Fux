@@ -144,17 +144,25 @@ StmtPtr Parser::parseForLoopStmt() {
 }
 
 StmtPtr Parser::parseWhileLoopStmt() {
-    // TODO: do .. while
     bool postCondition = false;
+    ExprPtr condition = nullptr;
+    StmtPtr body = nullptr;
 
-    if (!check(KEY_WHILE))
-        return parseBlockStmt(); 
+    if (check(KEY_DO)) {
+        postCondition = true;
+        body = parseStmt();
+        expect(KEY_WHILE);
+        expect(LPAREN);
+        condition = parseExpr();
+        expect(RPAREN, MISSING_BRACKET);
+    } else if (check(KEY_WHILE)) {
+        expect(LPAREN);
+        condition = parseExpr();
+        expect(RPAREN, MISSING_BRACKET);
+        body = parseStmt();
+    } else
+        return parseBlockStmt();
 
-    expect(LPAREN);
-    ExprPtr condition = parseExpr();
-    expect(RPAREN, MISSING_BRACKET);
-    StmtPtr body = parseStmt();
-    
     return make_unique<WhileLoopAST>(condition, body, postCondition);
 }
 

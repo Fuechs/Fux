@@ -209,6 +209,16 @@ void CodeBlockAST::debugPrint(size_t indent) {
 }
 
 void WhileLoopAST::debugPrint(size_t indent) {
+    if (postCondition) {
+        debugIndent(indent, "do\n");
+        debugBody(indent, body);
+        cout << "\n";
+        debugIndent(indent, "while (");
+        callASTDebug(0, condition);
+        cout << ")";
+        return;
+    }
+
     debugIndent(indent, "while (");
     callASTDebug(0, condition);
     cout << ")\n";

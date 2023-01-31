@@ -1,2 +1,8 @@
 while (true) 
     puts "Hello World!\n";
+
+do
+    puts "Hello World!\n";
+while (true)
+
+do {} while (1);

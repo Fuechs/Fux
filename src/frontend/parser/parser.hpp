@@ -40,7 +40,7 @@ private:
     StmtPtr parseFunctionDeclStmt();
     // for (each) loop
     StmtPtr parseForLoopStmt();
-    // while loop, TODO: do ... while
+    // while, do ... while loop
     StmtPtr parseWhileLoopStmt();
     // code block {}
     StmtPtr parseBlockStmt();
