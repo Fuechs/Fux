@@ -12,8 +12,8 @@
 #pragma once
 
 /**
- * TODO: Expectation class
- * This class should be passed to the analyse() function of ASTs.
+ * TODO: Expectation struct
+ * This struct should be passed to the analyse() function of ASTs.
  * It should include expectations (e.g. Integer, Binary Expression, Null Expression, Function Call)
  * in an enum, and what they are for.
  * We need this since we can't access the elements of an AST 
@@ -24,4 +24,20 @@
  *      and be flexible enough for every required kinds of checks.
  *      Could probably be implemented in the respective analyse() functions.
  */
-class Expectation;
+struct Expectation {
+    enum Preset {
+
+    };
+
+    enum Kind {
+
+    }; 
+
+    typedef vector<Kind> Kinds;
+
+    Expectation(Preset preset);
+    Expectation(Kinds kinds);
+    
+    Preset preset;
+    Kinds list;
+};

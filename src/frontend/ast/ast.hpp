@@ -62,7 +62,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-    
+     
     Position pos = Position();
 };
 
@@ -78,7 +78,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -90,10 +90,10 @@ public:
     ~StringExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override; 
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -105,10 +105,10 @@ public:
     ~VariableExprAST() override;
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override;  
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -121,10 +121,10 @@ public:
     : base(std::move(base)), member(std::move(member)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override;    
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -139,10 +139,10 @@ public:
     : callee(std::move(callee)), args(std::move(args)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override; 
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-   
+    
     Position pos = Position();
 };
 
@@ -154,10 +154,10 @@ public:
     UnaryExprAST(UnaryOp op, ExprPtr &expr) : op(op), expr(std::move(expr)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override;  
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -170,10 +170,10 @@ public:
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override;   
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -189,7 +189,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-   
+    
     Position pos = Position();
 };
 
@@ -203,10 +203,10 @@ public:
     : condition(std::move(condition)), thenExpr(std::move(thenExpr)), elseExpr(std::move(elseExpr)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtPtr analyse() override; 
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-   
+    
     Position pos = Position();
 };
 
@@ -230,7 +230,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-    
+     
     Position pos = Position();
 };
 
@@ -248,7 +248,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-    
+     
     Position pos = Position();
 };
 
@@ -265,7 +265,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -280,7 +280,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     void addSub(StmtPtr &sub);
 
     Position pos = Position();
@@ -299,7 +299,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -322,7 +322,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     Position pos = Position();
 };
 
@@ -350,7 +350,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-    
+     
     Position pos = Position();
 };
 
@@ -389,7 +389,7 @@ public:
     StmtPtr analyse() override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-
+ 
     void addSub(StmtPtr &sub);
     ExprPtr &addSizeExpr(ExprPtr &sizeExpr);
     

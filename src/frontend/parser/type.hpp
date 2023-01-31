@@ -47,7 +47,7 @@ public:
         STR     = KEY_STR,      // string ; array of c8
         VAR     = KEY_VAR,      // dynamic 
         AUTO,                   // automatic typing
-        NO_TYPE,                // used to check for auto typing
+        NO_TYPE,                
     };
 
     enum Access {
