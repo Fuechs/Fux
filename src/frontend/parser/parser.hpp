@@ -100,7 +100,7 @@ private:
     // <expr> [ <expr> ]
     ExprPtr parseIndexExpr();
     // <expr>  ( <expr>, <expr>, ... )
-    ExprPtr parseCallExpr(ExprPtr &symbol = nullExpr, StmtList arguments = StmtList());
+    ExprPtr parseCallExpr();
     // <expr>++, <expr>--
     ExprPtr parsePostIncDecExpr();
     // <identifier>, <value>, (<expr>)

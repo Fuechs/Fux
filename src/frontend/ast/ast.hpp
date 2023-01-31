@@ -130,12 +130,12 @@ public:
 
 class CallExprAST : public ExprAST {
     ExprPtr callee;
-    StmtList args;
+    ExprList args;
 
 public:
-    CallExprAST(const string &callee, StmtList &args)
+    CallExprAST(const string &callee, ExprList &args)
     : callee(make_unique<VariableExprAST>(callee)), args(std::move(args)) {}
-    CallExprAST(ExprPtr &callee, StmtList &args)
+    CallExprAST(ExprPtr &callee, ExprList &args)
     : callee(std::move(callee)), args(std::move(args)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)

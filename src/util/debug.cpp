@@ -142,7 +142,7 @@ void BinaryExprAST::debugPrint(size_t indent) {
 void CallExprAST::debugPrint(size_t indent) { 
     callASTDebug(indent, callee);
     cout << "(";
-    for (StmtPtr &arg : args) {
+    for (ExprPtr &arg : args) {
         callASTDebug(0, arg);
         if (arg != args.back())
             cout << ", ";

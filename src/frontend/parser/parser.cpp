@@ -70,34 +70,39 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         current = backToken;
         return parseForLoopStmt();
     }
+    
+    TokenIter paramBegin = current;
+    for (size_t depth = 1;;) {
+        if      (check(LPAREN)) ++depth;
+        else if (check(RPAREN)) --depth;
+        else if (check(_EOF))   {
+            error->createError(MISSING_BRACKET, peek(-1), "expected closing paren");
+            error->addNote(*paramBegin, "opening paren found here");
+            break;
+        } else                  eat();
+
+        if (depth == 0)
+            break;
+    } // skip ( ... )
+
+    if (*current != COLON && *current != RPOINTER) {
+        current = backToken;
+        return parseCallExpr();
+    } else
+        current = paramBegin;
 
     StmtList args = StmtList();
+    
     do {
         if (*current == RPAREN)
             break;
-        
         StmtPtr arg = parseVariableDeclStmt();
-
-        if (!arg) 
-            continue; // error already created by parseVariableDeclStmt
-        
-        args.push_back(std::move(arg));
-
-        // analyser will check for statements in arguments later
-        if (args.back()->isExpr()) 
-            return parseCallExpr(symbolExpr, std::move(args));
+        if (arg) // error already created by parseVariableDeclStmt
+            args.push_back(std::move(arg)); 
     } while (check(COMMA));
     expect(RPAREN, MISSING_BRACKET);
 
     FuxType type = parseType();
-
-    if (type.kind == FuxType::AUTO) {
-        // TODO: how to solve this?
-        error->createWarning(INCOMPATIBLE_TYPES, *current,
-            "automatic typing for functions not supported yet, a function call will be parsed instead");
-        error->addNote(*current, "would have expected a type here to make this a function declaration");
-        return parseCallExpr(symbolExpr, std::move(args));
-    }
 
     if (*current == SEMICOLON)
         return make_unique<PrototypeAST>(type, symbolExpr, args);
@@ -467,36 +472,22 @@ ExprPtr Parser::parseIndexExpr() {
     return expr;
 }
 
-ExprPtr Parser::parseCallExpr(ExprPtr &symbol, StmtList arguments) { 
-    if (!symbol && arguments.empty()) {
-        if (*current != IDENTIFIER)
-            return parsePostIncDecExpr();
+ExprPtr Parser::parseCallExpr() { 
+    if (*current != IDENTIFIER)
+        return parsePostIncDecExpr();
 
-        TokenIter backTok = current;
-        ExprPtr symbolExpr = parsePrimaryExpr(); // don't overwrite null expr symbol
+    TokenIter backTok = current;
+    ExprPtr symbol = parsePrimaryExpr();
         
-        if (!check(LPAREN)) {
-            current = backTok;
-            return parsePostIncDecExpr();
-        }
-
-        StmtList arguments = StmtList();
-        if (*current != RPAREN)
-            for (ExprPtr &arg : parseExprList())
-                arguments.push_back(std::move(arg));
-        expect(RPAREN, MISSING_BRACKET);
-        return make_unique<CallExprAST>(symbolExpr, arguments);
+    if (!check(LPAREN)) {
+        current = backTok;
+        return parsePostIncDecExpr();
     }
 
-    if (peek(-1) != RPAREN) {
-        while (check(COMMA)) {
-            ExprPtr arg = parseExpr();
-            if (arg)
-                arguments.push_back(std::move(arg));
-        } 
-        expect(RPAREN, MISSING_BRACKET);
-    }
-
+    ExprList arguments = ExprList();
+    if (*current != RPAREN)
+        arguments = parseExprList();
+    expect(RPAREN, MISSING_BRACKET);
     return make_unique<CallExprAST>(symbol, arguments);
 } 
 
