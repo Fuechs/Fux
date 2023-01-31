@@ -2,7 +2,7 @@
 
 ID | Value | Function
 -|-|-
-LPAREN | `(` | Code Structure
+LPAREN | `(` | Code Structure, Function Declaration / Call
 RPAREN | `)` | Code Structure
 LBRACKET | `[` | Array, Index
 RBRACKET | `]` | Array, Index
@@ -48,7 +48,7 @@ PERCENT | `%` | Modulus
 BIT_NOT | `~` | Bitwise Not
 BIT_OR | `\|` | Bitwise Or
 BIT_XOR | `><` | Bitwise Xor
-BIT_AND | `&` | Bitwise And
+BIT_AND | `&` | Address, Bitwise And
 BIT_LSHIFT | `<\|` | Left Bit Shift
 BIT_RSHIFT | `\|>` | Right Bit Shift
 COLON_COLON | `::` | (Class) Constructor
