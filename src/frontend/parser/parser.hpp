@@ -27,8 +27,8 @@ public:
     RootPtr parse();
 
 private:
-    TokenList tokens;
-    TokenIter current;
+    Token::Vec tokens;
+    Token::Iter current;
     ErrorManager *error;
     Lexer *lexer;
     RootPtr root;

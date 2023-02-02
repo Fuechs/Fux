@@ -11,7 +11,7 @@
 
 #include "lexer.hpp"
 
-TokenList Lexer::lex() {
+Token::Vec Lexer::lex() {
     while (idx < source.length()) {
         getToken();
         currentToken.end = col - 1;

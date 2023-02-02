@@ -439,6 +439,9 @@ static vector<string> TokenTypeValue = {
 
 class Token {
 public:
+    typedef vector<Token> Vec;
+    typedef Vec::iterator Iter;
+
     Token(TokenType type = NONE, string value = "");
     ~Token();
 
@@ -459,6 +462,3 @@ public:
     bool isAssignment() const;
     bool isInbuiltCall() const;
 };
-
-typedef vector<Token> TokenList;
-typedef TokenList::iterator TokenIter;

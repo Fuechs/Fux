@@ -32,7 +32,7 @@ public:
     }
 
     // lex source
-    TokenList lex();
+    Token::Vec lex();
 
     vector<string> getLines() { return this->lines; }
 
@@ -41,7 +41,7 @@ public:
 private:
     string source;
     vector<string> lines;
-    TokenList tokens;
+    Token::Vec tokens;
     Token currentToken;
     size_t idx, col, line;
     ErrorManager *error;

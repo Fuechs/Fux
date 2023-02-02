@@ -57,7 +57,7 @@ namespace fuxThread {
         
     private:
         ThreadList threads;
-        FileGroups required;
+        SourceFile::Groups required;
         size_t threadsMax;
         
         // wait until all threads are finished

@@ -85,14 +85,14 @@ namespace fuxThread {
 
     void ThreadManager::runThreads() {
         if (!fux.options.threading) {
-            for (FileList &fl : required)
+            for (SourceFile::Vec &fl : required)
                 for (SourceFile *sf : fl)
                     sf->parse();
             return;
         }
 
         if (fux.options.debugMode) {
-            for (FileList &fl : required)
+            for (SourceFile::Vec &fl : required)
                 for (SourceFile *sf : fl) {
                     threads[0]->run(sf);
                     threads[0]->finish();
@@ -100,7 +100,7 @@ namespace fuxThread {
             return;
         }
 
-        for (FileList &fl : required) {
+        for (SourceFile::Vec &fl : required) {
             for (size_t i = 0; i < fl.size(); i++)
                 threads[i]->run(fl[i]);
             checkThreads();

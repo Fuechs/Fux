@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-01-21
+> Last updated on 2023-02-02
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -132,12 +132,15 @@ bool someCheck() { return a == b; }
 size_t id;
 ```
 
-- For often used vector types, you'll usually find type definitions with `typedef`. The name of the type can be abbreviated and should end with `List` (`Groups` for a vector of vectors).
-- The same goes for dynamic pointers, which end with `Ptr`.
+- For often used vector types, you'll usually find type definitions with `typedef`. These are within the classes and are called `Vec` or `Groups` for a vector of a vector.
+- The same goes for dynamic pointers, which are defined outside the class and end with `Ptr`.
 
 ```cpp
-typedef vector<SourceFile *> FileList;
-typedef vector<FileList> FileGroups;
+class SourceFile {
+    typedef vector<SourceFile *> Vec;
+    typedef vector<FileList> Groups;
+};
+
 typedef unique_ptr<StmtAST> StmtPtr; 
 ```
 

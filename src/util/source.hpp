@@ -18,6 +18,9 @@
 
 class SourceFile {
 public:
+    typedef vector<SourceFile *> Vec;
+    typedef vector<Vec> Groups;
+
     SourceFile(const string &filePath, const bool mainFile = false);
     
     ~SourceFile();
@@ -53,6 +56,3 @@ private:
     string contents;
     bool mainFile;
 };
-
-typedef vector<SourceFile *> FileList;
-typedef vector<FileList> FileGroups;

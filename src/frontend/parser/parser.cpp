@@ -63,7 +63,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
     if (*current != IDENTIFIER) 
         return parseForLoopStmt();
 
-    TokenIter backToken = current;
+    Token::Iter backToken = current;
     ExprPtr symbolExpr = parsePrimaryExpr(); 
 
     if (!check(LPAREN)) {
@@ -71,7 +71,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         return parseForLoopStmt();
     }
     
-    TokenIter paramBegin = current;
+    Token::Iter paramBegin = current;
     for (size_t depth = 1;;) {
         if      (check(LPAREN)) ++depth;
         else if (check(RPAREN)) --depth;
@@ -421,7 +421,7 @@ ExprPtr Parser::parseDereferenceExpr() {
 }
 
 ExprPtr Parser::parseTypeCastExpr() { 
-    TokenIter backToken = current;
+    Token::Iter backToken = current;
     if (check(LPAREN)) {
         FuxType type = parseType(true); // analyser will check wether type is primitive or not
         if (!type || *current != RPAREN) { // TODO: test more possible cases
@@ -484,7 +484,7 @@ ExprPtr Parser::parseCallExpr() {
     if (*current != IDENTIFIER)
         return parsePostIncDecExpr();
 
-    TokenIter backTok = current;
+    Token::Iter backTok = current;
     ExprPtr symbol = parsePrimaryExpr();
         
     if (!check(LPAREN)) {
