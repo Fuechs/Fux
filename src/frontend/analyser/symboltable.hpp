@@ -13,7 +13,11 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
+#include "../parser/type.hpp"
+
+// TODO: add support for symbol members, e.g. of classes, structs, enums
 struct Symbol {
 public:
     enum Kind {
@@ -25,34 +29,36 @@ public:
         PACKAGE,    // package
         NONE,       
     };
-
-    enum Type {
-        INT,        // any integer type
-        FLOAT,      // any float type
-        CHAR,       // any char type
-        STR,        // any string type
-        NO_TYPE,
-    };
-
-    Symbol(Kind kind = NONE, Type type = NO_TYPE);
+    
+    Symbol(Kind kind = NONE, FuxType type = FuxType::NO_TYPE);
 
     Kind kind;
-    Type type;
+    FuxType type;
 };
 
 class SymbolTable {
 public:
     typedef std::unordered_map<std::string, Symbol *> Map;
+    typedef std::vector<SymbolTable *> Vec;
 
     SymbolTable() : table(Map()) {}
 
+    // get Symbol * of name `symbol`
     Symbol *operator[](std::string symbol);
+
+    // aka operator[]
+    Symbol *contains(std::string symbol);
     
+    // insert given Symbol * `_symbol` at name `symbol`
     void insert(std::string symbol, Symbol *_symbol);
-    void insert(std::string symbol, Symbol::Kind kind, Symbol::Type type);    
+    // create new Symbol * at name `symbol`
+    void insert(std::string symbol, Symbol::Kind kind, FuxType type);    
+    // erase all symbols named `symbol`
     void erase(std::string symbol);
 
+    // get table size
     size_t size();
+    // check wether table is empty
     bool empty();
 
 private:

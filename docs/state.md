@@ -24,7 +24,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [...] Position 
 - [&check;] Parser
 - [...] Analyser
-    - [&check;] Symbol Table
+    - [...] Symbol Table
     - [...] Expectation
     - [...] Expressions
     - [...] Statements

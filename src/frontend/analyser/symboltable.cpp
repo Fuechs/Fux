@@ -13,12 +13,14 @@
 
 using std::string;
 
-Symbol::Symbol(Kind kind, Type type) : kind(kind), type(type) {}
+Symbol::Symbol(Kind kind, FuxType type) : kind(kind), type(type) {}
 
 Symbol *SymbolTable::operator[](string symbol) { return table.contains(symbol) ? table.at(symbol) : nullptr; }
 
+Symbol *SymbolTable::contains(string symbol) { return operator[](symbol); }
+
 void SymbolTable::insert(string symbol, Symbol *_symbol) { table[symbol] = _symbol; }
-void SymbolTable::insert(string symbol, Symbol::Kind kind, Symbol::Type type) { table[symbol] = new Symbol(kind, type); }
+void SymbolTable::insert(string symbol, Symbol::Kind kind, FuxType type) { table[symbol] = new Symbol(kind, type); }
 void SymbolTable::erase(string symbol) { table[symbol] = nullptr; /* leave the field for error reporting */ }
 
 size_t SymbolTable::size() { return table.size(); }

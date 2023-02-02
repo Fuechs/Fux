@@ -37,10 +37,9 @@ struct Expectation {
 
     typedef std::vector<Kind> Kinds;
 
-    Expectation(SymbolTable *table, Preset preset);
-    Expectation(SymbolTable *table, Kinds kinds);
+    Expectation(SymbolTable::Vec tables, Preset preset);
+    Expectation(SymbolTable::Vec tables, Kinds kinds);
 
-    Preset preset;
-    Kinds list;
-    SymbolTable *table;
+    Kinds kinds;
+    SymbolTable::Vec tables;
 };

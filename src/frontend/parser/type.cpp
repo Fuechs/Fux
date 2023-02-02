@@ -24,7 +24,7 @@ FuxType &FuxType::operator=(const FuxType &copy) {
     this->access = copy.access;
     this->name = copy.name;
     this->array = copy.array;
-    this->arraySize = copy.arraySize;
+    this->sizeID = copy.sizeID;
     return *this;
 }
 
@@ -32,25 +32,25 @@ bool FuxType::operator==(const FuxType &comp) const {
     return (kind == comp.kind 
             && access == comp.access 
             && array == comp.array 
-            && arraySize.get() == comp.arraySize.get());
+            /* && sizeID == comp.sizeID (shouldn't be required to be equal as of now)*/ );
 }
 
 bool FuxType::operator!() { return kind == NO_TYPE; }
 
 FuxType FuxType::createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name) {
-    return FuxType(kind, pointerDepth, accessList, false, nullExpr, name);
+    return FuxType(kind, pointerDepth, accessList, false, -1, name);
 }
 
 FuxType FuxType::createRef(Kind kind, AccessList accessList, string name) {
-    return FuxType(kind, -1, accessList, false, nullExpr, name); 
+    return FuxType(kind, -1, accessList, false, -1, name); 
 }
 
-FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, ExprPtr &arraySize) {
-    return FuxType(kind, pointerDepth, accessList, true, arraySize, name);
+FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, _i64 sizeID) {
+    return FuxType(kind, pointerDepth, accessList, true, sizeID, name);
 }
 
 FuxType FuxType::createPrimitive(Kind kind, int64_t pointerDepth, bool array, string name) {
-    return FuxType(kind, pointerDepth, AccessList(), array, nullExpr, name);
+    return FuxType(kind, pointerDepth, AccessList(), array, -1, name);
 }
 
 
@@ -94,12 +94,9 @@ void FuxType::debugPrint(bool primitive) {
     
     cout << kindAsString();
     
-    if (array) {
-        cout << "[";
-        if (arraySize.get())
-            arraySize.get()->debugPrint();
-        cout << "]";
-    }
+    if (array) 
+        cout << "[" << SC::UNDERLINE << CC::YELLOW 
+            << sizeID << SC::RESET << CC::DEFAULT << "]";
 }
 
 bool FuxType::valid() {
@@ -110,7 +107,8 @@ bool FuxType::valid() {
     if (kind == CUSTOM && name.empty())
         return false;
 
-    // TODO: "expectation" struct for analyser
+    // OUTDATED: arraySize is now sizeID
+    // TODO: "expectation" struct for analyser 
     // may look something like this:
     // Expectation e( integer, binary expression, expression yielding integer, nullExpr, ... );
     // if (array && !arraySize->analyse(e))

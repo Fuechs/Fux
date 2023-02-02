@@ -266,6 +266,13 @@ void RootAST::debugPrint(size_t indent) {
         return;
 
     cout << debugText << "Root AST";
+
+    for (size_t i = 0; i < arraySizeExprs.size(); i++) {
+        cout << "\n";
+        cout << "[" << CC::YELLOW << SC::UNDERLINE << i << CC::DEFAULT << SC::RESET << "]: ";
+        callASTDebug(indent, arraySizeExprs.at(i));
+    }
+
     for (StmtPtr &stmt : program) {
         cout << "\n";
         callASTDebug(0, stmt);

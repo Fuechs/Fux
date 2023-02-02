@@ -13,7 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
-#include "../ast/expr.hpp"
+#include "../../backend/llvmheader.hpp"
 
 // string representations of Access elements
 const vector<string> AccessString = {
@@ -61,8 +61,8 @@ public:
 
     typedef vector<Access> AccessList;
 
-    FuxType(Kind kind = NO_TYPE, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, bool array = false, ExprPtr &arraySize = nullExpr, string name = "")
-    : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), arraySize(std::ref(arraySize)), name(name) {}
+    FuxType(Kind kind = NO_TYPE, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, bool array = false, _i64 sizeID = -1, string name = "")
+    : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), sizeID(sizeID), name(name) {}
     // FuxType(const FuxType &copy);
     ~FuxType();
 
@@ -75,7 +75,7 @@ public:
     // shorthand for reference types
     static FuxType createRef(Kind kind, AccessList accessList = {PUBLIC}, string name = "");
     // shorthand for array types
-    static FuxType createArray(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "", ExprPtr &arraySize = nullExpr);    
+    static FuxType createArray(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "", _i64 sizeID = -1);    
     // shorthand for primitive types (e.g. for values)
     static FuxType createPrimitive(Kind kind, int64_t pointerDepth = 0, bool array = false, string name = "");
 
@@ -90,12 +90,11 @@ public:
     bool valid();
     
     Kind kind;
-    /**
-     * -1 --> Reference
-     *  0 --> Value
-     *  N --> Pointer with depth of N 
-     */
-    int64_t pointerDepth; 
+    
+    // -1 --> Reference
+    //  0 --> Value
+    //  N --> Pointer with depth of N 
+    _i64 pointerDepth; 
     // access modifiers
     AccessList access;
     // string value of the type
@@ -104,7 +103,7 @@ public:
     // is an array type
     bool array; 
     // relevant for array types
-    // nullExpr -> no size
-    // reference_wrapper so other ExprPtrs won't get deleted when copying
-    reference_wrapper<ExprPtr> arraySize; 
+    // -1 -> no size
+    //  N -> ID of array size expr stored in RootAST
+    _i64 sizeID;
 };

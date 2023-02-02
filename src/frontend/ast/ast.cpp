@@ -80,9 +80,9 @@ AST FunctionAST::getASTType() { return AST::FunctionAST; }
 AST RootAST::getASTType() { return AST::RootAST; }
 
 void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
-ExprPtr &RootAST::addSizeExpr(ExprPtr &sizeExpr) {
+_i64 RootAST::addSizeExpr(ExprPtr &sizeExpr) {
     arraySizeExprs.push_back(std::move(sizeExpr));
-    return arraySizeExprs.back();
+    return arraySizeExprs.size() - 1;
 }
 
 bool StmtAST::isExpr() { 
