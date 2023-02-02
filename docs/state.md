@@ -24,9 +24,10 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [...] Position 
 - [&check;] Parser
 - [...] Analyser
+    - [&check;] Symbol Table
+    - [...] Expectation
     - [...] Expressions
     - [...] Statements
-    - [...] Expectation
 - [&cross;] Context [![LLVM][llvm-badge]](https://llvm.org/)
 - [&cross;] Generator [![LLVM][llvm-badge]](https://llvm.org/)
 - [&cross;] Optimizer [![LLVM][llvm-badge]](https://llvm.org/)

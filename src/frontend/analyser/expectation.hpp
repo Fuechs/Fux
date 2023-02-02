@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "symboltable.hpp"
+
 /**
  * TODO: Expectation struct
  * This struct should be passed to the analyse() function of ASTs.
@@ -33,11 +35,12 @@ struct Expectation {
 
     }; 
 
-    typedef vector<Kind> Kinds;
+    typedef std::vector<Kind> Kinds;
 
-    Expectation(Preset preset);
-    Expectation(Kinds kinds);
-    
+    Expectation(SymbolTable *table, Preset preset);
+    Expectation(SymbolTable *table, Kinds kinds);
+
     Preset preset;
     Kinds list;
+    SymbolTable *table;
 };

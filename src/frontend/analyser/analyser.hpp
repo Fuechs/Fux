@@ -20,7 +20,7 @@
 class Analyser {
 public:
     Analyser(ErrorManager *error, RootPtr &root) 
-    : error(error), origin(root) {} 
+    : error(error), origin(root), table(new SymbolTable()) {} 
 
     // analyse AST 
     StmtPtr analyse();
@@ -28,6 +28,8 @@ public:
 private:
     ErrorManager *error;
     RootPtr &origin;
+
+    SymbolTable *table;
 
     void debugPrint(const string message);
 };

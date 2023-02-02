@@ -15,7 +15,7 @@ def run_full(files: list[str]) -> tuple[float, list[float]]:
     return time() - start, times
 
 if __name__ == "__main__":
-    runs = 20
+    runs = 25
     exceptions = []
     files: list[str] = [file for file in listdir("src/examples/") if file.endswith(".fux") and file not in exceptions]
     
