@@ -55,7 +55,7 @@ StmtPtr Parser::parseStmt(bool expectSemicolon) {
     && stmt->getASTType() != AST::IfElseAST
     && stmt->getASTType() != AST::WhileLoopAST
     && stmt->getASTType() != AST::ForLoopAST) // don't throw useless errors
-        expect(SEMICOLON);
+        eat(SEMICOLON);
     return stmt;
 }
 
@@ -100,7 +100,7 @@ StmtPtr Parser::parseFunctionDeclStmt() {
         if (arg) // error already created by parseVariableDeclStmt
             args.push_back(std::move(arg)); 
     } while (check(COMMA));
-    expect(RPAREN, MISSING_BRACKET);
+    eat(RPAREN, MISSING_BRACKET);
 
     FuxType type = parseType();
 
@@ -120,7 +120,7 @@ StmtPtr Parser::parseForLoopStmt() {
     if (!check(KEY_FOR))
         return parseWhileLoopStmt();
 
-    expect(LPAREN);
+    eat(LPAREN);
 
     init = parseStmt(false);
 
@@ -128,16 +128,16 @@ StmtPtr Parser::parseForLoopStmt() {
         forEach = true;
         iter = parseExpr();
     } else {
-        expect(SEMICOLON); 
+        eat(SEMICOLON); 
         if (!check(SEMICOLON)) {
             cond = parseExpr();
-            expect(SEMICOLON);
+            eat(SEMICOLON);
         }
         if (*current != RPAREN)
             iter = parseExpr();
     }
 
-    expect(RPAREN, MISSING_BRACKET);
+    eat(RPAREN, MISSING_BRACKET);
     StmtPtr body = parseStmt();
     if (forEach)    return make_unique<ForLoopAST>(init, iter, body);
     else            return make_unique<ForLoopAST>(init, cond, iter, body);
@@ -151,14 +151,14 @@ StmtPtr Parser::parseWhileLoopStmt() {
     if (check(KEY_DO)) {
         postCondition = true;
         body = parseStmt();
-        expect(KEY_WHILE);
-        expect(LPAREN);
+        eat(KEY_WHILE);
+        eat(LPAREN);
         condition = parseExpr();
-        expect(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, MISSING_BRACKET);
     } else if (check(KEY_WHILE)) {
-        expect(LPAREN);
+        eat(LPAREN);
         condition = parseExpr();
-        expect(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, MISSING_BRACKET);
         body = parseStmt();
     } else
         return parseBlockStmt();
@@ -185,9 +185,9 @@ StmtPtr Parser::parseBlockStmt() {
 
 StmtPtr Parser::parseIfElseStmt() {
     if (check(KEY_IF)) {
-        expect(LPAREN);
+        eat(LPAREN);
         ExprPtr condition = parseExpr();
-        expect(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, MISSING_BRACKET);
         StmtPtr thenBody = parseStmt(); 
         if (check(KEY_ELSE)) {
             StmtPtr elseBody = parseStmt(); 
@@ -268,7 +268,7 @@ ExprPtr Parser::parseTernaryExpr() {
 
     while (check(QUESTION)) {
         ExprPtr thenExpr = parseLogicalOrExpr();
-        expect(COLON);
+        eat(COLON);
         ExprPtr elseExpr = parseLogicalOrExpr();
         condition = make_unique<TernaryExprAST>(condition, thenExpr, elseExpr);
     }
@@ -428,7 +428,7 @@ ExprPtr Parser::parseTypeCastExpr() {
             current = backToken; // get '*'s, identifier and '(' back
             return parseLogBitUnaryExpr();
         }
-        expect(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, MISSING_BRACKET);
         ExprPtr expr = parseExpr();
         return make_unique<TypeCastExprAST>(type, expr);
     }
@@ -473,7 +473,7 @@ ExprPtr Parser::parseIndexExpr() {
         return make_unique<BinaryExprAST>(BinaryOp::IDX, expr);
     else if (check(LBRACKET)) {
         ExprPtr index = parseExpr();
-        expect(RBRACKET, MISSING_BRACKET);
+        eat(RBRACKET, MISSING_BRACKET);
         return make_unique<BinaryExprAST>(BinaryOp::IDX, expr, index);
     }
 
@@ -495,7 +495,7 @@ ExprPtr Parser::parseCallExpr() {
     ExprList arguments = ExprList();
     if (*current != RPAREN)
         arguments = parseExprList();
-    expect(RPAREN, MISSING_BRACKET);
+    eat(RPAREN, MISSING_BRACKET);
     return make_unique<CallExprAST>(symbol, arguments);
 } 
 
@@ -515,8 +515,8 @@ ExprPtr Parser::parsePrimaryExpr() {
         case OCTAL:
         case BINARY:        return parseNumberExpr(that);
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
-        case CHAR:          return make_unique<CharExprAST>((_c8) that.value.front()); // TODO: parse c16
-        case STRING:        return make_unique<StringExprAST>(that.value); 
+        case CHAR:          return parseCharExpr(that);
+        case STRING:        return make_unique<StringExprAST>(escapeSequences(that.value)); 
         case KEY_TRUE:      return make_unique<BoolExprAST>(true);
         case KEY_FALSE:     return make_unique<BoolExprAST>(false);
         case KEY_NULL:      return make_unique<NullExprAST>();
@@ -531,7 +531,7 @@ ExprPtr Parser::parsePrimaryExpr() {
         }
         case LPAREN: {
             ExprPtr expr = parseExpr();
-            expect(RPAREN, MISSING_BRACKET);
+            eat(RPAREN, MISSING_BRACKET);
             return expr;
         }
         case _EOF: {
@@ -610,7 +610,7 @@ FuxType Parser::parseType(bool primitive) {
     else if (check(LBRACKET)) {
         ExprPtr size = parseExpr();
         ExprPtr &sizeRef = root->addSizeExpr(size);
-        expect(RBRACKET, MISSING_BRACKET);
+        eat(RBRACKET, MISSING_BRACKET);
         return FuxType::createArray(kind, pointerDepth, access, value, sizeRef);
     } else 
         return FuxType::createStd(kind, pointerDepth, access, value);
@@ -641,14 +641,22 @@ ExprPtr Parser::parseNumberExpr(Token &tok) {
     else                    return nullptr; // unreachable   
 }
 
+ExprPtr Parser::parseCharExpr(Token &tok) {
+    // TODO: add support for c16
+    _c8 value;
+    value = escapeSequences(tok.value).front();
+    return make_unique<CharExprAST>(value);
+}
+
 Token &Parser::eat() {
     if (*current == _EOF)
         return *current;
     return *current++;
 }
 
-Token Parser::expect(TokenType type, ErrorType errType) {
+Token &Parser::eat(TokenType type, ErrorType errType) {
     Token curTok = eat();
+
     if (curTok != type) {
         stringstream err;
         err 
@@ -657,10 +665,9 @@ Token Parser::expect(TokenType type, ErrorType errType) {
             << "got " << TokenTypeString[curTok.type] 
             << " '" << curTok.value << "' instead";
         error->createError(errType, curTok, err.str());
-        return Token();
     }
 
-    return curTok;
+    return *(current - 1); // avoid Wreturn-stack-address
 }
 
 Token &Parser::peek(size_t steps) { return *(current + steps); }

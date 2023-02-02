@@ -40,11 +40,11 @@ private:
     StmtPtr parseFunctionDeclStmt();
     // for (each) loop
     StmtPtr parseForLoopStmt();
-    // while, do ... while loop
+    // (do ...) while loop
     StmtPtr parseWhileLoopStmt();
     // code block {}
     StmtPtr parseBlockStmt();
-    // if statement
+    // if else statement
     StmtPtr parseIfElseStmt();
     // inbuilt call 
     StmtPtr parseInbuiltCallStmt();
@@ -112,11 +112,13 @@ private:
 
     // parse number with correct type
     ExprPtr parseNumberExpr(Token &tok);
+    // parse char with correct type and escape sequence
+    ExprPtr parseCharExpr(Token &tok);
 
     // get next token
     Token &eat();
-    // expect an token
-    Token expect(TokenType type, ErrorType errType = UNEXPECTED_TOKEN);
+    // expect and get next token
+    Token &eat(TokenType type, ErrorType = UNEXPECTED_TOKEN);
     // peek to Nth token
     Token &peek(size_t steps = 1);
     // check current token and advance if true

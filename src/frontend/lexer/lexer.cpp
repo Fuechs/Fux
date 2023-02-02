@@ -414,6 +414,7 @@ void Lexer::getToken() {
         
         case ' ':
         case '\t':
+        case '\v':
         case '\r':
             advance();
             break;

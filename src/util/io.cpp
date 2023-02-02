@@ -33,3 +33,48 @@ const std::string getDirectory(const std::string path) {
 const std::string getFileName(const std::string &path) {
     return path.substr(path.find_last_of("/") + 1);
 }
+
+std::string escapeSequences(std::string value) {
+    std::string buffer = "";
+    for (size_t i = 0; i < value.size(); i++) {
+        if (value.at(i) == '\\') {
+            switch (value.at(++i)) {
+                case 'a':   buffer += '\a'; break;  // alert
+                case 'b':   buffer += '\b'; break;  // backspace
+                case 'f':   buffer += '\f'; break;  // form feed
+                case 'n':   buffer += '\n'; break;  // new line
+                case 'r':   buffer += '\r'; break;  // carraige return  
+                case 't':   buffer += '\t'; break;  // horizontal tab
+                case 'v':   buffer += '\v'; break;  // vertical tab
+                case '\'':  buffer += '\''; break;  // single quote
+                case '\"':  buffer += '\"'; break;  // double quote
+                case '\?':  buffer += '\?'; break;  // question mark
+                case '\\':  buffer += '\\'; break;  // backslash
+                default:    break;                  // remove invalid escape sequences
+            }
+        } else
+            buffer += value.at(i);
+    }
+
+    return buffer;
+}
+
+std::string unescapeSequences(std::string value) {
+    std::string buffer = "";
+    for (size_t i = 0; i < value.size(); i++) 
+        switch (value.at(i)) {
+            case '\a':  buffer += "\\a"; break;
+            case '\b':  buffer += "\\b"; break;
+            case '\f':  buffer += "\\f"; break;
+            case '\n':  buffer += "\\n"; break; 
+            case '\r':  buffer += "\\r"; break;
+            case '\t':  buffer += "\\t"; break;
+            case '\v':  buffer += "\\v"; break;
+            case '\'':  buffer += "\\'"; break;
+            case '\"':  buffer += "\\\""; break;
+            case '\?':  buffer += "\\?"; break;
+            case '\\':  buffer += "\\\\"; break;
+            default:    buffer += value.at(i); break;
+        }
+    return buffer;
+}

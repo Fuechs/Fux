@@ -86,7 +86,7 @@ class StringExprAST : public ExprAST {
     ValueStruct *value;
 
 public:
-    StringExprAST(string &value) : value(new ValueStruct(value)) {}
+    StringExprAST(string value) : value(new ValueStruct(value)) {}
     ~StringExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)

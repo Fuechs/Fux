@@ -26,3 +26,9 @@ const std::string getDirectory(const std::string path);
 // get file name from a file path
 // "some/path/file.txt" --> "file.txt"
 const std::string getFileName(const std::string &path);
+
+// escape all escape sequences in string
+std::string escapeSequences(std::string);
+
+// unescape all escape sequences in string
+std::string unescapeSequences(std::string);
