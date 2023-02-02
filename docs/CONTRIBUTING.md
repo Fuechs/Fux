@@ -138,7 +138,7 @@ size_t id;
 ```cpp
 class SourceFile {
     typedef vector<SourceFile *> Vec;
-    typedef vector<FileList> Groups;
+    typedef vector<Vec> Groups;
 };
 
 typedef unique_ptr<StmtAST> StmtPtr; 
