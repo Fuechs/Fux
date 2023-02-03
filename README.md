@@ -13,13 +13,10 @@
 
 ## Flawless Unambiguous Programming
 
-<!-- ![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68&style=for-the-badge)x -->
 [![version](https://img.shields.io/badge/pre--alpha-fcaa68?colorA=151515&style=for-the-badge)](./docs/state.md)
 [![Apache License v2.0](https://img.shields.io/badge/Apache_License_v2.0-fcaa68?colorA=151515&style=for-the-badge)](./LICENSE)
 [![C++][cpp-badge]](./docs/state.md)
 [![LLVM][llvm-badge]](./docs/state.md)
-
-### The Beautiful Alternative for C++
 
 </div>
  
@@ -41,7 +38,7 @@ main(argc: u64, argv: str[]): i64 {
 <br>
 
 > __Warning__ \
-> Please not that Fux is still in early development. \
+> Please note that Fux is still in early development. \
 > As of now only MacOS and Linux will be supported.
 
 ## A Modern, Flexible Programming Language for All

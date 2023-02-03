@@ -1,5 +1,7 @@
 # Language State
 
+![total lines](https://aschey.tech/tokei/github/fuechs/fux?labelColor=151515&color=fcaa68&style=for-the-badge)
+
 ### Built with [![C++][cpp-badge]](https://isocpp.org/)&nbsp;[![LLVM][llvm-badge]](https://llvm.org/)
 
 Fux is currently still in early development. There is no working compiler available for this language. \
