@@ -115,11 +115,14 @@ enum TokenType {
     KEY_DELETE,
     KEY_LABEL,
     KEY_GOTO,
+    KEY_RESERVE,
+    KEY_FREE,
     
     KEY_SAFE,
     KEY_INTERN,
     KEY_FINAL,
     KEY_FIXED,
+    KEY_ASYNC,
 
     KEY_USING,
     KEY_TYPEDEF,
@@ -256,11 +259,14 @@ static const char *TokenTypeString[] = {
     "KEY_DELETE",
     "KEY_LABEL",
     "KEY_GOTO",
+    "KEY_RESERVE",
+    "KEY_FREE",
     
     "KEY_SAFE",
     "KEY_INTERN",
     "KEY_FINAL",
     "KEY_FIXED",
+    "KEY_ASYNC",
 
     "KEY_USING",
     "KEY_TYPEDEF",
@@ -397,11 +403,14 @@ static vector<string> TokenTypeValue = {
     "delete",
     "label",
     "goto",
+    "reserve",
+    "free",
     
     "safe",
     "intern",
     "final",
     "fixed",
+    "async",
 
     "using",
     "typedef",

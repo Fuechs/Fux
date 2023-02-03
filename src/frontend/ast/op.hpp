@@ -82,6 +82,8 @@ enum class Inbuilts {
     READ = KEY_READ,        // read <address>;
     LABEL = KEY_LABEL,      // label <identifier>;
     GOTO = KEY_GOTO,        // goto <label>;
+    RESERVE = KEY_RESERVE,  // reserve <type>, <size>, <address>;
+    FREE = KEY_FREE,        // free <address>;
 };
 
 string InbuiltsValue(Inbuilts &inbuilt);

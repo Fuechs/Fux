@@ -131,12 +131,13 @@ public:
 class CallExprAST : public ExprAST {
     ExprAST::Ptr callee;
     ExprAST::Vec args;
+    bool asyncCall;
 
 public:
-    CallExprAST(const string &callee, ExprAST::Vec &args)
-    : callee(make_unique<VariableExprAST>(callee)), args(std::move(args)) {}
-    CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args)
-    : callee(std::move(callee)), args(std::move(args)) {}
+    CallExprAST(const string &callee, ExprAST::Vec &args, bool asyncCall = false)
+    : callee(make_unique<VariableExprAST>(callee)), args(std::move(args)), asyncCall(asyncCall) {}
+    CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args, bool asyncCall = false)
+    : callee(std::move(callee)), args(std::move(args)), asyncCall(asyncCall) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtAST::Ptr analyse(Expectation exp) override; 

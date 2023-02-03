@@ -141,7 +141,9 @@ void BinaryExprAST::debugPrint(size_t indent) {
 }
 
 void CallExprAST::debugPrint(size_t indent) { 
-    callASTDebug(indent, callee);
+    if (asyncCall) 
+        debugIndent(indent, "async ");
+    callASTDebug(asyncCall ? 0 : indent, callee);
     cout << "(";
     for (ExprAST::Ptr &arg : args) {
         callASTDebug(0, arg);

@@ -1,0 +1,3 @@
+someNetwork(): async i64;
+async someNetwork();
+someNetwork();

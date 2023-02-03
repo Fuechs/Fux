@@ -482,10 +482,14 @@ ExprAST::Ptr Parser::parseIndexExpr() {
 }
 
 ExprAST::Ptr Parser::parseCallExpr() { 
-    if (*current != IDENTIFIER)
+    if (*current != IDENTIFIER && *current != KEY_ASYNC)
         return parsePostIncDecExpr();
 
+    bool asyncCall = false;
     Token::Iter backTok = current;
+    
+    if (check(KEY_ASYNC))
+        asyncCall = true;
     ExprAST::Ptr symbol = parsePrimaryExpr();
         
     if (!check(LPAREN)) {
@@ -497,7 +501,7 @@ ExprAST::Ptr Parser::parseCallExpr() {
     if (*current != RPAREN)
         arguments = parseExprList();
     eat(RPAREN, MISSING_BRACKET);
-    return make_unique<CallExprAST>(symbol, arguments);
+    return make_unique<CallExprAST>(symbol, arguments, asyncCall);
 } 
 
 ExprAST::Ptr Parser::parsePostIncDecExpr() {
@@ -510,6 +514,10 @@ ExprAST::Ptr Parser::parsePostIncDecExpr() {
 
 ExprAST::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
+
+    if (that.isKeyword() && that != IDENTIFIER)
+        return make_unique<VariableExprAST>(that.value);
+
     switch (that.type) {
         case HEXADECIMAL:
         case NUMBER:        

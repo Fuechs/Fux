@@ -6,3 +6,5 @@ putch x;
 read x;
 label x;
 goto x;
+reserve i32, 10, ptr;
+free ptr;

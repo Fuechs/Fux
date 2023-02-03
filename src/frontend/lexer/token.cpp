@@ -43,10 +43,10 @@ bool Token::isKeyword() const { return (type >= KEY_GET && type <= KEY_CLASS); }
 
 bool Token::isType() const { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }
 
-bool Token::isModifier() const { return (type >= KEY_SAFE && type <= KEY_FIXED); }
+bool Token::isModifier() const { return (type >= KEY_SAFE && type <= KEY_ASYNC); }
 
 bool Token::isRelational() const { return (type >= LESSTHAN && type <= GTEQUALS); }
 
 bool Token::isAssignment() const { return (type >= EQUALS && type <= SWAP); }
 
-bool Token::isInbuiltCall() const { return (type >= KEY_RETURN && type <= KEY_GOTO); }
+bool Token::isInbuiltCall() const { return (type >= KEY_RETURN && type <= KEY_FREE); }

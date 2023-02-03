@@ -15,16 +15,6 @@
 #include "../lexer/token.hpp"
 #include "../../backend/llvmheader.hpp"
 
-// string representations of Access elements
-const vector<string> AccessString = {
-    "fixed",
-    "final",
-    "constant",
-    "safe",
-    "intern",
-    "public",
-};
-
 class FuxType {
 public:
     // Possible kinds of data types -- Mapped to respective keyword value
@@ -55,6 +45,7 @@ public:
         INTERN      = KEY_INTERN,   // only accessible from within the class / module
         FINAL       = KEY_FINAL,    // will turn into a constant after initialisation
         FIXED       = KEY_FIXED,    // does not modify the class it's defined within
+        ASYNC       = KEY_ASYNC,    // async function that interacts with APIs / a network
         CONSTANT,                   // constant; value can't be changed
         PUBLIC,                     // read and write access for everyone / everywhere & default (for values too)
     };
