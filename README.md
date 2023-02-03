@@ -41,40 +41,36 @@ main(argc: u64, argv: str[]): i64 {
 <br>
 
 > __Warning__ \
-> Fux is still in early development. \
+> Please not that Fux is still in early development. \
 > As of now only MacOS and Linux will be supported.
 
-Fux is a static typed language that can be as low-level as Rust and as high-level as Python.
+## A Modern, Flexible Programming Language for All
 
-## Why Fux?
+###### A Versatile and Innovative Language
 
-### Flexible, Portable, Fast
+Fux is a modern and flexible programming language, perfect for use in a variety of domains by both novice and expert developers. With its efficient use of LLVM, it provides performance similar to C++, while being portable and running on a wide range of platforms.
 
-- At least as high performant as C++[^1][^2]
-- Using LLVM to compile and run on several platforms
+- **Large Core Package Library** \
+    Fux offers a comprehensive standard library, known as the Core Package, which includes features such as buffered console I/O, file I/O, mathematics and arithmetic operations, algorithms, key-value maps, dynamic pointers, and string utilities.
+- **Easy to Learn and Use** \
+    For new programmers, Fux offers a safe and intuitive programming environment, with features like a built-in string type, dynamic arrays, and secure memory management. Experienced C/C++ developers will find the programming environment familiar, with added features and improvements over C++.
+- **Readable and Streamlined Syntax** \
+    The syntax of Fux is designed to be readable and easy to understand, with a focus on seamless integration of different aspects of the language. This is achieved through the use of "pipe" / "move" operators (`<<` and `>>`), as well as the ability to define functions and variables without any keywords.
+- **Eliminating Common C++ Errors** \
+    Fux addresses common issues with C++ by eliminating potential sources of error, such as memory leaks, through its secure memory management. Its readable syntax and intuitive integration of different language elements also reduce the likelihood of bugs, making it easier for developers to write high-quality code.
 
-### Easy to Learn
+###### The Versatile Uses of Fux
 
-- Already known environment for developers with experience in C++
-- Pythonic features: automatic typing, inbuilt string type, simple arrays, safe memory management, optional dynamic types[^2][^3]
-
-### Large Standard Library
-
-- Fux ships with a large standard library packed with utility ready to be used
-- The Core Library includes but is not limited to
-    - Buffered Console I/O
-    - File I/O
-    - Mathematics
-    - Algorithms
-    - Key-Value-Maps
-    - Dynamic Pointers[^3]
-    - String Utility
-
-### More Readable Code
-
-- Various adjustments to the syntax make the code more readable and elements of the syntax merge seamlessly
-- Pipe operators (`<<` `>>`) are a key feature of Fux and help with making code more readable[^4]
-- Variables and functions can be defined without the usage of a single keyword[^2][^5]
+- **System Programming** \
+    Fux can be used for writing operating system kernel and driver software, as it is efficient and capable of communicating directly with hardware.
+- **Application Development** \
+    Fux is an excellent choice for desktop and mobile application development, providing both performance and portability, and offering a comprehensive standard library.
+- **Game Development** \
+    Fux can be used for developing games for desktop and mobile platforms, offering performance and flexibility, as well as high efficiency through the use of templates and overloaded operators.
+- **Algorithms and Data Structures** \
+    Fux provides an environment for developing algorithms and data structures, with a comprehensive standard library for mathematical operations, as well as algorithms.
+- **Network Programming** \
+    Fux can be utilized for network-based application and service development, providing a flexible and powerful environment for the implementation of network protocols.
 
 [^1]: As long as not a lot of automatisation is used.
 
