@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-02-02
+> Last updated on 2023-02-03
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
