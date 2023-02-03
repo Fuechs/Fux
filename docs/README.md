@@ -11,7 +11,7 @@
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status** \
-> Last updated on 2023-01-10 \
+> Last updated on 2023-02-03 \
 > Unfinished
 
 ## Contents
@@ -398,9 +398,9 @@ someFunction() << ("someString" >> someFormat(1, 3));
 someArray: i32[];
 someArray[] << 1;  // {1}
 2 >> someArray[] << 3;  // {2, 1, 3}
-6 >> 7 >> someArray[] << 4 << 5; // {6, 7, 2, 1, 3, 4, 5}
-//                 ^^ without brackets, Fux would 
-//                  try to assign a value to someArray 
+6 >> (7 >> someArray[]) << 4 << 5; // {6, 7, 2, 1, 3, 4, 5}
+//                  ^^ without brackets, Fux would 
+//                     try to assign a value to someArray 
 //                  someArray << {}; 
 //                  => someArray = {}
 ```

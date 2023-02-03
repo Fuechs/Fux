@@ -87,7 +87,8 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
 
     if (*current != COLON && *current != RPOINTER) {
         current = backToken;
-        return parseCallExpr();
+        return parseExpr(); // We have to call parseExpr() here to handle situations like this one:
+                            // someCall() << someArgument;
     } else
         current = paramBegin;
 
