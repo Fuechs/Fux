@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "../analyser/expectation.hpp"
+
 enum class AST {
     // expressions
     NullExprAST,
@@ -40,9 +42,12 @@ enum class AST {
 
 class StmtAST {
 public:
+    typedef unique_ptr<StmtAST> Ptr;
+    typedef vector<Ptr> Vec;
+
     virtual ~StmtAST() {}
     FUX_BC(virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;)
-    virtual unique_ptr<StmtAST> analyse() = 0;
+    virtual Ptr analyse(Expectation exp) = 0;
     virtual AST getASTType() = 0;
     virtual void debugPrint(size_t indent = 0) = 0;
 
@@ -51,7 +56,4 @@ public:
     Position pos = Position();
 };
 
-typedef unique_ptr<StmtAST> StmtPtr;
-typedef vector<StmtPtr> StmtList;
-
-extern StmtPtr nullStmt;
+extern StmtAST::Ptr nullStmt;

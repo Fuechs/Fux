@@ -46,7 +46,7 @@ void debugIndent(size_t indent, string message = "") {
         cout << message;
 }
 
-void callASTDebug(size_t indent, StmtPtr &ast) {
+void callASTDebug(size_t indent, StmtAST::Ptr &ast) {
     debugIndent(indent);
     if (ast)
         ast->debugPrint(indent);
@@ -62,7 +62,7 @@ void callASTDebug(size_t indent, ProtoPtr &ast) {
         cout << CC::RED << "NULLPROTO" << CC::DEFAULT;
 }
 
-void callASTDebug(size_t indent, ExprPtr &ast) {
+void callASTDebug(size_t indent, ExprAST::Ptr &ast) {
     debugIndent(indent);
     if (ast)
         ast->debugPrint();
@@ -70,7 +70,7 @@ void callASTDebug(size_t indent, ExprPtr &ast) {
         cout << CC::RED << "NULLEXPR" << CC::DEFAULT;
 }
 
-void debugBody(size_t indent, StmtPtr &ast) {
+void debugBody(size_t indent, StmtAST::Ptr &ast) {
     debugIndent(indent);
     if (ast) {
         if (ast->getASTType() == AST::CodeBlockAST)
@@ -143,7 +143,7 @@ void BinaryExprAST::debugPrint(size_t indent) {
 void CallExprAST::debugPrint(size_t indent) { 
     callASTDebug(indent, callee);
     cout << "(";
-    for (ExprPtr &arg : args) {
+    for (ExprAST::Ptr &arg : args) {
         callASTDebug(0, arg);
         if (arg != args.back())
             cout << ", ";
@@ -181,7 +181,7 @@ void VariableDeclAST::debugPrint(size_t indent) {
 void InbuiltCallAST::debugPrint(size_t indent) {
     debugIndent(indent, InbuiltsValue(callee));
     cout << " ";
-    for (ExprPtr &arg : arguments) {
+    for (ExprAST::Ptr &arg : arguments) {
         callASTDebug(0, arg);
         if (arg != arguments.back())
             cout << ", "; 
@@ -202,7 +202,7 @@ void IfElseAST::debugPrint(size_t indent) {
 
 void CodeBlockAST::debugPrint(size_t indent) {
     debugIndent(indent, "{\n");
-    for (StmtPtr &stmt : body) {
+    for (StmtAST::Ptr &stmt : body) {
         callASTDebug(indent + 1, stmt);
         cout << ";\n";
     }
@@ -246,7 +246,7 @@ void ForLoopAST::debugPrint(size_t indent) {
 void PrototypeAST::debugPrint(size_t indent) {
     callASTDebug(indent, symbol);
     cout << "(";
-    for (StmtPtr &param : args) {
+    for (StmtAST::Ptr &param : args) {
         callASTDebug(0, param);
         if (param != args.back())
             cout << ", ";
@@ -273,7 +273,7 @@ void RootAST::debugPrint(size_t indent) {
         callASTDebug(indent, arraySizeExprs.at(i));
     }
 
-    for (StmtPtr &stmt : program) {
+    for (StmtAST::Ptr &stmt : program) {
         cout << "\n";
         callASTDebug(0, stmt);
         cout << ";";

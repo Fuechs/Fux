@@ -6,10 +6,12 @@ def run_file(file: str) -> float:
     start = time()
     print("Running:", file)
     system(f"time ./fux src/examples/{file}")
+    end = time() - start
     print("\033[31m"+'-'*60+"\033[39m")
-    return time() - start
+    return end
 
 def run_full(files: list[str]) -> tuple[float, list[float]]:
+    print("\033[32m"+'='*60+"\033[39m")
     start = time()
     times = [run_file(file) for file in files]
     return time() - start, times
@@ -30,6 +32,6 @@ if __name__ == "__main__":
         
     print('='*60)
     print(f"|| Total Time for {runs} runs: {end}s")
-    print(f"|| Average Time per Run: {fmean(run_time)}s")
+    print(f"|| Average Time per Run ({len(files)} Files): {fmean(run_time)}s")
     print(f"|| Average Time per File: {fmean(file_time)}s")
     print('='*60)

@@ -35,85 +35,85 @@ private:
     const bool mainFile;
 
     // parse a statement
-    StmtPtr parseStmt(bool expectSemicolon = true);
+    StmtAST::Ptr parseStmt(bool expectSemicolon = true);
     // function declaration
-    StmtPtr parseFunctionDeclStmt();
+    StmtAST::Ptr parseFunctionDeclStmt();
     // for (each) loop
-    StmtPtr parseForLoopStmt();
+    StmtAST::Ptr parseForLoopStmt();
     // (do ...) while loop
-    StmtPtr parseWhileLoopStmt();
+    StmtAST::Ptr parseWhileLoopStmt();
     // code block {}
-    StmtPtr parseBlockStmt();
+    StmtAST::Ptr parseBlockStmt();
     // if else statement
-    StmtPtr parseIfElseStmt();
+    StmtAST::Ptr parseIfElseStmt();
     // inbuilt call 
-    StmtPtr parseInbuiltCallStmt();
+    StmtAST::Ptr parseInbuiltCallStmt();
     // variable declaration
-    StmtPtr parseVariableDeclStmt();
+    StmtAST::Ptr parseVariableDeclStmt();
 
     // <expr>, <expr>, ...
-    ExprList parseExprList();
+    ExprAST::Vec parseExprList();
 
     // parse an expression
-    ExprPtr parseExpr();
+    ExprAST::Ptr parseExpr();
     // <symbol> [...]= <value>
-    ExprPtr parseAssignmentExpr();
+    ExprAST::Ptr parseAssignmentExpr();
     // <expr> <<|>> <expr>
-    ExprPtr parsePipeExpr();
+    ExprAST::Ptr parsePipeExpr();
     // <expr> ? <expr> : <expr>
-    ExprPtr parseTernaryExpr();
+    ExprAST::Ptr parseTernaryExpr();
     // <expr> || <expr>
-    ExprPtr parseLogicalOrExpr();
+    ExprAST::Ptr parseLogicalOrExpr();
     // <expr> && <expr> 
-    ExprPtr parseLogicalAndExpr();
+    ExprAST::Ptr parseLogicalAndExpr();
     // <expr> | <expr> 
-    ExprPtr parseBitwiseOrExpr();
+    ExprAST::Ptr parseBitwiseOrExpr();
     // <expr> >< <expr> 
-    ExprPtr parseBitwiseXorExpr();
+    ExprAST::Ptr parseBitwiseXorExpr();
     // <expr> & <expr> 
-    ExprPtr parseBitwiseAndExpr();
+    ExprAST::Ptr parseBitwiseAndExpr();
     // <expr> == <expr> , <expr> != <expr> 
-    ExprPtr parseEqualityExpr();
+    ExprAST::Ptr parseEqualityExpr();
     // <expr> < <expr> , <expr> <= <expr> , <expr> > <expr> , <expr> >= <expr> 
-    ExprPtr parseRelationalExpr();
+    ExprAST::Ptr parseRelationalExpr();
     // <expr> <| <expr> , <expr> |> <expr> 
-    ExprPtr parseBitwiseShiftExpr();
+    ExprAST::Ptr parseBitwiseShiftExpr();
     // <expr> + <expr> , <expr> - <expr> 
-    ExprPtr parseAdditiveExpr();
+    ExprAST::Ptr parseAdditiveExpr();
     // <expr> * <expr> , <expr> / <expr> , <expr> % <expr> 
-    ExprPtr parseMultiplicativeExpr();
+    ExprAST::Ptr parseMultiplicativeExpr();
     // <expr> ^ <expr> 
-    ExprPtr parsePowerExpr();
+    ExprAST::Ptr parsePowerExpr();
 
     // & <expr>
-    ExprPtr parseAddressExpr();
+    ExprAST::Ptr parseAddressExpr();
     // * <expr>
-    ExprPtr parseDereferenceExpr();
+    ExprAST::Ptr parseDereferenceExpr();
     // ( <type> ) <expr>
-    ExprPtr parseTypeCastExpr();
+    ExprAST::Ptr parseTypeCastExpr();
     //° ! (log not), ~ (bit not), ? (existence)
-    ExprPtr parseLogBitUnaryExpr();
+    ExprAST::Ptr parseLogBitUnaryExpr();
     // + <expr> , - <expr> 
-    ExprPtr parsePlusMinusUnaryExpr();
+    ExprAST::Ptr parsePlusMinusUnaryExpr();
     // ++<expr> , --<expr> 
-    ExprPtr parsePreIncDecExpr();
+    ExprAST::Ptr parsePreIncDecExpr();
     // <expr> [ <expr> ]
-    ExprPtr parseIndexExpr();
+    ExprAST::Ptr parseIndexExpr();
     // <expr>  ( <expr>, <expr>, ... )
-    ExprPtr parseCallExpr();
+    ExprAST::Ptr parseCallExpr();
     // <expr>++, <expr>--
-    ExprPtr parsePostIncDecExpr();
+    ExprAST::Ptr parsePostIncDecExpr();
     // <identifier>, <value>, (<expr>)
-    ExprPtr parsePrimaryExpr();
+    ExprAST::Ptr parsePrimaryExpr();
 
     // parse : | -> + access + pointer depth + type name + array
     // primitive: only parse pointer depth + type name + array
     FuxType parseType(bool primitive = false);
 
     // parse number with correct type
-    ExprPtr parseNumberExpr(Token &tok);
+    ExprAST::Ptr parseNumberExpr(Token &tok);
     // parse char with correct type and escape sequence
-    ExprPtr parseCharExpr(Token &tok);
+    ExprAST::Ptr parseCharExpr(Token &tok);
 
     // get next token
     Token &eat();

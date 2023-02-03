@@ -11,52 +11,52 @@
 
 #include "analyser.hpp"
 
-StmtPtr Analyser::analyse() { return origin->analyse(); }
+StmtAST::Ptr Analyser::analyse() { return origin->analyse(Expectation({}, {})); }
 
-StmtPtr NullExprAST::analyse() { return nullptr; }
+StmtAST::Ptr NullExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr BoolExprAST::analyse() { return nullptr; }
+StmtAST::Ptr BoolExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr NumberExprAST::analyse() { return nullptr; }
+StmtAST::Ptr NumberExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr CharExprAST::analyse() { return nullptr; }
+StmtAST::Ptr CharExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr StringExprAST::analyse() { return nullptr; }
+StmtAST::Ptr StringExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr VariableExprAST::analyse() { return nullptr; }
+StmtAST::Ptr VariableExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr MemberExprAST::analyse() { return nullptr; }
+StmtAST::Ptr MemberExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr CallExprAST::analyse() { return nullptr; }
+StmtAST::Ptr CallExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr UnaryExprAST::analyse() { return nullptr; }
+StmtAST::Ptr UnaryExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr BinaryExprAST::analyse() { return nullptr; }
+StmtAST::Ptr BinaryExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr TypeCastExprAST::analyse() { return nullptr; }
+StmtAST::Ptr TypeCastExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr TernaryExprAST::analyse() { return nullptr; }
+StmtAST::Ptr TernaryExprAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr VariableDeclAST::analyse() { return nullptr; }
+StmtAST::Ptr VariableDeclAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr InbuiltCallAST::analyse() { return nullptr; }
+StmtAST::Ptr InbuiltCallAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr IfElseAST::analyse() { return nullptr; }
+StmtAST::Ptr IfElseAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr CodeBlockAST::analyse() { return nullptr; }
+StmtAST::Ptr CodeBlockAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr WhileLoopAST::analyse() { return nullptr; }
+StmtAST::Ptr WhileLoopAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr ForLoopAST::analyse() { return nullptr; }
+StmtAST::Ptr ForLoopAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr PrototypeAST::analyse() { return nullptr; }
+StmtAST::Ptr PrototypeAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr FunctionAST::analyse() { return nullptr; }
+StmtAST::Ptr FunctionAST::analyse(Expectation exp) { return nullptr; }
 
-StmtPtr RootAST::analyse() {
+StmtAST::Ptr RootAST::analyse(Expectation exp) {
     RootPtr mod = make_unique<RootAST>();
-    StmtPtr modStmt = nullptr;
-    for (StmtPtr &stmt : program) 
-        mod->addSub((modStmt = stmt->analyse()));  
+    StmtAST::Ptr modStmt = nullptr;
+    for (StmtAST::Ptr &stmt : program) 
+        mod->addSub((modStmt = stmt->analyse(exp)));  
     return mod;
 }

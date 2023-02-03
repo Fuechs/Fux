@@ -47,7 +47,7 @@ public:
     string fileDir;
 
     RootPtr root;
-    StmtPtr analysed;
+    StmtAST::Ptr analysed;
     
 private:
     ErrorManager *error;

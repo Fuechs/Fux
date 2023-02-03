@@ -17,16 +17,16 @@
 
 class ExprAST : public StmtAST {
 public:
+    typedef unique_ptr<ExprAST> Ptr;
+    typedef vector<Ptr> Vec;
+
     virtual ~ExprAST() {}
     FUX_BC(virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;)
-    virtual StmtPtr analyse() = 0;
+    virtual StmtAST::Ptr analyse(Expectation exp) = 0;
     virtual AST getASTType() = 0;
     virtual void debugPrint(size_t indent = 0) = 0;
 
     Position pos = Position();
 };
 
-typedef unique_ptr<ExprAST> ExprPtr;
-typedef vector<ExprPtr> ExprList;
-
-extern ExprPtr nullExpr;
+extern ExprAST::Ptr nullExpr;

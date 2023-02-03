@@ -207,7 +207,7 @@ int repl() {
         Parser *parser = new Parser(error, "<stdin>", input, true);
         RootPtr root = parser->parse();
         // Analyser *analyser = new Analyser(error, root);
-        // StmtPtr analysed = analyser->analyse();
+        // StmtAST::Ptr analysed = analyser->analyse();
         delete parser;
         // delete analyser;
 
@@ -230,9 +230,9 @@ RootPtr createTestAST() {
     RootPtr root = make_unique<RootAST>();
 
     // modify(num -> i64): void;
-    StmtList eArgs = StmtList();
+    StmtAST::Vec eArgs = StmtAST::Vec();
     eArgs.push_back(make_unique<VariableDeclAST>("num", FuxType::createRef(FuxType::I64)));
-    StmtPtr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::VOID), "modify", eArgs);
+    StmtAST::Ptr emptyF = make_unique<PrototypeAST>(FuxType(FuxType::VOID), "modify", eArgs);
     root->addSub(emptyF);
 
     // main(argc: i64, argv: str[]): i64 {
@@ -240,30 +240,30 @@ RootPtr createTestAST() {
     //      modify(x);
     //      return x;
     // }
-    StmtList args = StmtList();
+    StmtAST::Vec args = StmtAST::Vec();
     args.push_back(make_unique<VariableDeclAST>("argc", FuxType::createStd(FuxType::U64, 0, {FuxType::FINAL})));
     args.push_back(make_unique<VariableDeclAST>("argv", FuxType::createArray(FuxType::STR, 0, {FuxType::FINAL})));
 
-    StmtList bodyList = StmtList();
+    StmtAST::Vec bodyList = StmtAST::Vec();
     
-    ExprPtr variable = make_unique<VariableExprAST>("argc");
-    ExprPtr constant = make_unique<NumberExprAST, _i64>(1);
-    ExprPtr binop = make_unique<BinaryExprAST>('+', variable, constant);
-    StmtPtr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I64), binop);
+    ExprAST::Ptr variable = make_unique<VariableExprAST>("argc");
+    ExprAST::Ptr constant = make_unique<NumberExprAST, _i64>(1);
+    ExprAST::Ptr binop = make_unique<BinaryExprAST>('+', variable, constant);
+    StmtAST::Ptr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I64), binop);
     bodyList.push_back(std::move(decl));
 
     variable = make_unique<VariableExprAST>("x");
-    ExprList pass = ExprList();
+    ExprAST::Vec pass = ExprAST::Vec();
     pass.push_back(std::move(variable));
-    StmtPtr call = make_unique<CallExprAST>("modify", pass);
+    StmtAST::Ptr call = make_unique<CallExprAST>("modify", pass);
     bodyList.push_back(std::move(call));
 
     variable = make_unique<VariableExprAST>("x");
-    StmtPtr ret = make_unique<ReturnCallAST>(variable);
+    StmtAST::Ptr ret = make_unique<ReturnCallAST>(variable);
     bodyList.push_back(std::move(ret));
 
-    StmtPtr body = make_unique<CodeBlockAST>(bodyList);
-    StmtPtr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
+    StmtAST::Ptr body = make_unique<CodeBlockAST>(bodyList);
+    StmtAST::Ptr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
     root->addSub(mFunc);
 
     return root;

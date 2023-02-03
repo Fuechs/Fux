@@ -23,7 +23,7 @@ public:
     : error(error), origin(root), table(new SymbolTable()) {} 
 
     // analyse AST 
-    StmtPtr analyse();
+    StmtAST::Ptr analyse();
 
 private:
     ErrorManager *error;

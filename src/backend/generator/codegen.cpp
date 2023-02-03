@@ -133,7 +133,7 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
 }
 
 Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
-    for (StmtPtr &sub : program)
+    for (StmtAST::Ptr &sub : program)
         sub->codegen(fuxLLVM);
     return nullptr;
 }

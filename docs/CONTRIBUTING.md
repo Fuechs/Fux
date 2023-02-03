@@ -133,7 +133,7 @@ size_t id;
 ```
 
 - For often used vector types, you'll usually find type definitions with `typedef`. These are within the classes and are called `Vec` or `Groups` for a vector of a vector.
-- The same goes for dynamic pointers, which are defined outside the class and end with `Ptr`.
+- The same goes for dynamic pointers which are called `Ptr`.
 
 ```cpp
 class SourceFile {
@@ -141,13 +141,16 @@ class SourceFile {
     typedef vector<Vec> Groups;
 };
 
-typedef unique_ptr<StmtAST> StmtPtr; 
+class StmtAST {
+    typedef unique_ptr<StmtAST> Ptr; 
+    typedef vector<Ptr> Vec;
+};
 ```
 
 - (Especially regarding AST classes) Use references in the constructor for dynamic pointers and call `std::move` in the constructor.
 
 ```cpp
-SomeConstructor(ExprPtr &LHS, ExprPtr &RHS)
+SomeConstructor(ExprAST::Ptr &LHS, ExprAST::Ptr &RHS)
 : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 ```
 

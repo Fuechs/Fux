@@ -82,6 +82,8 @@ void FuxType::debugPrint(bool primitive) {
             for (size_t pd = pointerDepth; pd --> 0;)
                 cout << "*";
         cout << kindAsString();
+        if (array)
+            cout << "[]";
         return;
     }
 
@@ -94,9 +96,13 @@ void FuxType::debugPrint(bool primitive) {
     
     cout << kindAsString();
     
-    if (array) 
-        cout << "[" << SC::UNDERLINE << CC::YELLOW 
-            << sizeID << SC::RESET << CC::DEFAULT << "]";
+    if (array) {
+        cout << "[";
+        if (sizeID > -1)
+            cout << SC::UNDERLINE << CC::YELLOW 
+                << sizeID << SC::RESET << CC::DEFAULT;
+        cout << "]";
+    }
 }
 
 bool FuxType::valid() {

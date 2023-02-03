@@ -11,8 +11,8 @@
 
 #include "ast.hpp"
 
-StmtPtr nullStmt = StmtPtr(nullptr);
-ExprPtr nullExpr = ExprPtr(nullptr);
+StmtAST::Ptr nullStmt = StmtAST::Ptr(nullptr);
+ExprAST::Ptr nullExpr = ExprAST::Ptr(nullptr);
 
 Position &Position::operator=(Position pos) {
     lStart = pos.lStart;
@@ -55,13 +55,13 @@ VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
 string &VariableDeclAST::getSymbol() { return symbol; }
 FuxType &VariableDeclAST::getType() { return type; }
-ExprPtr &VariableDeclAST::getValue() { return value; }
+ExprAST::Ptr &VariableDeclAST::getValue() { return value; }
 
 AST InbuiltCallAST::getASTType() { return AST::InbuiltCallAST; }
 
 AST IfElseAST::getASTType() { return AST::IfElseAST; }
 
-void CodeBlockAST::addSub(StmtPtr &sub) { body.push_back(std::move(sub)); }
+void CodeBlockAST::addSub(StmtAST::Ptr &sub) { body.push_back(std::move(sub)); }
 AST CodeBlockAST::getASTType() { return AST::CodeBlockAST; }
 
 AST WhileLoopAST::getASTType() { return AST::WhileLoopAST; }
@@ -70,8 +70,8 @@ AST ForLoopAST::getASTType() { return AST::ForLoopAST; }
 
 PrototypeAST::~PrototypeAST() { args.clear(); }
 
-ExprPtr &PrototypeAST::getSymbol() { return symbol; }
-StmtList &PrototypeAST::getArgs() { return args; }
+ExprAST::Ptr &PrototypeAST::getSymbol() { return symbol; }
+StmtAST::Vec &PrototypeAST::getArgs() { return args; }
 FuxType &PrototypeAST::getType() { return type; }
 AST PrototypeAST::getASTType() { return AST::PrototypeAST; }
 
@@ -79,8 +79,8 @@ AST FunctionAST::getASTType() { return AST::FunctionAST; }
 
 AST RootAST::getASTType() { return AST::RootAST; }
 
-void RootAST::addSub(StmtPtr &sub) { program.push_back(std::move(sub)); }
-_i64 RootAST::addSizeExpr(ExprPtr &sizeExpr) {
+void RootAST::addSub(StmtAST::Ptr &sub) { program.push_back(std::move(sub)); }
+_i64 RootAST::addSizeExpr(ExprAST::Ptr &sizeExpr) {
     arraySizeExprs.push_back(std::move(sizeExpr));
     return arraySizeExprs.size() - 1;
 }

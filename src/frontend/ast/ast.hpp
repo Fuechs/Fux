@@ -28,7 +28,7 @@ typedef map<string, FuxType> ArgMap;
 class NullExprAST : public ExprAST {
 public:    
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
     
@@ -43,7 +43,7 @@ public:
     ~BoolExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
     
@@ -59,7 +59,7 @@ public:
     ~NumberExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
      
@@ -75,7 +75,7 @@ public:
     ~CharExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -90,7 +90,7 @@ public:
     ~StringExprAST();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override; 
+    StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -105,7 +105,7 @@ public:
     ~VariableExprAST() override;
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;  
+    StmtAST::Ptr analyse(Expectation exp) override;  
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -113,15 +113,15 @@ public:
 };
 
 class MemberExprAST : public ExprAST {
-    ExprPtr base;
-    ExprPtr member;
+    ExprAST::Ptr base;
+    ExprAST::Ptr member;
 
 public:
-    MemberExprAST(ExprPtr &base, ExprPtr &member) 
+    MemberExprAST(ExprAST::Ptr &base, ExprAST::Ptr &member) 
     : base(std::move(base)), member(std::move(member)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;    
+    StmtAST::Ptr analyse(Expectation exp) override;    
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -129,17 +129,17 @@ public:
 };
 
 class CallExprAST : public ExprAST {
-    ExprPtr callee;
-    ExprList args;
+    ExprAST::Ptr callee;
+    ExprAST::Vec args;
 
 public:
-    CallExprAST(const string &callee, ExprList &args)
+    CallExprAST(const string &callee, ExprAST::Vec &args)
     : callee(make_unique<VariableExprAST>(callee)), args(std::move(args)) {}
-    CallExprAST(ExprPtr &callee, ExprList &args)
+    CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args)
     : callee(std::move(callee)), args(std::move(args)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override; 
+    StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
     
@@ -148,13 +148,13 @@ public:
 
 class UnaryExprAST : public ExprAST {
     UnaryOp op;
-    ExprPtr expr;
+    ExprAST::Ptr expr;
 
 public:
-    UnaryExprAST(UnaryOp op, ExprPtr &expr) : op(op), expr(std::move(expr)) {}
+    UnaryExprAST(UnaryOp op, ExprAST::Ptr &expr) : op(op), expr(std::move(expr)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;  
+    StmtAST::Ptr analyse(Expectation exp) override;  
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -163,14 +163,14 @@ public:
 
 class BinaryExprAST : public ExprAST {
     BinaryOp op;
-    ExprPtr LHS, RHS;
+    ExprAST::Ptr LHS, RHS;
 
 public:
-    BinaryExprAST(BinaryOp op, ExprPtr &LHS, ExprPtr &RHS = nullExpr) 
+    BinaryExprAST(BinaryOp op, ExprAST::Ptr &LHS, ExprAST::Ptr &RHS = nullExpr) 
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;   
+    StmtAST::Ptr analyse(Expectation exp) override;   
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -179,14 +179,14 @@ public:
 
 class TypeCastExprAST : public ExprAST {
     FuxType type;
-    ExprPtr expr;
+    ExprAST::Ptr expr;
 
 public:
-    TypeCastExprAST(FuxType type, ExprPtr &expr) 
+    TypeCastExprAST(FuxType type, ExprAST::Ptr &expr) 
     : type(type), expr(std::move(expr)) {}
     
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
     
@@ -194,16 +194,16 @@ public:
 };
 
 class TernaryExprAST : public ExprAST {
-    ExprPtr condition;
-    ExprPtr thenExpr;
-    ExprPtr elseExpr;
+    ExprAST::Ptr condition;
+    ExprAST::Ptr thenExpr;
+    ExprAST::Ptr elseExpr;
 
 public:
-    TernaryExprAST(ExprPtr &condition, ExprPtr &thenExpr, ExprPtr &elseExpr)
+    TernaryExprAST(ExprAST::Ptr &condition, ExprAST::Ptr &thenExpr, ExprAST::Ptr &elseExpr)
     : condition(std::move(condition)), thenExpr(std::move(thenExpr)), elseExpr(std::move(elseExpr)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override; 
+    StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
     
@@ -215,19 +215,19 @@ public:
 class VariableDeclAST : public StmtAST {
     string symbol;
     FuxType type;
-    ExprPtr value;
+    ExprAST::Ptr value;
 
 public:
-    VariableDeclAST(string symbol, FuxType type = FuxType(), ExprPtr &value = nullExpr) 
+    VariableDeclAST(string symbol, FuxType type = FuxType(), ExprAST::Ptr &value = nullExpr) 
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() override;
     
     string &getSymbol();
     FuxType &getType();
-    ExprPtr &getValue();
+    ExprAST::Ptr &getValue();
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
      
@@ -238,14 +238,14 @@ typedef unique_ptr<VariableDeclAST> VarDeclPtr;
 
 class InbuiltCallAST : public StmtAST {
     Inbuilts callee;
-    ExprList arguments;
+    ExprAST::Vec arguments;
 
 public:
-    InbuiltCallAST(Inbuilts callee, ExprList &arguments) 
+    InbuiltCallAST(Inbuilts callee, ExprAST::Vec &arguments) 
     : callee(callee), arguments(std::move(arguments)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
      
@@ -253,16 +253,16 @@ public:
 };
 
 class IfElseAST : public StmtAST {
-    ExprPtr condition;
-    StmtPtr thenBody;
-    StmtPtr elseBody;
+    ExprAST::Ptr condition;
+    StmtAST::Ptr thenBody;
+    StmtAST::Ptr elseBody;
 
 public:
-    IfElseAST(ExprPtr &condition, StmtPtr &thenBody, StmtPtr &elseBody = nullStmt)
+    IfElseAST(ExprAST::Ptr &condition, StmtAST::Ptr &thenBody, StmtAST::Ptr &elseBody = nullStmt)
     : condition(std::move(condition)), thenBody(std::move(thenBody)), elseBody(std::move(elseBody)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -270,33 +270,33 @@ public:
 };
 
 class CodeBlockAST : public StmtAST {
-    StmtList body;
+    StmtAST::Vec body;
 
 public:
-    CodeBlockAST() : body(StmtList()) {}
-    CodeBlockAST(StmtList &body) : body(std::move(body)) {}
+    CodeBlockAST() : body(StmtAST::Vec()) {}
+    CodeBlockAST(StmtAST::Vec &body) : body(std::move(body)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
-    void addSub(StmtPtr &sub);
+    void addSub(StmtAST::Ptr &sub);
 
     Position pos = Position();
 };
 
 class WhileLoopAST : public StmtAST {
-    ExprPtr condition;
-    StmtPtr body;
+    ExprAST::Ptr condition;
+    StmtAST::Ptr body;
     bool postCondition;
 
 public:
-    WhileLoopAST(ExprPtr &condition, StmtPtr &body, bool postCondition = false)
+    WhileLoopAST(ExprAST::Ptr &condition, StmtAST::Ptr &body, bool postCondition = false)
     : condition(std::move(condition)), body(std::move(body)), postCondition(postCondition) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -305,21 +305,21 @@ public:
 
 class ForLoopAST : public StmtAST {
     bool forEach;
-    /*for (*/StmtPtr initial; 
-            ExprPtr condition; 
-            ExprPtr iterator;//) {
-        StmtPtr body;
+    /*for (*/StmtAST::Ptr initial; 
+            ExprAST::Ptr condition; 
+            ExprAST::Ptr iterator;//) {
+        StmtAST::Ptr body;
     // }
 public:
-    ForLoopAST(StmtPtr &initial, ExprPtr &iterator, StmtPtr &body)
+    ForLoopAST(StmtAST::Ptr &initial, ExprAST::Ptr &iterator, StmtAST::Ptr &body)
     : forEach(true), initial(std::move(initial)), condition(nullptr), 
         iterator(std::move(iterator)), body(std::move(body)) {}
-    ForLoopAST(StmtPtr &initial, ExprPtr &condition, ExprPtr &iterator, StmtPtr &body)
+    ForLoopAST(StmtAST::Ptr &initial, ExprAST::Ptr &condition, ExprAST::Ptr &iterator, StmtAST::Ptr &body)
     : forEach(false), initial(std::move(initial)), condition(std::move(condition)),
         iterator(std::move(iterator)), body(std::move(body)) {}
 
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
@@ -332,22 +332,22 @@ typedef unique_ptr<CodeBlockAST> BlockPtr;
 // name and arguments
 class PrototypeAST : public StmtAST {
     FuxType type;
-    ExprPtr symbol;
-    StmtList args;
+    ExprAST::Ptr symbol;
+    StmtAST::Vec args;
 
 public:
-    PrototypeAST(FuxType type, const string &symbol, StmtList &args)
+    PrototypeAST(FuxType type, const string &symbol, StmtAST::Vec &args)
     : type(type), symbol(make_unique<VariableExprAST>(symbol)), args(std::move(args)) {}
-    PrototypeAST(FuxType type, ExprPtr &symbol, StmtList &args)
+    PrototypeAST(FuxType type, ExprAST::Ptr &symbol, StmtAST::Vec &args)
     : type(type), symbol(std::move(symbol)), args(std::move(args)) {}
     ~PrototypeAST() override;
     
-    ExprPtr &getSymbol();
-    StmtList &getArgs();
+    ExprAST::Ptr &getSymbol();
+    StmtAST::Vec &getArgs();
     FuxType &getType();
     
     FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
      
@@ -358,18 +358,18 @@ typedef unique_ptr<PrototypeAST> ProtoPtr;
 
 class FunctionAST : public StmtAST {
     ProtoPtr proto;
-    StmtPtr body;
+    StmtAST::Ptr body;
 
 public:
-    FunctionAST(FuxType type, const string &symbol, StmtList &args, StmtPtr &body)
+    FunctionAST(FuxType type, const string &symbol, StmtAST::Vec &args, StmtAST::Ptr &body)
     : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
-    FunctionAST(FuxType type, ExprPtr &symbol, StmtList &args, StmtPtr &body)
+    FunctionAST(FuxType type, ExprAST::Ptr &symbol, StmtAST::Vec &args, StmtAST::Ptr &body)
     : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
-    FunctionAST(ProtoPtr &proto, StmtPtr &body)
+    FunctionAST(ProtoPtr &proto, StmtAST::Ptr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;    
 
@@ -377,21 +377,21 @@ public:
 };
 
 class RootAST : public StmtAST {
-    StmtList program;
+    StmtAST::Vec program;
     // resting place for array size expressions
     // FuxTypes refer to these by IDs
-    ExprList arraySizeExprs; 
+    ExprAST::Vec arraySizeExprs; 
 
 public:
-    RootAST() : program(StmtList()) {}        
+    RootAST() : program(StmtAST::Vec()) {}        
     
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtPtr analyse() override;
+    StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
  
-    void addSub(StmtPtr &sub);
-    _i64 addSizeExpr(ExprPtr &sizeExpr);
+    void addSub(StmtAST::Ptr &sub);
+    _i64 addSizeExpr(ExprAST::Ptr &sizeExpr);
     
     Position pos = Position();
 };
