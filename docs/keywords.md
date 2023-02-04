@@ -30,6 +30,13 @@ ID | Value | Type
 [KEY_DELETE](#delete) | `delete` | Intrinsic, Memory 
 [KEY_LABEL](#label) | `label` | Intrinsic, Control Flow
 [KEY_GOTO](#goto) | `goto` | Intrinsic, Control Flow
+[KEY_RESERVE](#reserve) | `reserve` | Intrinsic, Memory
+[KEY_FREE](#free) | `free` | Intrinsic, Memory
+[KEY_SAFE](#safe) | `safe` | Access Modifier
+[KEY_INTERN](#intern) | `intern` | Access Modifier
+[KEY_FINAL](#final) | `final` | Access Modifier
+[KEY_FIXED](#fixed) | `fixed` | Access Modifier
+[KEY_ASYNC](#async) | `async` | Access Modifier, Networking
 
 ### Get
 
@@ -169,15 +176,27 @@ switch (<object>) {
     1. Stops any loop
     2. Stops fall through in switch
 
+```cpp
+break;
+```
+
 ### Return
 
 - Usage: `return <expr>`
 - Effect: Return a value and exit from a function
 
+```cpp
+return 0;
+```
+
 ### Throw
 
 - Usage: `throw <expr>`
 - Effect: Throws exception `expr` and exits program
+
+```cpp
+throw SomeErrorType;
+```
 
 ### Exit
 
@@ -241,4 +260,79 @@ label loop;
 
 ```c
 goto loop;
+```
+
+### Reserve
+
+- `size` expression
+- `pointer` expression
+- Usage: `reserve <type>, <size>, <pointer>`
+- Effect: Reserves / Allocates `size` amount of memory of type `type` and saves address in `pointer`
+
+```rust
+ptr: *i64; 
+reserve i64, 10, ptr; 
+```
+
+### Free
+
+- Usage: `free <expr>`
+- Effect: Frees reserved / allocated memory at address `expr`
+
+```c
+free ptr;
+```
+
+### Safe
+
+- Usage: `safe <type>`
+- Effect: Object of this type can't be modified but read outside of the class / namespace it's declared in.
+
+```rust
+name: safe str;
+```
+
+### Intern
+
+- Usage: `intern <type>`
+- Effect: Object of this type can't be accessed outside of the class / namespace it's declared in.
+
+```rust
+name: intern str;
+```
+
+### Final
+
+- Usage: `final <type>`
+- Effect: Value of object of this type can't be modified after assignment.
+
+```rust
+name: final str;
+name = "fux";
+```
+
+### Fixed
+
+- Usage: `fixed <type>`
+- Effect: Object of this type can be accessed without creating an instance of the class it's declared in.
+
+```rust
+name: fixed str = "fux";
+```
+
+### Async
+
+- `function` statement
+- `call` expression
+- Usage:
+    1) `<function> async <type>`
+    2) `async <call>`
+- Effect:
+    1) Declares `function` as asynchronus
+    2) Waits until asynchronus `call` 
+
+```rust
+someFunction(): async i64; // async function
+async someFunction(); // async call
+someFunction(); // normal call
 ```
