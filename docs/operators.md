@@ -10,7 +10,7 @@ COLON | `:` | "Normal" Type, Ternary Expression | /, Ternary
 SEMICOLON | `;` | Code Structure | /
 DOT | `.` | Member Expressions | /
 COMMA | `,` | Code Structure | / 
-RPOINTER | `->` | (lvalue) Reference Type | /
+POINTER | `->` | (lvalue) Reference Type | /
 LSHIFT | `<<` | Pipe / Move | Binary
 RSHIFT | `>>` | Pipe / Move | Binary
 *AT* | `@` | *UNASSIGNED* | *UNASSIGNED*

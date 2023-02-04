@@ -286,7 +286,7 @@ void Lexer::getToken() {
             }
 
             if (peek() == '>') {
-                currentToken.type = RPOINTER;
+                currentToken.type = POINTER;
                 currentToken.value = "->";
                 advance(2);
                 break;

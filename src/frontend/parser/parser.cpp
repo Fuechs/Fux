@@ -85,7 +85,7 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
             break;
     } // skip ( ... )
 
-    if (*current != COLON && *current != RPOINTER) {
+    if (*current != COLON && *current != POINTER) {
         current = backToken;
         return parseExpr(); // We have to call parseExpr() here to handle situations like this one:
                             // someCall() << someArgument;
@@ -211,7 +211,7 @@ StmtAST::Ptr Parser::parseInbuiltCallStmt() {
 }
 
 StmtAST::Ptr Parser::parseVariableDeclStmt() {
-    if (*current != IDENTIFIER || (peek() != COLON && peek() != RPOINTER))
+    if (*current != IDENTIFIER || (peek() != COLON && peek() != POINTER))
         return parseExpr();
     
     const string symbol = eat().value; // get value from identifier
@@ -576,10 +576,10 @@ FuxType Parser::parseType(bool primitive) {
     Token &typeDenotion = eat(); // ':' or '->' for error tracking
     switch (typeDenotion.type) {
         case COLON:     pointerDepth = 0; break;
-        case RPOINTER:  pointerDepth = -1; break;
+        case POINTER:  pointerDepth = -1; break;
         default:        
             error->createError(UNEXPECTED_TOKEN, typeDenotion,
-                "expected a COLON ':' or RPOINTER '->' here");
+                "expected a COLON ':' or POINTER '->' here");
             return FuxType();
     }
 
@@ -599,8 +599,8 @@ FuxType Parser::parseType(bool primitive) {
     }
 
     if (!current->isType()) {
-        // if (typeDenotion == RPOINTER) {
-        //     error->createError(UNEXPECTED_TOKEN, eat(), "expected a type after RPOINTER '->'");
+        // if (typeDenotion == POINTER) {
+        //     error->createError(UNEXPECTED_TOKEN, eat(), "expected a type after POINTER '->'");
         //     error->addNote(typeDenotion, "automatic typing is not supported for references yet");
         //     return FuxType(); 
         // } 

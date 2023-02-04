@@ -26,7 +26,7 @@ enum TokenType {
     SEMICOLON,      // ;
     DOT,            // .
     COMMA,          // ,
-    RPOINTER,       // ->
+    POINTER,        // ->
     LSHIFT,         // <<
     RSHIFT,         // >>
     AT,             // @ (this token is not used yet, but reserved for any new features)
@@ -170,7 +170,7 @@ static const char *TokenTypeString[] = {
     "SEMICOLON",      // ;
     "DOT",            // .
     "COMMA",          // ,
-    "RPOINTER",       // ->
+    "POINTER",        // ->
     "LSHIFT",         // <<
     "RSHIFT",         // >>
     "AT",
