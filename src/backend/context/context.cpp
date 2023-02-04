@@ -13,7 +13,7 @@
 
 #ifdef FUX_BACKEND
 
-FuxContext::FuxContext(RootPtr &root) {
+FuxContext::FuxContext(RootAST::Ptr &root) {
     llvm::InitializeNativeTarget();
     LLVMContext *llvmContext = new LLVMContext();
     this->fuxLLVM = new LLVMWrapper(

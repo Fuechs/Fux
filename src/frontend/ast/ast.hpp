@@ -384,6 +384,9 @@ class RootAST : public StmtAST {
     ExprAST::Vec arraySizeExprs; 
 
 public:
+    typedef unique_ptr<RootAST> Ptr;
+    typedef vector<Ptr> Vec;
+
     RootAST() : program(StmtAST::Vec()) {}        
     
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
@@ -396,5 +399,3 @@ public:
     
     Position pos = Position();
 };
-
-typedef unique_ptr<RootAST> RootPtr;

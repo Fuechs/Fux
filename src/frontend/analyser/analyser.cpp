@@ -54,7 +54,7 @@ StmtAST::Ptr PrototypeAST::analyse(Expectation exp) { return nullptr; }
 StmtAST::Ptr FunctionAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr RootAST::analyse(Expectation exp) {
-    RootPtr mod = make_unique<RootAST>();
+    RootAST::Ptr mod = make_unique<RootAST>();
     StmtAST::Ptr modStmt = nullptr;
     for (StmtAST::Ptr &stmt : program) 
         mod->addSub((modStmt = stmt->analyse(exp)));  

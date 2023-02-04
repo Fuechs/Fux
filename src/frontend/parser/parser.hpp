@@ -24,14 +24,14 @@ public:
     ~Parser();
 
     // parse the Tokens and return AST root
-    RootPtr parse();
+    RootAST::Ptr parse();
 
 private:
     Token::Vec tokens;
     Token::Iter current;
     ErrorManager *error;
     Lexer *lexer;
-    RootPtr root;
+    RootAST::Ptr root;
     const bool mainFile;
 
     // parse a statement

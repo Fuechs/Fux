@@ -46,7 +46,7 @@ public:
     string filePath;
     string fileDir;
 
-    RootPtr root;
+    RootAST::Ptr root;
     StmtAST::Ptr analysed;
     
 private:

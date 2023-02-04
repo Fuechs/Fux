@@ -19,7 +19,7 @@
 
 class Analyser {
 public:
-    Analyser(ErrorManager *error, RootPtr &root) 
+    Analyser(ErrorManager *error, RootAST::Ptr &root) 
     : error(error), origin(root), table(new SymbolTable()) {} 
 
     // analyse AST 
@@ -27,7 +27,7 @@ public:
 
 private:
     ErrorManager *error;
-    RootPtr &origin;
+    RootAST::Ptr &origin;
 
     SymbolTable *table;
 

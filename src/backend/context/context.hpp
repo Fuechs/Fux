@@ -21,7 +21,7 @@
 // Manages whole backend of the compiler
 class FuxContext {
 public:
-    FuxContext(RootPtr &root);
+    FuxContext(RootAST::Ptr &root);
     ~FuxContext();
 
     LLVMWrapper *fuxLLVM;
@@ -31,7 +31,7 @@ public:
     void run();
 
 private:
-    RootPtr root;
+    RootAST::Ptr root;
     Generator *generator;
     Compiler *compiler;
 

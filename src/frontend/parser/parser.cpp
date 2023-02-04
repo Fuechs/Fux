@@ -24,7 +24,7 @@ Parser::~Parser() {
     tokens.clear();
 }
 
-RootPtr Parser::parse() {
+RootAST::Ptr Parser::parse() {
     // lexing
     tokens = lexer->lex();
     lexer->debugPrint();

@@ -16,7 +16,7 @@
 #include "util/threading.hpp"
 #include "backend/context/context.hpp"
 
-RootPtr createTestAST();
+RootAST::Ptr createTestAST();
 #endif
 
 FuxStruct fux;
@@ -59,15 +59,15 @@ int main(int argc, char **argv) {
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
     mainFile->parse();
-    RootPtr root = std::move(mainFile->root);
+    RootAST::Ptr root = std::move(mainFile->root);
     if (mainFile->hasErrors()) {
         delete mainFile;
-        return result;
+        return 1;
     } 
     mainFile->reportErrors();
     root->debugPrint();
 
-    // RootPtr root = createTestAST();    
+    // RootAST::Ptr root = createTestAST();    
     // root->debugPrint();
 
     #ifdef FUX_BACKEND 
@@ -205,7 +205,7 @@ int repl() {
 
         ErrorManager *error = new ErrorManager("<stdin>", {input});
         Parser *parser = new Parser(error, "<stdin>", input, true);
-        RootPtr root = parser->parse();
+        RootAST::Ptr root = parser->parse();
         // Analyser *analyser = new Analyser(error, root);
         // StmtAST::Ptr analysed = analyser->analyse();
         delete parser;
@@ -226,8 +226,8 @@ int repl() {
 
 #ifdef FUX_BACKEND
 // create AST to test the generator without parser
-RootPtr createTestAST() {
-    RootPtr root = make_unique<RootAST>();
+RootAST::Ptr createTestAST() {
+    RootAST::Ptr root = make_unique<RootAST>();
 
     // modify(num -> i64): void;
     StmtAST::Vec eArgs = StmtAST::Vec();

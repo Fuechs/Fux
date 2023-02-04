@@ -1,17 +1,20 @@
-from os import system, listdir
+from os import listdir
 from time import time
 from statistics import fmean
+from subprocess import run, PIPE
 
 def run_file(file: str) -> float:
-    start = time()
     print("Running:", file)
-    system(f"time ./fux src/examples/{file}")
+    start = time()
+    result = run([f"./fux src/examples/{file}"], shell=True, stdout=PIPE, stderr=PIPE)
     end = time() - start
-    print("\033[31m"+'-'*60+"\033[39m")
+    if result.returncode != 0:
+        print("The command failed with exit code", result.returncode)
+        print("Standard error:", result.stderr.decode())
+        raise SystemExit(result.returncode)
     return end
 
 def run_full(files: list[str]) -> tuple[float, list[float]]:
-    print("\033[32m"+'='*60+"\033[39m")
     start = time()
     times = [run_file(file) for file in files]
     return time() - start, times
