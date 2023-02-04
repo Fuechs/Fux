@@ -45,14 +45,14 @@ main(argc: u64, argv: str[]): i64 {
 
 ###### A Versatile and Innovative Language
 
-Fux is a modern and flexible programming language, perfect for use in a variety of domains by both novice and expert developers. With its efficient use of LLVM, it provides performance similar to C++, while being portable and running on a wide range of platforms.
+Fux is a modern and flexible programming language, perfect for use in a variety of domains by both novice and expert developers. With its efficient use of LLVM, it provides performance similar to C++, while being portable and running on a wide range of platforms.[^1]
 
 - **Large Core Package Library** \
-    Fux offers a comprehensive standard library, known as the Core Package, which includes features such as buffered console I/O, file I/O, mathematics and arithmetic operations, algorithms, key-value maps, dynamic pointers, and string utilities.
+    Fux offers a comprehensive standard library, known as the Core Package, which includes features such as buffered console I/O, file I/O, mathematics and arithmetic operations, algorithms, key-value maps, dynamic pointers, and string utilities.[^1][^2][^3]
 - **Easy to Learn and Use** \
     For new programmers, Fux offers a safe and intuitive programming environment, with features like a built-in string type, dynamic arrays, and secure memory management. Experienced C/C++ developers will find the programming environment familiar, with added features and improvements over C++.
 - **Readable and Streamlined Syntax** \
-    The syntax of Fux is designed to be readable and easy to understand, with a focus on seamless integration of different aspects of the language. This is achieved through the use of "pipe" / "move" operators (`<<` and `>>`), as well as the ability to define functions and variables without any keywords.
+    The syntax of Fux is designed to be readable and easy to understand, with a focus on seamless integration of different aspects of the language. This is achieved through the use of "pipe" / "move" operators (`<<` and `>>`), as well as the ability to define functions and variables without any keywords.[^3][^4]
 - **Eliminating Common C++ Errors** \
     Fux addresses common issues with C++ by eliminating potential sources of error, such as memory leaks, through its secure memory management. Its readable syntax and intuitive integration of different language elements also reduce the likelihood of bugs, making it easier for developers to write high-quality code.
 
@@ -69,15 +69,17 @@ Fux is a modern and flexible programming language, perfect for use in a variety 
 - **Network Programming** \
     Fux can be utilized for network-based application and service development, providing a flexible and powerful environment for the implementation of network protocols.
 
-[^1]: As long as not a lot of automatisation is used.
+> __Note__
+> 1. Fux may still have limited adoption, so it may not be as widely used or supported as other programming languages.
+> 2. Fux may not be fully compatible with other (programming) languages or technologies, which may limit its usefulness in certain domains.
+> 3. As with any new technology, there may be potential for new bugs or security issues to arise in the Fux programming language.
+> 4. Fux is an ongoing development project, and new features, changes, or updates may be introduced at any time, which may impact its performance, stability, or compatibility.
+> 5. Fux may have limited resources available, such as documentation, forums, or tutorials, compared to more established programming languages.
 
-[^2]: Feature(s) might slow down the execution and / or compilation of your program.
-
-[^3]: Feature(s) are not included for sure in the final language.
-
-[^4]: More information [here](./docs/README.md).
-
-[^5]: As long as automatic typing is used.
+[^1]: The usage of certain features may result in decreased program performance and slower compile times.
+[^2]: The inclusion of these features is not guaranteed in future versions of the language.
+[^3]: Further details can be found [here](./docs/).
+[^4]: Provided automatic typing is used.
 
 ## Getting Started
 
