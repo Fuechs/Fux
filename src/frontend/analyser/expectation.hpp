@@ -28,18 +28,18 @@
  */
 struct Expectation {
     enum Preset {
-
+        NO_PRESET,
     };
 
     enum Kind {
-
+        NO_KIND,
     }; 
 
     typedef std::vector<Kind> Kinds;
 
-    Expectation(SymbolTable::Vec tables, Preset preset);
-    Expectation(SymbolTable::Vec tables, Kinds kinds);
+    Expectation(SymbolTable *table, Preset preset = NO_PRESET);
+    Expectation(SymbolTable *table, Kinds kinds);
 
     Kinds kinds;
-    SymbolTable::Vec tables;
+    SymbolTable *table;
 };

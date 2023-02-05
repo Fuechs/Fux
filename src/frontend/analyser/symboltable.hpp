@@ -17,7 +17,6 @@
 
 #include "../parser/type.hpp"
 
-// TODO: add support for symbol members, e.g. of classes, structs, enums
 struct Symbol {
 public:
     enum Kind {
@@ -30,18 +29,29 @@ public:
         NONE,       
     };
     
-    Symbol(Kind kind = NONE, FuxType type = FuxType::NO_TYPE);
+    typedef std::unordered_map<std::string, Symbol *> Map;
+    
+    Symbol(Kind kind = NONE, FuxType type = FuxType::NO_TYPE, FuxType::Vec parameters = FuxType::Vec());
+    Symbol(Symbol *parent, Kind kind = NONE, FuxType type = FuxType::NO_TYPE, FuxType::Vec parameters = FuxType::Vec());
+    
+    Symbol *operator[](std::string symbol);
+
+    Symbol *addMember(std::string name, Kind kind = NONE, FuxType type = FuxType::NO_TYPE, FuxType::Vec parameters = FuxType::Vec());
 
     Kind kind;
     FuxType type;
+    FuxType::Vec parameters;
+
+    bool member;
+    Symbol *parent;
+    Map members;
 };
 
 class SymbolTable {
 public:
-    typedef std::unordered_map<std::string, Symbol *> Map;
     typedef std::vector<SymbolTable *> Vec;
 
-    SymbolTable() : table(Map()) {}
+    SymbolTable() : table(Symbol::Map()) {}
 
     // get Symbol * of name `symbol`
     Symbol *operator[](std::string symbol);
@@ -62,5 +72,5 @@ public:
     bool empty();
 
 private:
-    Map table;
+    Symbol::Map table;
 };

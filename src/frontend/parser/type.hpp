@@ -51,6 +51,7 @@ public:
     };
 
     typedef vector<Access> AccessList;
+    typedef vector<FuxType> Vec;
 
     FuxType(Kind kind = NO_TYPE, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, bool array = false, _i64 sizeID = -1, string name = "")
     : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), sizeID(sizeID), name(name) {}

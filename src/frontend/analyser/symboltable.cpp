@@ -13,7 +13,19 @@
 
 using std::string;
 
-Symbol::Symbol(Kind kind, FuxType type) : kind(kind), type(type) {}
+Symbol::Symbol(Kind kind, FuxType type, FuxType::Vec parameters) 
+: kind(kind), type(type), parameters(parameters), member(false), parent(nullptr) {}
+
+Symbol::Symbol(Symbol *parent, Kind kind, FuxType type, FuxType::Vec parameters)
+: kind(kind), type(type), parameters(parameters), member(true), parent(parent) {}
+
+Symbol *Symbol::operator[](string symbol) { return members.contains(symbol) ? members.at(symbol) : nullptr; }
+
+Symbol *Symbol::addMember(string name, Kind kind, FuxType type, FuxType::Vec parameters) { 
+    Symbol *sym = new Symbol(this, kind, type, parameters);
+    members[name] = sym;
+    return sym;
+}
 
 Symbol *SymbolTable::operator[](string symbol) { return table.contains(symbol) ? table.at(symbol) : nullptr; }
 

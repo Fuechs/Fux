@@ -11,8 +11,8 @@
 
 #include "expectation.hpp"
 
-Expectation::Expectation(SymbolTable::Vec tables, Preset preset) {
-    this->tables = tables;
+Expectation::Expectation(SymbolTable *table, Preset preset) {
+    this->table = table;
     this->kinds = Kinds();
 
     switch (preset) {
@@ -20,4 +20,4 @@ Expectation::Expectation(SymbolTable::Vec tables, Preset preset) {
     }
 }
 
-Expectation::Expectation(SymbolTable::Vec tables, Kinds kinds) : tables(tables), kinds(kinds) {}
+Expectation::Expectation(SymbolTable *table, Kinds kinds) : table(table), kinds(kinds) {}
