@@ -53,8 +53,6 @@ StmtAST::Ptr ForLoopAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr PrototypeAST::analyse(Expectation exp) { return nullptr; }
 
-// FIXME: we need to be able to access the symbol of the prototype, so it can't be a member expression but only a variable expr
-//          implement a check in the parser that prohibits a member expr
 StmtAST::Ptr FunctionAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr RootAST::analyse(Expectation exp) {

@@ -347,17 +347,15 @@ typedef unique_ptr<CodeBlockAST> BlockPtr;
 // name and arguments
 class PrototypeAST : public StmtAST {
     FuxType type;
-    ExprAST::Ptr symbol;
+    string symbol;
     StmtAST::Vec args;
 
 public:
     PrototypeAST(FuxType type, const string &symbol, StmtAST::Vec &args)
-    : type(type), symbol(make_unique<VariableExprAST>(symbol)), args(std::move(args)) {}
-    PrototypeAST(FuxType type, ExprAST::Ptr &symbol, StmtAST::Vec &args)
-    : type(type), symbol(std::move(symbol)), args(std::move(args)) {}
+    : type(type), symbol(symbol), args(std::move(args)) {}
     ~PrototypeAST() override;
     
-    ExprAST::Ptr &getSymbol();
+    string &getSymbol();
     StmtAST::Vec &getArgs();
     FuxType &getType();
     
@@ -377,8 +375,6 @@ class FunctionAST : public StmtAST {
 
 public:
     FunctionAST(FuxType type, const string &symbol, StmtAST::Vec &args, StmtAST::Ptr &body)
-    : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
-    FunctionAST(FuxType type, ExprAST::Ptr &symbol, StmtAST::Vec &args, StmtAST::Ptr &body)
     : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
     FunctionAST(ProtoPtr &proto, StmtAST::Ptr &body)
     : proto(std::move(proto)), body(std::move(body)) {}

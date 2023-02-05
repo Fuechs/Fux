@@ -256,7 +256,7 @@ void ForLoopAST::debugPrint(size_t indent) {
 }
 
 void PrototypeAST::debugPrint(size_t indent) {
-    callASTDebug(indent, symbol);
+    debugIndent(indent, symbol);
     cout << "(";
     for (StmtAST::Ptr &param : args) {
         callASTDebug(0, param);

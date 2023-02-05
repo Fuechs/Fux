@@ -39,7 +39,6 @@ RootAST::Ptr Parser::parse() {
     return std::move(root);
 }
 
-// FIXME: error reporting: errors resulting out of other errors shouldn't be reported
 StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
     if (*current == SEMICOLON) { // handle while (...); or for (;;);
         if (expectSemicolon)
@@ -64,7 +63,7 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
         return parseForLoopStmt();
 
     Token::Iter backToken = current;
-    ExprAST::Ptr symbolExpr = parsePrimaryExpr(); 
+    string symbol = eat().value;
 
     if (!check(LPAREN)) {
         current = backToken;
@@ -107,10 +106,10 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
     FuxType type = parseType();
 
     if (*current == SEMICOLON)
-        return make_unique<PrototypeAST>(type, symbolExpr, args);
+        return make_unique<PrototypeAST>(type, symbol, args);
 
     StmtAST::Ptr body = parseStmt();    
-    return make_unique<FunctionAST>(type, symbolExpr, args, body);
+    return make_unique<FunctionAST>(type, symbol, args, body);
 }
 
 StmtAST::Ptr Parser::parseForLoopStmt() { 

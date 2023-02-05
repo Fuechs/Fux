@@ -72,7 +72,7 @@ AST ForLoopAST::getASTType() { return AST::ForLoopAST; }
 
 PrototypeAST::~PrototypeAST() { args.clear(); }
 
-ExprAST::Ptr &PrototypeAST::getSymbol() { return symbol; }
+string &PrototypeAST::getSymbol() { return symbol; }
 StmtAST::Vec &PrototypeAST::getArgs() { return args; }
 FuxType &PrototypeAST::getType() { return type; }
 AST PrototypeAST::getASTType() { return AST::PrototypeAST; }
