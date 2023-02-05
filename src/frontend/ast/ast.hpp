@@ -97,6 +97,20 @@ public:
     Position pos = Position();
 };
 
+class ArrayExprAST : public ExprAST {
+    ExprAST::Vec elements;
+    
+public:
+    ArrayExprAST(ExprAST::Vec &elements) : elements(std::move(elements)) {}
+
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtAST::Ptr analyse(Expectation exp) override; 
+    AST getASTType() override;
+    void debugPrint(size_t indent = 0) override;
+
+    Position pos = Position();
+};
+
 class VariableExprAST : public ExprAST {
     string name;
 

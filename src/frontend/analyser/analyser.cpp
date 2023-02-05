@@ -23,6 +23,8 @@ StmtAST::Ptr CharExprAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr StringExprAST::analyse(Expectation exp) { return nullptr; }
 
+StmtAST::Ptr ArrayExprAST::analyse(Expectation exp) { return nullptr; }
+
 StmtAST::Ptr VariableExprAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr MemberExprAST::analyse(Expectation exp) { return nullptr; }

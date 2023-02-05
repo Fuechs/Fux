@@ -52,7 +52,7 @@ private:
     StmtAST::Ptr parseVariableDeclStmt();
 
     // <expr>, <expr>, ...
-    ExprAST::Vec parseExprList();
+    ExprAST::Vec parseExprList(TokenType end);
 
     // parse an expression
     ExprAST::Ptr parseExpr();
@@ -125,6 +125,8 @@ private:
     bool check(TokenType type);
     // check curret and next token ...
     bool check(TokenType type, TokenType type0);
+    // advance until given tokentype is reached (error recovery)
+    void recover(TokenType type = SEMICOLON);
 
     // check wether end of file is reached
     constexpr bool notEOF();

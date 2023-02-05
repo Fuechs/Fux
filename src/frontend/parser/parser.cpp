@@ -78,6 +78,7 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
         else if (check(_EOF))   {
             error->createError(MISSING_BRACKET, peek(-1), "expected closing paren");
             error->addNote(*paramBegin, "opening paren found here");
+            recover();
             break;
         } else                  eat();
 
@@ -203,7 +204,7 @@ StmtAST::Ptr Parser::parseIfElseStmt() {
 StmtAST::Ptr Parser::parseInbuiltCallStmt() {
     if (current->isInbuiltCall()) {
         Inbuilts callee = (Inbuilts) eat().type;
-        ExprAST::Vec args = parseExprList();
+        ExprAST::Vec args = parseExprList(SEMICOLON);
         return make_unique<InbuiltCallAST>(callee, args);
     }
 
@@ -226,10 +227,12 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
     return  make_unique<VariableDeclAST>(symbol, type, value);
 }
 
-ExprAST::Vec Parser::parseExprList() { 
+ExprAST::Vec Parser::parseExprList(TokenType end) { 
     ExprAST::Vec list = ExprAST::Vec();
     ExprAST::Ptr expr = parseExpr();
     while (check(COMMA)) {
+        if (*current == end)
+            break;
         list.push_back(std::move(expr));
         expr = parseExpr();
     }
@@ -499,7 +502,7 @@ ExprAST::Ptr Parser::parseCallExpr() {
 
     ExprAST::Vec arguments = ExprAST::Vec();
     if (*current != RPAREN)
-        arguments = parseExprList();
+        arguments = parseExprList(RPAREN);
     eat(RPAREN, MISSING_BRACKET);
     return make_unique<CallExprAST>(symbol, arguments, asyncCall);
 } 
@@ -543,8 +546,13 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
             eat(RPAREN, MISSING_BRACKET);
             return expr;
         }
+        case LBRACE: {
+            ExprAST::Vec elements = parseExprList(RBRACE);
+            eat(RBRACE, MISSING_BRACKET);
+            return make_unique<ArrayExprAST>(elements);
+        }
         case _EOF: {
-            error->createError(UNEXPECTED_EOF, that, "did not expect end of file here.");
+            error->createError(UNEXPECTED_EOF, that, "did not expect end of file here", true);
             return nullptr;
         }
         default: {        
@@ -553,6 +561,7 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
                 << "unexpected token " << TokenTypeString[that.type]
                 << " '" << that.value << "' while parsing primary expression";
             error->createError(UNEXPECTED_TOKEN, that, message.str());
+            recover();
             return parsePrimaryExpr();
         }
     }
@@ -667,15 +676,14 @@ Token &Parser::eat(TokenType type, ErrorType errType) {
 
     if (curTok != type) {
         stringstream err;
-        err 
-            << "expected " << TokenTypeString[type] 
-            << " '" << TokenTypeValue[type] << "', "
-            << "got " << TokenTypeString[curTok.type] 
-            << " '" << curTok.value << "' instead";
+        err << "got " << TokenTypeString[curTok.type] << " '" << curTok.value << "'";
+        if (errType == MISSING_BRACKET)
+            err << " instead of " << TokenTypeString[type] << " '" << TokenTypeValue[type] << "'";
         error->createError(errType, curTok, err.str());
+        recover();
     }
 
-    return *(current - 1); // avoid Wreturn-stack-address
+    return *current; 
 }
 
 Token &Parser::peek(size_t steps) { return *(current + steps); }
@@ -695,5 +703,7 @@ bool Parser::check(TokenType type, TokenType type0) {
     current += 2;
     return true;
 }
+
+void Parser::recover(TokenType type) { while (*current != type && *current != _EOF) eat(); }
 
 constexpr bool Parser::notEOF() { return *current != _EOF; }

@@ -36,6 +36,8 @@ AST CharExprAST::getASTType() { return AST::CharExprAST; }
 StringExprAST::~StringExprAST() { delete value; }
 AST StringExprAST::getASTType() { return AST::StringExprAST; }
 
+AST ArrayExprAST::getASTType() { return AST::ArrayExprAST; }
+
 VariableExprAST::~VariableExprAST() { name.clear(); }
 AST VariableExprAST::getASTType() { return AST::VariableExprAST; }
 

@@ -13,7 +13,7 @@
 
 #ifdef FUX_BACKEND
 
-Value *NullExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
+Value *NullExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *BoolExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
 
@@ -22,6 +22,8 @@ Value *NumberExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue
 Value *CharExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
 
 Value *StringExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
+
+Value *ArrayExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
     Value *V = fuxLLVM->namedValues[name];
