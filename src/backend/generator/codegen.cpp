@@ -52,6 +52,8 @@ Value *CallExprAST::codegen(LLVMWrapper *fuxLLVM) {
     return fuxLLVM->builder->CreateCall(calleeFunc, argList, "calltmp");
 } 
 
+Value *RangeExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Value *UnaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {

@@ -524,7 +524,26 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
         case HEXADECIMAL:
         case NUMBER:        
         case OCTAL:
-        case BINARY:        return parseNumberExpr(that);
+        case BINARY: {
+            ExprAST::Ptr beginExpr = parseNumberExpr(that);
+            if (check(TRIPLE_DOT)) {
+                ExprAST::Ptr endExpr = nullptr;
+                Token endTok = eat();
+                if (endTok.type == HEXADECIMAL 
+                || endTok.type == NUMBER 
+                || endTok.type == OCTAL
+                || endTok.type == BINARY)
+                    endExpr = parseNumberExpr(endTok);
+                else {
+                    error->createError(GENERIC, endTok,
+                        "incomplete range expressions, would have expected a number after '...'");
+                    error->addNote(that, "range expression starts here");
+                }   
+
+                return make_unique<RangeExprAST>(beginExpr, endExpr);
+            }
+            return beginExpr;
+        }
         case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
         case CHAR:          return parseCharExpr(that);
         case STRING:        return make_unique<StringExprAST>(escapeSequences(that.value)); 

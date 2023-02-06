@@ -20,6 +20,7 @@ enum class AST {
     NumberExprAST,
     CharExprAST,
     StringExprAST,
+    RangeExprAST,
     ArrayExprAST,
     VariableExprAST,
     MemberExprAST,

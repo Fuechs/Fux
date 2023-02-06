@@ -14,3 +14,6 @@ for (for(;;);; ; 1+1) {
     while (true)    
         putch '\n';
 }
+
+for (i: u64 in 0...9)
+    putch (c8) i;

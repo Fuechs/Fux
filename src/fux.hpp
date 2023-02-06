@@ -22,7 +22,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <functional>
 
 #include "util/color.hpp"
 #include "util/io.hpp"

@@ -103,6 +103,12 @@ void StringExprAST::debugPrint(size_t indent) {
     value->debugPrint(); 
 }
 
+void RangeExprAST::debugPrint(size_t indent) {
+    callASTDebug(indent, begin);
+    cout << "...";
+    callASTDebug(0, end);
+}
+
 void ArrayExprAST::debugPrint(size_t indent) {
     debugIndent(indent, "{");
     for (ExprAST::Ptr &expr : elements) {
