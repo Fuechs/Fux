@@ -244,7 +244,17 @@ puts *ptr;
 // "b"
 ```
 
-> Soon ...
+```rust
+// reference definition
+// <identiifer> [ -> [ <type> ] =/=== <lvalue> ] ;
+name: str = "fuechs";
+nameRef -> str = name;
+nameRef = "fux"; // name = "fux";
+name = "some"; // nameRef = "some";
+
+puts (str) &name;       // <name address>
+puts (str) &nameRef;    // <name address>
+```
 
 ## Types
 
