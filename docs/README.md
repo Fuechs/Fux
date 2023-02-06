@@ -24,7 +24,7 @@
     - [*Design Goals*](#design-goals)
 - [Variables](#variables)
     - [Declaration & Defenition](#declaration--definition)
-    - [*Pointer & References*](#pointer--references)
+    - [Pointer & References](#pointer--references)
 - [Types](#types)
     - [Boolean Type](#boolean-type)
     - [Integer Types](#integer-types)
@@ -201,57 +201,104 @@ read &input; // address of 'input' = &input
 
 ## Variables
 
-### Declaration & Definition
+### Declaration 
 
 [`# Types`](#types)
 
+Variables in Fux can be declared using the following syntax:
+
+```
+<identifier> [ : [ <type> ] =/=== <value> ] ;
+```
+
+- `identifier`: A unique name for the variable, chosen by the programmer.
+- `type` (optional): The data type of the value assigned to the variable. If no type is specified, automatic typing will be employed.
+- `=` or `===` (optional): The operator used to assign a value to the varaible. `=` is used for variables with a non-constant value, while `===` is used for constant variables.
+- `value` (optional): The initial value assigned to the variable. If no value is specified, the variable will be assigned the standard value of that type or declared without a value being assigned to it.
+
+Examples of variable declaration in Fux:
+
 ```rust
-// <identifier> [ : [ <type> ] =/=== <value> ] ;
 name;
 name := "fuechs"; // automatic typing
 name :=== "fuechs"; // constant
 name: str;
 name: str = "fuechs";
 name: str === "fuechs";
+```
 
-// redefinition
+The value of a non-constant variable can be changed later in the code. To do this, simple re-assign a new value to the variable using the `=` operator. For example:
+
+```rust
 name = "fuechsss";
 ```
 
 ### Pointer & References
 
-```rust
-// pointer definition
-// <identifier> [ : [ * <type> ] =/=== <address> ] ; 
-// address 
-// & <variable>
+Pointers in Fux allow you to store the memory address of a variable. This enables you to manipulate values at that address. To declare a pointer in Fux, you need to specify the type of the variable it will point to, and assign it the memory address of a variable. \
+You also have to specify the pointer depth, using the `*` operator. Each `*` increases the pointer depth by one.
 
-ptr: *str;
-ptr: *str = &name;
-ptr := &name;
-
-
-someString = "a";
-ptr = &someString; // redefinition
-
-*ptr = "b";
-// someString = "b";
-
-puts (str) ptr;
-// <someString address>
-
-puts *ptr;
-// "b"
+```
+<identifier> [ : [ * <type> ] =/=== <address> ] ;
 ```
 
+To get the address of a variable in Fux, you use the & operator. This operator returns the memory address of the specified variable.
+
+```
+&<variable>;
+```
+
+Examples:
+
 ```rust
-// reference definition
-// <identiifer> [ -> [ <type> ] =/=== <lvalue> ] ;
+ptr: *str;
+ptr := &name;
+ptr: *str = &name;
+
+someString := "a";
+ptr = &someString;
+```
+
+To access the value stored at the memory address pointed to by a pointer, you use the * operator. This is known as dereferencing the pointer.
+
+```rust
+*ptr = "b";
+puts *ptr; 
+```
+
+After the above code, the value of someString is now equal to "b" and printed to the console.
+
+To print the memory address of a pointer, simply use the puts function and cast the pointer to `str`.
+
+```rust
+puts (str) ptr; // <someString address>
+```
+
+---
+
+References in Fux allow you to create an alias to an existing value. The reference definition uses the following syntax:
+
+```
+<identifier> [ -> [ <type> ] =/=== <lvalue> ] ;
+```
+
+Here is an example of declaring a reference to a string value:
+
+```rust
 name: str = "fuechs";
 nameRef -> str = name;
+```
+
+The reference `nameRef` is now pointing to the string `name`. Any changes made to the value of `nameRef` will also reflect in the value of `name`, and vice versa. Thus the reference itself cannot be redefined.
+
+```rust
 nameRef = "fux"; // name = "fux";
 name = "some"; // nameRef = "some";
+```
 
+You can also obtain the memory address of a reference using the & operator, just like with variables:
+
+```rust
 puts (str) &name;       // <name address>
 puts (str) &nameRef;    // <name address>
 ```
