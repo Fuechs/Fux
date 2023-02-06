@@ -11,7 +11,7 @@
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status** \
-> Last updated on 2023-02-03 \
+> Last updated on 2023-02-06 \
 > Unfinished
 
 ## Contents
@@ -222,13 +222,13 @@ name = "fuechsss";
 
 ```rust
 // pointer definition
-// * <identifier> [ : [ <type> ] =/=== <address> ] ; 
+// <identifier> [ : [ * <type> ] =/=== <address> ] ; 
 // address 
 // & <variable>
 
-*ptr: str;
-*ptr: str = &name;
-*ptr := &name;
+ptr: *str;
+ptr: *str = &name;
+ptr := &name;
 
 
 someString = "a";
