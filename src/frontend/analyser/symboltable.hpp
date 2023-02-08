@@ -66,6 +66,9 @@ public:
     // erase all symbols named `symbol`
     void erase(std::string symbol);
 
+    auto begin();
+    auto end();
+
     // get table size
     size_t size();
     // check wether table is empty

@@ -53,9 +53,18 @@ StmtAST::Ptr WhileLoopAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr ForLoopAST::analyse(Expectation exp) { return nullptr; }
 
-StmtAST::Ptr PrototypeAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr PrototypeAST::analyse(Expectation exp) {
+    Symbol *that = new Symbol(Symbol::FUNC);
 
-StmtAST::Ptr FunctionAST::analyse(Expectation exp) { return nullptr; }
+    if (exp.table->contains(symbol)) {
+        // TODO: check type, parameters, etc.
+    }
+}
+
+StmtAST::Ptr FunctionAST::analyse(Expectation exp) {
+    proto->analyse(exp);
+    body->analyse(exp);
+}
 
 StmtAST::Ptr RootAST::analyse(Expectation exp) {
     RootAST::Ptr mod = make_unique<RootAST>();

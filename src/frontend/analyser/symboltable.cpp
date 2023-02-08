@@ -35,5 +35,8 @@ void SymbolTable::insert(string symbol, Symbol *_symbol) { table[symbol] = _symb
 void SymbolTable::insert(string symbol, Symbol::Kind kind, FuxType type) { table[symbol] = new Symbol(kind, type); }
 void SymbolTable::erase(string symbol) { table[symbol] = nullptr; /* leave the field for error reporting */ }
 
+auto SymbolTable::begin() { return table.begin(); }
+auto SymbolTable::end() { return table.end(); }
+
 size_t SymbolTable::size() { return table.size(); }
 bool SymbolTable::empty() { return table.size() == 0; }
