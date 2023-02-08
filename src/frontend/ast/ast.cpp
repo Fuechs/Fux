@@ -66,7 +66,7 @@ FuxType BinaryExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
 AST CallExprAST::getASTType() { return AST::StringExprAST; }
 // TODO: evaluate type
-FuxType BinaryExprAST::getFuxType() { return FuxType::NO_TYPE; }
+FuxType CallExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
 AST TypeCastExprAST::getASTType() { return AST::TypeCastExprAST; }
 FuxType TypeCastExprAST::getFuxType() { return type; }

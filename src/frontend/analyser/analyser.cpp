@@ -59,11 +59,13 @@ StmtAST::Ptr PrototypeAST::analyse(Expectation exp) {
     if (exp.table->contains(symbol)) {
         // TODO: check type, parameters, etc.
     }
+    return nullptr;
 }
 
 StmtAST::Ptr FunctionAST::analyse(Expectation exp) {
     proto->analyse(exp);
     body->analyse(exp);
+    return nullptr;
 }
 
 StmtAST::Ptr RootAST::analyse(Expectation exp) {
