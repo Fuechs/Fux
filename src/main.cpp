@@ -65,7 +65,8 @@ int main(int argc, char **argv) {
         return 1;
     } 
     mainFile->reportErrors();
-    root->debugPrint();
+    // root->debugPrint();
+    mainFile->analysed->debugPrint();
 
     // RootAST::Ptr root = createTestAST();    
     // root->debugPrint();

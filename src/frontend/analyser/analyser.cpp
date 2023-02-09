@@ -11,7 +11,7 @@
 
 #include "analyser.hpp"
 
-StmtAST::Ptr Analyser::analyse() { return origin->analyse(Expectation(table)); }
+StmtAST::Ptr Analyser::analyse() { return origin->analyse(Expectation(error, table)); }
 
 StmtAST::Ptr NullExprAST::analyse(Expectation exp) { return nullptr; }
 
@@ -54,18 +54,29 @@ StmtAST::Ptr WhileLoopAST::analyse(Expectation exp) { return nullptr; }
 StmtAST::Ptr ForLoopAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr PrototypeAST::analyse(Expectation exp) {
-    Symbol *that = new Symbol(Symbol::FUNC);
+    Symbol *that = new Symbol(Symbol::FUNC, type);
 
     if (exp.table->contains(symbol)) {
         // TODO: check type, parameters, etc.
     }
+
+    for (StmtAST::Ptr &arg : args) {
+        if (arg->getASTType() != AST::VariableDeclAST) {
+            exp.error->createError(GENERIC, pos.lStart, pos.colStart, "invalid parameter");
+            continue;
+        }
+        arg->analyse(exp);
+        that->parameters.push_back(arg->getFuxType());
+    }
+    
+    exp.table->insert(symbol, that);
     return nullptr;
 }
 
 StmtAST::Ptr FunctionAST::analyse(Expectation exp) {
     proto->analyse(exp);
     body->analyse(exp);
-    return nullptr;
+    return (StmtAST::Ptr) this;
 }
 
 StmtAST::Ptr RootAST::analyse(Expectation exp) {

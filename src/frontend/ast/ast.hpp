@@ -387,6 +387,8 @@ class PrototypeAST : public StmtAST {
     StmtAST::Vec args;
 
 public:
+    typedef unique_ptr<PrototypeAST> Ptr;
+
     PrototypeAST(FuxType type, const string &symbol, StmtAST::Vec &args)
     : type(type), symbol(symbol), args(std::move(args)) {}
     ~PrototypeAST() override;
@@ -403,16 +405,14 @@ public:
     Position pos = Position();
 };
 
-typedef unique_ptr<PrototypeAST> ProtoPtr;
-
 class FunctionAST : public StmtAST {
-    ProtoPtr proto;
+    PrototypeAST::Ptr proto;
     StmtAST::Ptr body;
 
 public:
     FunctionAST(FuxType type, const string &symbol, StmtAST::Vec &args, StmtAST::Ptr &body)
     : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
-    FunctionAST(ProtoPtr &proto, StmtAST::Ptr &body)
+    FunctionAST(PrototypeAST::Ptr &proto, StmtAST::Ptr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
     FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)

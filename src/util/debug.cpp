@@ -54,7 +54,7 @@ void callASTDebug(size_t indent, StmtAST::Ptr &ast) {
         cout << CC::RED << "NULLSTMT" << CC::DEFAULT;
 }
 
-void callASTDebug(size_t indent, ProtoPtr &ast) {
+void callASTDebug(size_t indent, PrototypeAST::Ptr &ast) {
     debugIndent(indent);
     if (ast)
         ast->debugPrint(indent);

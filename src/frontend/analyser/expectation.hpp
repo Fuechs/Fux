@@ -12,6 +12,7 @@
 #pragma once
 
 #include "symboltable.hpp"
+#include "../error/error.hpp"
 
 /**
  * TODO: Expectation struct
@@ -37,9 +38,10 @@ struct Expectation {
 
     typedef std::vector<Kind> Kinds;
 
-    Expectation(SymbolTable *table, Preset preset = NO_PRESET);
-    Expectation(SymbolTable *table, Kinds kinds);
+    Expectation(ErrorManager *error, SymbolTable *table, Preset preset = NO_PRESET);
+    Expectation(ErrorManager *error, SymbolTable *table, Kinds kinds);
 
     Kinds kinds;
     SymbolTable *table;
+    ErrorManager *error;
 };

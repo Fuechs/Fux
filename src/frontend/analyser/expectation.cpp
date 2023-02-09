@@ -11,7 +11,8 @@
 
 #include "expectation.hpp"
 
-Expectation::Expectation(SymbolTable *table, Preset preset) {
+Expectation::Expectation(ErrorManager *error, SymbolTable *table, Preset preset) {
+    this->error = error;
     this->table = table;
     this->kinds = Kinds();
 
@@ -20,4 +21,5 @@ Expectation::Expectation(SymbolTable *table, Preset preset) {
     }
 }
 
-Expectation::Expectation(SymbolTable *table, Kinds kinds) : table(table), kinds(kinds) {}
+Expectation::Expectation(ErrorManager *error, SymbolTable *table, Kinds kinds) 
+: table(table), kinds(kinds), error(error) {}
