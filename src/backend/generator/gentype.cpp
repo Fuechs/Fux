@@ -18,25 +18,25 @@ Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
     Type* ret;
 
     switch (type.kind) {
-        case FuxType::VOID:     ret = builder->getVoidTy();
-        case FuxType::BOOL:     ret = builder->getInt1Ty();
-        case FuxType::I8:       ret = builder->getInt8Ty();
-        case FuxType::U8:       ret = builder->getInt8Ty();
-        case FuxType::C8:       ret = builder->getInt8Ty();
-        case FuxType::I16:      ret = builder->getInt16Ty();
-        case FuxType::U16:      ret = builder->getInt16Ty();
-        case FuxType::C16:      ret = builder->getInt16Ty();
-        case FuxType::I32:      ret = builder->getInt32Ty();
-        case FuxType::U32:      ret = builder->getInt32Ty();
-        case FuxType::F32:      ret = builder->getFloatTy();
-        case FuxType::I64:      ret = builder->getInt64Ty();
-        case FuxType::U64:      ret = builder->getInt64Ty();
-        case FuxType::F64:      ret = builder->getDoubleTy();
-        case FuxType::STR:      ret = fuxLLVM->fuxStr->str;
+        case FuxType::VOID:     ret = builder->getVoidTy(); break;
+        case FuxType::BOOL:     ret = builder->getInt1Ty(); break;
+        case FuxType::I8:       ret = builder->getInt8Ty(); break;
+        case FuxType::U8:       ret = builder->getInt8Ty(); break;
+        case FuxType::C8:       ret = builder->getInt8Ty(); break;
+        case FuxType::I16:      ret = builder->getInt16Ty(); break;
+        case FuxType::U16:      ret = builder->getInt16Ty(); break;
+        case FuxType::C16:      ret = builder->getInt16Ty(); break;
+        case FuxType::I32:      ret = builder->getInt32Ty(); break;
+        case FuxType::U32:      ret = builder->getInt32Ty(); break;
+        case FuxType::F32:      ret = builder->getFloatTy(); break;
+        case FuxType::I64:      ret = builder->getInt64Ty(); break;
+        case FuxType::U64:      ret = builder->getInt64Ty(); break;
+        case FuxType::F64:      ret = builder->getDoubleTy(); break;
+        case FuxType::STR:      // TODO: str type
         default:                ret = nullptr;
     }
 
-    size_t pd = type.pointerDepth;
+    size_t pd = type.array ? type.pointerDepth + 1 : type.pointerDepth;
     while (pd --> 0) 
         ret = ret->getPointerTo();
 

@@ -14,7 +14,7 @@
 #ifdef FUX_BACKEND
 
 void Generator::generate() {
-    // root->codegen(fuxLLVM);
+    root->codegen(fuxLLVM);
 
     if (fux.options.debugMode) {
         std::error_code EC;

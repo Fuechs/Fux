@@ -10,6 +10,7 @@
  */
 
 #include "../../frontend/ast/ast.hpp"
+#include "generator.hpp"
 
 #ifdef FUX_BACKEND
 
@@ -79,27 +80,33 @@ Value *TernaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) {
+    switch (callee) {
+        using enum Inbuilts;
+        case RETURN:    return arguments.at(0)->codegen(fuxLLVM);
+        default:        return nullptr;
+    }
+}
 
 Value *IfElseAST::codegen(LLVMWrapper *fuxLLVM) {
     return nullptr;
 }
 
-Value *CodeBlockAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *CodeBlockAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *ret = nullptr;
+    for (StmtAST::Ptr &stmt : body)
+        ret = stmt->codegen(fuxLLVM);
+    return ret;
+}
 
 Value *WhileLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *ForLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
-    TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
-    FunctionType *funcType /*= FunctionType::get(Generator::getType(fuxLLVM, type), argTypes, false)*/ ;
-    Function *func = Function::Create(funcType, Function::ExternalLinkage, "Usr_"+symbol, *fuxLLVM->module);
-    
-    // auto it = args.begin();
-    // for (auto &arg : func->args())
-    //     arg.setName(it++->first);
-    
+    // TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
+    FunctionType *funcType = FunctionType::get(Generator::getType(fuxLLVM, type), false);
+    Function *func = Function::Create(funcType, Function::ExternalLinkage, symbol == "main" ? "main" : "Usr_"+symbol, *fuxLLVM->module);
     return func;
 }
 
@@ -111,7 +118,7 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     if (!func->empty()) 
         return nullptr; // cannot be redefined
 
-    BasicBlock *BB = BasicBlock::Create(fuxLLVM->builder->getContext(), "entry", func);
+    BasicBlock *BB = BasicBlock::Create(*fuxLLVM->context, "entry", func);
     fuxLLVM->builder->SetInsertPoint(BB);
 
     fuxLLVM->namedValues.clear();
@@ -122,20 +129,20 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     // body of the function is missing in the IR
     Value *retVal = body->codegen(fuxLLVM);
     
-    if (func->getReturnType()->isVoidTy()) {
+    if (func->getReturnType()->isVoidTy()) 
         fuxLLVM->builder->CreateRetVoid();
-        return func;
+    else if (retVal) {
+        retVal = fuxLLVM->builder->CreateZExt(retVal, func->getReturnType());
+        fuxLLVM->builder->CreateRet(retVal);
+    }
+    else {
+        // error reading body
+        func->eraseFromParent();
+        return nullptr;
     }
     
-    if (retVal) {
-        fuxLLVM->builder->CreateRet(retVal);
-        verifyFunction(*func);
-        return func;
-    }
-
-    // error reading body
-    func->eraseFromParent();
-    return nullptr;
+    verifyFunction(*func);
+    return func;
 }
 
 Value *RootAST::codegen(LLVMWrapper *fuxLLVM) {
