@@ -34,7 +34,7 @@ namespace fuxThread {
     private:
         size_t id;
         string name;
-        future<void> it;
+        std::future<void> it;
     };
 
     typedef vector<Thread *> ThreadList;

@@ -16,7 +16,7 @@
 namespace fuxThread {
 
     Thread::Thread(const string &name, size_t id) 
-    : name(name), id(id), it(future<void>()) {
+    : name(name), id(id), it(std::future<void>()) {
         debugPrint("Initialized this thread.");
     }
 
@@ -28,7 +28,7 @@ namespace fuxThread {
 
     void Thread::run(SourceFile *sf) { 
         debugPrint("Creating thread.");
-        it = async(launch::async, ref(*sf));
+        it = async(std::launch::async, std::ref(*sf));
         debugPrint("Running thread.");
     }
 
@@ -42,7 +42,7 @@ namespace fuxThread {
     }
 
     ThreadManager::ThreadManager() : threads(ThreadList()), required({{}}) {
-        threadsMax = thread::hardware_concurrency() - 2;
+        threadsMax = std::thread::hardware_concurrency() - 2;
         debugPrint("Max amount of threads: "+to_string(threadsMax+2)+" -> "+to_string(threadsMax));
         if (fux.options.debugMode)
             debugPrint("Limited to one (1) thread because of compiler flags.");

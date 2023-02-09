@@ -17,7 +17,7 @@ void Generator::generate() {
     // root->codegen(fuxLLVM);
 
     if (fux.options.debugMode) {
-        error_code EC;
+        std::error_code EC;
         llvm::raw_fd_ostream output("src/output.ll", EC);
         fuxLLVM->module->print(output, nullptr);
         output.close();

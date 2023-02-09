@@ -249,7 +249,7 @@ RootAST::Ptr createTestAST() {
     
     ExprAST::Ptr variable = make_unique<VariableExprAST>("argc");
     ExprAST::Ptr constant = make_unique<NumberExprAST, _i64>(1);
-    ExprAST::Ptr binop = make_unique<BinaryExprAST>('+', variable, constant);
+    ExprAST::Ptr binop = make_unique<BinaryExprAST>(BinaryOp::ADD, variable, constant);
     StmtAST::Ptr decl = make_unique<VariableDeclAST>("x", FuxType(FuxType::I64), binop);
     bodyList.push_back(std::move(decl));
 
@@ -260,7 +260,9 @@ RootAST::Ptr createTestAST() {
     bodyList.push_back(std::move(call));
 
     variable = make_unique<VariableExprAST>("x");
-    StmtAST::Ptr ret = make_unique<ReturnCallAST>(variable);
+    ExprAST::Vec retArgs = ExprAST::Vec();
+    retArgs.push_back(std::move(variable));
+    StmtAST::Ptr ret = make_unique<InbuiltCallAST>(Inbuilts::RETURN, retArgs);
     bodyList.push_back(std::move(ret));
 
     StmtAST::Ptr body = make_unique<CodeBlockAST>(bodyList);
