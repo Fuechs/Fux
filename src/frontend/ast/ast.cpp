@@ -39,7 +39,7 @@ FuxType CharExprAST::getFuxType() { return value->type;  }
 
 StringExprAST::~StringExprAST() { delete value; }
 AST StringExprAST::getASTType() { return AST::StringExprAST; }
-FuxType StringExprAST::getFuxType() { return FuxType::STR; }
+FuxType StringExprAST::getFuxType() { return FuxType::LIT; }
 
 AST RangeExprAST::getASTType() { return AST::RangeExprAST; }
 // TODO: combine begin & end type

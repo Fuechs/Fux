@@ -30,7 +30,7 @@ struct ValueStruct {
     ValueStruct(_i64 value) :   type(FuxType(FuxType::I64)), __i64(value) {}
     ValueStruct(_u64 value) :   type(FuxType(FuxType::U64)), __u64(value) {}
     ValueStruct(_f64 value) :   type(FuxType(FuxType::F64)), __f64(value) {}
-    ValueStruct(string value) : type(FuxType(FuxType::STR)), __str(value) {}
+    ValueStruct(string value) : type(FuxType(FuxType::LIT)), __lit(value) {}
     
     ~ValueStruct();
 
@@ -56,6 +56,6 @@ struct ValueStruct {
         _i64    __i64;
         _u64    __u64;
         _f64    __f64;
-        string  __str;
+        string  __lit;
     };
 };

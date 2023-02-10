@@ -243,7 +243,7 @@ RootAST::Ptr createTestAST() {
     // }
     StmtAST::Vec args = StmtAST::Vec();
     args.push_back(make_unique<VariableDeclAST>("argc", FuxType::createStd(FuxType::U64, 0, {FuxType::FINAL})));
-    args.push_back(make_unique<VariableDeclAST>("argv", FuxType::createArray(FuxType::STR, 0, {FuxType::FINAL})));
+    args.push_back(make_unique<VariableDeclAST>("argv", FuxType::createArray(FuxType::LIT, 0, {FuxType::FINAL})));
 
     StmtAST::Vec bodyList = StmtAST::Vec();
     

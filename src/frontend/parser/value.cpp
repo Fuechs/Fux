@@ -12,8 +12,8 @@
 #include "value.hpp"
 
 ValueStruct::~ValueStruct() {
-    if (type.kind == FuxType::STR)
-        __str.clear();
+    if (type.kind == FuxType::LIT)
+        __lit.clear();
 }
 
 #ifdef FUX_BACKEND
@@ -33,7 +33,7 @@ Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
         case FuxType::I64:      return fuxLLVM->builder->getInt64(__i64);
         case FuxType::U64:      return fuxLLVM->builder->getInt64(__u64);
         case FuxType::F64:      return ConstantFP::get(fuxLLVM->builder->getDoubleTy(), __f64);
-        case FuxType::STR:      // TODO: string llvm value
+        case FuxType::LIT:      // TODO: llvm i8* value
         default:                return nullptr;
     }
 }

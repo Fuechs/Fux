@@ -32,7 +32,7 @@ Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
         case FuxType::I64:      ret = builder->getInt64Ty(); break;
         case FuxType::U64:      ret = builder->getInt64Ty(); break;
         case FuxType::F64:      ret = builder->getDoubleTy(); break;
-        case FuxType::STR:      // TODO: str type
+        case FuxType::LIT:      ret = builder->getInt8PtrTy(); break;
         default:                ret = nullptr;
     }
 

@@ -324,7 +324,7 @@ void ValueStruct::debugPrint() {
         case FuxType::I64:      cout << __i64; break;
         case FuxType::U64:      cout << __u64; break;
         case FuxType::F64:      cout << __f64; break;
-        case FuxType::STR:      cout << '"' << unescapeSequences(__str) << '"'; break;
+        case FuxType::LIT:      cout << '"' << unescapeSequences(__lit) << '"'; break;
         default:                cout << "???";
     }
 }

@@ -34,7 +34,7 @@ public:
         I64     = KEY_I64,      // 64-bit signed integer
         U64     = KEY_U64,      // 64-bit unsigned integer
         F64     = KEY_F64,      // 64-bit floating point integer
-        STR     = KEY_STR,      // string ; array of c8
+        LIT,                    // string ; array of c8
         VAR     = KEY_VAR,      // dynamic 
         AUTO,                   // automatic typing
         NO_TYPE,                

@@ -38,7 +38,6 @@ string Token::str() const {
     return ss.str();
 }
 
-
 bool Token::isKeyword() const { return (type >= KEY_GET && type <= KEY_CLASS); }
 
 bool Token::isType() const { return ((type >= KEY_VOID && type <= KEY_VAR) || type == IDENTIFIER); }

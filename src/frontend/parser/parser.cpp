@@ -616,7 +616,7 @@ FuxType Parser::parseType(bool primitive) {
     while (check(ASTERISK)) {
         if (pointerDepth != -1) {
             ++pointerDepth;
-            break;
+            continue;
         }
 
         while(check(ASTERISK)); // skip all '*'
