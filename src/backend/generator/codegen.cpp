@@ -26,12 +26,7 @@ Value *StringExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue
 
 Value *ArrayExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) {
-    Value *V = fuxLLVM->namedValues[name];
-    if (!V)
-        return nullptr;
-    return V;
-}
+Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) { return fuxLLVM->namedValues[name]; }
 
 Value *MemberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
@@ -74,11 +69,20 @@ Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {
     }
 }
 
-Value *TypeCastExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *TypeCastExprAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *valToCast = expr->codegen(fuxLLVM);
+    return fuxLLVM->builder->CreateZExt(valToCast, Generator::getType(fuxLLVM, type));
+}
 
 Value *TernaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) {
+    Value *that = fuxLLVM->builder->CreateAlloca(Generator::getType(fuxLLVM, type), 0, symbol);
+    if (value) 
+        fuxLLVM->builder->CreateStore(value->codegen(fuxLLVM), that);
+    fuxLLVM->namedValues[symbol] = that;
+    return that;
+}
 
 Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) {
     switch (callee) {
@@ -132,7 +136,19 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     if (func->getReturnType()->isVoidTy()) 
         fuxLLVM->builder->CreateRetVoid();
     else if (retVal) {
-        retVal = fuxLLVM->builder->CreateZExt(retVal, func->getReturnType());
+        if (retVal->getType()->isPointerTy()) {
+            retVal = fuxLLVM->builder->CreateZExt(retVal, func->getReturnType());
+        }
+        Type *retType;
+        while ((retType = retVal->getType()) != func->getReturnType()) {
+            if (retType->isPointerTy()) {
+                // FIXME: need to get the value that is pointed to
+                //        should probably find a better solution for this
+                retVal = fuxLLVM->builder->CreateLoad(retType, retVal); 
+            } else
+                retVal = fuxLLVM->builder->CreateZExt(retVal, func->getReturnType()); 
+                // TODO: analyser should add explicit type cast
+        }
         fuxLLVM->builder->CreateRet(retVal);
     }
     else {

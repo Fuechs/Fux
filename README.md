@@ -47,10 +47,10 @@ main(argc: u64, argv: str[]): i64 {
 
 Fux is a modern and flexible programming language, perfect for use in a variety of domains by both novice and expert developers. With its efficient use of LLVM, it provides performance similar to C++, while being portable and running on a wide range of platforms.[^1]
 
-- **Large Core Package Library** \
-    Fux offers a comprehensive standard library, known as the Core Package, which includes features such as buffered console I/O, file I/O, mathematics and arithmetic operations, algorithms, key-value maps, dynamic pointers, and string utilities.[^1][^2][^3]
+- **Large Core Package** \
+    Fux offers a comprehensive standard library, known as the Core Package, which includes features such as a string type, buffered console I/O, file I/O, mathematics and arithmetic operations, algorithms, key-value maps and dynamic pointers.[^1][^2][^3]
 - **Easy to Learn and Use** \
-    For new programmers, Fux offers a safe and intuitive programming environment, with features like a built-in string type, dynamic arrays, and secure memory management. Experienced C/C++ developers will find the programming environment familiar, with added features and improvements over C++.
+    For new programmers, Fux offers a safe and intuitive programming environment, with features like built-in dynamic arrays and secure memory management. Experienced C/C++ developers will find the programming environment familiar, with added features and improvements over C++.
 - **Readable and Streamlined Syntax** \
     The syntax of Fux is designed to be readable and easy to understand, with a focus on seamless integration of different aspects of the language. This is achieved through the use of "pipe" / "move" operators (`<<` and `>>`), as well as the ability to define functions and variables without any keywords.[^3][^4]
 - **Eliminating Common C++ Errors** \

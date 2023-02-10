@@ -16,7 +16,8 @@
 
 ## Contents
 
-> Sections that are *italic* are still in progress.
+> Sections that are *italic* are still in progress. \
+> **Everything regarding strings is outdated.**
 
 - [Introduction](#introduction)
     - [Basic Example](#basic-example)
