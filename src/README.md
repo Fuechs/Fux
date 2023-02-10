@@ -24,6 +24,7 @@ src
 │   │   ├── generator.cpp - generator impl.
 │   │   ├── generator.hpp - generator
 │   │   ├── gentype.cpp - Generator::getType & FuxArray impl. (llvm ir)
+│   │   ├── wrapper.cpp - LLVMWrapper impl.
 │   │   └── wrapper.hpp - custom LLVMWrapper for StmtAST::codegen()
 │   └── llvmheader.hpp - includes for llvm headers & type definitions
 ├── examples - example fux programs

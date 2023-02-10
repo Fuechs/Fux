@@ -27,9 +27,9 @@ Value *StringExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue
 Value *ArrayExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) { 
-    FuxValue &found = fuxLLVM->values[name];
-    Value *ret = fuxLLVM->builder->CreateLoad(found.type, found.value, name+"_LOAD");
-    return ret;
+    // FuxValue &found = fuxLLVM->values[name];
+    // Value *ret = fuxLLVM->builder->CreateLoad(found.type, found.value, name+"_LOAD");
+    return fuxLLVM->values[name].value;
 }
 
 Value *MemberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
@@ -65,10 +65,23 @@ Value *BinaryExprAST::codegen(LLVMWrapper *fuxLLVM) {
 
     switch (op) {
         using enum BinaryOp;
-        case ADD:   return fuxLLVM->builder->CreateAdd(L, R, "addtmp");
-        case SUB:   return fuxLLVM->builder->CreateSub(L, R, "subtmp");
-        case MUL:   return fuxLLVM->builder->CreateMul(L, R, "multmp");
-        case DIV:   return fuxLLVM->builder->CreateFDiv(L, R, "divtmp");
+        case ASG:   return fuxLLVM->builder->CreateStore(R, L);
+        case ADD: 
+            fuxLLVM->loadValue(L);
+            fuxLLVM->loadValue(R);
+            return fuxLLVM->builder->CreateAdd(L, R, "addtmp");
+        case SUB:   
+            fuxLLVM->loadValue(L);
+            fuxLLVM->loadValue(R);
+            return fuxLLVM->builder->CreateSub(L, R, "subtmp");
+        case MUL:  
+            fuxLLVM->loadValue(L);
+            fuxLLVM->loadValue(R);
+            return fuxLLVM->builder->CreateMul(L, R, "multmp");
+        case DIV:   
+            fuxLLVM->loadValue(L);
+            fuxLLVM->loadValue(R);
+            return fuxLLVM->builder->CreateFDiv(L, R, "divtmp");
         default:    return nullptr;
     }
 }
@@ -92,7 +105,11 @@ Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) {
 Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) {
     switch (callee) {
         using enum Inbuilts;
-        case RETURN:    return fuxLLVM->builder->CreateRet(arguments.at(0)->codegen(fuxLLVM));
+        case RETURN: {
+            Value *ret = arguments.at(0)->codegen(fuxLLVM);
+            fuxLLVM->loadValue(ret);
+            return fuxLLVM->builder->CreateRet(ret);
+        }
         default:        return nullptr;
     }
 }
