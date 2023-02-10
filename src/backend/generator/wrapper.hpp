@@ -18,9 +18,24 @@
 // #include "../context/fuxstr.hpp"
 // #include "../context/fuxio.hpp"
 
+struct FuxValue {
+    typedef map<string, FuxValue> Map;
+
+    FuxValue(Type *type = nullptr, Value *value = nullptr) : type(type), value(value) {}
+    
+    FuxValue &operator=(const FuxValue &copy) { 
+        type = copy.type; 
+        value = copy.value; 
+        return *this; 
+    }
+
+    Type *type;     // type that is pointed to
+    Value *value;   // pointer (local variable)
+};
+
 struct LLVMWrapper {
     LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder)
-    : context(context), module(module), builder(builder), namedValues({}) {
+    : context(context), module(module), builder(builder), values(FuxValue::Map()) {
         // fuxMem = new FuxMem(context, module, builder);
         // fuxStr = new FuxStr(context, module, builder, fuxMem);
         // fuxIO = new FuxIO(context, module, builder, fuxMem, fuxStr);
@@ -30,7 +45,7 @@ struct LLVMWrapper {
         delete context;
         delete module;
         delete builder;
-        namedValues.clear();
+        values.clear();
     }
 
     LLVMContext *context;
@@ -41,7 +56,8 @@ struct LLVMWrapper {
     // FuxStr *fuxStr;
     // FuxIO *fuxIO;
 
-    ValueMap namedValues;
+    FuxValue::Map values;
+    Type *ctxReturnType = nullptr;
 };
 
 #endif

@@ -45,7 +45,6 @@ using namespace llvm;
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;
 typedef vector<Type *> TypeList;
-typedef map<string, Value *> ValueMap;
 #endif
 
 

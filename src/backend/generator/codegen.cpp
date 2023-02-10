@@ -26,7 +26,11 @@ Value *StringExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue
 
 Value *ArrayExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
-Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) { return fuxLLVM->namedValues[name]; }
+Value *VariableExprAST::codegen(LLVMWrapper *fuxLLVM) { 
+    FuxValue &found = fuxLLVM->values[name];
+    Value *ret = fuxLLVM->builder->CreateLoad(found.type, found.value, name+"_LOAD");
+    return ret;
+}
 
 Value *MemberExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
@@ -77,17 +81,18 @@ Value *TypeCastExprAST::codegen(LLVMWrapper *fuxLLVM) {
 Value *TernaryExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *VariableDeclAST::codegen(LLVMWrapper *fuxLLVM) {
-    Value *that = fuxLLVM->builder->CreateAlloca(Generator::getType(fuxLLVM, type), 0, symbol);
+    Type *llvmType = Generator::getType(fuxLLVM, type);
+    Value *that = fuxLLVM->builder->CreateAlloca(llvmType, 0, symbol);
     if (value) 
         fuxLLVM->builder->CreateStore(value->codegen(fuxLLVM), that);
-    fuxLLVM->namedValues[symbol] = that;
+    fuxLLVM->values[symbol] = FuxValue(llvmType, that);
     return that;
 }
 
 Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) {
     switch (callee) {
         using enum Inbuilts;
-        case RETURN:    return arguments.at(0)->codegen(fuxLLVM);
+        case RETURN:    return fuxLLVM->builder->CreateRet(arguments.at(0)->codegen(fuxLLVM));
         default:        return nullptr;
     }
 }
@@ -125,37 +130,19 @@ Function *FunctionAST::codegen(LLVMWrapper *fuxLLVM) {
     BasicBlock *BB = BasicBlock::Create(*fuxLLVM->context, "entry", func);
     fuxLLVM->builder->SetInsertPoint(BB);
 
-    fuxLLVM->namedValues.clear();
+    fuxLLVM->values.clear();
     for (auto &arg : func->args())
-        fuxLLVM->namedValues[arg.getName().str()] = &arg;
+        fuxLLVM->values[arg.getName().str()] = FuxValue(arg.getType(), &arg);
 
-    // FIXME: This does not work as expected, 
-    // body of the function is missing in the IR
     Value *retVal = body->codegen(fuxLLVM);
-    
-    if (func->getReturnType()->isVoidTy()) 
-        fuxLLVM->builder->CreateRetVoid();
-    else if (retVal) {
-        if (retVal->getType()->isPointerTy()) {
-            retVal = fuxLLVM->builder->CreateZExt(retVal, func->getReturnType());
-        }
-        Type *retType;
-        while ((retType = retVal->getType()) != func->getReturnType()) {
-            if (retType->isPointerTy()) {
-                // FIXME: need to get the value that is pointed to
-                //        should probably find a better solution for this
-                retVal = fuxLLVM->builder->CreateLoad(retType, retVal); 
-            } else
-                retVal = fuxLLVM->builder->CreateZExt(retVal, func->getReturnType()); 
-                // TODO: analyser should add explicit type cast
-        }
-        fuxLLVM->builder->CreateRet(retVal);
-    }
-    else {
-        // error reading body
+
+    if (!retVal) { // error reading body
         func->eraseFromParent();
         return nullptr;
     }
+    
+    if (func->getReturnType()->isVoidTy()) 
+        fuxLLVM->builder->CreateRetVoid();
     
     verifyFunction(*func);
     return func;
