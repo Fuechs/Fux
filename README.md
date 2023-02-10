@@ -23,7 +23,7 @@
 ###### Simple Hello World Program
 
 ```rust
-main(argc: u64, argv: **u8): i64 {
+main(argc: u64, argv: **c8): i64 {
     puts "Hello World\n!";
     return 0;
 }
