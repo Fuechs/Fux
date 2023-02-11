@@ -210,7 +210,7 @@ exit 1;
 ### Puts
 
 - Usage: `puts <expr>`
-- Effect: Outputs string (`str`) `expr` to stdout
+- Effect: Outputs string literal (`*c8`) `expr` to stdout
 
 ```c
 puts "Hello World!\n";
@@ -228,10 +228,10 @@ putch '\n';
 ### Read
 
 - Usage: `read <expr>`
-- Effect: Reads string (`str`) from stdin and stores it at address (`*str`) `expr`
+- Effect: Reads string literal (`*c8`) from stdin and stores it at address (`**c8`) `expr`
 
 ```rust
-input: str;
+input: *c8;
 read &input;
 ```
 
@@ -289,7 +289,7 @@ free ptr;
 - Effect: Object of this type can't be modified but read outside of the class / namespace it's declared in.
 
 ```rust
-name: safe str;
+name: safe *c8;
 ```
 
 ### Intern
@@ -298,7 +298,7 @@ name: safe str;
 - Effect: Object of this type can't be accessed outside of the class / namespace it's declared in.
 
 ```rust
-name: intern str;
+name: intern *c8;
 ```
 
 ### Final
@@ -307,8 +307,8 @@ name: intern str;
 - Effect: Value of object of this type can't be modified after assignment.
 
 ```rust
-name: final str;
-name = "fux";
+value: final *i8;
+name = 1;
 ```
 
 ### Fixed
@@ -317,7 +317,7 @@ name = "fux";
 - Effect: Object of this type can be accessed without creating an instance of the class it's declared in.
 
 ```rust
-name: fixed str = "fux";
+name: fixed *c8 = "fux";
 ```
 
 ### Async
