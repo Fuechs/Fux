@@ -2,6 +2,6 @@ main(): i64 {
     a: i64 = (i64) 1;
     b: i64 = (i64) 2;
     c: i64 = a + b;
-    c = b + c;
-    return a + c;
+    d: i64 = (i64) 10;
+    return c <> d;
 }

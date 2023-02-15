@@ -37,7 +37,7 @@ struct LLVMWrapper {
     }
 
     Type *getTypeOf(Value *ptr);
-    void loadValue(Value *&ptr);
+    Value *loadValue(Value *ptr);
 
     LLVMContext *context;
     Module *module;
