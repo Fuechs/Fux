@@ -26,6 +26,6 @@ Type *LLVMWrapper::getTypeOf(Value *ptr) {
 
 Value *LLVMWrapper::loadValue(Value *ptr) { 
     if (ptr->getType()->isPointerTy())
-        return builder->CreateLoad(getTypeOf(ptr), ptr); 
+        return builder->CreateLoad(getTypeOf(ptr), ptr, ptr->getName()+"_LOAD_"); 
     return ptr;
 }
