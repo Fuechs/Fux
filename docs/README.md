@@ -16,8 +16,7 @@
 
 ## Contents
 
-> Sections that are *italic* are still in progress. \
-> **Everything regarding strings is outdated.**
+> Sections that are *italic* are still in progress.
 
 - [Introduction](#introduction)
     - [Basic Example](#basic-example)
@@ -30,14 +29,14 @@
     - [Boolean Type](#boolean-type)
     - [Integer Types](#integer-types)
     - [Character Types](#character-types)
-    - [String Type](#string-type)
+    - [*String Type*](#string-literal-type)
     - [Array Type](#array-type)
     - [Type Casts](#type-casts)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
         - [Passing Arguments](#passing-arguments)
         - [Modifying Arrays](#modifying-arrays)
-        - [Extending Strings](#extending-strings)
+        <!-- - [Extending Strings](#extending-strings) -->
     - [Swap Operator](#swap-operator)
     - [Existence of Objects](#existence-of-objects)
 
@@ -48,13 +47,15 @@
 ### Basic Example
 
 ```rust
+get core.string;
+
 // takes reference to a string
 // and increments its (i32) value 
 incrementValue(value -> str): void {
     value = (str) ++((i32) value);
 }
 
-numStr := "1";
+numStr: str = "1";
 incrementValue(numStr);
 puts numStr;
 ```
@@ -81,6 +82,14 @@ Multiline comments start with `/*` and end with `*/`.
     - a multiline comment
 */
 ```
+
+---
+
+```rust
+get core.string;
+```
+
+In order to use the dynamic string type, we need to include the `str` class defined in the core package.
 
 ---
 
@@ -181,9 +190,9 @@ For that, we use the `puts` keyword, which will directly output a string to the 
 character: c8 = '\n';
 putch character;
 
-// output a string (str)
-// puts <value (str)> ;
-message: str = "Hello World!\n";
+// output a string literal (*c8)
+// puts <value (*c8)> ;
+message: *c8 = "Hello World!\n";
 puts message;
 ```
 
@@ -191,8 +200,9 @@ puts message;
 
 ```rust
 // read input until newline 
-// read <address (*str)> ;
-input: str;
+// this intrinsic will reserve the required memory at the provided address 
+// read <address (**c8)> ;
+input: *c8;
 read &input; // address of 'input' = &input
 ```
 
@@ -223,15 +233,15 @@ Examples of variable declaration in Fux:
 name;
 name := "fuechs"; // automatic typing
 name :=== "fuechs"; // constant
-name: str;
-name: str = "fuechs";
-name: str === "fuechs";
+name: *c8;
+name: *c8 = "fuechs";
+name: *c8 === "fuechs";
 ```
 
 The value of a non-constant variable can be changed later in the code. To do this, simple re-assign a new value to the variable using the `=` operator. For example:
 
 ```rust
-name = "fuechsss";
+name = "fux"; // note that literals (*c8) are not dynamic
 ```
 
 ### Pointer & References
@@ -252,27 +262,28 @@ To get the address of a variable in Fux, you use the & operator. This operator r
 Examples:
 
 ```rust
-ptr: *str;
-ptr := &name;
-ptr: *str = &name;
+num: i64 = 0;
+ptr: *i64;
+ptr := &num;
+ptr: *i64 = &num;
 
-someString := "a";
-ptr = &someString;
+someNum := -1;
+ptr = &someNum;
 ```
 
-To access the value stored at the memory address pointed to by a pointer, you use the * operator. This is known as dereferencing the pointer.
+To access the value stored at the memory address pointed to by a pointer, you use the `*` operator. This is known as dereferencing the pointer.
 
 ```rust
-*ptr = "b";
+*ptr = 2;
 puts *ptr; 
 ```
 
 After the above code, the value of someString is now equal to "b" and printed to the console.
 
-To print the memory address of a pointer, simply use the puts function and cast the pointer to `str`.
+To print the memory address of a pointer, simply use the puts function.
 
 ```rust
-puts (str) ptr; // <someString address>
+puts ptr; // <someString address>
 ```
 
 ---
@@ -286,22 +297,22 @@ References in Fux allow you to create an alias to an existing value. The referen
 Here is an example of declaring a reference to a string value:
 
 ```rust
-name: str = "fuechs";
-nameRef -> str = name;
+num: i64 = -1;
+numRef -> i64 = num;
 ```
 
-The reference `nameRef` is now pointing to the string `name`. Any changes made to the value of `nameRef` will also reflect in the value of `name`, and vice versa. Thus the reference itself cannot be redefined.
+The reference `numRef` is now pointing to the string `num`. Any changes made to the value of `numRef` will also reflect in the value of `num`, and vice versa. Thus the reference itself cannot be redefined.
 
 ```rust
-nameRef = "fux"; // name = "fux";
-name = "some"; // nameRef = "some";
+numRef = 2; // num = 2;
+num = 0; // numRef = 0;
 ```
 
-You can also obtain the memory address of a reference using the & operator, just like with variables:
+You can also obtain the memory address of a reference using the `&` operator, just like with variables:
 
 ```rust
-puts (str) &name;       // <name address>
-puts (str) &nameRef;    // <name address>
+puts &num;       // <num address>
+puts &numRef;    // <num address>
 ```
 
 ## Types
@@ -361,15 +372,15 @@ someChar: c8 = '\n';
 putch someChar; // output a single character
 ```
 
-### String Type
+### String Literal Type
 
-[`# Extending Strings`](#extending-strings)
-
-- Keyword - `str`
+- Keyword - `*c8`
 - Value - sequence of characters enclosed in double quotes `".*"`
 
+The literal has to end with a `\0`. Fux will append it automatically if missing.
+
 ```rust
-someString: str = "hello world";
+someString: *c8 = "hello world";
 ...
 puts someString; // output a string
 ```
@@ -466,6 +477,8 @@ someArray[] << 1;  // {1}
 #### Extending Strings
 
 ```rust
+get core.string;
+...
 someString: str = "uech";
 someString << 's';
 // someString = "uechs";
@@ -473,10 +486,6 @@ someString << 's';
 // someString = "fuechs";
 someString << 's' << 's';
 // someString = "fuechsss";
-
-someString << "s";
-//            ^ ^ fux assigns a new value because a string was used
-// someString = "s"; 
 ```
 
 ### Swap Operator
