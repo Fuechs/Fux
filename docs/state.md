@@ -31,7 +31,10 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [...] Expressions
     - [...] Statements
 - [&cross;] Context [![LLVM][llvm-badge]](https://llvm.org/)
-- [&cross;] Generator [![LLVM][llvm-badge]](https://llvm.org/)
+- [...] Generator [![LLVM][llvm-badge]](https://llvm.org/)
+    - [...] [Eisdrache Wrapper](https://github.com/fuechs/eisdrache)
+    - [...] Expressions
+    - [...] Statements
 - [&cross;] Optimizer [![LLVM][llvm-badge]](https://llvm.org/)
 - [&cross;] Compiler [![LLVM][llvm-badge]](https://llvm.org/)
 
