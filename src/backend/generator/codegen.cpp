@@ -137,8 +137,10 @@ Value *WhileLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 Value *ForLoopAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Function *PrototypeAST::codegen(LLVMWrapper *fuxLLVM) {
-    // TypeList argTypes(args.size(), fuxLLVM->builder->getInt32Ty());
-    FunctionType *funcType = FunctionType::get(Generator::getType(fuxLLVM, type), false);
+    TypeList paramTypes = TypeList();
+    for (StmtAST::Ptr &param : args) 
+        paramTypes.push_back(Generator::getType(fuxLLVM, param->getFuxType()));
+    FunctionType *funcType = FunctionType::get(Generator::getType(fuxLLVM, type), paramTypes, false);
     Function *func = Function::Create(funcType, Function::ExternalLinkage, symbol == "main" ? "main" : "Usr_"+symbol, *fuxLLVM->module);
     return func;
 }

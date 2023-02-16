@@ -1,7 +1,7 @@
 ; ModuleID = 'fux compiler'
 source_filename = "fux compiler"
 
-define i64 @main() {
+define i64 @main(i64 %0, ptr %1) {
 entry:
   %a = alloca i64, align 8
   store i64 1, ptr %a, align 4
