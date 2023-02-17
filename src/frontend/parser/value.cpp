@@ -33,7 +33,11 @@ Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
         case FuxType::I64:      return fuxLLVM->builder->getInt64(__i64);
         case FuxType::U64:      return fuxLLVM->builder->getInt64(__u64);
         case FuxType::F64:      return ConstantFP::get(fuxLLVM->builder->getDoubleTy(), __f64);
-        case FuxType::LIT:      // TODO: llvm i8* value
+        case FuxType::LIT:      {
+            Value *globalLiteral = fuxLLVM->builder->CreateGlobalStringPtr(__lit, "literal_");
+            fuxLLVM->values[globalLiteral->getName().str()] = FuxValue::Literal(globalLiteral);
+            return globalLiteral;
+        }
         default:                return nullptr;
     }
 }

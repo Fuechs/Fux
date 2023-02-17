@@ -117,6 +117,11 @@ Value *InbuiltCallAST::codegen(LLVMWrapper *fuxLLVM) {
             ret = fuxLLVM->loadValue(ret);
             return fuxLLVM->builder->CreateRet(ret);
         }
+        case PUTS: {
+            Value *literal = arguments.at(0)->codegen(fuxLLVM);
+            literal = fuxLLVM->loadValue(literal);
+            return fuxLLVM->builder->CreateCall(fuxLLVM->posix_puts, {literal});
+        }
         default:        return nullptr;
     }
 }

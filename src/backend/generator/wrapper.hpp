@@ -18,37 +18,32 @@
 struct FuxValue {
     typedef map<string, FuxValue> Map;
 
-    FuxValue(Type *type = nullptr, Value *value = nullptr) : type(type), value(value) {}
+    FuxValue(Type *type = nullptr, Value *value = nullptr) 
+    : type(type), value(value), literal(false) {}
+    
     FuxValue &operator=(const FuxValue &copy);
+
+    static FuxValue Literal(Value *value);
 
     Type *type;     // type that is pointed to
     Value *value;   // pointer (local variable)
+    bool literal;   // is global constant literal
 };
 
 struct LLVMWrapper {
-    LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder)
-    : context(context), module(module), builder(builder), values(FuxValue::Map()) {}
-
-    ~LLVMWrapper() {
-        delete context;
-        delete module;
-        delete builder;
-        values.clear();
-    }
+    LLVMWrapper(LLVMContext *context, Module *module, IRBuilder<> *builder);
+    ~LLVMWrapper();
 
     Type *getTypeOf(Value *ptr);
+    bool isLiteral(Value *ptr);
     Value *loadValue(Value *ptr);
 
     LLVMContext *context;
     Module *module;
     IRBuilder<> *builder;
 
-    // FuxMem *fuxMem;
-    // FuxStr *fuxStr;
-    // FuxIO *fuxIO;
-
     FuxValue::Map values;
-    Type *ctxReturnType = nullptr;
+    Function *posix_puts = nullptr; // temporary, will be replaced
 };
 
 #endif

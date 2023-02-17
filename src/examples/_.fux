@@ -1,7 +1,12 @@
-main(argc: u64, argv: **c8): i64 { 
-    a: i64 = (i64) 1;
-    b: i64 = (i64) 2;
-    c: i64 = a + b;
-    d: i64 = (i64) 10;
-    return c <> d;
+// main(argc: u64, argv: **c8): i64 { 
+//     a: i64 = (i64) 1;
+//     b: i64 = (i64) 2;
+//     c: i64 = a + b;
+//     d: i64 = (i64) 10;
+//     return c <> d;
+// }
+
+main(): i64 {
+    puts "Hello World!\n";
+    return (i64) 0;
 }
