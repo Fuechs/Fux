@@ -56,25 +56,12 @@ Fux is a modern and flexible programming language, perfect for use in a variety 
 - **Eliminating Common C++ Errors** \
     Fux addresses common issues with C++ by eliminating potential sources of error, such as memory leaks, through its secure memory management. Its readable syntax and intuitive integration of different language elements also reduce the likelihood of bugs, making it easier for developers to write high-quality code.
 
-###### The Versatile Uses of Fux
-
-- **System Programming** \
-    Fux can be used for writing operating system kernel and driver software, as it is efficient and capable of communicating directly with hardware.
-- **Application Development** \
-    Fux is an excellent choice for desktop and mobile application development, providing both performance and portability, and offering a comprehensive standard library.
-- **Game Development** \
-    Fux can be used for developing games for desktop and mobile platforms, offering performance and flexibility, as well as high efficiency through the use of templates and overloaded operators.
-- **Algorithms and Data Structures** \
-    Fux provides an environment for developing algorithms and data structures, with a comprehensive standard library for mathematical operations, as well as algorithms.
-- **Network Programming** \
-    Fux can be utilized for network-based application and service development, providing a flexible and powerful environment for the implementation of network protocols.
-
 > __Note__
-> 1. Fux may still have limited adoption, so it may not be as widely used or supported as other programming languages.
-> 2. Fux may not be fully compatible with other (programming) languages or technologies, which may limit its usefulness in certain domains.
-> 3. As with any new technology, there may be potential for new bugs or security issues to arise in the Fux programming language.
-> 4. Fux is an ongoing development project, and new features, changes, or updates may be introduced at any time, which may impact its performance, stability, or compatibility.
-> 5. Fux may have limited resources available, such as documentation, forums, or tutorials, compared to more established programming languages.
+> 1. Fux may have limited adoption and support compared to more established programming languages.
+> 2. Compatibility with other (programming) languages or technologies may be limited, which could restrict its use in certain domains.
+> 3. New bugs or security issues may arise as Fux is a new prorgamming language.
+> 4. As an ongoing development project, Fux may introduce new features or updates that could impact its performance, stability, or compatibility.
+> 5. Fux may have fewer resources available, such as documentation, forums, or tutorials, compared to more established programming languages.
 
 [^1]: The usage of certain features may result in decreased program performance and slower compile times.
 [^2]: The inclusion of these features is not guaranteed in future versions of the language.
