@@ -308,7 +308,7 @@ name: intern *c8;
 
 ```rust
 value: final *i8;
-name = 1;
+value = 1;
 ```
 
 ### Fixed
