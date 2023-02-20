@@ -18,7 +18,9 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [...] Syntax
 - [&check;] Error System
 - [&check;] Source Management
-- [&check;] Threading
+- [...] Threading
+    - [&check;] Class
+    - [&cross;] Implementation in Parser
 - [&check;] Lexer
 - [...] Abstract Syntax Tree
     - [&check;] Expressions
@@ -30,7 +32,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [...] Expectation
     - [...] Expressions
     - [...] Statements
-- [&cross;] Context [![LLVM][llvm-badge]](https://llvm.org/)
+- [...] Context [![LLVM][llvm-badge]](https://llvm.org/)
 - [...] Generator [![LLVM][llvm-badge]](https://llvm.org/)
     - [...] [Eisdrache Wrapper](https://github.com/fuechs/eisdrache)
     - [...] Expressions
