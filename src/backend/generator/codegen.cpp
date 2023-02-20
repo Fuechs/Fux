@@ -14,6 +14,11 @@
 
 #ifdef FUX_BACKEND
 
+/**
+ * ! TODO: All of this code will be replaced as soon as the Eisdrache wrapper is ready for use
+ *                                             github.com/fuechs/eisdrache
+ */
+
 Value *NullExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *BoolExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }
