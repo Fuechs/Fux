@@ -11,6 +11,8 @@
 
 #include "wrapper.hpp"
 
+#ifdef FUX_BACKEND
+
 FuxValue &FuxValue::operator=(const FuxValue &copy) { 
     type = copy.type; 
     value = copy.value; 
@@ -59,3 +61,5 @@ Value *LLVMWrapper::loadValue(Value *ptr) {
         return builder->CreateLoad(getTypeOf(ptr), ptr, ptr->getName()+"_LOAD_"); 
     return ptr;
 }
+
+#endif

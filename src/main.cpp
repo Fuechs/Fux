@@ -280,3 +280,14 @@ void clearConsole() {
         system("clear");
     #endif
 }
+
+// FuxOptions ; FuxStruct
+
+FuxOptions::~FuxOptions() { 
+    fileName.clear();
+    fileLines.clear();
+    out.clear(); 
+    version.clear();
+    libraries.clear();
+    target.clear();
+}

@@ -60,14 +60,7 @@ using std::cout, std::cerr, std::endl, std::exception, std::make_unique,
 // compiler options / flags
 struct FuxOptions {
 
-    ~FuxOptions() { 
-        fileName.clear();
-        fileLines.clear();
-        out.clear(); 
-        version.clear();
-        libraries.clear();
-        target.clear();
-    }
+    ~FuxOptions();
 
     string fileName; // file to compile (main)
     vector<string> fileLines; // lines of that file (main)

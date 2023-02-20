@@ -28,6 +28,7 @@ public:
         I16     = KEY_I16,      // 16-bit signed integer
         U16     = KEY_U16,      // 16-bit unsigned integer
         C16     = KEY_C16,      // UTF-16 code block
+        F16     = KEY_F16,      // 16-bit floating pointer integer
         I32     = KEY_I32,      // 32-bit signed integer
         U32     = KEY_U32,      // 32-bit unsigned integer
         F32     = KEY_F32,      // 32-bit floating point integer

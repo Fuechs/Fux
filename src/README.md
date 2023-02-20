@@ -7,17 +7,11 @@ src
 ├── README.md - this file
 ├── backend
 │   ├── compiler
-│   │   ├── compiler.cpp
-│   │   └── compiler.hpp 
+│   │   ├── compiler.cpp - compiler impl.
+│   │   └── compiler.hpp - compiler header
 │   ├── context
-│   │   ├── context.cpp - context manager impl.
-│   │   ├── context.hpp - context manager
-│   │   ├── fuxio.cpp - fux io operations impl. (llvm ir)
-│   │   ├── fuxio.hpp - fux io operations (llvm ir)
-│   │   ├── fuxmem.cpp - fux memory operations impl (llvm ir)
-│   │   ├── fuxmem.hpp - fux memory operations (llvm ir)
-│   │   ├── fuxstr.cpp - fux string type impl. (llvm ir)
-│   │   └── fuxstr.hpp - fux string type (llvm ir)
+│   │   ├── context.cpp - backend manager impl.
+│   │   └── context.hpp - backend manager header
 │   ├── generator
 │   │   ├── codegen.cpp - StmtAST::codegen() impl.
 │   │   ├── genarray.hpp - "template" class for array types (llvm ir)
