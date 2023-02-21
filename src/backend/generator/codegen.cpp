@@ -19,6 +19,8 @@
  *                                             github.com/fuechs/eisdrache
  */
 
+Value *NoOperationAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
+
 Value *NullExprAST::codegen(LLVMWrapper *fuxLLVM) { return nullptr; }
 
 Value *BoolExprAST::codegen(LLVMWrapper *fuxLLVM) { return value->getLLVMValue(fuxLLVM); }

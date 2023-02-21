@@ -81,6 +81,8 @@ void debugBody(size_t indent, StmtAST::Ptr &ast) {
         cout << CC::RED << "NULLBODY" << CC::DEFAULT;
 } 
 
+void NoOperationAST::debugPrint(size_t indent) { debugIndent(indent, "noop"); } 
+
 void NullExprAST::debugPrint(size_t indent) { debugIndent(indent, "null"); }
 
 void BoolExprAST::debugPrint(size_t indent) { 
@@ -276,6 +278,13 @@ void PrototypeAST::debugPrint(size_t indent) {
 void FunctionAST::debugPrint(size_t indent) { 
     callASTDebug(indent, proto);
     cout << "\n";
+    debugIndent(indent, "[ ");
+    for (StmtAST::Ptr &local : locals) {
+        callASTDebug(0, local);
+        if (local != locals.back())
+            cout << ", ";
+    }
+    cout << " ]\n";
     debugBody(indent, body);
 }
 

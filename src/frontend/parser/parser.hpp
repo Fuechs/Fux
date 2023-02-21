@@ -34,6 +34,8 @@ private:
     RootAST::Ptr root;
     const bool mainFile;
 
+    FunctionAST *parent = nullptr;
+
     // parse a statement
     StmtAST::Ptr parseStmt(bool expectSemicolon = true);
     // function declaration

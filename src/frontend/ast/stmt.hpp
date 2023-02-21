@@ -15,6 +15,7 @@
 
 enum class AST {
     // expressions
+    NoOperationAST,
     NullExprAST,
     BoolExprAST,
     NumberExprAST,

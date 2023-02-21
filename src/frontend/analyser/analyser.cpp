@@ -13,6 +13,8 @@
 
 StmtAST::Ptr Analyser::analyse() { return origin->analyse(Expectation(error, table)); }
 
+StmtAST::Ptr NoOperationAST::analyse(Expectation exp) { return nullptr; }
+
 StmtAST::Ptr NullExprAST::analyse(Expectation exp) { return nullptr; }
 
 StmtAST::Ptr BoolExprAST::analyse(Expectation exp) { return nullptr; }

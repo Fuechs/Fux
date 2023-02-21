@@ -22,6 +22,9 @@ Position &Position::operator=(Position pos) {
     return *this; 
 }
 
+AST NoOperationAST::getASTType() { return AST::NoOperationAST; }
+FuxType NoOperationAST::getFuxType() { return FuxType::NO_TYPE; }
+
 AST NullExprAST::getASTType() { return AST::NullExprAST; }
 FuxType NullExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
@@ -105,6 +108,8 @@ StmtAST::Vec &PrototypeAST::getArgs() { return args; }
 
 AST FunctionAST::getASTType() { return AST::FunctionAST; }
 FuxType FunctionAST::getFuxType() { return proto->getFuxType(); }
+void FunctionAST::setBody(StmtAST::Ptr &body) { this->body = std::move(body); }
+void FunctionAST::addLocal(StmtAST::Ptr &local) { locals.push_back(std::move(local)); }
 
 AST RootAST::getASTType() { return AST::RootAST; }
 FuxType RootAST::getFuxType() { return FuxType::NO_TYPE; }

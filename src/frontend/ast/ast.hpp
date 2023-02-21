@@ -25,6 +25,17 @@ typedef map<string, FuxType> ArgMap;
 
 /// EXPRESSIONS ///
 
+class NoOperationAST : public ExprAST {
+public:
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtAST::Ptr analyse(Expectation exp) override;
+    AST getASTType() override;
+    FuxType getFuxType() override;
+    void debugPrint(size_t indent = 0) override;
+    
+    Position pos = Position();
+};
+
 class NullExprAST : public ExprAST {
 public:    
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
@@ -408,10 +419,13 @@ public:
 class FunctionAST : public StmtAST {
     PrototypeAST::Ptr proto;
     StmtAST::Ptr body;
+    StmtAST::Vec locals; // local variables that are declared in this function
 
 public:
-    FunctionAST(FuxType type, const string &symbol, StmtAST::Vec &args, StmtAST::Ptr &body)
-    : proto(make_unique<PrototypeAST>(type, symbol, args)), body(std::move(body)) {}
+    typedef unique_ptr<FunctionAST> Ptr;
+
+    FunctionAST(FuxType type, const string &symbol, StmtAST::Vec &args)
+    : proto(make_unique<PrototypeAST>(type, symbol, args)), body(nullptr), locals(StmtAST::Vec()) {}
     FunctionAST(PrototypeAST::Ptr &proto, StmtAST::Ptr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
@@ -420,6 +434,9 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;    
+
+    void setBody(StmtAST::Ptr &body);
+    void addLocal(StmtAST::Ptr &local);
 
     Position pos = Position();
 };

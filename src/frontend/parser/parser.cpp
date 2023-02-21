@@ -87,7 +87,7 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
 
     if (*current != COLON && *current != POINTER) {
         current = backToken;
-        return parseExpr(); // We have to call parseExpr() here to handle situations like this one:
+        return parseExpr(); // We have to call parseExpr() instead of parseCallExpr() to handle situations like this one:
                             // someCall() << someArgument;
     } else
         current = paramBegin;
@@ -108,8 +108,12 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
     if (*current == SEMICOLON)
         return make_unique<PrototypeAST>(type, symbol, args);
 
-    StmtAST::Ptr body = parseStmt();    
-    return make_unique<FunctionAST>(type, symbol, args, body);
+    FunctionAST::Ptr node = make_unique<FunctionAST>(type, symbol, args);
+    parent = &*node;    
+    StmtAST::Ptr body = parseStmt();
+    parent = nullptr;
+    node->setBody(body);
+    return std::move(node);
 }
 
 StmtAST::Ptr Parser::parseForLoopStmt() { 
@@ -219,11 +223,22 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
 
     if (check(TRIPLE_EQUALS)) // ===
         type.access.push_back(FuxType::CONSTANT);
-    else if (!check(EQUALS))
-        return make_unique<VariableDeclAST>(symbol, type);
+    else if (!check(EQUALS)) {
+        StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type);
+        if (parent) {
+            parent->addLocal(decl);
+            return make_unique<NoOperationAST>();
+        }
+        return std::move(decl);
+    }
 
     ExprAST::Ptr value = parseExpr();
-    return  make_unique<VariableDeclAST>(symbol, type, value);
+    StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type, value);
+    if (parent) {
+        parent->addLocal(decl);
+        return make_unique<NoOperationAST>();
+    }
+    return std::move(decl);
 }
 
 ExprAST::Vec Parser::parseExprList(TokenType end) { 
