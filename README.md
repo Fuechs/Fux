@@ -24,7 +24,7 @@
 
 ```rust
 main(argc: u64, argv: **c8): i64 {
-    puts "Hello World\n!";
+    puts "Hello World!\n";
     return 0;
 }
 ```
