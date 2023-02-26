@@ -32,7 +32,8 @@ src
 │   │   ├── ast.hpp - Abstract Syntax Tree
 │   │   ├── expr.hpp - ExprAST base
 │   │   ├── op.hpp - BinaryOp/UnaryOp/Inbuilts
-│   │   ├── position.hpp - Position struct
+│   │   ├── position.cpp - Position struct implementation
+│   │   ├── position.hpp - Position struct header
 │   │   └── stmt.hpp - StmtAST base
 │   ├── error
 │   │   ├── error.cpp - ErrorManager impl.
