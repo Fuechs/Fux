@@ -13,13 +13,9 @@ int main(void) {
     ParseError err = ParseError();
     err.flags = { ParseError::WARNING };
     err.type = ParseError::UNEXPECTED_TOKEN;
-    err.file = &fileName;
-    err.source = &error->sources.at("main.fux");
     err.title = "Some test error";
     err.info = "Some direct info";
-    Token mTok = Token(IDENTIFIER, "main");
-    mTok.end = 4;
-    err.subject = &mTok;
+    err.subject = Metadata(&fileName, &error->sources[fileName], 1, 4, 0, 0);
     err.report();
 
     return 0;

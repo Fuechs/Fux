@@ -11,7 +11,10 @@
 
 #pragma once
 
-#include "note.hpp"
+#include "../../fux.hpp"
+#include "../ast/position.hpp"
+#include "../lexer/token.hpp"
+#include "../metadata.hpp"
 
 // standard messages for each error type
 static const char *ErrorTypeString[] = {
@@ -80,6 +83,7 @@ public:
         WARNING,        // is a warning
         AGGRESSIVE,     // is aggressive
         REPORTED,       // was reported
+        REFERENCE,      // has a reference to another code
     };
     
     typedef vector<Flag> FlagVec;
@@ -92,19 +96,19 @@ public:
 // private:
     FlagVec flags;
     Type type;
-    
-    const string *file;
-    const vector<string> *source;
-    
+        
     string title;
     string info;
-    Token *subject;
+    Metadata subject;
+    Metadata reference;
     
     vector<string> notes;
 
     // helper functions for error reporting
-    string pad(size_t padding);
-    string highlight(string src);
+
+    string pad(size_t padding, char fill = ' ');
+    string tripleDot(size_t padding);
+    string printLine(size_t lineNumber, string line, size_t padding);
 };
 
 // class ParseError {

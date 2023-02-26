@@ -91,4 +91,5 @@ namespace {
 
     // yellow string "Debug: "
     std::string debugText = "\033[33mDebug\033[39m: ";
+
 }

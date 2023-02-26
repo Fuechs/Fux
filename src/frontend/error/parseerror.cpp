@@ -14,10 +14,9 @@
 ParseError::ParseError() {
     flags = FlagVec();
     type = UNKNOWN_ERROR;
-    file = nullptr;
-    source = nullptr;
     title = "";
-    subject = nullptr;
+    subject = Metadata();
+    reference = Metadata();
     notes = vector<string>();
 }
 
@@ -28,7 +27,7 @@ ParseError::~ParseError() {
 
 void ParseError::report() {
     stringstream ss = stringstream();
-    size_t padding = 2;
+    size_t padding = to_string(std::max({subject.lstLine, reference.lstLine})).size() + 3;
 
     // header 
 
@@ -44,33 +43,59 @@ void ParseError::report() {
     // position
 
     ss << SC::RESET << "\n"<< pad(padding - 2) << CC::BLUE << ">>> " << CC::DEFAULT
-        << *file << ":" << subject->line << ":" << subject->start << "\n";
+        << *subject.file << ":" << subject.fstLine << ":" << subject.fstCol << "\n";
 
-    // source and pointers
-    
-    string lineNumber = to_string(subject->line);
-    ss << CC::BLUE << lineNumber << pad(padding-lineNumber.size()) << "|\t" << CC::DEFAULT;    
-    ss << CC::GRAY << (*source)[subject->line - 1] << CC::DEFAULT << "\n";
-    
-    size_t i;
-    ss << pad(padding) << CC::GREEN << SC::BOLD << "|\t";
-    for (i = 0; i < (subject->start - 1); i++) // -1 so arrow points at exact position
-        ss << " ";
-    while (i++ < subject->end)
-        ss << "^";
-    ss << CC::DEFAULT << SC::RESET;
-    if (!info.empty())
-        ss << "\t<- " << info;
-    ss  << "\n" << CC::BLUE << "..." << pad(padding - 3) << "|\t" << CC::DEFAULT << "...\n";
+    // source and pointers    
+    if (subject.fstCol != 0) {
+        ss << printLine(subject.fstLine, subject.source->at(subject.fstLine - 1), padding);
+
+        size_t i;
+        ss << pad(padding) << CC::GREEN << SC::BOLD << "|\t";
+        for (i = 0; i < (subject.fstCol - 1); i++) // -1 so arrow points at exact position
+            ss << " ";
+        while (i++ < subject.lstCol)
+            ss << "^";
+
+        if (!info.empty())
+            ss << "\t<-- " << info;
+
+        ss << CC::DEFAULT << SC::RESET << "\n";
+    } else {
+        if (subject.lstLine - subject.fstLine > 8) {
+            ss << printLine(subject.fstLine, subject.source->at(subject.fstLine - 1), padding);
+            ss << tripleDot(padding);
+            ss << printLine(subject.lstLine, subject.source->at(subject.lstLine - 1), padding);
+        } else 
+            for (size_t line = subject.fstLine; line < subject.lstLine + 1; line++)
+                ss << printLine(line, subject.source->at(line - 1), padding);
+        
+        if (!info.empty())
+            ss << CC::GREEN << SC::BOLD << pad(padding) << " \\__ " << info << "\n" << CC::DEFAULT << SC::RESET;
+    }  
+
+    ss << tripleDot(padding);
 
     cerr << ss.str();
 }
 
-string ParseError::pad(size_t padding) {
+string ParseError::pad(size_t padding, char fill) {
     string ret = "";
     while (padding --> 0)
-        ret += " ";
+        ret += fill;
     return ret;
+}
+
+string ParseError::tripleDot(size_t padding) {
+    stringstream ret = stringstream();
+    ret << CC::BLUE << "..." << pad(padding - 3) << "|\t" << CC::GRAY << "...\n" << CC::DEFAULT;
+    return ret.str();
+}
+
+string ParseError::printLine(size_t lineNumber, string line, size_t padding) {
+    stringstream ret = stringstream();
+    string lineStr = to_string(lineNumber);
+    ret << CC::BLUE << lineStr << pad(padding - lineStr.size()) << "|\t" << CC::GRAY << line << "\n" << CC::DEFAULT;
+    return ret.str();
 }
 
 // ParseError::ParseError() {
