@@ -13,98 +13,127 @@
 
 #include "note.hpp"
 
-enum ErrorType {
-    UNEXPECTED_SYMBOL,
-    ILLEGAL_NUMBER_FORMAT,
-    UNEXPECTED_EOF,
-    EXPECTED_STRING_LITERAL_EOF,
-    ILLEGAL_STRING_FORMAT,
-    EXPECTED_CHAR_LITERAL_EOF,
-    ILLEGAL_CHAR_LITERAL_FORMAT,
-    GENERIC,
-    ILLEGAL_ACCESS_DECLARATION,
-    ILLEGAL_BRACKET_MISMATCH,
-    MISSING_BRACKET,
-    INVALID_ACCESS_SPECIFIER,
-    MULTIPLE_DEFINITION,
-    PREVIOUSLY_DEFINED,
-    DUPLICATE_CLASS,
-    REDUNDANT_TOKEN,
-    INTERNAL_ERROR,
-    COULD_NOT_RESOLVE,
-    EXPECTED_REFERENCE_OF_TYPE,
-    INVALID_CAST,
-    REDUNDANT_CAST,
-    REDUNDANT_IMPORT,
-    UNEXPECTED_TOKEN,
-    INVALID_ACCESS,
-    SYMBOL_ALREADY_DEFINED,
-    INVALID_PARAM,
-    INCOMPATIBLE_TYPES,
-    DUPLICATE_DECLARATION,
-    NO_ERR,
-};
-
 // standard messages for each error type
 static const char *ErrorTypeString[] = {
-    "unexpected symbol",
-    "illegal number format mismatch",
-    "unexpected end of file",
-    "expected string literal before end of file",
-    "illegal string format",
-    "expected character literal before end of file",
-    "illegal character literal format",
     "",
-    "illegal specification of access specifier(s)",
-    "illegal symbol mismatch, unexpected bracket",
-    "missing bracket",
-    "invalid access specifier",
-    "",
-    "previously defined",
-    "duplicate class",
-    "redundant token",
-    "internal runtime error",
-    "could not resolve symbol",
-    "expected reference of type",
-    "invalid cast of type",
-    "redundant cast of type",
-    "redundant self import of package",
+
     "unexpected token",
-    "invalid access of",
-    "",
-    "invalid param of type",
-    "incompatible types",
-    "duplicate declaration of",
-    "",
+    "unexpected end of file",
+    "unexpected parameter",
+    "expected lvalue",
+
+    "unknown error",
+    "unknown character",
+
+    "illegal number format",
+    "illegal char literal format",
+    "illegal string literal format",
+    "illegal type",
+    "illegal cast",
+    "illegal access",
+    "illegal import"
+
+    "redundant cast",
+    "redundant token",
+    "redundant import",
+
+    "duplicate symbol",
+    "duplicate declaration",
+    
+    "missing paren",
 };
 
 class ParseError {
 public:
+    typedef vector<ParseError> Vec;
+
+    enum Type {
+        GENERIC,
+
+        UNEXPECTED_TOKEN,
+        UNEXPECTED_EOF,
+        UNEXPECTED_PARAMETER,
+        EXPECTED_LVALUE,
+
+        UNKNOWN_ERROR,
+        UNKNOWN_CHARACTER,
+        
+        ILLEGAL_NUMBER_FORMAT,
+        ILLEGAL_CHAR_LITERAL_FORMAT,
+        ILLEGAL_STRING_LITERAL_FORMAT,
+        ILLEGAL_TYPE,
+        ILLEGAL_CAST,
+        ILLEGAL_ACCESS,
+        ILLEGAL_IMPORT,
+
+        REDUNDANT_CAST,
+        REDUNDANT_TOKEN,
+        REDUNDANT_IMPORT,
+
+        DUPLICATE_SYMBOL,
+        DUPLICATE_DECLARATION,
+
+        MISSING_PAREN,
+    };
+
+    enum Flag {
+        WARNING,        // is a warning
+        AGGRESSIVE,     // is aggressive
+        REPORTED,       // was reported
+    };
+    
+    typedef vector<Flag> FlagVec;
+
     ParseError();
-    ParseError(const ParseError &pe);
-    ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, vector<string> lines, string comment = "", bool warning = false, bool aggressive = false);
-    ParseError(ErrorType type, Token &token, string fileName, string line, string comment = "", bool warning = false, bool aggressive = false);
+    ~ParseError();
 
-    void operator=(const ParseError &pe);
-
-    // free the error data
-    void free();
-    // check if error is supposed to be reported and print it out
-    // includes checks for aggressive and warnings and werror
-    // errormanager has to free error when it's freed
     void report();
 
-    void addNote(ErrorNote note);
+// private:
+    FlagVec flags;
+    Type type;
+    
+    const string *file;
+    const vector<string> *source;
+    
+    string title;
+    string info;
+    Token *subject;
+    
+    vector<string> notes;
 
-    bool warning, aggressive;
-    ErrorType type;
-    string message, fileName;
-    vector<string> lines;
-    NoteList notes;
-    Position pos;
-
-private:
-    bool reported;
+    // helper functions for error reporting
+    string pad(size_t padding);
+    string highlight(string src);
 };
 
-namespace fuxErr { typedef vector<ParseError> ErrorList; }
+// class ParseError {
+// public:
+//     typedef vector<ParseError> Vec;
+
+//     ParseError();
+//     ParseError(const ParseError &pe);
+//     ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, vector<string> lines, string comment = "", bool warning = false, bool aggressive = false);
+//     ParseError(ErrorType type, Token &token, string fileName, string line, string comment = "", bool warning = false, bool aggressive = false);
+
+//     void operator=(const ParseError &pe);
+
+//     // free the error data
+//     void free();
+//     // check if error is supposed to be reported and print it out
+//     // includes checks for aggressive and warnings and werror
+//     // errormanager has to free error when it's freed
+//     void report();
+
+//     void addNote(ErrorNote note);
+
+//     bool warning, aggressive;
+//     ErrorType type;
+//     string message, fileName;
+//     vector<string> lines;
+//     NoteList notes;
+//     Position pos;
+
+// private:
+//     bool reported;
+// };

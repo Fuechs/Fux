@@ -350,10 +350,6 @@ void Analyser::debugPrint(const string message) {
     cout << "\n";
 }
 
-// * ERROR
-
-void ErrorManager::debugPrint() { return; }
-
 #ifdef FUX_BACKEND
 
 // * CONTEXT

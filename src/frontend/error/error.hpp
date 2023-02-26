@@ -22,56 +22,75 @@
  */
 class ErrorManager {
 public:
-    ErrorManager(string fileName, vector<string> lines) 
-    : fileName(fileName), lines(lines), errors(fuxErr::ErrorList()) {}
+    typedef map<string, vector<string>> SourceMap;
 
+    ErrorManager();
     ~ErrorManager();
 
-    size_t errorCount();
-    size_t warningCount();
+    void addSourceFile(const string &fileName, const vector<string> &sourceLines);
 
-    bool hasErrors();
-    bool hasWarnings();
+    size_t errors();
+    size_t warnings();
 
-    // create an error with custom line and column
-    void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
-    // create an error with token position
-    void createError(ErrorType type, Token &token, string comment = "", bool aggressive = false);
-
-    // create a warning with custom line and column
-    void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
-    // create a warning with token position
-    void createWarning(ErrorType type, Token &token, string comment = "", bool aggressive = false);
-
-    // add note to recent ParseError
-    void addNote(size_t line, size_t col, string comment = "");
-    // add not to recent ParseError with token position
-    void addNote(Token &token, string comment = "");
-
-    // report all errors and warnings
-    void reportAll();
-
-    // literally self destruct 
-    // may be because of a fatal error
-    void panic(bool fatal = false) {
-        reportAll();
-        if (fatal)
-            cout 
-                << CC::RED << SC::BOLD 
-                << "Hit a fatal error.\n" 
-                << CC::DEFAULT << SC::RESET;
-        delete this;
-    }
-
-    string fileName;
-    vector<string> lines;
-
-    void debugPrint();
-    
-private:
-    fuxErr::ErrorList errors;
-
-    // add an error to errors (checks for errorlimit too)
-    void addError(ParseError error);
-
+// private:
+    ParseError::Vec _errors;
+    size_t errorCount;
+    size_t warningCount;
+    SourceMap sources;
 };
+
+// class ErrorManager {
+// public:
+//     ErrorManager(string fileName, vector<string> lines) 
+//     : fileName(fileName), lines(lines), errors(ParseError::Vec()) {}
+
+//     ~ErrorManager();
+
+//     size_t errorCount();
+//     size_t warningCount();
+
+//     bool hasErrors();
+//     bool hasWarnings();
+
+//     // create an error with custom line and column
+//     void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
+//     // create an error with token position
+//     void createError(ErrorType type, Token &token, string comment = "", bool aggressive = false);
+
+//     // create a warning with custom line and column
+//     void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
+//     // create a warning with token position
+//     void createWarning(ErrorType type, Token &token, string comment = "", bool aggressive = false);
+
+//     // add note to recent ParseError
+//     void addNote(size_t line, size_t col, string comment = "");
+//     // add not to recent ParseError with token position
+//     void addNote(Token &token, string comment = "");
+
+//     // report all errors and warnings
+//     void reportAll();
+
+//     // literally self destruct 
+//     // may be because of a fatal error
+//     void panic(bool fatal = false) {
+//         reportAll();
+//         if (fatal)
+//             cout 
+//                 << CC::RED << SC::BOLD 
+//                 << "Hit a fatal error.\n" 
+//                 << CC::DEFAULT << SC::RESET;
+//         delete this;
+//     }
+
+//     string fileName;
+//     vector<string> lines;
+
+//     void debugPrint();
+    
+// private:
+//     ParseError::Vec errors;
+
+//     // add an error to errors (checks for errorlimit too)
+//     void addError(ParseError error);
+
+// };
