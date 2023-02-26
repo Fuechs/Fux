@@ -14,9 +14,11 @@
 #include "parseerror.hpp"
 
 /**
- * ! IMPORTANT NOTE
- * The error system is currently being rewritten in the "error-rewrite" branch.
- * Please do not modify any code that is associated with this.
+ * TODO: Rewrite the error system.
+ * * Include more metadata about the error (e.g. "associated" code with the error is underlined, etc.),
+ * * make errors prettier and easier to read,
+ * * throw error as soon as it is encountered in the code,
+ * * and make the system overall more user-friendly (for developers working on the compiler).
  */
 class ErrorManager {
 public:
