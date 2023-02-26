@@ -15,7 +15,6 @@
 
 enum class AST {
     // expressions
-    NoOperationAST,
     NullExprAST,
     BoolExprAST,
     NumberExprAST,
@@ -32,6 +31,7 @@ enum class AST {
     TernaryExprAST,
 
     // statements
+    NoOperationAST,
     VariableDeclAST,
     InbuiltCallAST,
     IfElseAST,

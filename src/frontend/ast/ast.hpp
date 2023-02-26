@@ -25,26 +25,13 @@ typedef map<string, FuxType> ArgMap;
 
 /// EXPRESSIONS ///
 
-class NoOperationAST : public ExprAST {
-public:
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
-    AST getASTType() override;
-    FuxType getFuxType() override;
-    void debugPrint(size_t indent = 0) override;
-    
-    Position pos = Position();
-};
-
 class NullExprAST : public ExprAST {
 public:    
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
-    void debugPrint(size_t indent = 0) override;
-    
-    Position pos = Position();
+    void debugPrint(size_t indent = 0) override;    
 };
 
 class BoolExprAST : public ExprAST {
@@ -59,8 +46,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-    
-    Position pos = Position();
 };
 
 class NumberExprAST : public ExprAST {
@@ -76,8 +61,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-     
-    Position pos = Position();
 };
 
 class CharExprAST : public ExprAST {
@@ -93,8 +76,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class StringExprAST : public ExprAST {
@@ -109,8 +90,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class RangeExprAST : public ExprAST {
@@ -126,8 +105,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class ArrayExprAST : public ExprAST {
@@ -141,8 +118,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-
-    Position pos = Position();
 };
 
 class VariableExprAST : public ExprAST {
@@ -157,8 +132,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class MemberExprAST : public ExprAST {
@@ -174,8 +147,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class CallExprAST : public ExprAST {
@@ -194,8 +165,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-    
-    Position pos = Position();
 };
 
 class UnaryExprAST : public ExprAST {
@@ -210,8 +179,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class BinaryExprAST : public ExprAST {
@@ -227,8 +194,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class TypeCastExprAST : public ExprAST {
@@ -244,8 +209,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-    
-    Position pos = Position();
 };
 
 class TernaryExprAST : public ExprAST {
@@ -262,11 +225,18 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-    
-    Position pos = Position();
 };
 
 /// STATEMENTS ///
+
+class NoOperationAST : public StmtAST {
+public:
+    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    StmtAST::Ptr analyse(Expectation exp) override;
+    AST getASTType() override;
+    FuxType getFuxType() override;
+    void debugPrint(size_t indent = 0) override;    
+};
 
 class VariableDeclAST : public StmtAST {
     string symbol;
@@ -287,8 +257,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-     
-    Position pos = Position();
 };
 
 typedef unique_ptr<VariableDeclAST> VarDeclPtr; 
@@ -306,8 +274,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
-     
-    Position pos = Position();
 };
 
 class IfElseAST : public StmtAST {
@@ -324,8 +290,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class CodeBlockAST : public StmtAST {
@@ -342,8 +306,6 @@ public:
     void debugPrint(size_t indent = 0) override;
  
     void addSub(StmtAST::Ptr &sub);
-
-    Position pos = Position();
 };
 
 class WhileLoopAST : public StmtAST {
@@ -360,8 +322,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 class ForLoopAST : public StmtAST {
@@ -384,8 +344,6 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
- 
-    Position pos = Position();
 };
 
 typedef unique_ptr<CodeBlockAST> BlockPtr;
@@ -412,8 +370,6 @@ public:
     
     string &getSymbol();
     StmtAST::Vec &getArgs();
-     
-    Position pos = Position();
 };
 
 class FunctionAST : public StmtAST {
@@ -437,8 +393,6 @@ public:
 
     void setBody(StmtAST::Ptr &body);
     void addLocal(StmtAST::Ptr &local);
-
-    Position pos = Position();
 };
 
 class RootAST : public StmtAST {
@@ -461,6 +415,4 @@ public:
  
     void addSub(StmtAST::Ptr &sub);
     _i64 addSizeExpr(ExprAST::Ptr &sizeExpr);
-    
-    Position pos = Position();
 };

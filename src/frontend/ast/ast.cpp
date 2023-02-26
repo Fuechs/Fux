@@ -14,17 +14,6 @@
 StmtAST::Ptr nullStmt = StmtAST::Ptr(nullptr);
 ExprAST::Ptr nullExpr = ExprAST::Ptr(nullptr);
 
-Position &Position::operator=(Position pos) {
-    lStart = pos.lStart;
-    lEnd = pos.lStart;
-    colStart = pos.colStart;
-    colEnd = pos.colEnd;
-    return *this; 
-}
-
-AST NoOperationAST::getASTType() { return AST::NoOperationAST; }
-FuxType NoOperationAST::getFuxType() { return FuxType::NO_TYPE; }
-
 AST NullExprAST::getASTType() { return AST::NullExprAST; }
 FuxType NullExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
@@ -76,6 +65,9 @@ FuxType TypeCastExprAST::getFuxType() { return type; }
 
 AST TernaryExprAST::getASTType() { return AST::TernaryExprAST; }
 FuxType TernaryExprAST::getFuxType() { return FuxType::BOOL; }
+
+AST NoOperationAST::getASTType() { return AST::NoOperationAST; }
+FuxType NoOperationAST::getFuxType() { return FuxType::NO_TYPE; }
 
 VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
