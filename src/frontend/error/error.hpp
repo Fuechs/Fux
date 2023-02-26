@@ -13,6 +13,11 @@
 
 #include "parseerror.hpp"
 
+/**
+ * ! IMPORTANT NOTE
+ * The error system is currently being rewritten in the "error-rewrite" branch.
+ * Please do not modify any code that is associated with this.
+ */
 class ErrorManager {
 public:
     ErrorManager(string fileName, vector<string> lines) 
