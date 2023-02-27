@@ -11,6 +11,26 @@
 
 #include "parseerror.hpp"
 
+ParseError::SUBJ_STRCT::SUBJ_STRCT(Metadata meta, string info, string pointerText, size_t pointer) {
+    this->meta = meta;
+    this->info = info;
+    this->pointerText = pointerText;
+    this->pointer = pointer;
+}
+
+ParseError::SUBJ_STRCT::~SUBJ_STRCT() {
+    info.clear();
+    pointerText.clear();
+}
+
+ParseError::SUBJ_STRCT &ParseError::SUBJ_STRCT::operator=(const SUBJ_STRCT &copy) {
+    meta = copy.meta;
+    info = copy.info;
+    pointer = copy.pointer;
+    pointerText = copy.pointerText;
+    return *this;
+}
+
 ParseError::ParseError() {
     flags = FlagVec();
     type = UNKNOWN_ERROR;

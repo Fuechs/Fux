@@ -88,10 +88,15 @@ public:
     typedef vector<Flag> FlagVec;
 
     struct SUBJ_STRCT {
-        Metadata meta = Metadata();
-        string info = "";
-        string pointerText = ""; 
-        size_t pointer = 0;
+        SUBJ_STRCT(Metadata meta = Metadata(), string info = "", string pointerText = "", size_t pointer = 0);
+        ~SUBJ_STRCT();
+
+        SUBJ_STRCT &operator=(const SUBJ_STRCT &copy);
+
+        Metadata meta;
+        string info;
+        string pointerText;
+        size_t pointer;
     };
 
     ParseError();

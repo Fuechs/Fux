@@ -1,4 +1,4 @@
-src = $(wildcard *.cpp) ../ast/position.cpp ../lexer/token.cpp ../../util/io.cpp 
+src = $(wildcard *.cpp) ../lexer/token.cpp ../../util/io.cpp 
 
 all:
 	clang++ $(src) -o error.out -std=c++20

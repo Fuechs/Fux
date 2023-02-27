@@ -14,18 +14,19 @@ int main(void) {
         "}"
     });
 
-    ParseError err = ParseError();
-    err.flags = { ParseError::AGGRESSIVE, ParseError::WARNING, ParseError::REFERENCE };
-    err.type = ParseError::GENERIC;
-    err.title = "You-Are-An-Idiot-Error";
-    err.subject.info = "Seriously? How?";
-    err.subject.pointer = 10;
-    err.subject.pointerText = "I don't like this so the compilation failed. Fuck you.";
-    err.subject.meta = Metadata(&fileName, &error->sources[fileName], 1, 1, 5, 27);
-    err.reference.meta = Metadata(&fileName, &error->sources[fileName], 1, 8, 1, 1);
-    err.reference.info = "Yeah this is kinda the whole shitty function YOU wrote.";
-    err.notes = { "Note: You are a fucking dumbass.", "Help: Try contacting a doctor." };
-    err.report();
-
+    // ParseError err = ParseError();
+    // err.flags = { ParseError::AGGRESSIVE, ParseError::WARNING, ParseError::REFERENCE };
+    // err.type = ParseError::GENERIC;
+    // err.title = "You-Are-An-Idiot-Error";
+    // err.subject.info = "Seriously? How?";
+    // err.subject.pointer = 10;
+    // err.subject.pointerText = "I don't like this so the compilation failed. Fuck you.";
+    // err.subject.meta = Metadata(&fileName, &error->sources[fileName], 1, 1, 5, 27);
+    // err.reference.meta = Metadata(&fileName, &error->sources[fileName], 1, 8, 1, 1);
+    // err.reference.info = "Yeah this is kinda the whole shitty function YOU wrote.";
+    // err.notes = { "Note: You are a fucking dumbass.", "Help: Try contacting a doctor." };
+    Token m = Token();
+    error->createError(fileName, ParseError::UNEXPECTED_TOKEN, m, "no", "no");
+    error->report();
     return 0;
 }

@@ -35,6 +35,8 @@ public:
     void addNote(string message);
     void addHelp(string message);
 
+    void report();
+
     size_t errors();
     size_t warnings();
 

@@ -24,7 +24,7 @@ void ErrorManager::addSourceFile(const string &fileName, const vector<string> &s
 void ErrorManager::createError(string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
     Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
     _errors.push_back(ParseError(aggressive ? (ParseError::FlagVec) {ParseError::AGGRESSIVE} : (ParseError::FlagVec) {}, 
-        type, message, {meta, info, "", 0}));
+        type, message, (ParseError::SUBJ_STRCT) {meta, info, "", 0}));
 }
 
 void ErrorManager::createWarning(string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
@@ -32,7 +32,7 @@ void ErrorManager::createWarning(string &fileName, ParseError::Type type, const 
     if (aggressive)
         flags.push_back(ParseError::AGGRESSIVE);
     Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
-    _errors.push_back(ParseError(flags, type, message, {meta, info, "", 0}));
+    _errors.push_back(ParseError(flags, type, message, (ParseError::SUBJ_STRCT) {meta, info, "", 0}));
 }
 
 void ErrorManager::addHelp(string message) {
@@ -41,6 +41,11 @@ void ErrorManager::addHelp(string message) {
 
 void ErrorManager::addNote(string message) {
     _errors.back().addNote("Note: "+message);
+}
+
+void ErrorManager::report() {
+    for (ParseError &pe : _errors)
+        pe.report();
 }
 
 size_t ErrorManager::errors() { return errorCount; }
