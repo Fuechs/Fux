@@ -12,7 +12,6 @@
 #pragma once
 
 #include "../../fux.hpp"
-#include "../ast/position.hpp"
 #include "../lexer/token.hpp"
 #include "../metadata.hpp"
 
@@ -85,28 +84,31 @@ public:
         REPORTED,       // was reported
         REFERENCE,      // has a reference to another code
     };
-    
+
     typedef vector<Flag> FlagVec;
 
+    struct SUBJ_STRCT {
+        Metadata meta = Metadata();
+        string info = "";
+        string pointerText = ""; 
+        size_t pointer = 0;
+    };
+
     ParseError();
+    ParseError(FlagVec flags, Type type, string title, SUBJ_STRCT subject, SUBJ_STRCT reference = SUBJ_STRCT(), vector<string> notes = {});
     ~ParseError();
 
     void report();
 
     constexpr bool hasFlag(Flag flag);
+    void addNote(string note);
 
-// private:
+private:
     FlagVec flags;
     Type type;
         
     string title;
-    struct SUBJ_STRCT {
-        Metadata meta = Metadata();
-        string info = "";
-        string help = "";
-        string pointerText = ""; 
-        size_t pointer = 0;
-    } subject, reference;
+    SUBJ_STRCT subject, reference;
     
     vector<string> notes;
 

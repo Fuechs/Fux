@@ -29,10 +29,16 @@ public:
 
     void addSourceFile(const string &fileName, const vector<string> &sourceLines);
 
+    void createError(string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
+    void createWarning(string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
+
+    void addNote(string message);
+    void addHelp(string message);
+
     size_t errors();
     size_t warnings();
 
-// private:
+private:
     ParseError::Vec _errors;
     size_t errorCount;
     size_t warningCount;

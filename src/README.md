@@ -32,14 +32,10 @@ src
 │   │   ├── ast.hpp - Abstract Syntax Tree
 │   │   ├── expr.hpp - ExprAST base
 │   │   ├── op.hpp - BinaryOp/UnaryOp/Inbuilts
-│   │   ├── position.cpp - Position struct implementation
-│   │   ├── position.hpp - Position struct header
 │   │   └── stmt.hpp - StmtAST base
 │   ├── error
 │   │   ├── error.cpp - ErrorManager impl.
 │   │   ├── error.hpp - ErrorManager
-│   │   ├── note.cpp - ErrorNote impl.
-│   │   ├── note.hpp - ErrorNote
 │   │   ├── parseerror.cpp - ParseError impl.
 │   │   └── parseerror.hpp - ParseError
 │   ├── lexer
@@ -47,13 +43,14 @@ src
 │   │   ├── lexer.hpp - Lexer 
 │   │   ├── token.cpp - Token impl. 
 │   │   └── token.hpp - Token
-│   └── parser
-│       ├── parser.cpp - Parser impl.
-│       ├── parser.hpp - Parser
-│       ├── type.cpp - FuxType impl.
-│       ├── type.hpp - FuxType
-│       ├── value.cpp - ValueStruct impl.
-│       └── value.hpp - ValueStruct
+│   ├── parser
+│   │   ├── parser.cpp - Parser impl.
+│   │   ├── parser.hpp - Parser
+│   │   ├── type.cpp - FuxType impl.
+│   │   ├── type.hpp - FuxType
+│   │   ├── value.cpp - ValueStruct impl.
+│   │   └── value.hpp - ValueStruct
+│   └── metadata.hpp - Metadata struct
 ├── fux.hpp - standard includes and definitions
 ├── main.cpp - main file; bootstrap & repl
 ├── output.ll - llvm module dump (debug)

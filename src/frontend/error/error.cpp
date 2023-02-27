@@ -21,6 +21,28 @@ ErrorManager::~ErrorManager() {
 
 void ErrorManager::addSourceFile(const string &fileName, const vector<string> &sourceLines) { sources[fileName] = sourceLines; }
 
+void ErrorManager::createError(string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
+    Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
+    _errors.push_back(ParseError(aggressive ? (ParseError::FlagVec) {ParseError::AGGRESSIVE} : (ParseError::FlagVec) {}, 
+        type, message, {meta, info, "", 0}));
+}
+
+void ErrorManager::createWarning(string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
+    ParseError::FlagVec flags = {ParseError::WARNING};
+    if (aggressive)
+        flags.push_back(ParseError::AGGRESSIVE);
+    Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
+    _errors.push_back(ParseError(flags, type, message, {meta, info, "", 0}));
+}
+
+void ErrorManager::addHelp(string message) {
+    _errors.back().addNote("Help: "+message);
+}
+
+void ErrorManager::addNote(string message) {
+    _errors.back().addNote("Note: "+message);
+}
+
 size_t ErrorManager::errors() { return errorCount; }
 
 size_t ErrorManager::warnings() { return warningCount; }

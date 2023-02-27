@@ -20,6 +20,15 @@ ParseError::ParseError() {
     notes = vector<string>();
 }
 
+ParseError::ParseError(FlagVec flags, Type type, string title, SUBJ_STRCT subject, SUBJ_STRCT reference, vector<string> notes) {
+    this->flags = flags;
+    this->type = type;
+    this->title = title;
+    this->subject = subject;
+    this->reference = reference;
+    this->notes = notes;
+}
+
 ParseError::~ParseError() { 
     flags.clear(); 
     title.clear();
@@ -45,6 +54,8 @@ void ParseError::report() {
 constexpr bool ParseError::hasFlag(Flag flag) {
     return find(flags.begin(), flags.end(), flag) != flags.end();
 }
+
+void ParseError::addNote(string note) { notes.push_back(note); }
 
 string ParseError::pad(size_t sub, char fill) {
     string ret = "";
