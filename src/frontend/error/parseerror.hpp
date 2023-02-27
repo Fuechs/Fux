@@ -104,8 +104,8 @@ public:
         Metadata meta = Metadata();
         string info = "";
         string help = "";
-        string pointing = ""; 
-        size_t pointer_pos = 0;
+        string pointerText = ""; 
+        size_t pointer = 0;
     } subject, reference;
     
     vector<string> notes;
@@ -117,12 +117,13 @@ public:
     string tripleDot();
 
     string printHead();
-    string printSubject(const Metadata &subject, const string &info);
+    string printSubject(const SUBJ_STRCT &subj);
     string printPosition(const Metadata &meta);
     string printLine(size_t lineNumber, string line);
     string printUnderline(size_t start, size_t end, size_t except = 0);
-    string printArrow(size_t pos);
+    string printArrow(const SUBJ_STRCT &meta);
     string printInfo(const string &info, bool wrap = false);
+    string printNotes();
 
-    vector<string> splitString(string data, size_t max);
+    // vector<string> splitString(string data, size_t max);
 };

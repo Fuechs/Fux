@@ -34,7 +34,10 @@ void ParseError::report() {
     padding = to_string(std::max({subject.meta.lstLine, reference.meta.lstLine})).size() + 3;
 
     ss << printHead();
-    ss << printSubject(subject.meta, subject.info);
+    ss << printSubject(subject);
+    if (hasFlag(REFERENCE))
+        ss << printSubject(reference);
+    ss << printNotes();
 
     cerr << ss.str();
 }
@@ -51,20 +54,32 @@ string ParseError::pad(size_t sub, char fill) {
 }
 
 string ParseError::tripleDot() {
-    stringstream ret = stringstream();
-    ret << CC::BLUE << "..." << pad(3) << "|\t" << CC::GRAY << "...\n" << CC::DEFAULT;
-    return ret.str();
+    stringstream ss;
+    ss << CC::BLUE << "..." << pad(3) << "|\t" << CC::GRAY << "...\n" << CC::DEFAULT;
+    return ss.str();
 }
 
-string ParseError::printSubject(const Metadata &subject, const string &info) { 
+string ParseError::printSubject(const SUBJ_STRCT &subj) { 
     stringstream ss;
-    ss << printPosition(subject);
-    // source and pointers    
-    if (subject.fstLine == subject.lstLine) {
-        ss << printLine(subject.fstLine, subject[subject.fstLine]);
-        ss << printUnderline(subject.fstCol, subject.lstCol);
-        ss << printInfo(info);
+    const Metadata &meta = subj.meta;
+
+    ss << printPosition(meta);
+    if (meta.fstLine == meta.lstLine) {
+        ss << printLine(meta.fstLine, meta[meta.fstLine]);
+        ss << printUnderline(meta.fstCol, meta.lstCol, subj.pointer);
+        ss << printInfo(subj.info);
+        ss << printArrow(subj);
+    } else if (meta.lstLine - meta.fstLine > 6) {
+        ss << printLine(meta.fstLine, meta[meta.fstLine]);
+        ss << tripleDot();
+        ss << printLine(meta.lstLine, meta[meta.lstLine]);
+        ss << printInfo(subj.info, true);
+    } else {
+        for (size_t i = meta.fstLine; i <= meta.lstLine; i++) 
+            ss << printLine(i, meta[i]);
+        ss << printInfo(subj.info, true);
     }
+
     return ss.str();
 }
 
@@ -106,13 +121,40 @@ string ParseError::printUnderline(size_t start, size_t end, size_t except) {
     for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
         ss << " ";
 
-    while (i++ < end) 
-        if (except == 0) 
+    while (i++ < end) {
+        if (except == 0) {
             ss << "^";
+            continue;
+        }
+
+        if (i == except - 1 || i == except + 1) 
+            ss << " ";
+        else if (i == except) 
+            ss << CC::RED << "^";
         else 
-            ss << (i == except ? "^" : "-");
+            ss << CC::BLUE << "-";
+    }
 
     ss << SC::RESET << " ";
+    return ss.str();
+}
+
+string ParseError::printArrow(const SUBJ_STRCT &subj) {
+    if (subj.pointer == 0)
+        return "";
+    
+    const Metadata &meta = subj.meta;
+    stringstream ss;
+
+    ss << pad() << CC::RED << SC::BOLD << "|\t";
+    for (size_t i = 0; i < subj.pointer - 1; i++)
+        ss << " ";
+    ss << "|\n";
+    ss << pad() << "|\t";
+    for (size_t i = 0; i != subj.pointer - 1; i++)
+        ss << " ";
+    ss << subj.pointerText << "\n" << SC::RESET;
+
     return ss.str();
 }
 
@@ -123,21 +165,30 @@ string ParseError::printInfo(const string &info, bool wrap) {
     stringstream ss;
     ss << SC::BOLD << CC::RED;
     if (wrap) 
-        ss << pad() << " \\__ " << info;
+        ss << pad() << " \\___ " << info;
     else 
         ss << info;
     ss << "\n" << SC::RESET;
     return ss.str();
 }
 
-vector<string> ParseError::splitString(string data, size_t max) {
-    vector<string> ret = {""};
-    vector<string> tmp = vector<string>();
-    tmp = split(data, ' ');
-    for (string &word : tmp)
-        if (ret.back().size() < max)
-            ret.back() += word + " ";
-        else
-            ret.push_back(word + " ");
-    return ret;
+string ParseError::printNotes() {
+    stringstream ss;
+    ss << CC::YELLOW << SC::BOLD;
+    for (const string &note : notes)
+        ss << pad() << "|\t" << note << "\n";
+    ss << SC::RESET;
+    return ss.str();
 }
+
+// vector<string> ParseError::splitString(string data, size_t max) {
+//     vector<string> ret = {""};
+//     vector<string> tmp = vector<string>();
+//     tmp = split(data, ' ');
+//     for (string &word : tmp)
+//         if (ret.back().size() < max)
+//             ret.back() += word + " ";
+//         else
+//             ret.push_back(word + " ");
+//     return ret;
+// }
