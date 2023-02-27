@@ -29,8 +29,8 @@ public:
 
     void addSourceFile(const string &fileName, const vector<string> &sourceLines);
 
-    void createError(string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
-    void createWarning(string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
+    void createError(const string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
+    void createWarning(const string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
 
     void addNote(string message);
     void addHelp(string message);

@@ -14,7 +14,7 @@
 #include "../fux.hpp"
 
 struct Metadata {
-    Metadata(string *fileName = nullptr, vector<string> *source = nullptr, 
+    Metadata(const string *fileName = nullptr, vector<string> *source = nullptr, 
         size_t fstLine = 0, size_t lstLine = 0, 
         size_t fstCol = 0, size_t lstCol = 0) 
     : file(fileName), source(source), fstLine(fstLine), lstLine(lstLine), 
@@ -34,7 +34,7 @@ struct Metadata {
     string &operator[](size_t line) { return source->at(line - 1); }
     const string &operator[](size_t line) const { return source->at(line - 1); }
 
-    string *file;
+    const string *file;
     vector<string> *source;
     size_t fstLine, lstLine, fstCol, lstCol;
 };

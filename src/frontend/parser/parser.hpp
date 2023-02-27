@@ -27,6 +27,7 @@ public:
     RootAST::Ptr parse();
 
 private:
+    const string &fileName;
     Token::Vec tokens;
     Token::Iter current;
     ErrorManager *error;
@@ -120,7 +121,7 @@ private:
     // get next token
     Token &eat();
     // expect and get next token
-    Token &eat(TokenType type, ErrorType = UNEXPECTED_TOKEN);
+    Token &eat(TokenType type, ParseError::Type = ParseError::UNEXPECTED_TOKEN);
     // peek to Nth token
     Token &peek(size_t steps = 1);
     // check current token and advance if true

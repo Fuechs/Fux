@@ -21,13 +21,13 @@ ErrorManager::~ErrorManager() {
 
 void ErrorManager::addSourceFile(const string &fileName, const vector<string> &sourceLines) { sources[fileName] = sourceLines; }
 
-void ErrorManager::createError(string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
+void ErrorManager::createError(const string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
     Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
     _errors.push_back(ParseError(aggressive ? (ParseError::FlagVec) {ParseError::AGGRESSIVE} : (ParseError::FlagVec) {}, 
         type, message, (ParseError::SUBJ_STRCT) {meta, info, "", 0}));
 }
 
-void ErrorManager::createWarning(string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
+void ErrorManager::createWarning(const string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
     ParseError::FlagVec flags = {ParseError::WARNING};
     if (aggressive)
         flags.push_back(ParseError::AGGRESSIVE);
