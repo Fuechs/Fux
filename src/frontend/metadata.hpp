@@ -30,6 +30,10 @@ struct Metadata {
         return *this;
     }
 
+    // get line from source code (line number, not index!)
+    string &operator[](size_t line) { return source->at(line - 1); }
+    const string &operator[](size_t line) const { return source->at(line - 1); }
+
     string *file;
     vector<string> *source;
     size_t fstLine, lstLine, fstCol, lstCol;

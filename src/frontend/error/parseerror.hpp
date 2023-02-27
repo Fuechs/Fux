@@ -18,32 +18,32 @@
 
 // standard messages for each error type
 static const char *ErrorTypeString[] = {
-    "",
+    "Generic",
 
-    "unexpected token",
-    "unexpected end of file",
-    "unexpected parameter",
-    "expected lvalue",
+    "Unexpected Token",
+    "Unexpected End of File",
+    "Unexpected Parameter",
+    "Expected lvalue",
 
-    "unknown error",
-    "unknown character",
+    "Unknown Error",
+    "Unknown Character",
 
-    "illegal number format",
-    "illegal char literal format",
-    "illegal string literal format",
-    "illegal type",
-    "illegal cast",
-    "illegal access",
-    "illegal import"
+    "Illegal Number Format",
+    "Illegal Char Literal Format",
+    "Illegal String Literal Format",
+    "Illegal Type",
+    "Illegal Cast",
+    "Illegal Access",
+    "Illegal Import"
 
-    "redundant cast",
-    "redundant token",
-    "redundant import",
+    "Redundant Cast",
+    "Redundant Token",
+    "Redundant Import",
 
-    "duplicate symbol",
-    "duplicate declaration",
+    "Duplicate Symbol",
+    "Duplicate Declaration",
     
-    "missing paren",
+    "Missing Paren",
 };
 
 class ParseError {
@@ -89,18 +89,22 @@ public:
     typedef vector<Flag> FlagVec;
 
     ParseError();
+    ParseError(FlagVec flags, Type type, string title, Metadata subject, string info, Metadata reference, string refInfo, vector<string> notes);
     ~ParseError();
 
     void report();
 
-// private:
+    constexpr bool hasFlag(Flag flag);
+
+private:
     FlagVec flags;
     Type type;
         
     string title;
-    string info;
     Metadata subject;
+    string info; // info for subject
     Metadata reference;
+    string refInfo; // info for reference
     
     vector<string> notes;
 
@@ -109,35 +113,6 @@ public:
     string pad(size_t padding, char fill = ' ');
     string tripleDot(size_t padding);
     string printLine(size_t lineNumber, string line, size_t padding);
+    string printSubject(const Metadata &subject, const string &info, size_t padding);
+    vector<string> splitString(string data, size_t max);
 };
-
-// class ParseError {
-// public:
-//     typedef vector<ParseError> Vec;
-
-//     ParseError();
-//     ParseError(const ParseError &pe);
-//     ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, vector<string> lines, string comment = "", bool warning = false, bool aggressive = false);
-//     ParseError(ErrorType type, Token &token, string fileName, string line, string comment = "", bool warning = false, bool aggressive = false);
-
-//     void operator=(const ParseError &pe);
-
-//     // free the error data
-//     void free();
-//     // check if error is supposed to be reported and print it out
-//     // includes checks for aggressive and warnings and werror
-//     // errormanager has to free error when it's freed
-//     void report();
-
-//     void addNote(ErrorNote note);
-
-//     bool warning, aggressive;
-//     ErrorType type;
-//     string message, fileName;
-//     vector<string> lines;
-//     NoteList notes;
-//     Position pos;
-
-// private:
-//     bool reported;
-// };

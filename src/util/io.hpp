@@ -15,6 +15,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <vector>
+#include <iterator>
 
 // reads and returns contents of a file
 const std::string readFile(const std::string &path);
@@ -32,3 +34,9 @@ std::string escapeSequences(std::string);
 
 // unescape all escape sequences in string
 std::string unescapeSequences(std::string);
+
+// from https://stackoverflow.com/a/236803
+template <typename Out>
+void split(const std::string &s, char delim, Out result);
+
+std::vector<std::string> split(const std::string &s, char delim);
