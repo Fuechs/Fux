@@ -15,21 +15,9 @@ ParseError::ParseError() {
     flags = FlagVec();
     type = UNKNOWN_ERROR;
     title = "";
-    subject = Metadata();
-    reference = Metadata();
+    subject = SUBJ_STRCT();
+    reference = SUBJ_STRCT();
     notes = vector<string>();
-}
-
-ParseError::ParseError(FlagVec flags, Type type, string title, 
-    Metadata subject, string info, Metadata reference, string refInfo, vector<string> notes) {
-    this->flags = flags;
-    this->type = type;
-    this->title = title;
-    this->subject = subject;
-    this->info = info;
-    this->reference = reference;
-    this->refInfo = refInfo;
-    this->notes = notes;
 }
 
 ParseError::~ParseError() { 
@@ -43,28 +31,10 @@ void ParseError::report() {
     flags.push_back(REPORTED);
 
     stringstream ss = stringstream();
-    size_t padding = to_string(std::max({subject.lstLine, reference.lstLine})).size() + 3;
+    padding = to_string(std::max({subject.meta.lstLine, reference.meta.lstLine})).size() + 3;
 
-    // header 
-    ss << SC::BOLD;
-    if (/*!fux.options.werrors &&*/ hasFlag(WARNING)) 
-        ss << CC::MAGENTA << "[warning]";
-    else 
-        ss << CC::RED << "[error]";
-    ss << CC::DEFAULT << "["; 
-    if (hasFlag(AGGRESSIVE))
-        ss << "A";
-    ss << "E" << type << "]: " << ErrorTypeString[type];
-    if (!title.empty())
-        ss << ": " << title;
-    ss << "\n" << SC::RESET;
-
-    // subjects
-    ss << printSubject(subject, info, padding);
-    if (hasFlag(REFERENCE))
-        ss << printSubject(reference, refInfo, padding);
-    for (string &note : notes) 
-        ss << pad(padding) << "|>\t" << note << "\n";
+    ss << printHead();
+    ss << printSubject(subject.meta, subject.info);
 
     cerr << ss.str();
 }
@@ -73,76 +43,90 @@ constexpr bool ParseError::hasFlag(Flag flag) {
     return find(flags.begin(), flags.end(), flag) != flags.end();
 }
 
-string ParseError::pad(size_t padding, char fill) {
+string ParseError::pad(size_t sub, char fill) {
     string ret = "";
-    while (padding --> 0)
+    for (sub = padding - sub; sub --> 0;)
         ret += fill;
     return ret;
 }
 
-string ParseError::tripleDot(size_t padding) {
+string ParseError::tripleDot() {
     stringstream ret = stringstream();
-    ret << CC::BLUE << "..." << pad(padding - 3) << "|\t" << CC::GRAY << "...\n" << CC::DEFAULT;
+    ret << CC::BLUE << "..." << pad(3) << "|\t" << CC::GRAY << "...\n" << CC::DEFAULT;
     return ret.str();
 }
 
-string ParseError::printLine(size_t lineNumber, string line, size_t padding) {
-    stringstream ret = stringstream();
-    string lineStr = to_string(lineNumber);
-    ret << CC::BLUE << lineStr << pad(padding - lineStr.size()) << "|\t" << CC::GRAY << line << "\n" << CC::DEFAULT;
-    return ret.str();
-}
-
-string ParseError::printSubject(const Metadata &subject, const string &info, size_t padding) { 
+string ParseError::printSubject(const Metadata &subject, const string &info) { 
     stringstream ss;
-    // position
-    ss << pad(padding - 2) << CC::BLUE << ">>> " << CC::DEFAULT
-        << *subject.file << ":" << subject.fstLine << ":" << subject.fstCol << "\n";
-
+    ss << printPosition(subject);
     // source and pointers    
     if (subject.fstLine == subject.lstLine) {
-        ss << printLine(subject.fstLine, subject[subject.fstLine], padding);
+        ss << printLine(subject.fstLine, subject[subject.fstLine]);
+        ss << printUnderline(subject.fstCol, subject.lstCol);
+        ss << printInfo(info);
+    }
+    return ss.str();
+}
 
-        size_t i;
-        ss << pad(padding) << CC::GREEN << "|\t";
-        for (i = 0; i < (subject.fstCol - 1); i++) // -1 so arrow points at exact position
-            ss << " ";
-        while (i++ < subject.lstCol)
+string ParseError::printHead() {
+    stringstream ss;
+    ss << SC::BOLD;
+    if (/*!fux.options.werrors &&*/ hasFlag(WARNING)) 
+        ss << CC::MAGENTA << "[warning]";
+    else 
+        ss << CC::RED << "[error]";
+    ss << CC::DEFAULT << "["; 
+    if (hasFlag(AGGRESSIVE)) ss << "A";
+    ss << "E" << type << "]: " << ErrorTypeString[type];
+    if (!title.empty()) ss << ": " << title;
+    ss << "\n" << SC::RESET;
+    return ss.str();
+}
+
+string ParseError::printPosition(const Metadata &meta) {
+    stringstream ss;
+    ss << pad(2) << CC::BLUE << SC::BOLD << ">>> " << SC::RESET
+        << *meta.file << ":" << meta.fstLine << ":" << meta.fstCol << "\n";
+    return ss.str();
+}
+
+string ParseError::printLine(size_t lineNumber, string line) {
+    stringstream ss;
+    string lineStr = to_string(lineNumber);
+    ss << CC::BLUE << SC::BOLD << lineStr << pad(lineStr.size()) << "|\t" << SC::RESET << CC::GRAY << line << "\n" << CC::DEFAULT;
+    return ss.str();
+}
+
+string ParseError::printUnderline(size_t start, size_t end, size_t except) {
+    stringstream ss;
+    size_t i;
+    
+    ss << pad() << SC::BOLD << CC::RED << "|\t";
+    
+    for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
+        ss << " ";
+
+    while (i++ < end) 
+        if (except == 0) 
             ss << "^";
+        else 
+            ss << (i == except ? "^" : "-");
 
-        if (!info.empty()) {
-            if (info.size() > subject[subject.fstLine].size()) {
-                vector<string> data = splitString(info, subject[subject.fstLine].size());
-                ss << "\n" << pad(padding) << "|-> " << data[0];
-                for (size_t i = 1; i < data.size(); i++)
-                    ss << "\n" << pad(padding) << "|\t" << data[i];
-            } else
-                ss << " <-- " << info;
-        }
+    ss << SC::RESET << " ";
+    return ss.str();
+}
 
-        ss << CC::DEFAULT << "\n";
-    } else {
-        if (subject.lstLine - subject.fstLine > 6) {
-            ss << printLine(subject.fstLine, subject[subject.fstLine], padding);
-            ss << tripleDot(padding);
-            ss << printLine(subject.lstLine, subject[subject.lstLine], padding);
-        } else 
-            for (size_t line = subject.fstLine; line < subject.lstLine + 1; line++)
-                ss << printLine(line, subject[line], padding);
-        
-        if (!info.empty()) {
-            ss << CC::GREEN;
-            if (info.size() > subject[subject.lstLine].size()) {
-                vector<string> data = splitString(info, subject[subject.fstLine].size());
-                ss << pad(padding) << " \\_ " << data[0];
-                for (size_t i = 1; i < data.size(); i++)
-                    ss << "\n" << pad(padding) << "|\t" << data[i];
-            } else
-                ss << pad(padding) << " \\_ " << info;
-            ss << "\n" << CC::DEFAULT;
-        }
-    } 
+string ParseError::printInfo(const string &info, bool wrap) {
+    if (info.empty())
+        return "\n";
 
+    stringstream ss;
+    ss << SC::BOLD << CC::RED;
+    if (wrap) 
+        ss << pad() << " \\__ " << info;
+    else 
+        ss << info;
+    ss << "\n" << SC::RESET;
     return ss.str();
 }
 

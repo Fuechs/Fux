@@ -89,30 +89,40 @@ public:
     typedef vector<Flag> FlagVec;
 
     ParseError();
-    ParseError(FlagVec flags, Type type, string title, Metadata subject, string info, Metadata reference, string refInfo, vector<string> notes);
     ~ParseError();
 
     void report();
 
     constexpr bool hasFlag(Flag flag);
 
-private:
+// private:
     FlagVec flags;
     Type type;
         
     string title;
-    Metadata subject;
-    string info; // info for subject
-    Metadata reference;
-    string refInfo; // info for reference
+    struct SUBJ_STRCT {
+        Metadata meta = Metadata();
+        string info = "";
+        string help = "";
+        string pointing = ""; 
+        size_t pointer_pos = 0;
+    } subject, reference;
     
     vector<string> notes;
 
     // helper functions for error reporting
+    size_t padding = 3;
 
-    string pad(size_t padding, char fill = ' ');
-    string tripleDot(size_t padding);
-    string printLine(size_t lineNumber, string line, size_t padding);
-    string printSubject(const Metadata &subject, const string &info, size_t padding);
+    string pad(size_t sub = 0, char fill = ' ');
+    string tripleDot();
+
+    string printHead();
+    string printSubject(const Metadata &subject, const string &info);
+    string printPosition(const Metadata &meta);
+    string printLine(size_t lineNumber, string line);
+    string printUnderline(size_t start, size_t end, size_t except = 0);
+    string printArrow(size_t pos);
+    string printInfo(const string &info, bool wrap = false);
+
     vector<string> splitString(string data, size_t max);
 };

@@ -14,11 +14,12 @@ int main(void) {
         "}"
     });
 
-    ParseError err = ParseError({ParseError::REFERENCE}, ParseError::ILLEGAL_TYPE,  
-        "Type of returned value does not match declared type of function.", 
-        Metadata(&fileName, &error->sources[fileName], 3, 3, 5, 12), "Value of type 'u8' gets returned here.",
-        Metadata(&fileName, &error->sources[fileName], 1, 8, 1, 1), "Function got declared with type 'i64' here.", 
-        {"Help: Cast the value to the type 'i64'.", "Note: There was no valid type cast from 'u8' to 'i64' found."});
+    ParseError err = ParseError();
+    err.flags = { ParseError::AGGRESSIVE, ParseError::WARNING, };
+    err.type = ParseError::GENERIC;
+    err.title = "Some Shitty Error";
+    err.subject.info = "Some Test Info";
+    err.subject.meta = Metadata(&fileName, &error->sources[fileName], 1, 1, 1, 4);
     err.report();
 
     return 0;
