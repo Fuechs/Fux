@@ -32,6 +32,11 @@ public:
     void createError(const string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
     void createWarning(const string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
 
+    void createError(const string &fileName, ParseError::Type type, size_t fstLine, size_t lstLine, string message, string info = "", bool aggressive = false);
+
+    void createRefError(const string &fileName, ParseError::Type type, const Token &token, const Token &refToken, string message, string info = "", string refInfo = "", bool aggressive = false);
+    void createRefWarning(const string &fileName, ParseError::Type type, const Token &token, const Token &refToken, string message, string info = "", string refInfo = "", bool aggressive = false);
+
     void addNote(string message);
     void addHelp(string message);
 
