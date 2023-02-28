@@ -29,18 +29,35 @@ public:
 
     void addSourceFile(const string &fileName, const vector<string> &sourceLines);
 
-    void createError(const string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
-    void createWarning(const string &fileName, ParseError::Type type, const Token &token, string message, string info = "", bool aggressive = false);
+    void createError(
+        ParseError::Type type, string title,
+        // subject
+        const string &subjectFile,
+        size_t subjectFstLine, size_t subjectLstLine, 
+        size_t subjectFstCol, size_t subjectLstCol,
+        string subjectInfo, size_t subjectPtr, string subjectPtrText,
+        // reference
+        const string &refFile,
+        size_t refFstLine, size_t refLstLine, 
+        size_t refFstCol, size_t refLstCol,
+        string refInfo, size_t refPtr, string refPtrText,
+        // other
+        vector<string> notes, bool reference, bool warning, bool aggressive
+    );
 
-    void createError(const string &fileName, ParseError::Type type, size_t fstLine, size_t lstLine, string message, string info = "", bool aggressive = false);
-
-    void createRefError(const string &fileName, ParseError::Type type, const Token &token, const Token &refToken, string message, string info = "", string refInfo = "", bool aggressive = false);
-    void createRefWarning(const string &fileName, ParseError::Type type, const Token &token, const Token &refToken, string message, string info = "", string refInfo = "", bool aggressive = false);
-
-    void addNote(string message);
-    void addHelp(string message);
-
-    void report();
+    void simpleError(ParseError::Type type, string title,
+        const string &file,
+        size_t fstLine, size_t lstLine,
+        size_t fstCol, size_t lstCol,
+        string info, vector<string> notes = {}, 
+        bool warning = false, bool aggressive = false);
+    
+    void simpleError(ParseError::Type type, string title,
+        const string &file,
+        size_t fstLine, size_t lstLine, 
+        size_t fstCol, size_t lstCol, 
+        string info, size_t ptr, string ptrText, 
+        vector<string> notes = {}, bool warning = false, bool aggressive = false);
 
     size_t errors();
     size_t warnings();

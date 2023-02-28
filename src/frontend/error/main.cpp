@@ -4,17 +4,11 @@ int main(void) {
     ErrorManager *error = new ErrorManager();
     string fileName = "main.fux";
     error->addSourceFile(fileName, {
-        "main(argc: u64, argv: **c8): i64 {",
-        "    puts \"Hello World!\\n\";",
-        "    return 0;",
-        "",
-        "",
-        "",
-        "",
-        "}"
+        "(foo + bar) | (1.5 / 3)"
     });
-    error->createError(fileName, ParseError::DUPLICATE_SYMBOL, 1, 8, "The symbol 'main' is already taken by another function.", 
-        "Try changing the name (e.g. to 'Main', 'mainFunc')");
-    error->report();
+    error->simpleError(ParseError::ILLEGAL_OPERANDS, 
+        "Invalid operand type for 'bitwise or' operation.", 
+        fileName, 1, 1, 15, 23,
+        "RHS with invalid type 'f64'", 13, "Binary Operator");
     return 0;
 }

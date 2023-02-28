@@ -33,7 +33,8 @@ static const char *ErrorTypeString[] = {
     "Illegal Type",
     "Illegal Cast",
     "Illegal Access",
-    "Illegal Import"
+    "Illegal Import",
+    "Illegal Operands",
 
     "Redundant Cast",
     "Redundant Token",
@@ -67,6 +68,7 @@ public:
         ILLEGAL_CAST,
         ILLEGAL_ACCESS,
         ILLEGAL_IMPORT,
+        ILLEGAL_OPERANDS,
 
         REDUNDANT_CAST,
         REDUNDANT_TOKEN,

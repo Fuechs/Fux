@@ -145,26 +145,45 @@ string ParseError::printLine(size_t lineNumber, string line) {
 
 string ParseError::printUnderline(size_t start, size_t end, size_t except) {
     stringstream ss;
-    size_t i;
     
     ss << pad() << SC::BOLD << CC::RED << "|\t";
-    
-    for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
-        ss << " ";
 
-    while (i++ < end) {
+    bool underline = false, arrow = except == 0;
+    for (size_t i = 1; !underline || !arrow; i++) {
         if (except == 0) {
-            ss << "^";
-            continue;
+            for (;i >= start && i <= end; i++) 
+                ss << CC::RED << "^";
+            break;
         }
 
-        if (i == except - 1 || i == except + 1) 
+        if (i == except - 1 || i == except + 1)
             ss << " ";
-        else if (i == except) 
+        else if (i == except) {
+            arrow = true;
             ss << CC::RED << "^";
-        else 
+        } else if (i >= start && i <= end) {
             ss << CC::BLUE << "-";
+            underline = i == end;
+        } else
+            ss << " ";
     }
+    
+    // for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
+    //     ss << " ";
+
+    // while (i++ < end) {
+    //     if (except == 0) {
+    //         ss << "^";
+    //         continue;
+    //     }
+
+    //     if (i == except - 1 || i == except + 1) 
+    //         ss << " ";
+    //     else if (i == except) 
+    //         ss << CC::RED << "^";
+    //     else 
+    //         ss << CC::BLUE << "-";
+    // }
 
     ss << SC::RESET << " ";
     return ss.str();

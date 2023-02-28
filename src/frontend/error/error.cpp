@@ -21,58 +21,73 @@ ErrorManager::~ErrorManager() {
 
 void ErrorManager::addSourceFile(const string &fileName, const vector<string> &sourceLines) { sources[fileName] = sourceLines; }
 
-void ErrorManager::createError(const string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
-    Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
-    _errors.push_back(ParseError(aggressive ? (ParseError::FlagVec) {ParseError::AGGRESSIVE} : ParseError::FlagVec(), 
-        type, message, (ParseError::SUBJ_STRCT) {meta, info, "", 0}));
-}
-
-void ErrorManager::createWarning(const string &fileName, ParseError::Type type, const Token &token, string message, string info, bool aggressive) {
-    ParseError::FlagVec flags = {ParseError::WARNING};
+void ErrorManager::createError(
+    ParseError::Type type, string title,
+    // subject
+    const string &subjectFile,
+    size_t subjectFstLine, size_t subjectLstLine, 
+    size_t subjectFstCol, size_t subjectLstCol,
+    string subjectInfo, size_t subjectPtr, string subjectPtrText,
+    // reference
+    const string &refFile,
+    size_t refFstLine, size_t refLstLine, 
+    size_t refFstCol, size_t refLstCol,
+    string refInfo, size_t refPtr, string refPtrText,
+    // other
+    vector<string> notes, bool reference, bool warning, bool aggressive 
+) {
+    Metadata subjectMeta = Metadata(&subjectFile, &sources.at(subjectFile),
+        subjectFstLine, subjectLstLine, subjectFstCol, subjectLstCol);
+    Metadata refMeta = Metadata(&refFile, &sources.at(refFile),
+        refFstLine, refLstLine, refFstCol, refLstCol);
+    ParseError::FlagVec flags = {};
+    if (reference)
+        flags.push_back(ParseError::REFERENCE);
+    if (warning)
+        flags.push_back(ParseError::WARNING);
     if (aggressive)
         flags.push_back(ParseError::AGGRESSIVE);
-    Metadata meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
-    _errors.push_back(ParseError(flags, type, message, (ParseError::SUBJ_STRCT) {meta, info, "", 0}));
+    ParseError pe = ParseError(flags, type, title, 
+        ParseError::SUBJ_STRCT(subjectMeta, subjectInfo, subjectPtrText, subjectPtr),
+        ParseError::SUBJ_STRCT(refMeta, refInfo, refPtrText, refPtr),
+        notes);
+    pe.report();
+    _errors.push_back(pe);
+    
+    if (warning)
+        warningCount++;
+    else
+        errorCount++;
 }
 
-void ErrorManager::createError(const string &fileName, ParseError::Type type, size_t fstLine, size_t lstLine, string message, string info, bool aggressive) {
-    Metadata meta = Metadata(&fileName, &sources.at(fileName), fstLine, lstLine, 1);
-    _errors.push_back(ParseError(aggressive ? (ParseError::FlagVec) {ParseError::AGGRESSIVE} : ParseError::FlagVec(), 
-        type, message, (ParseError::SUBJ_STRCT) {meta, info, "", 0}));
+void ErrorManager::simpleError(
+    ParseError::Type type, string title,
+    const string &file,
+    size_t fstLine, size_t lstLine,
+    size_t fstCol, size_t lstCol,
+    string info, vector<string> notes, 
+    bool warning, bool aggressive) {
+        createError(
+            type, title, 
+            file, fstLine, lstLine, fstCol, lstCol, info, 0, "", 
+            file, 0, 0, 0, 0, "", 0, "", // empty reference
+            notes, false, warning, aggressive 
+        );
 }
 
-void ErrorManager::createRefError(const string &fileName, ParseError::Type type, const Token &token, const Token &refToken, string message, string info, string refInfo, bool aggressive) {
-    ParseError::FlagVec flags = {ParseError::REFERENCE};
-    if (aggressive)
-        flags.push_back(ParseError::AGGRESSIVE);
-    Metadata subj_meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
-    Metadata ref_meta = Metadata(&fileName, &sources.at(fileName), refToken.line, refToken.line, refToken.start, refToken.end);
-    _errors.push_back(ParseError(flags, type, message, 
-        (ParseError::SUBJ_STRCT) {subj_meta, info, "", 0}, (ParseError::SUBJ_STRCT) {ref_meta, refInfo, "", 0}));
-}
-
-void ErrorManager::createRefWarning(const string &fileName, ParseError::Type type, const Token &token, const Token &refToken, string message, string info, string refInfo, bool aggressive) {
-    ParseError::FlagVec flags = {ParseError::REFERENCE, ParseError::WARNING};
-    if (aggressive)
-        flags.push_back(ParseError::AGGRESSIVE);
-    Metadata subj_meta = Metadata(&fileName, &sources.at(fileName), token.line, token.line, token.start, token.end);
-    Metadata ref_meta = Metadata(&fileName, &sources.at(fileName), refToken.line, refToken.line, refToken.start, refToken.end);
-    _errors.push_back(ParseError(flags, type, message, 
-        (ParseError::SUBJ_STRCT) {subj_meta, info, "", 0}, (ParseError::SUBJ_STRCT) {ref_meta, refInfo, "", 0}));
-}
-
-
-void ErrorManager::addHelp(string message) {
-    _errors.back().addNote("Help: "+message);
-}
-
-void ErrorManager::addNote(string message) {
-    _errors.back().addNote("Note: "+message);
-}
-
-void ErrorManager::report() {
-    for (ParseError &pe : _errors)
-        pe.report();
+void ErrorManager::simpleError(ParseError::Type type, string title,
+    const string &file,
+    size_t fstLine, size_t lstLine,
+    size_t fstCol, size_t lstCol, 
+    string info, size_t ptr, string ptrText, 
+    vector<string> notes, bool warning, bool aggressive) {
+        createError(
+            type, title, 
+            file, fstLine, lstLine, fstCol, lstCol,
+            info, ptr, ptrText, 
+            file, 0, 0, 0, 0, "", 0, "", // empty reference
+            notes, false, warning, aggressive
+        );
 }
 
 size_t ErrorManager::errors() { return errorCount; }
