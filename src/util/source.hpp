@@ -21,7 +21,7 @@ public:
     typedef vector<SourceFile *> Vec;
     typedef vector<Vec> Groups;
 
-    SourceFile(const string &filePath, const bool mainFile = false);
+    SourceFile(ErrorManager *error, const string &filePath, const bool mainFile = false);
     
     ~SourceFile();
 
@@ -33,10 +33,7 @@ public:
     void parse();
 
     // check if file has errors
-    bool hasErrors();
-
-    // report all errors (for warnings actually)
-    void reportErrors();
+    size_t errors();
 
     // return file size in bytes
     // from https://stackoverflow.com/a/32286531

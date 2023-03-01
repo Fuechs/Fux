@@ -18,11 +18,11 @@
 
 class Lexer {
 public:
-    Lexer(const string source, const string fileName, ErrorManager *error) 
-    : source(source), tokens({}), currentToken(Token()), idx(0), col(1), line(1), error(error) {
-        parseLines();
-        error->lines = lines;
-        error->fileName = fileName;
+    Lexer(const string source, const string &fileName, ErrorManager *error) 
+    : fileName(fileName), source(source), tokens({}), currentToken(Token()), 
+        idx(0), col(1), line(1), error(error) {
+            parseLines();
+            error->addSourceFile(fileName, lines);
     }
 
     ~Lexer() {
@@ -39,6 +39,7 @@ public:
     void debugPrint();
 
 private:
+    const string &fileName;
     string source;
     vector<string> lines;
     Token::Vec tokens;

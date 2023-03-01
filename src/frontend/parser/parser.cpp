@@ -127,7 +127,9 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
 
     eat(LPAREN);
 
-    init = parseStmt(false);
+    init = parseStmt(false); 
+    // FIXME: declaration returns noop, 
+    //          thus there's no reference to the variable in foreach loops
 
     if (check(KEY_IN)) {
         forEach = true;

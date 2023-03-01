@@ -55,18 +55,17 @@ int main(int argc, char **argv) {
         default:    return result;
     }
     
-    SourceFile *mainFile = new SourceFile(fux.options.fileName, true);
+    ErrorManager *error = new ErrorManager();
+    SourceFile *mainFile = new SourceFile(error, fux.options.fileName, true);
     fux.options.libraries.push_back(mainFile->fileDir); // add src include path 
 
     mainFile->parse();
     RootAST::Ptr root = std::move(mainFile->root);
-    if (mainFile->hasErrors()) {
+    if (mainFile->errors()) {
         delete mainFile;
         return 1;
     } 
-    mainFile->reportErrors();
     root->debugPrint();
-    // mainFile->analysed->debugPrint();
 
     // RootAST::Ptr root = createTestAST();    
     // root->debugPrint();
@@ -204,7 +203,9 @@ int repl() {
         else if (input == "exit" || input == "exit;")
             break;
 
-        ErrorManager *error = new ErrorManager("<stdin>", {input});
+        ErrorManager *error = new ErrorManager();
+        string streamName = "<stdin>";
+        error->addSourceFile(streamName, {input});
         Parser *parser = new Parser(error, "<stdin>", input, true);
         RootAST::Ptr root = parser->parse();
         // Analyser *analyser = new Analyser(error, root);
@@ -212,13 +213,10 @@ int repl() {
         delete parser;
         // delete analyser;
 
-        if (error->hasErrors())
-            error->panic();
-        else {
+        if (!error->errors())  {          
             root->debugPrint();
             // TODO: generate and run ...
         }
-
         break;
     }
 

@@ -282,7 +282,7 @@ void FunctionAST::debugPrint(size_t indent) {
     for (StmtAST::Ptr &local : locals) {
         callASTDebug(0, local);
         if (local != locals.back())
-            cout << ", ";
+            cout << "; ";
     }
     cout << " ]\n";
     debugBody(indent, body);

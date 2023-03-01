@@ -148,8 +148,10 @@ string ParseError::printUnderline(size_t start, size_t end, size_t except) {
     
     ss << pad() << SC::BOLD << CC::RED << "|\t";
 
-    bool underline = false, arrow = except == 0;
-    for (size_t i = 1; !underline || !arrow; i++) {
+    size_t i;
+    for (i = 1; i < std::min({start, except}) - 1; i++) 
+        ss << " ";
+    for (; i <= std::max({end, except}) + 1; i++) {
         if (except == 0) {
             for (;i >= start && i <= end; i++) 
                 ss << CC::RED << "^";
@@ -158,13 +160,11 @@ string ParseError::printUnderline(size_t start, size_t end, size_t except) {
 
         if (i == except - 1 || i == except + 1)
             ss << " ";
-        else if (i == except) {
-            arrow = true;
+        else if (i == except) 
             ss << CC::RED << "^";
-        } else if (i >= start && i <= end) {
+        else if (i >= start && i <= end) 
             ss << CC::BLUE << "-";
-            underline = i == end;
-        } else
+        else
             ss << " ";
     }
     
