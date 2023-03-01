@@ -40,7 +40,8 @@
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Target/TargetOptions.h>
 
-using namespace llvm;
+using llvm::Value, llvm::Function, llvm::BasicBlock, llvm::Type, llvm::PointerType, 
+    llvm::LLVMContext, llvm::Module, llvm::IRBuilder, llvm::FunctionType, llvm::Attribute, llvm::ConstantFP;
 
 typedef vector<Value *> ValueList;
 typedef vector<BasicBlock *> BlockList;

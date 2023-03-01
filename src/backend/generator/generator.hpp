@@ -16,7 +16,6 @@
 #ifdef FUX_BACKEND
 #include "../llvmheader.hpp"
 #include "../../frontend/ast/ast.hpp"
-#include "genarray.hpp"
 
 class Generator {
 public:
@@ -26,7 +25,6 @@ public:
     void generate();
 
     static Type *getType(LLVMWrapper *fuxLLVM, FuxType type);
-    static FuxArray *createArrayType(LLVMWrapper *fuxLLVM, FuxType type);
 
 private:
     RootAST::Ptr root;

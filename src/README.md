@@ -1,6 +1,6 @@
 # `src/` Tree
 
-> Last updated on 2023-01-27
+> Last updated on 2023-03-01
 
 ```
 src
@@ -14,10 +14,9 @@ src
 │   │   └── context.hpp - backend manager header
 │   ├── generator
 │   │   ├── codegen.cpp - StmtAST::codegen() impl.
-│   │   ├── genarray.hpp - "template" class for array types (llvm ir)
 │   │   ├── generator.cpp - generator impl.
 │   │   ├── generator.hpp - generator
-│   │   ├── gentype.cpp - Generator::getType & FuxArray impl. (llvm ir)
+│   │   ├── gentype.cpp - Generator::getType() impl.
 │   │   ├── wrapper.cpp - LLVMWrapper impl.
 │   │   └── wrapper.hpp - custom LLVMWrapper for StmtAST::codegen()
 │   └── llvmheader.hpp - includes for llvm headers & type definitions

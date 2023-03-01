@@ -264,8 +264,10 @@ RootAST::Ptr createTestAST() {
     bodyList.push_back(std::move(ret));
 
     StmtAST::Ptr body = make_unique<CodeBlockAST>(bodyList);
-    StmtAST::Ptr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args, body);
-    root->addSub(mFunc);
+    FunctionAST::Ptr mFunc = make_unique<FunctionAST>(FuxType(FuxType::I64), "main", args);
+    mFunc->setBody(body);
+    StmtAST::Ptr _mFunc = std::move(mFunc);
+    root->addSub(_mFunc); 
 
     return root;
 }
