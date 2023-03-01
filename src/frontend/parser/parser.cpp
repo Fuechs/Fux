@@ -43,7 +43,7 @@ StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
     if (*current == SEMICOLON) { // handle while (...); or for (;;);
         if (expectSemicolon)
             eat();
-        return nullptr;
+        return make_unique<NoOperationAST>();
     }
 
     StmtAST::Ptr stmt = parseFunctionDeclStmt();
@@ -704,11 +704,10 @@ Token &Parser::eat(TokenType type, ParseError::Type errType) {
     Token curTok = eat();
 
     if (curTok != type) {
-        stringstream err;
-        err << "got " << TokenTypeString[curTok.type] << " '" << curTok.value << "'";
-        if (errType == ParseError::MISSING_PAREN)
-            err << " instead of " << TokenTypeString[type] << " '" << TokenTypeValue[type] << "'";
-        createError(errType, err.str(), curTok, ""); // TODO: better error
+        createError(errType, "Got Unexpected Token "+string(TokenTypeString[curTok.type])+" '"+curTok.value+"'", 
+            peek(-1), "Previous token", curTok.start, 
+            "Expected "+string(TokenTypeString[type])+" '"+TokenTypeValue[type]+"' here instead"); 
+        // TODO: better error
         recover();
     }
 

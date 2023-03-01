@@ -23,6 +23,7 @@ Token::Vec Lexer::lex() {
 
     currentToken.type = _EOF;
     currentToken.value = TokenTypeValue[_EOF];
+    currentToken.end = col + 1;
     endToken();
 
     return tokens;

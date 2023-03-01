@@ -149,7 +149,8 @@ string ParseError::printUnderline(size_t start, size_t end, size_t except) {
     ss << pad() << SC::BOLD << CC::RED << "|\t";
 
     size_t i;
-    for (i = 1; i < std::min({start, except}) - 1; i++) 
+    size_t max = (except == 0 ? start  : std::min({start, except})) - 1;
+    for (i = 1; i < max; i++) 
         ss << " ";
     for (; i <= std::max({end, except}) + 1; i++) {
         if (except == 0) {
