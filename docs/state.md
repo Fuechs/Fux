@@ -16,7 +16,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 #### [...] Stage I - Turing Complete in C++
 
 - [...] Syntax
-- [...] Error System ([Rewrite](https://github.com/Fuechs/Fux/tree/error-rewrite))
+- [&check;] Error System
 - [&check;] Source Management
 - [...] Threading
     - [&check;] Class

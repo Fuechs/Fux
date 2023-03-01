@@ -16,7 +16,7 @@ src = 		$(main) $(frontend) $(backend) $(util)
 all: comp
 
 comp:
-	$(cc) $(src) -o $(exec) $(cflags) 
+	$(cc) $(src) -o $(exec) $(llvmflags) $(cflags) 
 
 # can be set with f=... when compiling
 f = test
