@@ -12,7 +12,6 @@
 #pragma once
 
 #include "../../backend/generator/wrapper.hpp"
-#include "position.hpp"
 #include "stmt.hpp"
 
 class ExprAST : public StmtAST {

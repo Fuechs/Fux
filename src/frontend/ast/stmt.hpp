@@ -12,6 +12,7 @@
 #pragma once
 
 #include "../analyser/expectation.hpp"
+#include "../metadata.hpp"
 
 enum class AST {
     // expressions
@@ -57,7 +58,7 @@ public:
 
     bool isExpr();
 
-    Position pos = Position();
+    Metadata meta = Metadata();
 };
 
 extern StmtAST::Ptr nullStmt;

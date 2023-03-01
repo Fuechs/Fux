@@ -282,7 +282,7 @@ void FunctionAST::debugPrint(size_t indent) {
     for (StmtAST::Ptr &local : locals) {
         callASTDebug(0, local);
         if (local != locals.back())
-            cout << ", ";
+            cout << "; ";
     }
     cout << " ]\n";
     debugBody(indent, body);
@@ -349,10 +349,6 @@ void Analyser::debugPrint(const string message) {
         cout << ": " << message;
     cout << "\n";
 }
-
-// * ERROR
-
-void ErrorManager::debugPrint() { return; }
 
 #ifdef FUX_BACKEND
 

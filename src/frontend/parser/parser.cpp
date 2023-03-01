@@ -12,7 +12,7 @@
 #include "parser.hpp"
 
 Parser::Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile) 
-: error(error), mainFile(mainFile) {
+: fileName(fileName), error(error), mainFile(mainFile) {
     lexer = new Lexer(source, fileName, error);
     if (mainFile)
         fux.options.fileLines = lexer->getLines();
@@ -73,15 +73,15 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
     Token::Iter paramBegin = current;
     for (size_t depth = 1;;) {
         if      (check(LPAREN)) ++depth;
-        else if (check(RPAREN)) --depth;
+        else if (check(RPAREN)) --depth; // we don't care about any errors here, so we don't check wether depth is < 0
         else if (check(_EOF))   {
-            error->createError(MISSING_BRACKET, peek(-1), "expected closing paren");
-            error->addNote(*paramBegin, "opening paren found here");
+            createError(ParseError::MISSING_PAREN, "Expected Closing Paren after Parameter List", peek(-1), "Expected closing paren here",
+                *paramBegin, "Opening paren found here"); 
             recover();
             break;
         } else                  eat();
 
-        if (depth == 0)
+        if (depth <= 0)
             break;
     } // skip ( ... )
 
@@ -101,7 +101,7 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
         if (arg) // error already created by parseVariableDeclStmt
             args.push_back(std::move(arg)); 
     } while (check(COMMA));
-    eat(RPAREN, MISSING_BRACKET);
+    eat(RPAREN, ParseError::MISSING_PAREN);
 
     FuxType type = parseType();
 
@@ -127,7 +127,9 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
 
     eat(LPAREN);
 
-    init = parseStmt(false);
+    init = parseStmt(false); 
+    // FIXME: declaration returns noop, 
+    //          thus there's no reference to the variable in foreach loops
 
     if (check(KEY_IN)) {
         forEach = true;
@@ -142,7 +144,7 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
             iter = parseExpr();
     }
 
-    eat(RPAREN, MISSING_BRACKET);
+    eat(RPAREN, ParseError::MISSING_PAREN);
     StmtAST::Ptr body = parseStmt();
     if (forEach)    return make_unique<ForLoopAST>(init, iter, body);
     else            return make_unique<ForLoopAST>(init, cond, iter, body);
@@ -159,11 +161,11 @@ StmtAST::Ptr Parser::parseWhileLoopStmt() {
         eat(KEY_WHILE);
         eat(LPAREN);
         condition = parseExpr();
-        eat(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, ParseError::MISSING_PAREN);
     } else if (check(KEY_WHILE)) {
         eat(LPAREN);
         condition = parseExpr();
-        eat(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, ParseError::MISSING_PAREN);
         body = parseStmt();
     } else
         return parseBlockStmt();
@@ -173,12 +175,13 @@ StmtAST::Ptr Parser::parseWhileLoopStmt() {
 
 StmtAST::Ptr Parser::parseBlockStmt() {
     if (check(LBRACE)) {
+        Token &opening = peek(-1); // '{' position for error reporting 
         StmtAST::Vec body;
         while (!check(RBRACE)) {
             if (!notEOF()) {
-                error->createError(MISSING_BRACKET, *(current - 1),
-                    "Code block was never closed.");
-                return nullptr; 
+                createError(ParseError::MISSING_PAREN, "Code Block was never closed", *(current - 1), "Expected a closing paren (RBRACE '}') here", 
+                    opening, "Opening paren found here (LBRACE '{')");
+                return make_unique<NoOperationAST>(); 
             }
             body.push_back(parseStmt());
         }
@@ -192,7 +195,7 @@ StmtAST::Ptr Parser::parseIfElseStmt() {
     if (check(KEY_IF)) {
         eat(LPAREN);
         ExprAST::Ptr condition = parseExpr();
-        eat(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, ParseError::MISSING_PAREN);
         StmtAST::Ptr thenBody = parseStmt(); 
         if (check(KEY_ELSE)) {
             StmtAST::Ptr elseBody = parseStmt(); 
@@ -446,7 +449,7 @@ ExprAST::Ptr Parser::parseTypeCastExpr() {
             current = backToken; // get '*'s, identifier and '(' back
             return parseLogBitUnaryExpr();
         }
-        eat(RPAREN, MISSING_BRACKET);
+        eat(RPAREN, ParseError::MISSING_PAREN);
         ExprAST::Ptr expr = parseExpr();
         return make_unique<TypeCastExprAST>(type, expr);
     }
@@ -491,7 +494,7 @@ ExprAST::Ptr Parser::parseIndexExpr() {
         return make_unique<BinaryExprAST>(BinaryOp::IDX, expr);
     else if (check(LBRACKET)) {
         ExprAST::Ptr index = parseExpr();
-        eat(RBRACKET, MISSING_BRACKET);
+        eat(RBRACKET, ParseError::MISSING_PAREN);
         return make_unique<BinaryExprAST>(BinaryOp::IDX, expr, index);
     }
 
@@ -517,7 +520,7 @@ ExprAST::Ptr Parser::parseCallExpr() {
     ExprAST::Vec arguments = ExprAST::Vec();
     if (*current != RPAREN)
         arguments = parseExprList(RPAREN);
-    eat(RPAREN, MISSING_BRACKET);
+    eat(RPAREN, ParseError::MISSING_PAREN);
     return make_unique<CallExprAST>(symbol, arguments, asyncCall);
 } 
 
@@ -549,12 +552,12 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
                 || endTok.type == OCTAL
                 || endTok.type == BINARY)
                     endExpr = parseNumberExpr(endTok);
-                else {
-                    error->createError(GENERIC, endTok,
-                        "incomplete range expressions, would have expected a number after '...'");
-                    error->addNote(that, "range expression starts here");
-                }   
-
+                else 
+                    error->simpleError(ParseError::ILLEGAL_OPERANDS, "Incomplete Range Expression", fileName,
+                        that.line, endTok.line, that.start, endTok.end, "Range expression indicated by '...' operator.", 
+                        endTok.start, "Would have expected an integer here.", 
+                        {"Help: The LHS and the RHS of a range expression have to be constants."});
+                
                 return make_unique<RangeExprAST>(beginExpr, endExpr);
             }
             return beginExpr;
@@ -576,24 +579,22 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
         }
         case LPAREN: {
             ExprAST::Ptr expr = parseExpr();
-            eat(RPAREN, MISSING_BRACKET);
+            eat(RPAREN, ParseError::MISSING_PAREN);
             return expr;
         }
         case LBRACE: {
             ExprAST::Vec elements = parseExprList(RBRACE);
-            eat(RBRACE, MISSING_BRACKET);
+            eat(RBRACE, ParseError::MISSING_PAREN);
             return make_unique<ArrayExprAST>(elements);
         }
         case _EOF: {
-            error->createError(UNEXPECTED_EOF, that, "did not expect end of file here", true);
+            createError(ParseError::UNEXPECTED_EOF, "Unexpected EOF while parsing Primary Expression",
+                that, "Expected a primay expression here", 0, "", {}, false, true);
             return nullptr;
         }
         default: {        
-            stringstream message;
-            message 
-                << "unexpected token " << TokenTypeString[that.type]
-                << " '" << that.value << "' while parsing primary expression";
-            error->createError(UNEXPECTED_TOKEN, that, message.str());
+            createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing Primary Expression",
+                that, "Unexpected token "+string(TokenTypeString[that.type])+" '"+that.value+"'");
             recover();
             return parsePrimaryExpr();
         }
@@ -620,8 +621,8 @@ FuxType Parser::parseType(bool primitive) {
         case COLON:     pointerDepth = 0; break;
         case POINTER:  pointerDepth = -1; break;
         default:        
-            error->createError(UNEXPECTED_TOKEN, typeDenotion,
-                "expected a COLON ':' or POINTER '->' here");
+            createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
+                typeDenotion, "Expected a COLON ':' or POINTER '->' here");
             return FuxType();
     }
 
@@ -635,21 +636,16 @@ FuxType Parser::parseType(bool primitive) {
         }
 
         while(check(ASTERISK)); // skip all '*'
-        error->createWarning(INCOMPATIBLE_TYPES, peek(-1),
-            "given pointer depth wil be ignored and a reference parsed instead");
-        error->addNote(typeDenotion, "the reference got declared here");
+        createError(ParseError::ILLEGAL_TYPE, "Pointrer-Depth on Reference Type",
+            peek(-1), "Given pointer-depth will be ignored and a reference passed instead",
+            typeDenotion, "The reference got denoted here", {}, true);
     }
 
     if (!current->isType()) {
-        // if (typeDenotion == POINTER) {
-        //     error->createError(UNEXPECTED_TOKEN, eat(), "expected a type after POINTER '->'");
-        //     error->addNote(typeDenotion, "automatic typing is not supported for references yet");
-        //     return FuxType(); 
-        // } 
-
         if (pointerDepth > 0)
-            error->createWarning(INCOMPATIBLE_TYPES, peek(-1), 
-                "given pointer depth will be ignored for automatic type");
+            createError(ParseError::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
+                peek(-1), "Given pointer-depth will be ignored",
+                0, "", {}, true);
         return FuxType::createStd(FuxType::AUTO, 0, access);
     }
 
@@ -660,7 +656,7 @@ FuxType Parser::parseType(bool primitive) {
         return FuxType::createArray(kind, pointerDepth, access, value);
     else if (check(LBRACKET)) {
         ExprAST::Ptr size = parseExpr();
-        eat(RBRACKET, MISSING_BRACKET);
+        eat(RBRACKET, ParseError::MISSING_PAREN);
         return FuxType::createArray(kind, pointerDepth, access, value, root->addSizeExpr(size));
     } else 
         return FuxType::createStd(kind, pointerDepth, access, value);
@@ -704,15 +700,15 @@ Token &Parser::eat() {
     return *current++;
 }
 
-Token &Parser::eat(TokenType type, ErrorType errType) {
+Token &Parser::eat(TokenType type, ParseError::Type errType) {
     Token curTok = eat();
 
     if (curTok != type) {
         stringstream err;
         err << "got " << TokenTypeString[curTok.type] << " '" << curTok.value << "'";
-        if (errType == MISSING_BRACKET)
+        if (errType == ParseError::MISSING_PAREN)
             err << " instead of " << TokenTypeString[type] << " '" << TokenTypeValue[type] << "'";
-        error->createError(errType, curTok, err.str());
+        createError(errType, err.str(), curTok, ""); // TODO: better error
         recover();
     }
 
@@ -740,3 +736,22 @@ bool Parser::check(TokenType type, TokenType type0) {
 void Parser::recover(TokenType type) { while (*current != type && *current != _EOF) eat(); }
 
 constexpr bool Parser::notEOF() { return *current != _EOF; }
+
+void Parser::createError(
+    ParseError::Type type, string title, 
+    const Token &token, string info, size_t ptr, string ptrText,
+    vector<string> notes, bool warning, bool aggressive) {
+        error->simpleError(type, title, fileName, token.line, token.line, token.start, token.end, 
+            info, ptr, ptrText, notes, warning, aggressive);
+}
+
+void Parser::createError(
+    ParseError::Type type, string title,
+    const Token &token, string info, 
+    const Token &refTok, string refInfo,
+    vector<string> notes, bool warning, bool aggressive) {
+        error->createError(type, title, 
+            fileName, token.line, token.line, token.start, token.end, info, 0, "", 
+            fileName, refTok.line, refTok.line, refTok.start, refTok.end, refInfo, 0, "",
+            notes, true, warning, aggressive);
+}

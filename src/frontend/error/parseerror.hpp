@@ -11,100 +11,128 @@
 
 #pragma once
 
-#include "note.hpp"
-
-enum ErrorType {
-    UNEXPECTED_SYMBOL,
-    ILLEGAL_NUMBER_FORMAT,
-    UNEXPECTED_EOF,
-    EXPECTED_STRING_LITERAL_EOF,
-    ILLEGAL_STRING_FORMAT,
-    EXPECTED_CHAR_LITERAL_EOF,
-    ILLEGAL_CHAR_LITERAL_FORMAT,
-    GENERIC,
-    ILLEGAL_ACCESS_DECLARATION,
-    ILLEGAL_BRACKET_MISMATCH,
-    MISSING_BRACKET,
-    INVALID_ACCESS_SPECIFIER,
-    MULTIPLE_DEFINITION,
-    PREVIOUSLY_DEFINED,
-    DUPLICATE_CLASS,
-    REDUNDANT_TOKEN,
-    INTERNAL_ERROR,
-    COULD_NOT_RESOLVE,
-    EXPECTED_REFERENCE_OF_TYPE,
-    INVALID_CAST,
-    REDUNDANT_CAST,
-    REDUNDANT_IMPORT,
-    UNEXPECTED_TOKEN,
-    INVALID_ACCESS,
-    SYMBOL_ALREADY_DEFINED,
-    INVALID_PARAM,
-    INCOMPATIBLE_TYPES,
-    DUPLICATE_DECLARATION,
-    NO_ERR,
-};
+#include "../../fux.hpp"
+#include "../lexer/token.hpp"
+#include "../metadata.hpp"
 
 // standard messages for each error type
 static const char *ErrorTypeString[] = {
-    "unexpected symbol",
-    "illegal number format mismatch",
-    "unexpected end of file",
-    "expected string literal before end of file",
-    "illegal string format",
-    "expected character literal before end of file",
-    "illegal character literal format",
-    "",
-    "illegal specification of access specifier(s)",
-    "illegal symbol mismatch, unexpected bracket",
-    "missing bracket",
-    "invalid access specifier",
-    "",
-    "previously defined",
-    "duplicate class",
-    "redundant token",
-    "internal runtime error",
-    "could not resolve symbol",
-    "expected reference of type",
-    "invalid cast of type",
-    "redundant cast of type",
-    "redundant self import of package",
-    "unexpected token",
-    "invalid access of",
-    "",
-    "invalid param of type",
-    "incompatible types",
-    "duplicate declaration of",
-    "",
+    "Generic",
+
+    "Unexpected Token",
+    "Unexpected End of File",
+    "Unexpected Parameter",
+    "Expected lvalue",
+
+    "Unknown Error",
+    "Unknown Character",
+
+    "Illegal Number Format",
+    "Illegal Char Literal Format",
+    "Illegal String Literal Format",
+    "Illegal Type",
+    "Illegal Cast",
+    "Illegal Access",
+    "Illegal Import",
+    "Illegal Operands",
+
+    "Redundant Cast",
+    "Redundant Token",
+    "Redundant Import",
+
+    "Duplicate Symbol",
+    "Duplicate Declaration",
+    
+    "Missing Paren",
 };
 
 class ParseError {
 public:
+    typedef vector<ParseError> Vec;
+
+    enum Type {
+        GENERIC,
+
+        UNEXPECTED_TOKEN,
+        UNEXPECTED_EOF,
+        UNEXPECTED_PARAMETER,
+        EXPECTED_LVALUE,
+
+        UNKNOWN_ERROR,
+        UNKNOWN_CHARACTER,
+        
+        ILLEGAL_NUMBER_FORMAT,
+        ILLEGAL_CHAR_LITERAL_FORMAT,
+        ILLEGAL_STRING_LITERAL_FORMAT,
+        ILLEGAL_TYPE,
+        ILLEGAL_CAST,
+        ILLEGAL_ACCESS,
+        ILLEGAL_IMPORT,
+        ILLEGAL_OPERANDS,
+
+        REDUNDANT_CAST,
+        REDUNDANT_TOKEN,
+        REDUNDANT_IMPORT,
+
+        DUPLICATE_SYMBOL,
+        DUPLICATE_DECLARATION,
+
+        MISSING_PAREN,
+    };
+
+    enum Flag {
+        WARNING,        // is a warning
+        AGGRESSIVE,     // is aggressive
+        REPORTED,       // was reported
+        REFERENCE,      // has a reference to another code
+    };
+
+    typedef vector<Flag> FlagVec;
+
+    struct SUBJ_STRCT {
+        SUBJ_STRCT(Metadata meta = Metadata(), string info = "", string pointerText = "", size_t pointer = 0);
+        ~SUBJ_STRCT();
+
+        SUBJ_STRCT &operator=(const SUBJ_STRCT &copy);
+
+        Metadata meta;
+        string info;
+        string pointerText;
+        size_t pointer;
+    };
+
     ParseError();
-    ParseError(const ParseError &pe);
-    ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, vector<string> lines, string comment = "", bool warning = false, bool aggressive = false);
-    ParseError(ErrorType type, Token &token, string fileName, string line, string comment = "", bool warning = false, bool aggressive = false);
+    ParseError(FlagVec flags, Type type, string title, SUBJ_STRCT subject, SUBJ_STRCT reference = SUBJ_STRCT(), vector<string> notes = {});
+    ~ParseError();
 
-    void operator=(const ParseError &pe);
-
-    // free the error data
-    void free();
-    // check if error is supposed to be reported and print it out
-    // includes checks for aggressive and warnings and werror
-    // errormanager has to free error when it's freed
     void report();
 
-    void addNote(ErrorNote note);
-
-    bool warning, aggressive;
-    ErrorType type;
-    string message, fileName;
-    vector<string> lines;
-    NoteList notes;
-    Position pos;
+    constexpr bool hasFlag(Flag flag);
+    void addNote(string note);
 
 private:
-    bool reported;
-};
+    FlagVec flags;
+    Type type;
+        
+    string title;
+    SUBJ_STRCT subject, reference;
+    
+    vector<string> notes;
 
-namespace fuxErr { typedef vector<ParseError> ErrorList; }
+    // helper functions for error reporting
+    size_t padding = 3;
+
+    string pad(size_t sub = 0, char fill = ' ');
+    string tripleDot();
+
+    string printHead();
+    string printSubject(const SUBJ_STRCT &subj);
+    string printPosition(const Metadata &meta);
+    string printLine(size_t lineNumber, string line);
+    string printUnderline(size_t start, size_t end, size_t except = 0);
+    string printArrow(const SUBJ_STRCT &meta);
+    string printInfo(const string &info, bool wrap = false);
+    string printNotes();
+
+    // vector<string> splitString(string data, size_t max);
+};

@@ -13,63 +13,51 @@
 
 #include "parseerror.hpp"
 
-/**
- * ! IMPORTANT NOTE
- * The error system is currently being rewritten in the "error-rewrite" branch.
- * Please do not modify any code that is associated with this.
- */
 class ErrorManager {
 public:
-    ErrorManager(string fileName, vector<string> lines) 
-    : fileName(fileName), lines(lines), errors(fuxErr::ErrorList()) {}
+    typedef map<string, vector<string>> SourceMap;
 
+    ErrorManager();
     ~ErrorManager();
 
-    size_t errorCount();
-    size_t warningCount();
+    void addSourceFile(const string &fileName, const vector<string> &sourceLines);
 
-    bool hasErrors();
-    bool hasWarnings();
+    void createError(
+        ParseError::Type type, string title,
+        // subject
+        const string &subjectFile,
+        size_t subjectFstLine, size_t subjectLstLine, 
+        size_t subjectFstCol, size_t subjectLstCol,
+        string subjectInfo, size_t subjectPtr, string subjectPtrText,
+        // reference
+        const string &refFile,
+        size_t refFstLine, size_t refLstLine, 
+        size_t refFstCol, size_t refLstCol,
+        string refInfo, size_t refPtr, string refPtrText,
+        // other
+        vector<string> notes, bool reference, bool warning, bool aggressive
+    );
 
-    // create an error with custom line and column
-    void createError(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
-    // create an error with token position
-    void createError(ErrorType type, Token &token, string comment = "", bool aggressive = false);
-
-    // create a warning with custom line and column
-    void createWarning(ErrorType type, size_t line, size_t col, string comment = "", bool aggressive = false);
-    // create a warning with token position
-    void createWarning(ErrorType type, Token &token, string comment = "", bool aggressive = false);
-
-    // add note to recent ParseError
-    void addNote(size_t line, size_t col, string comment = "");
-    // add not to recent ParseError with token position
-    void addNote(Token &token, string comment = "");
-
-    // report all errors and warnings
-    void reportAll();
-
-    // literally self destruct 
-    // may be because of a fatal error
-    void panic(bool fatal = false) {
-        reportAll();
-        if (fatal)
-            cout 
-                << CC::RED << SC::BOLD 
-                << "Hit a fatal error.\n" 
-                << CC::DEFAULT << SC::RESET;
-        delete this;
-    }
-
-    string fileName;
-    vector<string> lines;
-
-    void debugPrint();
+    void simpleError(ParseError::Type type, string title,
+        const string &file,
+        size_t fstLine, size_t lstLine,
+        size_t fstCol, size_t lstCol,
+        string info, vector<string> notes = {}, 
+        bool warning = false, bool aggressive = false);
     
+    void simpleError(ParseError::Type type, string title,
+        const string &file,
+        size_t fstLine, size_t lstLine, 
+        size_t fstCol, size_t lstCol, 
+        string info, size_t ptr, string ptrText, 
+        vector<string> notes = {}, bool warning = false, bool aggressive = false);
+
+    size_t errors();
+    size_t warnings();
+
 private:
-    fuxErr::ErrorList errors;
-
-    // add an error to errors (checks for errorlimit too)
-    void addError(ParseError error);
-
+    ParseError::Vec _errors;
+    size_t errorCount;
+    size_t warningCount;
+    SourceMap sources;
 };

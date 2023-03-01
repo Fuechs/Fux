@@ -11,95 +11,234 @@
 
 #include "parseerror.hpp"
 
+ParseError::SUBJ_STRCT::SUBJ_STRCT(Metadata meta, string info, string pointerText, size_t pointer) {
+    this->meta = meta;
+    this->info = info;
+    this->pointerText = pointerText;
+    this->pointer = pointer;
+}
+
+ParseError::SUBJ_STRCT::~SUBJ_STRCT() {
+    info.clear();
+    pointerText.clear();
+}
+
+ParseError::SUBJ_STRCT &ParseError::SUBJ_STRCT::operator=(const SUBJ_STRCT &copy) {
+    meta = copy.meta;
+    info = copy.info;
+    pointer = copy.pointer;
+    pointerText = copy.pointerText;
+    return *this;
+}
+
 ParseError::ParseError() {
-    reported = false;
-    warning = false;
-    aggressive = false;
-    type = NO_ERR;
-    message = "";
-    fileName = "";
-    lines = {};
-    notes = {};
-    pos = Position();
+    flags = FlagVec();
+    type = UNKNOWN_ERROR;
+    title = "";
+    subject = SUBJ_STRCT();
+    reference = SUBJ_STRCT();
+    notes = vector<string>();
 }
 
-ParseError::ParseError(const ParseError &pe) { operator=(pe); }
-
-ParseError::ParseError(ErrorType type, size_t lStart, size_t lEnd, size_t colStart, size_t colEnd, string fileName, vector<string> lines, string comment, bool warning, bool aggressive) {
+ParseError::ParseError(FlagVec flags, Type type, string title, SUBJ_STRCT subject, SUBJ_STRCT reference, vector<string> notes) {
+    this->flags = flags;
     this->type = type;
-    this->message = string(ErrorTypeString[type])+": "+comment;
-    this->fileName = fileName;
-    this->lines = lines;
-    this->pos = Position(lStart, lEnd, colStart, colEnd);
-    this->reported = false;
-    this->warning = warning;
-    this->aggressive = aggressive;
+    this->title = title;
+    this->subject = subject;
+    this->reference = reference;
+    this->notes = notes;
 }
 
-ParseError::ParseError(ErrorType type, Token &token, string fileName, string line, string comment, bool warning, bool aggressive) {
-    this->type = type;
-    this->pos = Position(token.line, token.line, token.start, token.end);
-    this->message = string(ErrorTypeString[type])+": "+comment;
-    this->fileName = fileName;
-    this->lines = {line};
-    this->reported = false;
-    this->warning = warning;
-    this->aggressive = aggressive;
+ParseError::~ParseError() { 
+    flags.clear(); 
+    title.clear();
 }
-
-void ParseError::operator=(const ParseError &pe) {
-    reported = pe.reported;
-    warning = pe.warning;
-    aggressive = pe.aggressive;
-    type = pe.type;
-    message = pe.message;
-    fileName = pe.fileName;
-    lines = pe.lines;
-    notes = pe.notes;
-    pos = pe.pos;
-}
-
-void ParseError::free() {
-    message.clear();
-    fileName.clear();
-    lines.clear();
-}
-
-void ParseError::addNote(ErrorNote note) { notes.push_back(note); }
-
 
 void ParseError::report() {
-    if ((aggressive && !fux.options.aggressiveErrors) || (warning && !fux.options.warnings) || reported) 
+    if (hasFlag(REPORTED) /* || !fux.options.warnings && hasFlag(WARNING) */)
         return;
+    flags.push_back(REPORTED);
 
-    if (fux.options.werrors)
-        warning = false;
+    stringstream ss = stringstream();
+    padding = to_string(std::max({subject.meta.lstLine, reference.meta.lstLine})).size() + 3;
 
-    stringstream errorMessage;
-    
-    errorMessage << SC::BOLD << fileName << ":" << pos.lStart << ":" << pos.colStart << ": ";
-    
-    if (warning)
-        errorMessage << CC::MAGENTA << "warning: ";
-    else
-        errorMessage << CC::RED << "error: ";
-    
-    errorMessage 
-        << CC::DEFAULT << "(" << type << ") " << message << "\n\t" // indent for visibility
-        << SC::RESET << lines.at(0) << "\n\t";
-    
-    // TODO: correct position for multiple lines (see Position class)
-    size_t i;
-    for (i = 0; i < (pos.colStart - 1); i++) // -1 so arrow points at exact position
-        errorMessage << " ";
-    errorMessage << CC::GREEN << SC::BOLD;
-    while (i++ < pos.colEnd)
-        errorMessage << "^";
-    errorMessage << CC::DEFAULT << SC::RESET << endl;
+    ss << printHead();
+    ss << printSubject(subject);
+    if (hasFlag(REFERENCE))
+        ss << printSubject(reference);
+    ss << printNotes();
 
-    for (ErrorNote &note : notes)
-        errorMessage << note.str();
-    
-    cerr << errorMessage.str();
-    reported = true;
+    cerr << ss.str();
 }
+
+constexpr bool ParseError::hasFlag(Flag flag) {
+    return find(flags.begin(), flags.end(), flag) != flags.end();
+}
+
+void ParseError::addNote(string note) { notes.push_back(note); }
+
+string ParseError::pad(size_t sub, char fill) {
+    string ret = "";
+    for (sub = padding - sub; sub --> 0;)
+        ret += fill;
+    return ret;
+}
+
+string ParseError::tripleDot() {
+    stringstream ss;
+    ss << CC::BLUE << "..." << pad(3) << "|\t" << CC::GRAY << "...\n" << CC::DEFAULT;
+    return ss.str();
+}
+
+string ParseError::printSubject(const SUBJ_STRCT &subj) { 
+    stringstream ss;
+    const Metadata &meta = subj.meta;
+
+    ss << printPosition(meta);
+    if (meta.fstLine == meta.lstLine) {
+        ss << printLine(meta.fstLine, meta[meta.fstLine]);
+        ss << printUnderline(meta.fstCol, meta.lstCol, subj.pointer);
+        ss << printInfo(subj.info);
+        ss << printArrow(subj);
+    } else if (meta.lstLine - meta.fstLine > 6) {
+        ss << printLine(meta.fstLine, meta[meta.fstLine]);
+        ss << tripleDot();
+        ss << printLine(meta.lstLine, meta[meta.lstLine]);
+        ss << printInfo(subj.info, true);
+    } else {
+        for (size_t i = meta.fstLine; i <= meta.lstLine; i++) 
+            ss << printLine(i, meta[i]);
+        ss << printInfo(subj.info, true);
+    }
+
+    return ss.str();
+}
+
+string ParseError::printHead() {
+    stringstream ss;
+    ss << SC::BOLD;
+    if (/*!fux.options.werrors &&*/ hasFlag(WARNING)) 
+        ss << CC::MAGENTA << "[warning]";
+    else 
+        ss << CC::RED << "[error]";
+    ss << CC::DEFAULT << "["; 
+    if (hasFlag(AGGRESSIVE)) ss << "A";
+    ss << "E" << type << "]: " << ErrorTypeString[type];
+    if (!title.empty()) ss << ": " << title;
+    ss << "\n" << SC::RESET;
+    return ss.str();
+}
+
+string ParseError::printPosition(const Metadata &meta) {
+    stringstream ss;
+    ss << pad(2) << CC::BLUE << SC::BOLD << ">>> " << SC::RESET
+        << *meta.file << ":" << meta.fstLine << ":" << meta.fstCol << "\n";
+    return ss.str();
+}
+
+string ParseError::printLine(size_t lineNumber, string line) {
+    stringstream ss;
+    string lineStr = to_string(lineNumber);
+    ss << CC::BLUE << SC::BOLD << lineStr << pad(lineStr.size()) << "|\t" << SC::RESET << CC::GRAY << line << "\n" << CC::DEFAULT;
+    return ss.str();
+}
+
+string ParseError::printUnderline(size_t start, size_t end, size_t except) {
+    stringstream ss;
+    
+    ss << pad() << SC::BOLD << CC::RED << "|\t";
+
+    size_t i;
+    for (i = 1; i < std::min({start, except}) - 1; i++) 
+        ss << " ";
+    for (; i <= std::max({end, except}) + 1; i++) {
+        if (except == 0) {
+            for (;i >= start && i <= end; i++) 
+                ss << CC::RED << "^";
+            break;
+        }
+
+        if (i == except - 1 || i == except + 1)
+            ss << " ";
+        else if (i == except) 
+            ss << CC::RED << "^";
+        else if (i >= start && i <= end) 
+            ss << CC::BLUE << "-";
+        else
+            ss << " ";
+    }
+    
+    // for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
+    //     ss << " ";
+
+    // while (i++ < end) {
+    //     if (except == 0) {
+    //         ss << "^";
+    //         continue;
+    //     }
+
+    //     if (i == except - 1 || i == except + 1) 
+    //         ss << " ";
+    //     else if (i == except) 
+    //         ss << CC::RED << "^";
+    //     else 
+    //         ss << CC::BLUE << "-";
+    // }
+
+    ss << SC::RESET << " ";
+    return ss.str();
+}
+
+string ParseError::printArrow(const SUBJ_STRCT &subj) {
+    if (subj.pointer == 0)
+        return "";
+    
+    const Metadata &meta = subj.meta;
+    stringstream ss;
+
+    ss << pad() << CC::RED << SC::BOLD << "|\t";
+    for (size_t i = 0; i < subj.pointer - 1; i++)
+        ss << " ";
+    ss << "|\n";
+    ss << pad() << "|\t";
+    for (size_t i = 0; i != subj.pointer - 1; i++)
+        ss << " ";
+    ss << subj.pointerText << "\n" << SC::RESET;
+
+    return ss.str();
+}
+
+string ParseError::printInfo(const string &info, bool wrap) {
+    if (info.empty())
+        return "\n";
+
+    stringstream ss;
+    ss << SC::BOLD << CC::RED;
+    if (wrap) 
+        ss << pad() << " \\___ " << info;
+    else 
+        ss << info;
+    ss << "\n" << SC::RESET;
+    return ss.str();
+}
+
+string ParseError::printNotes() {
+    stringstream ss;
+    ss << CC::YELLOW << SC::BOLD;
+    for (const string &note : notes)
+        ss << pad() << "|\t" << note << "\n";
+    ss << SC::RESET;
+    return ss.str();
+}
+
+// vector<string> ParseError::splitString(string data, size_t max) {
+//     vector<string> ret = {""};
+//     vector<string> tmp = vector<string>();
+//     tmp = split(data, ' ');
+//     for (string &word : tmp)
+//         if (ret.back().size() < max)
+//             ret.back() += word + " ";
+//         else
+//             ret.push_back(word + " ");
+//     return ret;
+// }

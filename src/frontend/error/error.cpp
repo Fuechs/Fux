@@ -11,97 +11,85 @@
 
 #include "error.hpp"
 
+ErrorManager::ErrorManager() : _errors(ParseError::Vec()), 
+    errorCount(0), warningCount(0), sources(SourceMap()) {}
+
 ErrorManager::~ErrorManager() {
-    fileName.clear();
-    for (ParseError &error : errors)
-        error.free();
-    errors.clear();
-    for (string &line : lines)
-        line.clear();
-    lines.clear();
+    _errors.clear();
+    sources.clear();
 }
 
-size_t ErrorManager::errorCount() {
-    if (fux.options.werrors) 
-        return errors.size();
+void ErrorManager::addSourceFile(const string &fileName, const vector<string> &sourceLines) { sources[fileName] = sourceLines; }
+
+void ErrorManager::createError(
+    ParseError::Type type, string title,
+    // subject
+    const string &subjectFile,
+    size_t subjectFstLine, size_t subjectLstLine, 
+    size_t subjectFstCol, size_t subjectLstCol,
+    string subjectInfo, size_t subjectPtr, string subjectPtrText,
+    // reference
+    const string &refFile,
+    size_t refFstLine, size_t refLstLine, 
+    size_t refFstCol, size_t refLstCol,
+    string refInfo, size_t refPtr, string refPtrText,
+    // other
+    vector<string> notes, bool reference, bool warning, bool aggressive 
+) {
+    Metadata subjectMeta = Metadata(&subjectFile, &sources.at(subjectFile),
+        subjectFstLine, subjectLstLine, subjectFstCol, subjectLstCol);
+    Metadata refMeta = Metadata(&refFile, &sources.at(refFile),
+        refFstLine, refLstLine, refFstCol, refLstCol);
+    ParseError::FlagVec flags = {};
+    if (reference)
+        flags.push_back(ParseError::REFERENCE);
+    if (warning)
+        flags.push_back(ParseError::WARNING);
+    if (aggressive)
+        flags.push_back(ParseError::AGGRESSIVE);
+    ParseError pe = ParseError(flags, type, title, 
+        ParseError::SUBJ_STRCT(subjectMeta, subjectInfo, subjectPtrText, subjectPtr),
+        ParseError::SUBJ_STRCT(refMeta, refInfo, refPtrText, refPtr),
+        notes);
+    pe.report();
+    _errors.push_back(pe);
     
-    size_t count = 0;
-    
-    for (ParseError &error : errors)
-        if (!error.warning)
-            ++count;
-    
-    return count;
+    if (warning)
+        warningCount++;
+    else
+        errorCount++;
 }
 
-size_t ErrorManager::warningCount() {
-    size_t count = 0;
-    
-    for (ParseError &error : errors)
-        if (error.warning)
-            ++count;
-    
-    return count;
+void ErrorManager::simpleError(
+    ParseError::Type type, string title,
+    const string &file,
+    size_t fstLine, size_t lstLine,
+    size_t fstCol, size_t lstCol,
+    string info, vector<string> notes, 
+    bool warning, bool aggressive) {
+        createError(
+            type, title, 
+            file, fstLine, lstLine, fstCol, lstCol, info, 0, "", 
+            file, 0, 0, 0, 0, "", 0, "", // empty reference
+            notes, false, warning, aggressive 
+        );
 }
 
-bool ErrorManager::hasErrors() {
-    if (fux.options.werrors)
-        return !errors.empty();
-
-    for (ParseError &error : errors)
-        if (!error.warning)
-            return true;
-    
-    return false;
+void ErrorManager::simpleError(ParseError::Type type, string title,
+    const string &file,
+    size_t fstLine, size_t lstLine,
+    size_t fstCol, size_t lstCol, 
+    string info, size_t ptr, string ptrText, 
+    vector<string> notes, bool warning, bool aggressive) {
+        createError(
+            type, title, 
+            file, fstLine, lstLine, fstCol, lstCol,
+            info, ptr, ptrText, 
+            file, 0, 0, 0, 0, "", 0, "", // empty reference
+            notes, false, warning, aggressive
+        );
 }
 
-bool ErrorManager::hasWarnings() {
-    for (ParseError &error : errors)
-        if (error.warning)
-            return true;
-    
-    return false;
-}
+size_t ErrorManager::errors() { return errorCount; }
 
-void ErrorManager::createError(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    addError(ParseError(type, line, line, col, col, fileName, {lines[line - 1]}, comment, false, aggressive));
-}
-
-void ErrorManager::createError(ErrorType type, Token &token, string comment, bool aggressive) {
-    addError(ParseError(type, token, fileName, {lines[token.line - 1]}, comment, false, aggressive));
-}
-
-void ErrorManager::createWarning(ErrorType type, size_t line, size_t col, string comment, bool aggressive) {
-    addError(ParseError(type, line, line, col, col, fileName, {lines[line - 1]}, comment, true, aggressive));
-}
-
-void ErrorManager::createWarning(ErrorType type, Token &token, string comment, bool aggressive) {
-    addError(ParseError(type, token, fileName, {lines[token.line - 1]}, comment, true, aggressive));
-}
-
-void ErrorManager::addNote(size_t line, size_t col, string comment) {
-    errors.back().addNote(ErrorNote(comment, lines, line, line, col, col));
-}
-
-void ErrorManager::addNote(Token &token, string comment) {
-    errors.back().addNote(ErrorNote(comment, lines, token.line, token.line, token.start, token.end));
-}
-
-void ErrorManager::reportAll() {
-    for (ParseError &error : errors)
-        error.report();
-}
-
-void ErrorManager::addError(ParseError error) {
-    errors.push_back(error);
-
-    if (errorCount() >= fux.options.errorLimit) {
-        reportAll();
-        cerr 
-            << CC::RED << SC::BOLD 
-            << "Hit error limit of " << fux.options.errorLimit << "."
-            << CC::DEFAULT << SC::RESET
-            << endl;
-        exit(error.type);
-    }
-}
+size_t ErrorManager::warnings() { return warningCount; }

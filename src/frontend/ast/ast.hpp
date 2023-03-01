@@ -17,7 +17,6 @@
 #include "../lexer/token.hpp"
 #include "../parser/type.hpp"
 #include "../parser/value.hpp"
-#include "position.hpp"
 #include "expr.hpp"
 #include "op.hpp"
 

@@ -64,7 +64,7 @@ StmtAST::Ptr PrototypeAST::analyse(Expectation exp) {
 
     for (StmtAST::Ptr &arg : args) {
         if (arg->getASTType() != AST::VariableDeclAST) {
-            exp.error->createError(GENERIC, pos.lStart, pos.colStart, "invalid parameter");
+            // TODO: exp.error->createError(GENERIC, pos.lStart, pos.colStart, "invalid parameter");
             continue;
         }
         arg->analyse(exp);

@@ -18,7 +18,6 @@ ValueStruct::~ValueStruct() {
 
 #ifdef FUX_BACKEND
 Value *ValueStruct::getLLVMValue(LLVMWrapper *fuxLLVM) {
-    // TODO: how to implement pointer types?
     switch (type.kind) {
         case FuxType::BOOL:     return fuxLLVM->builder->getInt1(__bool);
         case FuxType::I8:       return fuxLLVM->builder->getInt8(__i8);

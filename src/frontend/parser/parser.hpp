@@ -27,6 +27,7 @@ public:
     RootAST::Ptr parse();
 
 private:
+    const string &fileName;
     Token::Vec tokens;
     Token::Iter current;
     ErrorManager *error;
@@ -120,18 +121,29 @@ private:
     // get next token
     Token &eat();
     // expect and get next token
-    Token &eat(TokenType type, ErrorType = UNEXPECTED_TOKEN);
+    Token &eat(TokenType type, ParseError::Type = ParseError::UNEXPECTED_TOKEN);
     // peek to Nth token
     Token &peek(size_t steps = 1);
     // check current token and advance if true
     bool check(TokenType type);
-    // check curret and next token ...
+    // check current and next token ...
     bool check(TokenType type, TokenType type0);
     // advance until given tokentype is reached (error recovery)
     void recover(TokenType type = SEMICOLON);
 
     // check wether end of file is reached
     constexpr bool notEOF();
+
+    void createError(
+        ParseError::Type type, string title, 
+        const Token &token, string info, size_t ptr = 0, string ptrText = "",
+        vector<string> notes = {}, bool warning = false, bool aggressive = false);
+    
+    void createError(
+        ParseError::Type type, string title,
+        const Token &token, string info, 
+        const Token &refTok, string refInfo,
+        vector<string> notes = {}, bool warning = false, bool aggressive = true);
 
     void debugPrint(const string message);
 };
