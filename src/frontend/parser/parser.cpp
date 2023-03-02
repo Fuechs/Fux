@@ -128,8 +128,6 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
     eat(LPAREN);
 
     init = parseStmt(false); 
-    // FIXME: declaration returns noop, 
-    //          thus there's no reference to the variable in foreach loops
 
     if (check(KEY_IN)) {
         forEach = true;
@@ -230,7 +228,7 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
         StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type);
         if (parent) {
             parent->addLocal(decl);
-            return make_unique<NoOperationAST>();
+            return make_unique<NoOperationAST>(symbol);
         }
         return std::move(decl);
     }
@@ -239,7 +237,7 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
     StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type, value);
     if (parent) {
         parent->addLocal(decl);
-        return make_unique<NoOperationAST>();
+        return make_unique<NoOperationAST>(symbol);
     }
     return std::move(decl);
 }
@@ -306,7 +304,7 @@ ExprAST::Ptr Parser::parseLogicalOrExpr() {
     }
 
     return LHS;
- }
+}
 
 ExprAST::Ptr Parser::parseLogicalAndExpr() { 
     ExprAST::Ptr LHS = parseBitwiseOrExpr();
@@ -317,7 +315,7 @@ ExprAST::Ptr Parser::parseLogicalAndExpr() {
     }
 
     return LHS;
- }
+}
 
 ExprAST::Ptr Parser::parseBitwiseOrExpr() {
     ExprAST::Ptr LHS = parseBitwiseXorExpr();

@@ -229,7 +229,11 @@ public:
 /// STATEMENTS ///
 
 class NoOperationAST : public StmtAST {
+    string symbolRef;
+
 public:
+    NoOperationAST(string symbolRef = "") : symbolRef(symbolRef) {};
+
     FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;

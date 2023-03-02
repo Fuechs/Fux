@@ -81,7 +81,9 @@ void debugBody(size_t indent, StmtAST::Ptr &ast) {
         cout << CC::RED << "NULLBODY" << CC::DEFAULT;
 } 
 
-void NoOperationAST::debugPrint(size_t indent) { debugIndent(indent, "noop"); } 
+void NoOperationAST::debugPrint(size_t indent) { 
+    debugIndent(indent, symbolRef.empty() ? "noop" : "(-> '"+symbolRef+"')"); 
+} 
 
 void NullExprAST::debugPrint(size_t indent) { debugIndent(indent, "null"); }
 
