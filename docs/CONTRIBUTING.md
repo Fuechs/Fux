@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-02-03
+> Last updated on 2023-03-03
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -120,7 +120,7 @@ for (...)
         if (...)
 ```
 
-- If functions just have on short statement, it is ok to define everything in one line.
+- If functions just have one short statement, it is ok to write everything in one line.
 
 ```cpp
 bool someCheck() { return a == b; }
@@ -158,7 +158,7 @@ SomeConstructor(ExprAST::Ptr &LHS, ExprAST::Ptr &RHS)
 
 #### Using Namespaces
 
-All includes from the standard library are in `src/fux.hpp`.
+Most of the includes from the standard library are in `src/fux.hpp`.
 
 #### Using Licensed Code
 
@@ -166,7 +166,7 @@ If you add any licensed code (for example a utility header), include the license
 
 #### LLVM IR
 
-All names are in snake_case.
+All symbols are in snake_case.
 
 Predefined or internal functions start with `Fux_`.
 Functions that are part of a module, class or type have the name as an additional prefix  (`...CLASS_create_default`).
