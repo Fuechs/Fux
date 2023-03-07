@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2023-03-02
  * 
- * @copyright Copyright (c) 2020-2023, Fyronix and Contributors. All rights reserved.
+ * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
  */
 
