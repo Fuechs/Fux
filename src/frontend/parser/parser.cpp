@@ -612,12 +612,13 @@ FuxType Parser::parseType(bool primitive) {
     }
 
     FuxType::AccessList access = {FuxType::PUBLIC};
-    int64_t pointerDepth;
+    size_t pointerDepth = 0;
 
     Token &typeDenotion = eat(); // ':' or '->' for error tracking
+    bool reference;
     switch (typeDenotion.type) {
-        case COLON:     pointerDepth = 0; break;
-        case POINTER:  pointerDepth = -1; break;
+        case COLON:     reference = false; break;
+        case POINTER:   reference = true; break;
         default:        
             createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
                 typeDenotion, "Expected a COLON ':' or POINTER '->' here");
@@ -627,37 +628,28 @@ FuxType Parser::parseType(bool primitive) {
     while (current->isModifier())
         access.push_back((FuxType::Access) eat().type);
     
-    while (check(ASTERISK)) {
-        if (pointerDepth != -1) {
-            ++pointerDepth;
-            continue;
-        }
-
-        while(check(ASTERISK)); // skip all '*'
-        createError(ParseError::ILLEGAL_TYPE, "Pointrer-Depth on Reference Type",
-            peek(-1), "Given pointer-depth will be ignored and a reference passed instead",
-            typeDenotion, "The reference got denoted here", {}, true);
-    }
+    while (check(ASTERISK)) 
+        ++pointerDepth;
 
     if (!current->isType()) {
         if (pointerDepth > 0)
             createError(ParseError::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
                 peek(-1), "Given pointer-depth will be ignored",
                 0, "", {}, true);
-        return FuxType::createStd(FuxType::AUTO, 0, access);
+        return FuxType::createStd(FuxType::AUTO, 0, reference, access);
     }
 
     const FuxType::Kind kind = (FuxType::Kind) current->type;
     const string &value = eat().value;
 
     if (check(ARRAY_BRACKET)) 
-        return FuxType::createArray(kind, pointerDepth, access, value);
+        return FuxType::createArray(kind, pointerDepth, reference, access, value);
     else if (check(LBRACKET)) {
         ExprAST::Ptr size = parseExpr();
         eat(RBRACKET, ParseError::MISSING_PAREN);
-        return FuxType::createArray(kind, pointerDepth, access, value, root->addSizeExpr(size));
+        return FuxType::createArray(kind, pointerDepth, reference, access, value, root->addSizeExpr(size));
     } else 
-        return FuxType::createStd(kind, pointerDepth, access, value);
+        return FuxType::createStd(kind, pointerDepth, reference, access, value);
 
     assert(false && "unreachable");
 }

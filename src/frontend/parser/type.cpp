@@ -37,20 +37,20 @@ bool FuxType::operator==(const FuxType &comp) const {
 
 bool FuxType::operator!() { return kind == NO_TYPE; }
 
-FuxType FuxType::createStd(Kind kind, int64_t pointerDepth, AccessList accessList, string name) {
-    return FuxType(kind, pointerDepth, accessList, false, -1, name);
+FuxType FuxType::createStd(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name) {
+    return FuxType(kind, pointerDepth, reference, accessList, false, -1, name);
 }
 
-FuxType FuxType::createRef(Kind kind, AccessList accessList, string name) {
-    return FuxType(kind, -1, accessList, false, -1, name); 
+FuxType FuxType::createRef(Kind kind, size_t pointerDepth, AccessList accessList, string name) {
+    return FuxType(kind, pointerDepth, true, accessList, false, -1, name); 
 }
 
-FuxType FuxType::createArray(Kind kind, int64_t pointerDepth, AccessList accessList, string name, _i64 sizeID) {
-    return FuxType(kind, pointerDepth, accessList, true, sizeID, name);
+FuxType FuxType::createArray(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name, _i64 sizeID) {
+    return FuxType(kind, pointerDepth, reference, accessList, true, sizeID, name);
 }
 
-FuxType FuxType::createPrimitive(Kind kind, int64_t pointerDepth, bool array, string name) {
-    return FuxType(kind, pointerDepth, AccessList(), array, -1, name);
+FuxType FuxType::createPrimitive(Kind kind, size_t pointerDepth, bool array, string name) {
+    return FuxType(kind, pointerDepth, false, AccessList(), array, -1, name);
 }
 
 
@@ -78,21 +78,19 @@ string FuxType::kindAsString() {
 
 void FuxType::debugPrint(bool primitive) {
     if (primitive) {
-        if (pointerDepth > 0)
-            for (size_t pd = pointerDepth; pd --> 0;)
-                cout << "*";
+        for (size_t pd = pointerDepth; pd --> 0;)
+            cout << "*";
         cout << kindAsString();
         if (array)
             cout << "[]";
         return;
     }
 
-    cout << (pointerDepth == -1 ? " -> " : ": ");
+    cout << (reference ? " -> " : ": ");
     cout << accessAsString();
 
-    if (pointerDepth > 0) 
-        for (size_t pd = pointerDepth; pd --> 0;)
-            cout << "*";
+    for (size_t pd = pointerDepth; pd --> 0;)
+        cout << "*";
     
     cout << kindAsString();
     

@@ -54,9 +54,8 @@ public:
     typedef vector<Access> AccessList;
     typedef vector<FuxType> Vec;
 
-    FuxType(Kind kind = NO_TYPE, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, bool array = false, _i64 sizeID = -1, string name = "")
-    : kind(kind), pointerDepth(pointerDepth), access(accessList), array(array), sizeID(sizeID), name(name) {}
-    // FuxType(const FuxType &copy);
+    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, bool array = false, _i64 sizeID = -1, string name = "")
+    : kind(kind), pointerDepth(pointerDepth), reference(reference), access(accessList), array(array), sizeID(sizeID), name(name) {}
     ~FuxType();
 
     FuxType &operator=(const FuxType &copy);
@@ -64,13 +63,13 @@ public:
     bool operator!();
 
     // shorthand for normal types
-    static FuxType createStd(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "");
+    static FuxType createStd(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "");
     // shorthand for reference types
-    static FuxType createRef(Kind kind, AccessList accessList = {PUBLIC}, string name = "");
+    static FuxType createRef(Kind kind, size_t pointerDepth = 0, AccessList accessList = {}, string name = "");
     // shorthand for array types
-    static FuxType createArray(Kind kind, int64_t pointerDepth = 0, AccessList accessList = {PUBLIC}, string name = "", _i64 sizeID = -1);    
-    // shorthand for primitive types (e.g. for values)
-    static FuxType createPrimitive(Kind kind, int64_t pointerDepth = 0, bool array = false, string name = "");
+    static FuxType createArray(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "", _i64 sizeID = -1);    
+    // shorthand for primitive types (e.g. for type casts)
+    static FuxType createPrimitive(Kind kind, size_t pointerDepth = 0, bool array = false, string name = "");
 
     // return FuxType::AccessList as string
     string accessAsString();
@@ -84,10 +83,10 @@ public:
     
     Kind kind;
     
-    // -1 --> Reference
     //  0 --> Value
     //  N --> Pointer with depth of N 
-    _i64 pointerDepth; 
+    size_t pointerDepth; 
+    bool reference;
     // access modifiers
     AccessList access;
     // string value of the type
