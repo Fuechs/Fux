@@ -80,8 +80,6 @@ enum class Inbuilts {
     PUTS = KEY_PUTS,        // puts <expr>;
     PUTCH = KEY_PUTCH,      // putch <expr>;
     READ = KEY_READ,        // read <address>;
-    LABEL = KEY_LABEL,      // label <identifier>;
-    GOTO = KEY_GOTO,        // goto <label>;
     RESERVE = KEY_RESERVE,  // reserve <type>, <size>, <address>;
     FREE = KEY_FREE,        // free <address>;
 };

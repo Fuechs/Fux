@@ -329,6 +329,7 @@ void ValueStruct::debugPrint() {
         case FuxType::I16:      cout << __i16; break;
         case FuxType::U16:      cout << __u16; break;
         case FuxType::C16:      cout << "'" << to_string(__c16) << "'"; break;
+        // case FuxType::F16:      cout << __f16; break;
         case FuxType::I32:      cout << __i32; break;
         case FuxType::U32:      cout << __u32; break;
         case FuxType::F32:      cout << __f32; break;

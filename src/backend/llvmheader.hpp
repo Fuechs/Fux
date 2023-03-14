@@ -56,6 +56,7 @@ typedef char        _c8;
 typedef int16_t     _i16;
 typedef uint16_t    _u16;
 typedef wchar_t     _c16;
+// typedef _Float16    _f16;
 typedef int32_t     _i32;
 typedef uint32_t    _u32;
 typedef float       _f32;

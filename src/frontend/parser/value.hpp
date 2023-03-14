@@ -24,6 +24,7 @@ struct ValueStruct {
     ValueStruct(_i16 value) :   type(FuxType(FuxType::I16)), __i16(value) {}
     ValueStruct(_u16 value) :   type(FuxType(FuxType::U16)), __u16(value) {}
     ValueStruct(_c16 value) :   type(FuxType(FuxType::C16)), __c16(value) {}
+    // ValueStruct(_f16 value) :   type(FuxType(FuxType::F16)), __f16(value) {}
     ValueStruct(_i32 value) :   type(FuxType(FuxType::I32)), __i32(value) {}
     ValueStruct(_u32 value) :   type(FuxType(FuxType::U32)), __u32(value) {}
     ValueStruct(_f32 value) :   type(FuxType(FuxType::F32)), __f32(value) {}
@@ -50,6 +51,7 @@ struct ValueStruct {
         _i16    __i16;
         _u16    __u16;
         _c16    __c16;
+        // _f16    __f16;
         _i32    __i32;
         _u32    __u32;
         _f32    __f32;

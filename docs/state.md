@@ -25,7 +25,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [...] Abstract Syntax Tree
     - [&check;] Expressions
     - [&check;] Statements
-    - [...] Position 
+    - [...] Metadata 
 - [&check;] Parser
 - [...] Analyser
     - [...] Symbol Table

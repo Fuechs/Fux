@@ -11,7 +11,7 @@
 > This documentation is not meant to teach you programming, but rather be a reference to the syntax and how things are designed for me and you.
 >
 > **Status** \
-> Last updated on 2023-02-06 \
+> Last updated on 2023-03-14 \
 > Unfinished
 
 ## Contents
@@ -29,14 +29,14 @@
     - [Boolean Type](#boolean-type)
     - [Integer Types](#integer-types)
     - [Character Types](#character-types)
-    - [*String Type*](#string-literal-type)
+    - [String Type](#string-literal-type)
     - [Array Type](#array-type)
     - [Type Casts](#type-casts)
 - [New Concepts](#new-concepts)
     - [Pipe Operators](#pipe-operators)
         - [Passing Arguments](#passing-arguments)
         - [Modifying Arrays](#modifying-arrays)
-        <!-- - [Extending Strings](#extending-strings) -->
+        - [Extending Strings](#extending-strings)
     - [Swap Operator](#swap-operator)
     - [Existence of Objects](#existence-of-objects)
 

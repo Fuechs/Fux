@@ -113,8 +113,6 @@ enum TokenType {
     KEY_PUTCH,
     KEY_READ,
     KEY_DELETE,
-    KEY_LABEL,
-    KEY_GOTO,
     KEY_RESERVE,
     KEY_FREE,
     
@@ -257,8 +255,6 @@ static const char *TokenTypeString[] = {
     "KEY_PUTCH",
     "KEY_READ",
     "KEY_DELETE",
-    "KEY_LABEL",
-    "KEY_GOTO",
     "KEY_RESERVE",
     "KEY_FREE",
     
@@ -401,8 +397,6 @@ static vector<string> TokenTypeValue = {
     "putch",
     "read",
     "delete",
-    "label",
-    "goto",
     "reserve",
     "free",
     

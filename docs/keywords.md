@@ -28,8 +28,6 @@ ID | Value | Type
 [KEY_PUTCH](#putch) | `putch` | Intrinsic, I/O
 [KEY_READ](#read) | `read` | Intrinsic, I/O
 [KEY_DELETE](#delete) | `delete` | Intrinsic, Memory 
-[KEY_LABEL](#label) | `label` | Intrinsic, Control Flow
-[KEY_GOTO](#goto) | `goto` | Intrinsic, Control Flow
 [KEY_RESERVE](#reserve) | `reserve` | Intrinsic, Memory
 [KEY_FREE](#free) | `free` | Intrinsic, Memory
 [KEY_SAFE](#safe) | `safe` | Access Modifier
@@ -243,24 +241,6 @@ read &input;
 ```cpp
 delete &input;
 ``` 
-
-### Label
-
-- Usage: `label <identifier>`
-- Effect: Sets label at current position with name `identifier`
-
-```c
-label loop;
-```
-
-### Goto
-
-- Usage: `goto <label>`
-- Effect: Goes to label with name `label` 
-
-```c
-goto loop;
-```
 
 ### Reserve
 
