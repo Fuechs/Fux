@@ -17,14 +17,14 @@
 
 class Compiler {
 public:
-    Compiler(const string &fileName, Module *module);
+    Compiler(const string &fileName, llvm::Module *module);
     ~Compiler();
 
     void compile();
 
 private:
     string fileName;
-    Module *module;
+    llvm::Module *module;
 
     void debugPrint(const string message);
 };

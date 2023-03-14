@@ -16,7 +16,6 @@
 #ifdef FUX_BACKEND
 #include "../generator/generator.hpp"
 #include "../compiler/compiler.hpp"
-#include "../generator/wrapper.hpp"
 
 // Manages whole backend of the compiler
 class FuxContext {
@@ -24,9 +23,7 @@ public:
     FuxContext(RootAST::Ptr &root);
     ~FuxContext();
 
-    LLVMWrapper *fuxLLVM;
-    Module *module;
-    string target;
+    Eisdrache *eisdrache;
 
     void run();
 

@@ -14,12 +14,12 @@
 #ifdef FUX_BACKEND
 
 void Generator::generate() {
-    root->codegen(fuxLLVM);
+    root->codegen(eisdrache);
 
     if (fux.options.debugMode) {
         std::error_code EC;
         llvm::raw_fd_ostream output("src/output.ll", EC);
-        fuxLLVM->module->print(output, nullptr);
+        eisdrache->dump(output);
         output.close();
     }
 }

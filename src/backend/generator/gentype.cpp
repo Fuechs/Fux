@@ -13,32 +13,32 @@
 
 #ifdef FUX_BACKEND
 
-Type *Generator::getType(LLVMWrapper *fuxLLVM, FuxType type) {
-    IRBuilder<> *builder = fuxLLVM->builder;
-    Type* ret;
+Eisdrache::Ty *Generator::getType(Eisdrache *eisdrache, FuxType type) {
+    Eisdrache::Ty *ret = nullptr;
 
     switch (type.kind) {
-        case FuxType::VOID:     ret = builder->getVoidTy(); break;
-        case FuxType::BOOL:     ret = builder->getInt1Ty(); break;
-        case FuxType::I8:       ret = builder->getInt8Ty(); break;
-        case FuxType::U8:       ret = builder->getInt8Ty(); break;
-        case FuxType::C8:       ret = builder->getInt8Ty(); break;
-        case FuxType::I16:      ret = builder->getInt16Ty(); break;
-        case FuxType::U16:      ret = builder->getInt16Ty(); break;
-        case FuxType::C16:      ret = builder->getInt16Ty(); break;
-        case FuxType::I32:      ret = builder->getInt32Ty(); break;
-        case FuxType::U32:      ret = builder->getInt32Ty(); break;
-        case FuxType::F32:      ret = builder->getFloatTy(); break;
-        case FuxType::I64:      ret = builder->getInt64Ty(); break;
-        case FuxType::U64:      ret = builder->getInt64Ty(); break;
-        case FuxType::F64:      ret = builder->getDoubleTy(); break;
-        case FuxType::LIT:      ret = builder->getInt8PtrTy(); break;
+        case FuxType::VOID:     ret = eisdrache->getVoidTy(); break;
+        case FuxType::BOOL:     ret = eisdrache->getBoolTy(); break;
+        case FuxType::I8:       ret = eisdrache->getSignedTy(8); break;
+        case FuxType::U8:       ret = eisdrache->getUnsignedTy(8); break;
+        case FuxType::C8:       ret = eisdrache->getUnsignedTy(8); break;
+        case FuxType::I16:      ret = eisdrache->getSignedTy(16); break;
+        case FuxType::U16:      ret = eisdrache->getUnsignedTy(16); break;
+        case FuxType::C16:      ret = eisdrache->getUnsignedTy(16); break;
+        case FuxType::F16:      ret = eisdrache->getFloatTy(16); break;
+        case FuxType::I32:      ret = eisdrache->getSignedTy(32); break;
+        case FuxType::U32:      ret = eisdrache->getUnsignedTy(32); break;
+        case FuxType::F32:      ret = eisdrache->getFloatTy(32); break;
+        case FuxType::I64:      ret = eisdrache->getSignedTy(64); break;
+        case FuxType::U64:      ret = eisdrache->getUnsignedTy(64); break;
+        case FuxType::F64:      ret = eisdrache->getFloatTy(64); break;
+        case FuxType::LIT:      ret = eisdrache->getUnsignedPtrTy(8); break;
         default:                ret = nullptr;
     }
 
     size_t pd = type.array ? type.pointerDepth + 1 : type.pointerDepth;
     while (pd --> 0) 
-        ret = ret->getPointerTo();
+        ret = ret->getPtrTo();
 
     return ret;
 }

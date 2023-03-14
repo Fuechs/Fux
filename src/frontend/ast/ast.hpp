@@ -13,7 +13,6 @@
 
 #include "../../fux.hpp"
 #include "../../backend/llvmheader.hpp"
-#include "../../backend/generator/wrapper.hpp"
 #include "../lexer/token.hpp"
 #include "../parser/type.hpp"
 #include "../parser/value.hpp"
@@ -26,7 +25,7 @@ typedef map<string, FuxType> ArgMap;
 
 class NullExprAST : public ExprAST {
 public:    
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -40,7 +39,7 @@ public:
     BoolExprAST(bool value) : value(new ValueStruct(value)) {}
     ~BoolExprAST();
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -55,7 +54,7 @@ public:
     NumberExprAST(T value) : value(new ValueStruct(value)) {}
     ~NumberExprAST();
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -70,7 +69,7 @@ public:
     CharExprAST(T value) : value(new ValueStruct(value)) {}
     ~CharExprAST();
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -84,7 +83,7 @@ public:
     StringExprAST(string value) : value(new ValueStruct(value)) {}
     ~StringExprAST();
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -99,7 +98,7 @@ public:
     RangeExprAST(ExprAST::Ptr &begin, ExprAST::Ptr &end) 
     : begin(std::move(begin)), end(std::move(end)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -112,7 +111,7 @@ class ArrayExprAST : public ExprAST {
 public:
     ArrayExprAST(ExprAST::Vec &elements) : elements(std::move(elements)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -126,7 +125,7 @@ public:
     VariableExprAST(const string& name) : name(name) {}
     ~VariableExprAST() override;
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -141,7 +140,7 @@ public:
     MemberExprAST(ExprAST::Ptr &base, ExprAST::Ptr &member) 
     : base(std::move(base)), member(std::move(member)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;    
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -159,7 +158,7 @@ public:
     CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args, bool asyncCall = false)
     : callee(std::move(callee)), args(std::move(args)), asyncCall(asyncCall) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -173,7 +172,7 @@ class UnaryExprAST : public ExprAST {
 public:
     UnaryExprAST(UnaryOp op, ExprAST::Ptr &expr) : op(op), expr(std::move(expr)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -188,7 +187,7 @@ public:
     BinaryExprAST(BinaryOp op, ExprAST::Ptr &LHS, ExprAST::Ptr &RHS = nullExpr) 
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;   
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -203,7 +202,7 @@ public:
     TypeCastExprAST(FuxType type, ExprAST::Ptr &expr) 
     : type(type), expr(std::move(expr)) {}
     
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -219,7 +218,7 @@ public:
     TernaryExprAST(ExprAST::Ptr &condition, ExprAST::Ptr &thenExpr, ExprAST::Ptr &elseExpr)
     : condition(std::move(condition)), thenExpr(std::move(thenExpr)), elseExpr(std::move(elseExpr)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -234,7 +233,7 @@ class NoOperationAST : public StmtAST {
 public:
     NoOperationAST(string symbolRef = "") : symbolRef(symbolRef) {};
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -255,7 +254,7 @@ public:
     FuxType &getType();
     ExprAST::Ptr &getValue();
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -272,7 +271,7 @@ public:
     InbuiltCallAST(Inbuilts callee, ExprAST::Vec &arguments) 
     : callee(callee), arguments(std::move(arguments)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -288,7 +287,7 @@ public:
     IfElseAST(ExprAST::Ptr &condition, StmtAST::Ptr &thenBody, StmtAST::Ptr &elseBody = nullStmt)
     : condition(std::move(condition)), thenBody(std::move(thenBody)), elseBody(std::move(elseBody)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -302,7 +301,7 @@ public:
     CodeBlockAST() : body(StmtAST::Vec()) {}
     CodeBlockAST(StmtAST::Vec &body) : body(std::move(body)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -320,7 +319,7 @@ public:
     WhileLoopAST(ExprAST::Ptr &condition, StmtAST::Ptr &body, bool postCondition = false)
     : condition(std::move(condition)), body(std::move(body)), postCondition(postCondition) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -342,7 +341,7 @@ public:
     : forEach(false), initial(std::move(initial)), condition(std::move(condition)),
         iterator(std::move(iterator)), body(std::move(body)) {}
 
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -365,7 +364,7 @@ public:
     : type(type), symbol(symbol), args(std::move(args)) {}
     ~PrototypeAST() override;
     
-    FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -388,7 +387,7 @@ public:
     FunctionAST(PrototypeAST::Ptr &proto, StmtAST::Ptr &body)
     : proto(std::move(proto)), body(std::move(body)) {}
 
-    FUX_BC(Function *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;
@@ -410,7 +409,7 @@ public:
 
     RootAST() : program(StmtAST::Vec()) {}        
     
-    FUX_BC(Value *codegen(LLVMWrapper *fuxLLVM) override;)
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;
     FuxType getFuxType() override;

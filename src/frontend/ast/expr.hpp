@@ -11,7 +11,6 @@
 
 #pragma once
 
-#include "../../backend/generator/wrapper.hpp"
 #include "stmt.hpp"
 
 class ExprAST : public StmtAST {
@@ -20,7 +19,7 @@ public:
     typedef vector<Ptr> Vec;
 
     virtual ~ExprAST() {}
-    FUX_BC(virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;)
+    FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache) = 0;)
     virtual StmtAST::Ptr analyse(Expectation exp) = 0;
     virtual AST getASTType() = 0;
     virtual FuxType getFuxType() = 0;

@@ -13,7 +13,7 @@
 
 #ifdef FUX_BACKEND
 
-Compiler::Compiler(const string &fileName, Module *module) 
+Compiler::Compiler(const string &fileName, llvm::Module *module) 
 : fileName(fileName), module(module) {}
 
 Compiler::~Compiler() {

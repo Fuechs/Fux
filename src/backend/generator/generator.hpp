@@ -19,16 +19,16 @@
 
 class Generator {
 public:
-    Generator(RootAST::Ptr &root, LLVMWrapper *fuxLLVM) 
-    : root(std::move(root)), fuxLLVM(fuxLLVM) {}
+    Generator(RootAST::Ptr &root, Eisdrache *eisdrache) 
+    : root(std::move(root)), eisdrache(eisdrache) {}
 
     void generate();
-
-    static Type *getType(LLVMWrapper *fuxLLVM, FuxType type);
+    
+    static Eisdrache::Ty *getType(Eisdrache *eisdrache, FuxType type);
 
 private:
     RootAST::Ptr root;
-    LLVMWrapper *fuxLLVM;
+    Eisdrache *eisdrache;
 
     void debugPrint(const string message);
 };

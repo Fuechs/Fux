@@ -31,7 +31,7 @@ enum class BinaryOp {
     RSHASG = RSH_EQUALS,        // right bitwise shift equals |>=
     SWAPASG = SWAP,             // swap assignment <>
 
-    EQUAL = EQUALS,         // equalitiy ==
+    EQUAL = EQUALS_EQUALS,  // equalitiy ==
     UNEQUAL = NOT_EQUALS,   // unequalitiy !=
     LESST = LESSTHAN,       // less than <
     LTE = LTEQUALS,         // less than equals <=

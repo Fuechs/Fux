@@ -15,39 +15,11 @@
 
 #ifdef FUX_BACKEND
 
-#include <llvm/ADT/APFloat.h>
-#include <llvm/ADT/STLExtras.h>
+#include "eisdrache/eisdrache.hpp"
 
-#include <llvm/IR/BasicBlock.h>
-#include <llvm/IR/Constant.h>
-#include <llvm/IR/DerivedTypes.h>
-#include <llvm/IR/Function.h>
-#include <llvm/IR/IRBuilder.h>
-#include <llvm/IR/Instructions.h>
-#include <llvm/IR/LLVMContext.h>
-#include <llvm/IR/LegacyPassManager.h>
-#include <llvm/IR/Module.h>
-#include <llvm/IR/Type.h>
-#include <llvm/IR/Verifier.h>
+using llvm::Eisdrache;
 
-#include <llvm/MC/TargetRegistry.h>
-
-#include <llvm/Support/FileSystem.h>
-#include <llvm/Support/Host.h>
-#include <llvm/Support/TargetSelect.h>
-#include <llvm/Support/raw_ostream.h>
-
-#include <llvm/Target/TargetMachine.h>
-#include <llvm/Target/TargetOptions.h>
-
-using llvm::Value, llvm::Function, llvm::BasicBlock, llvm::Type, llvm::PointerType, 
-    llvm::LLVMContext, llvm::Module, llvm::IRBuilder, llvm::FunctionType, llvm::Attribute, llvm::ConstantFP;
-
-typedef vector<Value *> ValueList;
-typedef vector<BasicBlock *> BlockList;
-typedef vector<Type *> TypeList;
 #endif
-
 
 // type definitions for generating objects
 typedef int8_t      _i8;

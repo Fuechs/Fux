@@ -12,7 +12,6 @@
 #pragma once
 
 #include "../../backend/llvmheader.hpp"
-#include "../../backend/generator/wrapper.hpp"
 #include "type.hpp"
 
 // used to represent values within a union
@@ -36,7 +35,7 @@ struct ValueStruct {
     ~ValueStruct();
 
     #ifdef FUX_BACKEND
-    Value *getLLVMValue(LLVMWrapper* fuxLLVM);
+    Eisdrache::Local &getLLVMValue(Eisdrache* eisdrache);
     #endif
 
     // output saved value

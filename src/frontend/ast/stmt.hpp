@@ -50,7 +50,7 @@ public:
     typedef vector<Ptr> Vec;
 
     virtual ~StmtAST() {}
-    FUX_BC(virtual Value *codegen(LLVMWrapper *fuxLLVM) = 0;)
+    FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache) = 0;)
     virtual Ptr analyse(Expectation exp) = 0;
     virtual AST getASTType() = 0;
     virtual FuxType getFuxType() = 0;
