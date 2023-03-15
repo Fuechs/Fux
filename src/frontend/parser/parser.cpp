@@ -208,7 +208,9 @@ StmtAST::Ptr Parser::parseIfElseStmt() {
 StmtAST::Ptr Parser::parseInbuiltCallStmt() {
     if (current->isInbuiltCall()) {
         Inbuilts callee = (Inbuilts) eat().type;
-        ExprAST::Vec args = parseExprList(SEMICOLON);
+        ExprAST::Vec args = {};
+        if (*current != SEMICOLON)
+            args = parseExprList(SEMICOLON);
         return make_unique<InbuiltCallAST>(callee, args);
     }
 

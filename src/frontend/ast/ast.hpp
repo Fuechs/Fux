@@ -130,6 +130,8 @@ public:
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
+
+    string &getName();
 };
 
 class MemberExprAST : public ExprAST {

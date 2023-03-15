@@ -1,12 +1,14 @@
-// main(argc: u64, argv: **c8): i64 { 
-//     a: i64 = (i64) 1;
-//     b: i64 = (i64) 2;
-//     c: i64 = a + b;
-//     d: i64 = (i64) 10;
-//     return c <> d;
-// }
-
-main(): i64 {
+say(): void {
     puts "Hello World!\n";
-    return (i64) 0;
+    return;
+}
+
+main(argc: u64, argv: **c8): i64 { 
+    a: i64 = (i64) 1;
+    b: i64 = (i64) 2;
+    c: i64 = a + b;
+    d: i64 = (i64) 10;
+    c <> d;
+    say();
+    return c + (i64) 1;
 }

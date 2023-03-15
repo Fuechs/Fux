@@ -44,6 +44,7 @@ FuxType ArrayExprAST::getFuxType() { return FuxType::createArray(FuxType::NO_TYP
 VariableExprAST::~VariableExprAST() { name.clear(); }
 AST VariableExprAST::getASTType() { return AST::VariableExprAST; }
 FuxType VariableExprAST::getFuxType() { return FuxType::NO_TYPE; }
+string &VariableExprAST::getName() { return name; }
 
 AST MemberExprAST::getASTType() { return AST::MemberExprAST; }
 FuxType MemberExprAST::getFuxType() { return FuxType::NO_TYPE; }

@@ -16,7 +16,9 @@ Eisdrache::Local nullLocal = Eisdrache::Local();
 
 #ifdef FUX_BACKEND
 
-Eisdrache::Local &NoOperationAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
+Eisdrache::Local &NoOperationAST::codegen(Eisdrache *eisdrache) {
+    return symbolRef.empty() ? nullLocal : eisdrache->getCurrentParent()[symbolRef];
+}
 
 Eisdrache::Local &NullExprAST::codegen(Eisdrache *eisdrache) { return  nullLocal; }
 
@@ -37,8 +39,9 @@ Eisdrache::Local &VariableExprAST::codegen(Eisdrache *eisdrache) {
 Eisdrache::Local &MemberExprAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
 
 Eisdrache::Local &CallExprAST::codegen(Eisdrache *eisdrache) {
-    Eisdrache::Local &calleeSymbol = callee->codegen(eisdrache);
-    Eisdrache::Func &callee = *eisdrache->getFunc(calleeSymbol.getName());
+    // FIXME: can't get callee symbol as a local
+    // Eisdrache::Local &calleeSymbol = callee->codegen(eisdrache);
+    Eisdrache::Func &callee = *eisdrache->getFunc(dynamic_cast<VariableExprAST *>(&*this->callee)->getName());
 
     if ((*callee)->arg_size() != args.size())
         return nullLocal;
@@ -90,7 +93,7 @@ Eisdrache::Local &BinaryExprAST::codegen(Eisdrache *eisdrache) {
 }
 
 Eisdrache::Local &TypeCastExprAST::codegen(Eisdrache *eisdrache) {
-    return eisdrache->bitCast(expr->codegen(eisdrache), Generator::getType(eisdrache, type));
+    return eisdrache->typeCast(expr->codegen(eisdrache), Generator::getType(eisdrache, type));
 }
 
 Eisdrache::Local &TernaryExprAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
@@ -115,12 +118,16 @@ Eisdrache::Local &InbuiltCallAST::codegen(Eisdrache *eisdrache) {
         }
         case PUTS: {
             Eisdrache::Local &literal = arguments.at(0)->codegen(eisdrache);
+            Eisdrache::Func *cur = &eisdrache->getCurrentParent();
             Eisdrache::Func *puts = nullptr;
+
             if (!(puts = eisdrache->getFunc("puts"))) {
                 puts = &eisdrache->declareFunction(eisdrache->getSizeTy(), "puts",
                     {eisdrache->getUnsignedPtrTy(8)});
-                llvm::dyn_cast<llvm::Argument>(puts->arg(0).getValuePtr())->addAttr(llvm::Attribute::NoCapture); 
+                llvm::dyn_cast<llvm::Argument>(puts->arg(0).getValuePtr())->addAttr(llvm::Attribute::NoCapture);
+                eisdrache->setParent(cur); 
             }
+
             return puts->call({literal.getValuePtr()});
         }
         default:        return nullLocal;
@@ -151,12 +158,26 @@ Eisdrache::Local &IfElseAST::codegen(Eisdrache *eisdrache) {
 }
 
 Eisdrache::Local &CodeBlockAST::codegen(Eisdrache *eisdrache) {
-    bool isEntry = (*eisdrache->getCurrentParent())->getBasicBlockList().empty();
-    eisdrache->createBlock(isEntry ? "entry" : "", true);
-    for (StmtAST::Ptr &stmt : body)
+    // figure out wether this is the entry block
+    size_t blocks = (*eisdrache->getCurrentParent())->getBasicBlockList().size();
+    llvm::BasicBlock *fst = &(*eisdrache->getCurrentParent())->getEntryBlock();
+    bool isEntry = blocks == 0 || (blocks == 1 && fst->getName() == "locals");
+
+    llvm::BasicBlock *that = eisdrache->createBlock(isEntry ? "entry" : string("block_")+to_string(blocks));
+    
+    if (blocks)
+        eisdrache->jump(that);
+    eisdrache->setBlock(that);
+    
+    for (StmtAST::Ptr &stmt : body)        
         stmt->codegen(eisdrache);
-    if (!isEntry)
-        eisdrache->createBlock("block_leave", true);
+
+    if (!isEntry) { 
+        that = eisdrache->createBlock(string("block_")+to_string(blocks)+"_leave"); 
+        eisdrache->jump(that);
+        eisdrache->setBlock(that);        
+    }
+
     return nullLocal;
 }
 
@@ -187,7 +208,22 @@ Eisdrache::Local &FunctionAST::codegen(Eisdrache *eisdrache) {
         return nullLocal;
 
     eisdrache->setParent(func);
+
+    if (!locals.empty()) {
+        eisdrache->createBlock("locals", true);
+        for (StmtAST::Ptr &stmt : locals)
+            stmt->codegen(eisdrache);
+    }
+    
+    if (body->getASTType() != AST::CodeBlockAST) {
+        llvm::BasicBlock *entry = eisdrache->createBlock("entry"); 
+        if (!locals.empty())
+            eisdrache->jump(entry);
+        eisdrache->setBlock(entry);
+    } 
+    
     body->codegen(eisdrache);
+
     eisdrache->verifyFunc(*func);
 
     return nullLocal;
