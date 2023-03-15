@@ -293,7 +293,17 @@ bool Eisdrache::Func::operator==(const Func &comp) const { return func == comp.f
 
 bool Eisdrache::Func::operator==(const Function *comp) const { return func == comp; }
 
-Eisdrache::Local &Eisdrache::Func::operator[](std::string symbol) { return locals.at(symbol); }
+Eisdrache::Local &Eisdrache::Func::operator[](std::string symbol) { 
+    if (locals.contains(symbol))
+        return locals[symbol];
+
+    for (Local &param : parameters)
+        if (param.getName() == symbol)
+            return param;
+    
+    Eisdrache::complain("Eisdrache::Func::operator[]: Symbol not found: %"+symbol+".");
+    return locals.begin()->second; // silence warning
+}
 
 Function *Eisdrache::Func::operator*() { return func; }
 
@@ -665,13 +675,13 @@ StoreInst *Eisdrache::storeValue(Local &local, Local &value) {
     if (!local.getTy()->isPtrTy())
         return Eisdrache::complain("Eisdrache::storeValue(): Local is not a pointer (%"+local.getName()+").");
 
-    Ty *storeType = **local.getTy();
+    // Ty *storeType = **local.getTy();
 
-    if (storeType != value.getTy() 
-    && ((!local.getTy()->isFloatTy() 
-    && !value.getTy()->isFloatTy())
-    || value.getTy()->isPtrTy()))
-        return Eisdrache::complain("Eisdrache::storeValue(): Value type does not match type of local.");
+    // if (storeType != value.getTy() 
+    // && ((!local.getTy()->isFloatTy() 
+    // && !value.getTy()->isFloatTy())
+    // || value.getTy()->isPtrTy()))
+    //     return Eisdrache::complain("Eisdrache::storeValue(): Value type does not match type of local (%"+local.getName()+").");
     
     return builder->CreateStore(value.getValuePtr(), local.getValuePtr());
 } 
@@ -882,8 +892,9 @@ Eisdrache::Local &Eisdrache::typeCast(Local &value, Ty *to, std::string name) {
     if (*value.getTy() == *to)
         complain("Eisdrache::typeCast(): Redundant type cast.");
 
-    Value *v = value.loadValue().getValuePtr();
-    Ty *from = value.getTy();
+    Local &load = value.loadValue();
+    Value *v = load.getValuePtr();
+    Ty *from = load.getTy();
     Local &cast = parent->addLocal(Local(this, to));
     
     if (from->isFloatTy()) {

@@ -228,20 +228,26 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
         type.access.push_back(FuxType::CONSTANT);
     else if (!check(EQUALS)) {
         StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type);
+
         if (parent) {
             parent->addLocal(decl);
-            return make_unique<NoOperationAST>(symbol);
+            return make_unique<VariableExprAST>(symbol);
         }
+
         return std::move(decl);
     }
 
     ExprAST::Ptr value = parseExpr();
-    StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type, value);
+
     if (parent) {
+        StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type);
         parent->addLocal(decl);
-        return make_unique<NoOperationAST>(symbol);
+        bool constant = find(type.access.begin(), type.access.end(), FuxType::CONSTANT) != type.access.end();
+        ExprAST::Ptr ref = make_unique<VariableExprAST>(symbol);
+        return make_unique<BinaryExprAST>(constant ? BinaryOp::CONASG : BinaryOp::ASG, ref, value);
     }
-    return std::move(decl);
+
+    return make_unique<VariableDeclAST>(symbol, type, value);
 }
 
 ExprAST::Vec Parser::parseExprList(TokenType end) { 
@@ -535,7 +541,7 @@ ExprAST::Ptr Parser::parsePostIncDecExpr() {
 ExprAST::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
 
-    if (that.isKeyword() && that != IDENTIFIER)
+    if (that.isType() && that != IDENTIFIER)
         return make_unique<VariableExprAST>(that.value);
 
     switch (that.type) {

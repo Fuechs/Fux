@@ -230,11 +230,7 @@ public:
 /// STATEMENTS ///
 
 class NoOperationAST : public StmtAST {
-    string symbolRef;
-
 public:
-    NoOperationAST(string symbolRef = "") : symbolRef(symbolRef) {};
-
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Expectation exp) override;
     AST getASTType() override;

@@ -12,13 +12,11 @@
 #include "../../frontend/ast/ast.hpp"
 #include "generator.hpp"
 
-Eisdrache::Local nullLocal = Eisdrache::Local();
-
 #ifdef FUX_BACKEND
 
-Eisdrache::Local &NoOperationAST::codegen(Eisdrache *eisdrache) {
-    return symbolRef.empty() ? nullLocal : eisdrache->getCurrentParent()[symbolRef];
-}
+Eisdrache::Local nullLocal = Eisdrache::Local();
+
+Eisdrache::Local &NoOperationAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
 
 Eisdrache::Local &NullExprAST::codegen(Eisdrache *eisdrache) { return  nullLocal; }
 
@@ -32,8 +30,8 @@ Eisdrache::Local &StringExprAST::codegen(Eisdrache *eisdrache) { return value->g
 
 Eisdrache::Local &ArrayExprAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
 
-Eisdrache::Local &VariableExprAST::codegen(Eisdrache *eisdrache) {
-    return eisdrache->getCurrentParent()[name];
+Eisdrache::Local &VariableExprAST::codegen(Eisdrache *eisdrache) { 
+    return eisdrache->getCurrentParent()[name]; 
 }
 
 Eisdrache::Local &MemberExprAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
@@ -99,11 +97,7 @@ Eisdrache::Local &TypeCastExprAST::codegen(Eisdrache *eisdrache) {
 Eisdrache::Local &TernaryExprAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
 
 Eisdrache::Local &VariableDeclAST::codegen(Eisdrache *eisdrache) {
-    Eisdrache::Ty *declTy = Generator::getType(eisdrache, type);
-    Eisdrache::Local &decl = eisdrache->declareLocal(declTy, symbol);
-    if (value)
-        decl.setFuture(value->codegen(eisdrache).getValuePtr());
-    return decl;
+    return eisdrache->declareLocal(Generator::getType(eisdrache, type), symbol);
 }
 
 Eisdrache::Local &InbuiltCallAST::codegen(Eisdrache *eisdrache) {

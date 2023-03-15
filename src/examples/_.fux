@@ -1,6 +1,6 @@
-say(): void {
+say(a: i64): i64 {
     puts "Hello World!\n";
-    return;
+    return a + (i64) 1;
 }
 
 main(argc: u64, argv: **c8): i64 { 
@@ -9,6 +9,5 @@ main(argc: u64, argv: **c8): i64 {
     c: i64 = a + b;
     d: i64 = (i64) 10;
     c <> d;
-    say();
-    return c + (i64) 1;
+    return c + say(say((i64) 0));
 }

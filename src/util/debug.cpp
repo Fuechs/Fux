@@ -82,7 +82,7 @@ void debugBody(size_t indent, StmtAST::Ptr &ast) {
 } 
 
 void NoOperationAST::debugPrint(size_t indent) { 
-    debugIndent(indent, symbolRef.empty() ? "noop" : "(-> '"+symbolRef+"')"); 
+    debugIndent(indent, "noop"); 
 } 
 
 void NullExprAST::debugPrint(size_t indent) { debugIndent(indent, "null"); }
@@ -194,6 +194,7 @@ void TernaryExprAST::debugPrint(size_t indent) {
 void VariableDeclAST::debugPrint(size_t indent) {
     debugIndent(indent, symbol);
     type.debugPrint();
+    
     if (value) {
         cout << " = ";
         value->debugPrint();
@@ -202,11 +203,14 @@ void VariableDeclAST::debugPrint(size_t indent) {
 
 void InbuiltCallAST::debugPrint(size_t indent) {
     debugIndent(indent, InbuiltsValue(callee));
-    cout << " ";
-    for (ExprAST::Ptr &arg : arguments) {
-        callASTDebug(0, arg);
-        if (arg != arguments.back())
-            cout << ", "; 
+    
+    if (!arguments.empty()) {
+        cout << " ";
+        for (ExprAST::Ptr &arg : arguments) {
+            callASTDebug(0, arg);
+            if (arg != arguments.back())
+                cout << ", "; 
+        }
     }
 }
 
