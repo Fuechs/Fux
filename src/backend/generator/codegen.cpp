@@ -64,6 +64,26 @@ Eisdrache::Local &BinaryExprAST::codegen(Eisdrache *eisdrache) {
         case ASG:   
             eisdrache->storeValue(L, R.loadValue());
             return L;
+        case ADDASG: {
+            Eisdrache::Local &inc = eisdrache->binaryOp(Eisdrache::ADD, L, R, "addasg");
+            eisdrache->storeValue(L, inc);
+            return L;
+        }
+        case SUBASG: {
+            Eisdrache::Local &dec = eisdrache->binaryOp(Eisdrache::SUB, L, R, "subasg");
+            eisdrache->storeValue(L, dec);
+            return L;
+        }
+        case MULASG: {
+            Eisdrache::Local &dec = eisdrache->binaryOp(Eisdrache::MUL, L, R, "mulasg");
+            eisdrache->storeValue(L, dec);
+            return L;
+        }
+        case DIVASG: {
+            Eisdrache::Local &dec = eisdrache->binaryOp(Eisdrache::DIV, L, R, "divasg");
+            eisdrache->storeValue(L, dec);
+            return L;
+        }
         case SWAPASG: {
             Eisdrache::Local &lVal = L.loadValue();
             Eisdrache::Local &rVal = R.loadValue();

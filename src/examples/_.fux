@@ -1,13 +1,2 @@
-say(a: i64): i64 {
-    puts "Hello World!\n";
-    return a + (i64) 1;
-}
-
-main(argc: u64, argv: **c8): i64 { 
-    a: i64 = (i64) 1;
-    b: i64 = (i64) 2;
-    c: i64 = a + b;
-    d: i64 = (i64) 10;
-    c <> d;
-    return c + say(say((i64) 0));
-}
+main(argc: u64, argv: **c8): i64 
+    return (i64) (8 | 4);
