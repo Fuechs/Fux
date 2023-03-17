@@ -2,7 +2,7 @@
  * @file eisdrache.cpp
  * @author fuechs
  * @brief Eisdrache class implementation
- * @version 0.1
+ * @version 0.1.2
  * @date 2023-01-30
  * 
  * @copyright Copyright (c) 2023, Fuechs.
@@ -796,12 +796,17 @@ Eisdrache::Local &Eisdrache::binaryOp(Op op, Local &LHS, Local &RHS, std::string
             break;
         case DIV:
             if (name.empty()) name = "divtmp";
+            bop.setPtr(builder->CreateFDiv(l.getValuePtr(), r.getValuePtr(), name));
+            bop.setTy(getFloatTy(64));
+            break;
+        case MOD:
+            if (name.empty()) name = "modtmp";
             if (ty->isFloatTy())
-                bop.setPtr(builder->CreateFDiv(l.getValuePtr(), r.getValuePtr(), name));
+                bop.setPtr(builder->CreateFRem(l.getValuePtr(), r.getValuePtr(), name));
             else if (ty->isSignedTy())
-                bop.setPtr(builder->CreateSDiv(l.getValuePtr(), r.getValuePtr(), name));
+                bop.setPtr(builder->CreateSRem(l.getValuePtr(), r.getValuePtr(), name));
             else
-                bop.setPtr(builder->CreateUDiv(l.getValuePtr(), r.getValuePtr(), name));
+                bop.setPtr(builder->CreateURem(l.getValuePtr(), r.getValuePtr(), name));
             break;
         case OR:    
             bop.setPtr(builder->CreateOr(l.getValuePtr(), r.getValuePtr(), name.empty() ? "ortmp" : name)); 

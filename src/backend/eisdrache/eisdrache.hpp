@@ -2,7 +2,7 @@
  * @file eisdrache.hpp
  * @author fuechs
  * @brief Eisdrache class header
- * @version 0.1
+ * @version 0.1.2
  * @date 2023-01-30
  * 
  * @copyright Copyright (c) 2023, Fuechs.
@@ -79,6 +79,7 @@ public:
         SUB,    // subtraction          -
         MUL,    // multiplication       *
         DIV,    // division             /
+        MOD,    // modulus / remainder  %
         OR,     // bit or               |
         XOR,    // bit xor              ^
         AND,    // bit and              &

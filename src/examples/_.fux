@@ -1,2 +1,4 @@
-main(argc: u64, argv: **c8): i64 
-    return (i64) (8 | 4);
+main(argc: u64, argv: **c8): i64 {
+    x: f64 = 8.0;
+    return (i64) x ^= (1.0 % 1.0);
+}

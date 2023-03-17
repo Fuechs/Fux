@@ -62,28 +62,54 @@ Eisdrache::Local &BinaryExprAST::codegen(Eisdrache *eisdrache) {
     switch (op) {
         using enum BinaryOp;
         case ASG:   
+        case CONASG: // TODO: analyser should check for constant locals
             eisdrache->storeValue(L, R.loadValue());
             return L;
-        case ADDASG: {
-            Eisdrache::Local &inc = eisdrache->binaryOp(Eisdrache::ADD, L, R, "addasg");
-            eisdrache->storeValue(L, inc);
+        case ADDASG: 
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::ADD, L, R, "addasg"));
+            return L;
+        case SUBASG: 
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::SUB, L, R, "subasg"));
+            return L;
+        case MULASG: 
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::MUL, L, R, "mulasg"));
+            return L;
+        case DIVASG: 
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::DIV, L, R, "divasg"));
+            return L;
+        case POWASG: {
+            Eisdrache::Func *pow = nullptr;
+
+            if (!(pow = eisdrache->getFunc("pow"))) {
+                Eisdrache::Func *prev = &eisdrache->getCurrentParent();
+                pow = &eisdrache->declareFunction(eisdrache->getFloatTy(64), "pow",
+                    {eisdrache->getFloatTy(64), eisdrache->getFloatTy(64)});
+                (**pow)->setDoesNotThrow();
+                (**pow)->setDoesNotAccessMemory();
+                eisdrache->setParent(prev);
+            }
+
+            Eisdrache::Local &raw = pow->call({
+                eisdrache->typeCast(L, eisdrache->getFloatTy(64)).getValuePtr(),
+                R.loadValue().getValuePtr()}, "powasg");
+            Eisdrache::Local &conv = eisdrache->typeCast(raw, (**L.getTy()), "powasg_conv");
+            eisdrache->storeValue(L, conv);
             return L;
         }
-        case SUBASG: {
-            Eisdrache::Local &dec = eisdrache->binaryOp(Eisdrache::SUB, L, R, "subasg");
-            eisdrache->storeValue(L, dec);
+        case MODASG: 
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::MOD, L, R, "modasg"));
             return L;
-        }
-        case MULASG: {
-            Eisdrache::Local &dec = eisdrache->binaryOp(Eisdrache::MUL, L, R, "mulasg");
-            eisdrache->storeValue(L, dec);
+        case BORASG: 
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::OR, L, R, "borasg"));
             return L;
-        }
-        case DIVASG: {
-            Eisdrache::Local &dec = eisdrache->binaryOp(Eisdrache::DIV, L, R, "divasg");
-            eisdrache->storeValue(L, dec);
+        case BANDASG:
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::AND, L, R, "bandasg"));
             return L;
-        }
+        case LSHASG:
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::LSH, L, R, "lshasg"));
+            return L;
+        case RSHASG:
+            eisdrache->storeValue(L, eisdrache->binaryOp(Eisdrache::RSH, L, R, "rshasg"));
         case SWAPASG: {
             Eisdrache::Local &lVal = L.loadValue();
             Eisdrache::Local &rVal = R.loadValue();
@@ -95,6 +121,22 @@ Eisdrache::Local &BinaryExprAST::codegen(Eisdrache *eisdrache) {
         case SUB:           return eisdrache->binaryOp(Eisdrache::SUB, L, R);
         case MUL:           return eisdrache->binaryOp(Eisdrache::MUL, L, R);
         case DIV:           return eisdrache->binaryOp(Eisdrache::DIV, L, R);
+        case POW: {
+            Eisdrache::Func *pow = nullptr;
+
+            if (!(pow = eisdrache->getFunc("pow"))) {
+                Eisdrache::Func *prev = &eisdrache->getCurrentParent();
+                pow = &eisdrache->declareFunction(eisdrache->getFloatTy(64), "pow",
+                    {eisdrache->getFloatTy(64), eisdrache->getFloatTy(64)});
+                (**pow)->setDoesNotThrow();
+                (**pow)->setDoesNotAccessMemory();
+                eisdrache->setParent(prev);
+            }
+
+            return pow->call({L.loadValue().getValuePtr(),
+                R.loadValue().getValuePtr()}, "powtmp");
+        }
+        case MOD:           return eisdrache->binaryOp(Eisdrache::MOD, L, R);
         case BOR:           return eisdrache->binaryOp(Eisdrache::OR, L, R);
         case BXOR:          return eisdrache->binaryOp(Eisdrache::XOR, L, R);
         case BAND:          return eisdrache->binaryOp(Eisdrache::AND, L, R);
@@ -111,7 +153,7 @@ Eisdrache::Local &BinaryExprAST::codegen(Eisdrache *eisdrache) {
 }
 
 Eisdrache::Local &TypeCastExprAST::codegen(Eisdrache *eisdrache) {
-    return eisdrache->typeCast(expr->codegen(eisdrache), Generator::getType(eisdrache, type));
+    return eisdrache->typeCast(expr->codegen(eisdrache), Generator::getType(eisdrache, type), "typecast");
 }
 
 Eisdrache::Local &TernaryExprAST::codegen(Eisdrache *eisdrache) { return nullLocal; }
