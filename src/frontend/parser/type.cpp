@@ -111,12 +111,5 @@ bool FuxType::valid() {
     if (kind == CUSTOM && name.empty())
         return false;
 
-    // OUTDATED: arraySize is now sizeID
-    // TODO: "expectation" struct for analyser 
-    // may look something like this:
-    // Expectation e( integer, binary expression, expression yielding integer, nullExpr, ... );
-    // if (array && !arraySize->analyse(e))
-    //      return false;
-
     return pointerDepth >= -1;
 }

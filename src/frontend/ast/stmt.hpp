@@ -11,8 +11,9 @@
 
 #pragma once
 
-#include "../analyser/expectation.hpp"
 #include "../metadata.hpp"
+
+class Analyser;
 
 enum class AST {
     // expressions
@@ -51,7 +52,7 @@ public:
 
     virtual ~StmtAST() {}
     FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache) = 0;)
-    virtual Ptr analyse(Expectation exp) = 0;
+    virtual Ptr analyse(Analyser *analyser) = 0;
     virtual AST getASTType() = 0;
     virtual FuxType getFuxType() = 0;
     virtual void debugPrint(size_t indent = 0) = 0;

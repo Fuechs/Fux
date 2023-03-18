@@ -1,6 +1,6 @@
 # `src/` Tree
 
-> Last updated on 2023-03-01
+> Last updated on 2023-03-18
 
 ```
 src
@@ -16,16 +16,18 @@ src
 │   │   ├── codegen.cpp - StmtAST::codegen() impl.
 │   │   ├── generator.cpp - generator impl.
 │   │   ├── generator.hpp - generator
-│   │   ├── gentype.cpp - Generator::getType() impl.
-│   │   ├── wrapper.cpp - LLVMWrapper impl.
-│   │   └── wrapper.hpp - custom LLVMWrapper for StmtAST::codegen()
+│   │   └── gentype.cpp - Generator::getType() impl.
+│   ├── eisdrache - Eisdrache Wrapper for the LLVM API
+│   │   ├── eisdrache.cpp
+│   │   └── eisdrache.hpp
 │   └── llvmheader.hpp - includes for llvm headers & type definitions
 ├── examples - example fux programs
 ├── frontend
 │   ├── analyser 
 │   │   ├── analyser.cpp - AST analyser impl.
 │   │   ├── analyser.hpp - AST analyser 
-│   │   └── expectation.hpp - expectation struct
+│   │   ├── symbol.cpp - symbol header
+│   │   └── symbol.hpp - symbol impl.
 │   ├── ast
 │   │   ├── ast.cpp - AST & BinaryOp/UnaryOp/Inbuilts impl.
 │   │   ├── ast.hpp - Abstract Syntax Tree

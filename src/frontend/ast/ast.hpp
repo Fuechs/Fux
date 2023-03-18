@@ -26,7 +26,7 @@ typedef map<string, FuxType> ArgMap;
 class NullExprAST : public ExprAST {
 public:    
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;    
@@ -40,7 +40,7 @@ public:
     ~BoolExprAST();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -55,7 +55,7 @@ public:
     ~NumberExprAST();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -70,7 +70,7 @@ public:
     ~CharExprAST();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -84,7 +84,7 @@ public:
     ~StringExprAST();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override; 
+    StmtAST::Ptr analyse(Analyser *analyser) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -99,7 +99,7 @@ public:
     : begin(std::move(begin)), end(std::move(end)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;  
+    StmtAST::Ptr analyse(Analyser *analyser) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -112,7 +112,7 @@ public:
     ArrayExprAST(ExprAST::Vec &elements) : elements(std::move(elements)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override; 
+    StmtAST::Ptr analyse(Analyser *analyser) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -126,7 +126,7 @@ public:
     ~VariableExprAST() override;
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;  
+    StmtAST::Ptr analyse(Analyser *analyser) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -143,7 +143,7 @@ public:
     : base(std::move(base)), member(std::move(member)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;    
+    StmtAST::Ptr analyse(Analyser *analyser) override;    
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -161,7 +161,7 @@ public:
     : callee(std::move(callee)), args(std::move(args)), asyncCall(asyncCall) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override; 
+    StmtAST::Ptr analyse(Analyser *analyser) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -175,7 +175,7 @@ public:
     UnaryExprAST(UnaryOp op, ExprAST::Ptr &expr) : op(op), expr(std::move(expr)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;  
+    StmtAST::Ptr analyse(Analyser *analyser) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -190,7 +190,7 @@ public:
     : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;   
+    StmtAST::Ptr analyse(Analyser *analyser) override;   
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -205,7 +205,7 @@ public:
     : type(type), expr(std::move(expr)) {}
     
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -221,7 +221,7 @@ public:
     : condition(std::move(condition)), thenExpr(std::move(thenExpr)), elseExpr(std::move(elseExpr)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override; 
+    StmtAST::Ptr analyse(Analyser *analyser) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -232,7 +232,7 @@ public:
 class NoOperationAST : public StmtAST {
 public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;    
@@ -253,7 +253,7 @@ public:
     ExprAST::Ptr &getValue();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -270,7 +270,7 @@ public:
     : callee(callee), arguments(std::move(arguments)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -286,7 +286,7 @@ public:
     : condition(std::move(condition)), thenBody(std::move(thenBody)), elseBody(std::move(elseBody)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -300,7 +300,7 @@ public:
     CodeBlockAST(StmtAST::Vec &body) : body(std::move(body)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -318,7 +318,7 @@ public:
     : condition(std::move(condition)), body(std::move(body)), postCondition(postCondition) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -340,7 +340,7 @@ public:
         iterator(std::move(iterator)), body(std::move(body)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -363,7 +363,7 @@ public:
     ~PrototypeAST() override;
     
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;
@@ -386,7 +386,7 @@ public:
     : proto(std::move(proto)), body(std::move(body)) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;    
@@ -408,7 +408,7 @@ public:
     RootAST() : program(StmtAST::Vec()) {}        
     
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Expectation exp) override;
+    StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;

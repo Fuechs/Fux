@@ -11,80 +11,62 @@
 
 #include "analyser.hpp"
 
-StmtAST::Ptr Analyser::analyse() { return origin->analyse(Expectation(error, table)); }
+StmtAST::Ptr Analyser::analyse() { return origin->analyse(this); }
 
-StmtAST::Ptr NoOperationAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr NoOperationAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr NullExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr NullExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr BoolExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr BoolExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr NumberExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr NumberExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr CharExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr CharExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr StringExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr StringExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr RangeExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr RangeExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr ArrayExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr ArrayExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr VariableExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr VariableExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr MemberExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr MemberExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr CallExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr CallExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr UnaryExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr UnaryExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr BinaryExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr BinaryExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr TypeCastExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr TypeCastExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr TernaryExprAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr TernaryExprAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr VariableDeclAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr VariableDeclAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr InbuiltCallAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr InbuiltCallAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr IfElseAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr IfElseAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr CodeBlockAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr CodeBlockAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr WhileLoopAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr WhileLoopAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr ForLoopAST::analyse(Expectation exp) { return nullptr; }
+StmtAST::Ptr ForLoopAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr PrototypeAST::analyse(Expectation exp) {
-    Symbol *that = new Symbol(Symbol::FUNC, type);
+StmtAST::Ptr PrototypeAST::analyse(Analyser *analyser) { return nullptr; }
 
-    if (exp.table->contains(symbol)) {
-        // TODO: check type, parameters, etc.
-    }
-
-    for (StmtAST::Ptr &arg : args) {
-        if (arg->getASTType() != AST::VariableDeclAST) {
-            // TODO: exp.error->createError(GENERIC, pos.lStart, pos.colStart, "invalid parameter");
-            continue;
-        }
-        arg->analyse(exp);
-        that->parameters.push_back(arg->getFuxType());
-    }
-    
-    exp.table->insert(symbol, that);
-    return nullptr;
-}
-
-StmtAST::Ptr FunctionAST::analyse(Expectation exp) {
-    proto->analyse(exp);
-    body->analyse(exp);
+StmtAST::Ptr FunctionAST::analyse(Analyser *analyser) {
+    proto->analyse(analyser);
+    body->analyse(analyser);
     return (StmtAST::Ptr) this;
 }
 
-StmtAST::Ptr RootAST::analyse(Expectation exp) {
+StmtAST::Ptr RootAST::analyse(Analyser *analyser) {
     RootAST::Ptr mod = make_unique<RootAST>();
     StmtAST::Ptr modStmt = nullptr;
     for (StmtAST::Ptr &stmt : program) 
-        mod->addSub((modStmt = stmt->analyse(exp)));  
+        mod->addSub((modStmt = stmt->analyse(analyser)));  
     return mod;
 }

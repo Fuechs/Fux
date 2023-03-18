@@ -51,8 +51,8 @@ public:
         PUBLIC,                     // read and write access for everyone / everywhere & default (for values too)
     };
 
-    typedef vector<Access> AccessList;
-    typedef vector<FuxType> Vec;
+    using AccessList = vector<Access>;
+    using Vec = vector<FuxType>;
 
     FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, bool array = false, _i64 sizeID = -1, string name = "")
     : kind(kind), pointerDepth(pointerDepth), reference(reference), access(accessList), array(array), sizeID(sizeID), name(name) {}

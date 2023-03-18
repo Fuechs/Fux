@@ -18,18 +18,32 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [...] Syntax
 - [&check;] Error System
 - [&check;] Source Management
-- [...] Threading
-    - [&check;] Class
-    - [&cross;] Implementation in Parser
+- [&check;] Threading
 - [&check;] Lexer
 - [...] Abstract Syntax Tree
     - [&check;] Expressions
     - [&check;] Statements
     - [...] Metadata 
-- [&check;] Parser
+- [...] Parser
+    - [...] Expressions
+        - [&check;] ...
+        - [&cross;] Member / Sub -Symbols
+    - [...] Statements
+        - [&check;] ...
+        - [&cross;] Structs
+        - [&cross;] Enumerations
+        - [&cross;] Type Definitions
+    - [...] Error Reporting
+    - [...] Metadata
+    - [&cross;] Threading
 - [...] Analyser
-    - [...] Symbol Table
-    - [...] Expectation
+    - [...] Symbols
+        - [...] Table
+        - [...] Variables
+        - [...] Functions
+        - [&cross;] Structes / Classes
+        - [&cross;] Enumerations
+        - [&cross;] Type Definitions
     - [...] Expressions
     - [...] Statements
 - [...] Context [![LLVM][llvm-badge]](https://llvm.org/)

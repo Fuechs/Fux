@@ -15,12 +15,12 @@
 #include "../error/error.hpp"
 #include "../ast/ast.hpp"
 #include "../parser/type.hpp"
-#include "expectation.hpp"
+#include "symbol.hpp"
 
 class Analyser {
 public:
     Analyser(ErrorManager *error, RootAST::Ptr &root) 
-    : error(error), origin(root), table(new SymbolTable()) {} 
+    : error(error), origin(root), table() {} 
 
     // analyse AST 
     StmtAST::Ptr analyse();
@@ -28,8 +28,7 @@ public:
 private:
     ErrorManager *error;
     RootAST::Ptr &origin;
-
-    SymbolTable *table;
+    Table table;
 
     void debugPrint(const string message);
 };
