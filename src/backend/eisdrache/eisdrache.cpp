@@ -131,7 +131,13 @@ Type *Eisdrache::Ty::getTy() const {
     return Type::getIntNTy(*eisdrache->getContext(), bit);
 }
 
-Eisdrache::Ty *Eisdrache::Ty::getPtrTo() const { return eisdrache->addTy(new Ty(eisdrache, bit, ptrDepth + 1, isFloat)); }
+Eisdrache::Ty *Eisdrache::Ty::getPtrTo() const { 
+    return eisdrache->addTy(new Ty(eisdrache, bit, ptrDepth + 1, isFloat, isSigned)); 
+}
+
+Eisdrache::Ty *Eisdrache::Ty::getSignedTy() const {
+    return eisdrache->addTy(new Ty(eisdrache, bit, ptrDepth, isFloat, true));
+}
 
 Eisdrache::Struct &Eisdrache::Ty::getStructTy() const {
     if (!structTy)
@@ -150,6 +156,7 @@ bool Eisdrache::Ty::isPtrTy() const { return ptrDepth > 0; }
 bool Eisdrache::Ty::isValidRHS(const Ty *comp) const {
     return bit == comp->bit
         && isFloat == comp->isFloat
+        && isSigned == comp->isSigned
         && isPtrTy() == comp->isPtrTy();
 }
 
@@ -895,7 +902,7 @@ BranchInst *Eisdrache::jump(Local &condition, BasicBlock *then, BasicBlock *else
 
 Eisdrache::Local &Eisdrache::typeCast(Local &value, Ty *to, std::string name) {
     if (*value.getTy() == *to)
-        complain("Eisdrache::typeCast(): Redundant type cast.");
+        return value.loadValue();
 
     Local &load = value.loadValue();
     Value *v = load.getValuePtr();
@@ -964,6 +971,31 @@ Eisdrache::Local &Eisdrache::compareToNull(Local &pointer, std::string name) {
         complain("Eisdrache::compareToNull(): Local is not a pointer.");
     Value *cond = builder->CreateICmpEQ(pointer.getValuePtr(), getNullPtr(pointer.getTy()), name);
     return parent->addLocal(Local(this, getBoolTy(), cond));
+}
+
+Eisdrache::Local &Eisdrache::unaryOp(Op op, Local &expr, std::string name) {
+    Local &load = expr.loadValue();
+    Ty *loadTy = load.getTy();
+    Local ret = Local(this);
+
+    switch (op) {
+        case NEG: {
+            if (loadTy->isFloatTy())
+                ret.setPtr(builder->CreateFNeg(load.getValuePtr(), "negtmp"));
+            else
+                ret.setPtr(builder->CreateNeg(load.getValuePtr(), "negtmp"));
+            ret.setTy(loadTy->getSignedTy());
+            break;
+        }
+        case NOT: 
+            ret.setPtr(builder->CreateNot(load.getValuePtr(), "nottmp"));
+            ret.setTy(loadTy);
+            break;
+        default: 
+            complain("Eisdrache::unaryOp(): Operation not implemented.");
+    }
+
+    return parent->addLocal(ret);
 }
 
 /// GETTER ///
