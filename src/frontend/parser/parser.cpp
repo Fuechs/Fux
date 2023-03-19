@@ -486,62 +486,117 @@ ExprAST::Ptr Parser::parsePlusMinusUnaryExpr() {
 ExprAST::Ptr Parser::parsePreIncDecExpr() { 
     if (*current == PLUS_PLUS || *current == MINUS_MINUS) {
         UnaryOp op = eat() == PLUS_PLUS ? UnaryOp::PINC : UnaryOp::PDEC;
-        ExprAST::Ptr expr = parseIndexExpr();
+        ExprAST::Ptr expr = parsePostIncDecExpr();
         return make_unique<UnaryExprAST>(op, expr);
     } 
     
-    return parseIndexExpr(); 
+    return parsePostIncDecExpr(); 
 }
 
-ExprAST::Ptr Parser::parseIndexExpr() { 
-    ExprAST::Ptr expr = parseCallExpr(); 
-    
-    if (check(ARRAY_BRACKET)) 
-        return make_unique<BinaryExprAST>(BinaryOp::IDX, expr);
-    else if (check(LBRACKET)) {
-        ExprAST::Ptr index = parseExpr();
-        eat(RBRACKET, ParseError::MISSING_PAREN);
-        return make_unique<BinaryExprAST>(BinaryOp::IDX, expr, index);
-    }
+ExprAST::Ptr Parser::parsePostIncDecExpr() {
+    ExprAST::Ptr expr = parseTopMemberExpr();
 
+    if (*current == PLUS_PLUS || *current == MINUS_MINUS)
+        return make_unique<UnaryExprAST>(
+            eat() == PLUS_PLUS ? UnaryOp::SINC : UnaryOp::SDEC, expr);
+    
     return expr;
 }
 
-ExprAST::Ptr Parser::parseCallExpr() { 
-    if (*current != IDENTIFIER && *current != KEY_ASYNC)
-        return parsePostIncDecExpr();
+ExprAST::Ptr Parser::parseTopMemberExpr() {
+    ExprAST::Ptr parent = parseIndexExpr();
 
-    bool asyncCall = false;
-    Token::Iter backTok = current;
-    
-    if (check(KEY_ASYNC))
-        asyncCall = true;
-    ExprAST::Ptr symbol = parsePrimaryExpr();
-        
-    if (!check(LPAREN)) {
-        current = backTok;
-        return parsePostIncDecExpr();
+    if (check(DOT)) {
+        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER).value);
+
+        if (check(LPAREN))
+            parent = parseCallExpr(std::move(parent));
+        else if (*current == ARRAY_BRACKET || *current == LBRACKET)
+            parent = parseIndexExpr(std::move(parent));
     }
 
+    return parent;
+}
+
+ExprAST::Ptr Parser::parseIndexExpr(ExprAST::Ptr parent) { 
+    if (parent == nullptr)
+        parent = parseMidMemberExpr(); 
+    
+    if (check(ARRAY_BRACKET)) 
+        parent = make_unique<BinaryExprAST>(BinaryOp::IDX, parent);
+    else if (check(LBRACKET)) {
+        ExprAST::Ptr index = parseExpr();
+        eat(RBRACKET, ParseError::MISSING_PAREN);
+        parent = make_unique<BinaryExprAST>(BinaryOp::IDX, parent, index);
+    }
+
+    if (check(LPAREN))
+        parent = parseCallExpr(std::move(parent));
+    else if (*current == ARRAY_BRACKET || *current == LBRACKET)
+        parent  = parseIndexExpr(std::move(parent));
+
+    return parent;
+}
+
+ExprAST::Ptr Parser::parseMidMemberExpr() {
+    ExprAST::Ptr parent = parseCallExpr();
+
+    if (check(DOT)) {
+        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER).value);
+
+        if (check(LPAREN))
+            parent = parseCallExpr(std::move(parent));
+    }
+
+    return parent;
+}
+
+ExprAST::Ptr Parser::parseCallExpr(ExprAST::Ptr callee) { 
+    bool async = false;
+
+    if (callee == nullptr) {
+        if (*current != IDENTIFIER && *current != KEY_ASYNC)
+            return parseBotMemberExpr();
+
+        Token::Iter backTok = current;
+
+        async = check(KEY_ASYNC);
+        callee = parseBotMemberExpr();
+                
+        if (!check(LPAREN)) {
+            current = backTok;
+            return parseBotMemberExpr();
+        }
+    }
+    
     ExprAST::Vec arguments = ExprAST::Vec();
     if (*current != RPAREN)
         arguments = parseExprList(RPAREN);
     eat(RPAREN, ParseError::MISSING_PAREN);
-    return make_unique<CallExprAST>(symbol, arguments, asyncCall);
+    
+    ExprAST::Ptr expr = make_unique<CallExprAST>(callee, arguments, async);
+
+    if (check(LPAREN))
+        expr = parseCallExpr(std::move(expr));
+    else if (*current == ARRAY_BRACKET || *current == LBRACKET)
+        expr = parseIndexExpr(std::move(expr));
+    
+    return expr;
 } 
 
-ExprAST::Ptr Parser::parsePostIncDecExpr() {
-    ExprAST::Ptr expr = parsePrimaryExpr();
-    if (*current == PLUS_PLUS || *current == MINUS_MINUS)
-        return make_unique<UnaryExprAST>(
-            eat() == PLUS_PLUS ? UnaryOp::SINC : UnaryOp::SDEC, expr);
-    return expr;
+ExprAST::Ptr Parser::parseBotMemberExpr() {
+    ExprAST::Ptr parent = parsePrimaryExpr();
+
+    while (check(DOT)) 
+        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER).value);
+    
+    return parent;
 }
 
 ExprAST::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
 
-    if (that.isType() && that != IDENTIFIER)
+    if (that.isType())
         return make_unique<VariableExprAST>(that.value);
 
     switch (that.type) {
@@ -574,15 +629,6 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
         case KEY_TRUE:      return make_unique<BoolExprAST>(true);
         case KEY_FALSE:     return make_unique<BoolExprAST>(false);
         case KEY_NULL:      return make_unique<NullExprAST>();
-        case IDENTIFIER:    {
-            ExprAST::Ptr primary = make_unique<VariableExprAST>(that.value);
-
-            if (!check(DOT)) 
-                return primary;
-            
-            ExprAST::Ptr member = parsePrimaryExpr(); 
-            return make_unique<MemberExprAST>(primary, member);
-        }
         case LPAREN: {
             ExprAST::Ptr expr = parseExpr();
             eat(RPAREN, ParseError::MISSING_PAREN);
@@ -658,8 +704,6 @@ FuxType Parser::parseType(bool primitive) {
         return FuxType::createArray(kind, pointerDepth, reference, access, value, root->addSizeExpr(size));
     } else 
         return FuxType::createStd(kind, pointerDepth, reference, access, value);
-
-    assert(false && "unreachable");
 }
 
 ExprAST::Ptr Parser::parseNumberExpr(Token &tok) {
@@ -709,7 +753,7 @@ Token &Parser::eat(TokenType type, ParseError::Type errType) {
         recover();
     }
 
-    return *current; 
+    return peek(-1); 
 }
 
 Token &Parser::peek(size_t steps) { return *(current + steps); }
@@ -730,7 +774,10 @@ bool Parser::check(TokenType type, TokenType type0) {
     return true;
 }
 
-void Parser::recover(TokenType type) { while (*current != type && *current != _EOF) eat(); }
+void Parser::recover(TokenType type) { 
+    while (*current != type && *current != _EOF) 
+        eat(); 
+}
 
 constexpr bool Parser::notEOF() { return *current != _EOF; }
 

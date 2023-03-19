@@ -125,10 +125,23 @@ void ArrayExprAST::debugPrint(size_t indent) {
 
 void VariableExprAST::debugPrint(size_t indent) { debugIndent(indent, name); }
 
+void CallExprAST::debugPrint(size_t indent) { 
+    if (asyncCall) 
+        debugIndent(indent, "async ");
+    callASTDebug(asyncCall ? 0 : indent, callee);
+    cout << "(";
+    for (ExprAST::Ptr &arg : args) {
+        callASTDebug(0, arg);
+        if (arg != args.back())
+            cout << ", ";
+    }
+    cout << ")";
+}
+
 void MemberExprAST::debugPrint(size_t indent) {
-    callASTDebug(indent, base);
+    callASTDebug(indent, parent);
     cout << ".";
-    callASTDebug(0, member);
+    debugIndent(0, member);
 }
 
 void UnaryExprAST::debugPrint(size_t indent) {
@@ -156,19 +169,6 @@ void BinaryExprAST::debugPrint(size_t indent) {
     } else {
         cout << " " << BinaryOpValue(op) << " ";
         callASTDebug(0, RHS);
-    }
-    cout << ")";
-}
-
-void CallExprAST::debugPrint(size_t indent) { 
-    if (asyncCall) 
-        debugIndent(indent, "async ");
-    callASTDebug(asyncCall ? 0 : indent, callee);
-    cout << "(";
-    for (ExprAST::Ptr &arg : args) {
-        callASTDebug(0, arg);
-        if (arg != args.back())
-            cout << ", ";
     }
     cout << ")";
 }

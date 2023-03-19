@@ -25,9 +25,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [&check;] Statements
     - [...] Metadata 
 - [...] Parser
-    - [...] Expressions
-        - [&check;] ...
-        - [&cross;] Member / Sub -Symbols
+    - [&check;] Expressions
     - [...] Statements
         - [&check;] ...
         - [&cross;] Structs

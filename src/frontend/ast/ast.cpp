@@ -46,6 +46,10 @@ AST VariableExprAST::getASTType() { return AST::VariableExprAST; }
 FuxType VariableExprAST::getFuxType() { return FuxType::NO_TYPE; }
 string &VariableExprAST::getName() { return name; }
 
+AST CallExprAST::getASTType() { return AST::StringExprAST; }
+// TODO: evaluate type
+FuxType CallExprAST::getFuxType() { return FuxType::NO_TYPE; }
+
 AST MemberExprAST::getASTType() { return AST::MemberExprAST; }
 FuxType MemberExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
@@ -56,10 +60,6 @@ FuxType UnaryExprAST::getFuxType() { return FuxType::NO_TYPE; }
 AST BinaryExprAST::getASTType() { return AST::BinaryExprAST; }
 // TODO: evaluate type
 FuxType BinaryExprAST::getFuxType() { return FuxType::NO_TYPE; }
-
-AST CallExprAST::getASTType() { return AST::StringExprAST; }
-// TODO: evaluate type
-FuxType CallExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
 AST TypeCastExprAST::getASTType() { return AST::TypeCastExprAST; }
 FuxType TypeCastExprAST::getFuxType() { return type; }

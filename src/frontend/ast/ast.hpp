@@ -134,21 +134,6 @@ public:
     string &getName();
 };
 
-class MemberExprAST : public ExprAST {
-    ExprAST::Ptr base;
-    ExprAST::Ptr member;
-
-public:
-    MemberExprAST(ExprAST::Ptr &base, ExprAST::Ptr &member) 
-    : base(std::move(base)), member(std::move(member)) {}
-
-    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    StmtAST::Ptr analyse(Analyser *analyser) override;    
-    AST getASTType() override;
-    FuxType getFuxType() override;
-    void debugPrint(size_t indent = 0) override;
-};
-
 class CallExprAST : public ExprAST {
     ExprAST::Ptr callee;
     ExprAST::Vec args;
@@ -162,6 +147,21 @@ public:
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override; 
+    AST getASTType() override;
+    FuxType getFuxType() override;
+    void debugPrint(size_t indent = 0) override;
+};
+
+class MemberExprAST : public ExprAST {
+    ExprAST::Ptr parent;
+    string member;
+
+public:
+    MemberExprAST(ExprAST::Ptr &parent, const string &member) 
+    : parent(std::move(parent)), member(member) {}
+
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
+    StmtAST::Ptr analyse(Analyser *analyser) override;    
     AST getASTType() override;
     FuxType getFuxType() override;
     void debugPrint(size_t indent = 0) override;

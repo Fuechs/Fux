@@ -100,14 +100,30 @@ private:
     ExprAST::Ptr parsePlusMinusUnaryExpr();
     // ++<expr> , --<expr> 
     ExprAST::Ptr parsePreIncDecExpr();
-    // <expr> [ <expr> ]
-    ExprAST::Ptr parseIndexExpr();
-    // <expr>  ( <expr>, <expr>, ... )
-    ExprAST::Ptr parseCallExpr();
     // <expr>++, <expr>--
     ExprAST::Ptr parsePostIncDecExpr();
+    // <expr>.<symbol> 
+    ExprAST::Ptr parseTopMemberExpr();
+    // <expr> [ <expr> ]
+    ExprAST::Ptr parseIndexExpr(ExprAST::Ptr parent = nullptr);
+    // <expr>.<symbol>
+    ExprAST::Ptr parseMidMemberExpr();
+    // <expr>  ( <expr>, <expr>, ... )
+    ExprAST::Ptr parseCallExpr(ExprAST::Ptr callee = nullptr);
+    // <expr>.<symbol>
+    ExprAST::Ptr parseBotMemberExpr();
     // <identifier>, <value>, (<expr>)
     ExprAST::Ptr parsePrimaryExpr();
+
+    /**
+     * Since member expressions can contain 
+     *  call expressions, index expressions
+     *  and vice versa, there are three different 
+     *  functions to parse a member expression.
+     * - TOP: Has Call, Index 
+     * - MID: Has Call, Can be carried by Index
+     * - BOT: Can be carried by Call, Index
+     */
 
     // parse : | -> + access + pointer depth + type name + array
     // primitive: only parse pointer depth + type name + array
