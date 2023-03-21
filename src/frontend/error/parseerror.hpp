@@ -131,7 +131,7 @@ private:
     string printLine(size_t lineNumber, string line);
     string printUnderline(size_t start, size_t end, size_t except = 0);
     string printArrow(const SUBJ_STRCT &meta);
-    string printInfo(const string &info, bool wrap = false);
+    string printInfo(const string &info, bool wrap = false, bool color = false);
     string printNotes();
 
     // vector<string> splitString(string data, size_t max);

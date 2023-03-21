@@ -98,7 +98,7 @@ string ParseError::printSubject(const SUBJ_STRCT &subj) {
     if (meta.fstLine == meta.lstLine) {
         ss << printLine(meta.fstLine, meta[meta.fstLine]);
         ss << printUnderline(meta.fstCol, meta.lstCol, subj.pointer);
-        ss << printInfo(subj.info);
+        ss << printInfo(subj.info, false, subj.pointer != 0);
         ss << printArrow(subj);
     } else if (meta.lstLine - meta.fstLine > 6) {
         ss << printLine(meta.fstLine, meta[meta.fstLine]);
@@ -168,23 +168,6 @@ string ParseError::printUnderline(size_t start, size_t end, size_t except) {
         else
             ss << " ";
     }
-    
-    // for (i = 0; i < (start - 1); i++) // -1 so arrow points at exact position
-    //     ss << " ";
-
-    // while (i++ < end) {
-    //     if (except == 0) {
-    //         ss << "^";
-    //         continue;
-    //     }
-
-    //     if (i == except - 1 || i == except + 1) 
-    //         ss << " ";
-    //     else if (i == except) 
-    //         ss << CC::RED << "^";
-    //     else 
-    //         ss << CC::BLUE << "-";
-    // }
 
     ss << SC::RESET << " ";
     return ss.str();
@@ -209,12 +192,12 @@ string ParseError::printArrow(const SUBJ_STRCT &subj) {
     return ss.str();
 }
 
-string ParseError::printInfo(const string &info, bool wrap) {
+string ParseError::printInfo(const string &info, bool wrap, bool color) {
     if (info.empty())
         return "\n";
 
     stringstream ss;
-    ss << SC::BOLD << CC::RED;
+    ss << SC::BOLD << (color ? CC::BLUE : CC::RED);
     if (wrap) 
         ss << pad() << " \\___ " << info;
     else 

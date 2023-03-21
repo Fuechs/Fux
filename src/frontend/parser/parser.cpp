@@ -47,14 +47,18 @@ StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
     }
 
     StmtAST::Ptr stmt = parseFunctionDeclStmt();
-    // TODO: get rid of this if
     if (expectSemicolon && stmt 
     && stmt->getASTType() != AST::CodeBlockAST 
     && stmt->getASTType() != AST::FunctionAST
     && stmt->getASTType() != AST::IfElseAST
     && stmt->getASTType() != AST::WhileLoopAST
     && stmt->getASTType() != AST::ForLoopAST) // don't throw useless errors
-        eat(SEMICOLON);
+        if (!check(SEMICOLON)) {
+            if (!stmt->meta.file) // TODO: implement metadata for every ast
+                assert(!"metadata not implemented for parsed kind of AST");
+            error->metaError(ParseError::UNEXPECTED_TOKEN, "Expected a Semicolon ';' after Statement", 
+                stmt->meta, "Parsed statement", peek(-1).end + 1, "Expected semicolon ';' here");
+        }
     return stmt;
 }
 
@@ -207,11 +211,15 @@ StmtAST::Ptr Parser::parseIfElseStmt() {
 
 StmtAST::Ptr Parser::parseInbuiltCallStmt() {
     if (current->isInbuiltCall()) {
+        Metadata meta = Metadata(fileName, *current);
         Inbuilts callee = (Inbuilts) eat().type;
         ExprAST::Vec args = {};
         if (*current != SEMICOLON)
             args = parseExprList(SEMICOLON);
-        return make_unique<InbuiltCallAST>(callee, args);
+        meta.copyEnd(peek(-1));
+        StmtAST::Ptr stmt = make_unique<InbuiltCallAST>(callee, args);
+        stmt->meta = meta;
+        return stmt;
     }
 
     return parseVariableDeclStmt();
@@ -747,7 +755,7 @@ Token &Parser::eat(TokenType type, ParseError::Type errType) {
 
     if (curTok != type) {
         createError(errType, "Got Unexpected Token "+string(TokenTypeString[curTok.type])+" '"+curTok.value+"'", 
-            peek(-1), "Previous token", curTok.start, 
+            peek(-1), "", curTok.start, 
             "Expected "+string(TokenTypeString[type])+" '"+TokenTypeValue[type]+"' here instead"); 
         // TODO: better error
         recover();

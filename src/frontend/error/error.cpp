@@ -90,6 +90,17 @@ void ErrorManager::simpleError(ParseError::Type type, string title,
         );
 }
 
+void ErrorManager::metaError(ParseError::Type type, string title,
+    Metadata &subject, string info, size_t ptr, string ptrText, 
+    vector<string> notes, bool warning, bool aggressive ) {
+        createError(
+            type, title, *subject.file, 
+            subject.fstLine, subject.lstLine, subject.fstCol, subject.lstCol,
+            info, ptr, ptrText, *subject.file, 0, 0, 0, 0, "", 0, "", // empty reference
+            notes, false, warning, aggressive
+        );
+}
+
 size_t ErrorManager::errors() { return errorCount; }
 
 size_t ErrorManager::warnings() { return warningCount; }

@@ -52,6 +52,10 @@ public:
         string info, size_t ptr, string ptrText, 
         vector<string> notes = {}, bool warning = false, bool aggressive = false);
 
+    void metaError(ParseError::Type type, string title,
+        Metadata &subject, string info, size_t ptr, string ptrText, 
+        vector<string> notes = {}, bool warning = false, bool aggressive = false);
+
     size_t errors();
     size_t warnings();
 

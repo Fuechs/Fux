@@ -20,6 +20,10 @@ struct Metadata {
     : file(fileName), source(source), fstLine(fstLine), lstLine(lstLine), 
         fstCol(fstCol), lstCol(lstCol) {}
 
+    Metadata(const string &fileName, Token &token)
+    : file(&fileName), source(nullptr), fstLine(token.line), lstLine(token.line),
+        fstCol(token.start), lstCol(token.end) {}
+
     Metadata &operator=(const Metadata &copy) {
         file = copy.file;
         source = copy.source;
@@ -33,6 +37,20 @@ struct Metadata {
     // get line from source code (line number, not index!)
     string &operator[](size_t line) { return source->at(line - 1); }
     const string &operator[](size_t line) const { return source->at(line - 1); }
+
+    // copy whole position of one token
+    void copyWhole(const Token &token) {
+        this->fstLine = token.line;
+        this->lstLine = token.line;
+        this->fstCol = token.start;
+        this->lstCol = token.end;
+    }
+
+    // copy end position of one token
+    void copyEnd(const Token &token) {
+        this->lstLine = token.line;
+        this->lstCol = token.end;
+    }
 
     const string *file;
     vector<string> *source;
