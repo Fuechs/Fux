@@ -21,14 +21,18 @@ const string &  Symbol::getSymbol() const { return symbol; }
 Symbol *        Symbol::getParent() { return parent; }
 const Symbol *  Symbol::getParent() const { return parent; }
 
+Metadata &      Symbol::getMeta() { return meta; }
+const Metadata &Symbol::getMeta() const { return meta; }
+
 void Symbol::setParent(Symbol *parent) { this->parent = parent; }
 
 /// VARIABLE ///
 
-Variable::Variable(FuxType type, string symbol, Symbol *parent) {
+Variable::Variable(FuxType type, string symbol, Metadata meta, Symbol *parent) {
     this->type = type;
     this->symbol = symbol;
     this->parent = parent;
+    this->meta = meta;
 }
 
 Variable::~Variable() { symbol.clear(); }
@@ -52,12 +56,14 @@ void Variable::addMember(Symbol *symbol) {
 /// FUNCTION ///
 
 Function::Function(FuxType type, string symbol, 
-    FuxType::Vec parameters, Symbol::Vec locals, Symbol *parent) {
+    FuxType::Vec parameters, Symbol::Vec locals, 
+    Metadata meta, Symbol *parent) {
         this->type = type;
         this->symbol = symbol;
         this->parameters = parameters;
         this->locals = locals;
         this->parent = parent;
+        this->meta = meta;
 }
 
 Function::~Function() { 
@@ -97,3 +103,5 @@ Symbol *Table::contains(std::string symbol) {
             return sym;
     return nullptr;
 }
+
+void Table::insert(Symbol *symbol) { table.push_back(symbol); }

@@ -13,6 +13,7 @@
 
 #include "../../fux.hpp"
 #include "../parser/type.hpp"
+#include "../metadata.hpp"
 
 class Symbol {
 public:
@@ -35,6 +36,9 @@ public:
     Symbol *        getParent();
     const Symbol *  getParent() const;
 
+    Metadata &      getMeta();
+    const Metadata &getMeta() const;
+
     void setParent(Symbol *parent);
 
     virtual Kind getKind() const = 0;
@@ -51,11 +55,12 @@ public:
 protected:
     string symbol;
     Symbol *parent;
+    Metadata meta;
 };
 
 class Variable : public Symbol {
 public:
-    Variable(FuxType type = FuxType::NO_TYPE, string symbol = "", Symbol *parent = nullptr);
+    Variable(FuxType type = FuxType::NO_TYPE, string symbol = "", Metadata meta = Metadata(), Symbol *parent = nullptr);
     ~Variable() override;
 
     Kind getKind() const override;
@@ -72,7 +77,8 @@ private:
 class Function : public Symbol {
 public:
     Function(FuxType type = FuxType::NO_TYPE, string symbol = "", 
-        FuxType::Vec parameters = {}, Symbol::Vec locals = {}, Symbol *parent = nullptr);
+        FuxType::Vec parameters = {}, Symbol::Vec locals = {}, 
+        Metadata meta = Metadata(), Symbol *parent = nullptr);
     ~Function() override;
     
     Kind getKind() const override;
@@ -97,6 +103,7 @@ public:
     ~Table();
 
     Symbol *contains(std::string symbol);
+    void insert(Symbol *symbol);
 
 private:
     Symbol::Vec table;

@@ -13,6 +13,8 @@
 
 StmtAST::Ptr Analyser::analyse() { return origin->analyse(this); }
 
+Table &Analyser::getTable() { return table; }
+
 StmtAST::Ptr NoOperationAST::analyse(Analyser *analyser) { return nullptr; }
 
 StmtAST::Ptr NullExprAST::analyse(Analyser *analyser) { return nullptr; }
@@ -55,11 +57,13 @@ StmtAST::Ptr WhileLoopAST::analyse(Analyser *analyser) { return nullptr; }
 
 StmtAST::Ptr ForLoopAST::analyse(Analyser *analyser) { return nullptr; }
 
-StmtAST::Ptr PrototypeAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr PrototypeAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
 StmtAST::Ptr FunctionAST::analyse(Analyser *analyser) {
-    proto->analyse(analyser);
-    body->analyse(analyser);
+    proto = (PrototypeAST::Ptr) dynamic_cast<PrototypeAST *>(&*proto->analyse(analyser));
+    body = body->analyse(analyser);
     return (StmtAST::Ptr) this;
 }
 

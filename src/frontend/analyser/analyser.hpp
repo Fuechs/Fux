@@ -25,6 +25,8 @@ public:
     // analyse AST 
     StmtAST::Ptr analyse();
 
+    Table &getTable();
+
 private:
     ErrorManager *error;
     RootAST::Ptr &origin;
