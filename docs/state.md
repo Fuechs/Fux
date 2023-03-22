@@ -39,7 +39,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
         - [...] Table
         - [...] Variables
         - [...] Functions
-        - [&cross;] Structes / Classes
+        - [&cross;] Structs / Classes
         - [&cross;] Enumerations
         - [&cross;] Type Definitions
     - [...] Expressions

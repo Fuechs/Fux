@@ -144,6 +144,8 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
         }
         if (*current != RPAREN)
             iter = parseExpr();
+        else
+            iter = make_unique<NullExprAST>();
     }
 
     eat(RPAREN, ParseError::MISSING_PAREN);
@@ -441,8 +443,9 @@ ExprAST::Ptr Parser::parsePowerExpr() {
 
 ExprAST::Ptr Parser::parseAddressExpr() { 
     if (*current == BIT_AND) {
+        Token &op = eat();
         ExprAST::Ptr expr = parseDereferenceExpr();
-        return make_unique<UnaryExprAST>(eat(), expr);
+        return make_unique<UnaryExprAST>(op, expr);
     }
 
     return parseDereferenceExpr(); 
@@ -450,8 +453,9 @@ ExprAST::Ptr Parser::parseAddressExpr() {
 
 ExprAST::Ptr Parser::parseDereferenceExpr() { 
     if (*current == ASTERISK) {
+        Token &op = eat();
         ExprAST::Ptr expr = parseTypeCastExpr();
-        return make_unique<UnaryExprAST>(eat(), expr);
+        return make_unique<UnaryExprAST>(op, expr);
     }
 
     return parseTypeCastExpr(); 
@@ -628,7 +632,7 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
 
             if (check(TRIPLE_DOT)) {
                 ExprAST::Ptr endExpr = nullptr;
-                Token endTok = eat();
+                Token &endTok = eat();
                 if (endTok.type == HEXADECIMAL 
                 || endTok.type == NUMBER 
                 || endTok.type == OCTAL
@@ -639,9 +643,13 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
                         that.line, endTok.line, that.start, endTok.end, "Range expression indicated by '...' operator.", 
                         endTok.start, "Would have expected an integer here.", 
                         {"Help: The LHS and the RHS of a range expression have to be constants."});
-                
+
+                if (endExpr.get() == nullptr) {
+                    endExpr = make_unique<NullExprAST>();
+                    endExpr->meta.copyWhole(endTok);
+                }
+
                 beginExpr = make_unique<RangeExprAST>(beginExpr, endExpr);
-                beginExpr->meta.copyEnd(endExpr->meta);
             }
             
             return beginExpr;

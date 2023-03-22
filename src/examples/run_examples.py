@@ -10,7 +10,8 @@ def run_file(file: str) -> float:
     end = time() - start
     if result.returncode != 0:
         print("The command failed with exit code", result.returncode)
-        print("Standard error:", result.stderr.decode())
+        print("Standard output:\n", result.stdout.decode())
+        print("Standard error:\n", result.stderr.decode())
         raise SystemExit(result.returncode)
     return end
 
