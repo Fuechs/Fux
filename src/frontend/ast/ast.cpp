@@ -14,75 +14,203 @@
 StmtAST::Ptr nullStmt = StmtAST::Ptr(nullptr);
 ExprAST::Ptr nullExpr = ExprAST::Ptr(nullptr);
 
+
 AST NullExprAST::getASTType() { return AST::NullExprAST; }
+
 FuxType NullExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
 BoolExprAST::~BoolExprAST() { delete value; }
+
 AST BoolExprAST::getASTType() { return AST::BoolExprAST; }
+
 FuxType BoolExprAST::getFuxType() { return FuxType::BOOL; }
 
+
 NumberExprAST::~NumberExprAST() { delete value; }
+
 AST NumberExprAST::getASTType() { return AST::NumberExprAST; }
+
 FuxType NumberExprAST::getFuxType() { return value->type; }
 
+
 CharExprAST::~CharExprAST() { delete value; }
+
 AST CharExprAST::getASTType() { return AST::CharExprAST; }
+
 FuxType CharExprAST::getFuxType() { return value->type;  }
 
+
 StringExprAST::~StringExprAST() { delete value; }
+
 AST StringExprAST::getASTType() { return AST::StringExprAST; }
+
 FuxType StringExprAST::getFuxType() { return FuxType::LIT; }
 
+
 AST RangeExprAST::getASTType() { return AST::RangeExprAST; }
+
 // TODO: combine begin & end type
 FuxType RangeExprAST::getFuxType() { return end->getFuxType(); }
 
+
 AST ArrayExprAST::getASTType() { return AST::ArrayExprAST; }
+
 // TODO: get element types for this
 FuxType ArrayExprAST::getFuxType() { return FuxType::createArray(FuxType::NO_TYPE);  }
 
+
 VariableExprAST::~VariableExprAST() { name.clear(); }
+
 AST VariableExprAST::getASTType() { return AST::VariableExprAST; }
+
 FuxType VariableExprAST::getFuxType() { return FuxType::NO_TYPE; }
+
 string &VariableExprAST::getName() { return name; }
 
+
+CallExprAST::CallExprAST(const string &callee, ExprAST::Vec &args, bool asyncCall) {
+    this->callee = make_unique<VariableExprAST>(callee);
+    this->args = std::move(args);
+    this->asyncCall = asyncCall;
+}
+
+CallExprAST::CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args, bool asyncCall) {
+    this->callee = std::move(callee);
+    this->args = std::move(args);
+    this->asyncCall = asyncCall;
+    this->meta = this->callee->meta;
+}
+
 AST CallExprAST::getASTType() { return AST::StringExprAST; }
+
 // TODO: evaluate type
 FuxType CallExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
+MemberExprAST::MemberExprAST(ExprAST::Ptr &parent, const Token &member) {
+    this->parent = std::move(parent);
+    this->member = member.value;
+    this->meta = this->parent->meta;
+    this->meta.copyEnd(member);
+}
+
+MemberExprAST::MemberExprAST(ExprAST::Ptr &parent, const string &member) {
+    this->parent = std::move(parent);
+    this->member = member;
+    this->meta = this->parent->meta;
+}
+
 AST MemberExprAST::getASTType() { return AST::MemberExprAST; }
+
 FuxType MemberExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
+UnaryExprAST::UnaryExprAST(const Token &op, ExprAST::Ptr &expr, bool postOp) {
+    switch (op.type) {
+        case PLUS_PLUS:
+        case MINUS_MINUS:   
+            if (postOp)
+                this->op = op == PLUS_PLUS ? UnaryOp::SINC : UnaryOp::SDEC;
+            else
+                this->op = op == PLUS_PLUS ? UnaryOp::PINC : UnaryOp::PDEC;
+            break;
+        default:
+            this->op = (UnaryOp) op.type;
+    }
+
+    this->expr = std::move(expr);
+    this->meta = this->expr->meta;
+    
+    if (postOp)
+        this->meta.copyEnd(op);
+    else {
+        this->meta.fstLine = op.line;
+        this->meta.fstCol = op.start;
+    }
+}
+
+UnaryExprAST::UnaryExprAST(UnaryOp op, ExprAST::Ptr &expr) {
+    this->op = op;
+    this->expr = std::move(expr);
+    this->meta = this->expr->meta;
+}
+
 AST UnaryExprAST::getASTType() { return AST::UnaryExprAST; }
+
 // TODO: evaluate type
 FuxType UnaryExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
+BinaryExprAST::BinaryExprAST(BinaryOp op, ExprAST::Ptr &LHS, ExprAST::Ptr &RHS) {
+    this->op = op;
+    this->LHS = std::move(LHS);
+    this->RHS = std::move(RHS);
+    this->meta = this->LHS->meta;
+    if (this->RHS)
+        this->meta.copyEnd(this->RHS->meta);
+}
+
 AST BinaryExprAST::getASTType() { return AST::BinaryExprAST; }
+
 // TODO: evaluate type
 FuxType BinaryExprAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
+TypeCastExprAST::TypeCastExprAST(FuxType type, ExprAST::Ptr &expr) {
+    this->type = type;
+    this->expr = std::move(expr);
+    this->meta = this->type.meta;
+    this->meta.copyEnd(this->expr->meta);
+}
+
 AST TypeCastExprAST::getASTType() { return AST::TypeCastExprAST; }
+
 FuxType TypeCastExprAST::getFuxType() { return type; }
 
+
+TernaryExprAST::TernaryExprAST(ExprAST::Ptr &condition, 
+    ExprAST::Ptr &thenExpr, ExprAST::Ptr &elseExpr) {
+        this->condition = std::move(condition);
+        this->thenExpr = std::move(thenExpr);
+        this->elseExpr = std::move(elseExpr);
+        this->meta = this->condition->meta;
+        this->meta.copyEnd(this->elseExpr->meta);
+}
+
 AST TernaryExprAST::getASTType() { return AST::TernaryExprAST; }
+
 FuxType TernaryExprAST::getFuxType() { return FuxType::BOOL; }
 
+
 AST NoOperationAST::getASTType() { return AST::NoOperationAST; }
+
 FuxType NoOperationAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
 VariableDeclAST::~VariableDeclAST() { symbol.clear(); }
+
 AST VariableDeclAST::getASTType() { return AST::VariableDeclAST; }
+
 FuxType VariableDeclAST::getFuxType() { return type; }
+
 string &VariableDeclAST::getSymbol() { return symbol; }
+
 FuxType &VariableDeclAST::getType() { return type; }
+
 ExprAST::Ptr &VariableDeclAST::getValue() { return value; }
 
+
 AST InbuiltCallAST::getASTType() { return AST::InbuiltCallAST; }
+
 FuxType InbuiltCallAST::getFuxType() { return FuxType::NO_TYPE; }
 
+
 AST IfElseAST::getASTType() { return AST::IfElseAST; }
+
 FuxType IfElseAST::getFuxType() { return FuxType::NO_TYPE; }
- 
+
+
 void CodeBlockAST::addSub(StmtAST::Ptr &sub) { body.push_back(std::move(sub)); }
 AST CodeBlockAST::getASTType() { return AST::CodeBlockAST; }
 FuxType CodeBlockAST::getFuxType() { return FuxType::NO_TYPE; }

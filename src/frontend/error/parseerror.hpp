@@ -133,6 +133,4 @@ private:
     string printArrow(const SUBJ_STRCT &meta);
     string printInfo(const string &info, bool wrap = false, bool color = false);
     string printNotes();
-
-    // vector<string> splitString(string data, size_t max);
 };

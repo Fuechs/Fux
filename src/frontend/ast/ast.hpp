@@ -140,10 +140,10 @@ class CallExprAST : public ExprAST {
     bool asyncCall;
 
 public:
-    CallExprAST(const string &callee, ExprAST::Vec &args, bool asyncCall = false)
-    : callee(make_unique<VariableExprAST>(callee)), args(std::move(args)), asyncCall(asyncCall) {}
-    CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args, bool asyncCall = false)
-    : callee(std::move(callee)), args(std::move(args)), asyncCall(asyncCall) {}
+    // parser has to insert end position!
+    CallExprAST(const string &callee, ExprAST::Vec &args, bool asyncCall = false);
+    [[deprecated("Is not able to copy the position of the callee.")]]
+    CallExprAST(ExprAST::Ptr &callee, ExprAST::Vec &args, bool asyncCall = false);
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override; 
@@ -157,8 +157,9 @@ class MemberExprAST : public ExprAST {
     string member;
 
 public:
-    MemberExprAST(ExprAST::Ptr &parent, const string &member) 
-    : parent(std::move(parent)), member(member) {}
+    MemberExprAST(ExprAST::Ptr &parent, const Token &member);
+    [[deprecated("Is not able to copy the position of the member.")]]
+    MemberExprAST(ExprAST::Ptr &parent, const string &member);
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override;    
@@ -172,7 +173,9 @@ class UnaryExprAST : public ExprAST {
     ExprAST::Ptr expr;
 
 public:
-    UnaryExprAST(UnaryOp op, ExprAST::Ptr &expr) : op(op), expr(std::move(expr)) {}
+    UnaryExprAST(const Token &op, ExprAST::Ptr &expr, bool postOp = false);
+    [[deprecated("Is not able to copy the position of the operator.")]]
+    UnaryExprAST(UnaryOp op, ExprAST::Ptr &expr);
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override;  
@@ -186,8 +189,7 @@ class BinaryExprAST : public ExprAST {
     ExprAST::Ptr LHS, RHS;
 
 public:
-    BinaryExprAST(BinaryOp op, ExprAST::Ptr &LHS, ExprAST::Ptr &RHS = nullExpr) 
-    : op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
+    BinaryExprAST(BinaryOp op, ExprAST::Ptr &LHS, ExprAST::Ptr &RHS = nullExpr);
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override;   
@@ -201,8 +203,7 @@ class TypeCastExprAST : public ExprAST {
     ExprAST::Ptr expr;
 
 public:
-    TypeCastExprAST(FuxType type, ExprAST::Ptr &expr) 
-    : type(type), expr(std::move(expr)) {}
+    TypeCastExprAST(FuxType type, ExprAST::Ptr &expr);
     
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override;
@@ -217,8 +218,7 @@ class TernaryExprAST : public ExprAST {
     ExprAST::Ptr elseExpr;
 
 public:
-    TernaryExprAST(ExprAST::Ptr &condition, ExprAST::Ptr &thenExpr, ExprAST::Ptr &elseExpr)
-    : condition(std::move(condition)), thenExpr(std::move(thenExpr)), elseExpr(std::move(elseExpr)) {}
+    TernaryExprAST(ExprAST::Ptr &condition, ExprAST::Ptr &thenExpr, ExprAST::Ptr &elseExpr);
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     StmtAST::Ptr analyse(Analyser *analyser) override; 

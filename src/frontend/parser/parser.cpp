@@ -242,7 +242,7 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
             return make_unique<VariableExprAST>(symbol);
         }
 
-        return std::move(decl);
+        return decl;
     }
 
     ExprAST::Ptr value = parseExpr();
@@ -261,12 +261,14 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
 ExprAST::Vec Parser::parseExprList(TokenType end) { 
     ExprAST::Vec list = ExprAST::Vec();
     ExprAST::Ptr expr = parseExpr();
+
     while (check(COMMA)) {
         if (*current == end)
             break;
         list.push_back(std::move(expr));
         expr = parseExpr();
     }
+
     list.push_back(std::move(expr));
     return list;
 }
@@ -438,18 +440,18 @@ ExprAST::Ptr Parser::parsePowerExpr() {
 }
 
 ExprAST::Ptr Parser::parseAddressExpr() { 
-    if (check(BIT_AND)) {
+    if (*current == BIT_AND) {
         ExprAST::Ptr expr = parseDereferenceExpr();
-        return make_unique<UnaryExprAST>(UnaryOp::ADDR, expr);
+        return make_unique<UnaryExprAST>(eat(), expr);
     }
 
     return parseDereferenceExpr(); 
 }
 
 ExprAST::Ptr Parser::parseDereferenceExpr() { 
-    if (check(ASTERISK)) {
+    if (*current == ASTERISK) {
         ExprAST::Ptr expr = parseTypeCastExpr();
-        return make_unique<UnaryExprAST>(UnaryOp::DEREF, expr);
+        return make_unique<UnaryExprAST>(eat(), expr);
     }
 
     return parseTypeCastExpr(); 
@@ -458,6 +460,7 @@ ExprAST::Ptr Parser::parseDereferenceExpr() {
 ExprAST::Ptr Parser::parseTypeCastExpr() { 
     Token::Iter backToken = current;
     if (check(LPAREN)) {
+        Token &open = peek(-1);
         FuxType type = parseType(true); // analyser will check wether type is primitive or not
         if (!type || *current != RPAREN) { // TODO: test more possible cases
             current = backToken; // get '*'s, identifier and '(' back
@@ -465,7 +468,10 @@ ExprAST::Ptr Parser::parseTypeCastExpr() {
         }
         eat(RPAREN, ParseError::MISSING_PAREN);
         ExprAST::Ptr expr = parseExpr();
-        return make_unique<TypeCastExprAST>(type, expr);
+        expr = make_unique<TypeCastExprAST>(type, expr);
+        expr->meta.fstLine = open.line;
+        expr->meta.fstCol = open.start;
+        return expr;
     }
    
     return parseLogBitUnaryExpr(); 
@@ -473,7 +479,7 @@ ExprAST::Ptr Parser::parseTypeCastExpr() {
 
 ExprAST::Ptr Parser::parseLogBitUnaryExpr() { 
     if (*current == EXCLAMATION || *current == BIT_NOT || *current == QUESTION) {
-        UnaryOp op = (UnaryOp) eat().type;
+        Token &op = eat();
         ExprAST::Ptr expr = parsePlusMinusUnaryExpr();
         return make_unique<UnaryExprAST>(op, expr);
     }
@@ -483,7 +489,7 @@ ExprAST::Ptr Parser::parseLogBitUnaryExpr() {
 
 ExprAST::Ptr Parser::parsePlusMinusUnaryExpr() { 
     if (*current == PLUS || *current == MINUS) {
-        UnaryOp op = (UnaryOp) eat().type;
+        Token &op = eat();
         ExprAST::Ptr expr = parsePreIncDecExpr();
         return make_unique<UnaryExprAST>(op, expr);
     }
@@ -493,7 +499,7 @@ ExprAST::Ptr Parser::parsePlusMinusUnaryExpr() {
 
 ExprAST::Ptr Parser::parsePreIncDecExpr() { 
     if (*current == PLUS_PLUS || *current == MINUS_MINUS) {
-        UnaryOp op = eat() == PLUS_PLUS ? UnaryOp::PINC : UnaryOp::PDEC;
+        Token &op = eat();
         ExprAST::Ptr expr = parsePostIncDecExpr();
         return make_unique<UnaryExprAST>(op, expr);
     } 
@@ -504,9 +510,8 @@ ExprAST::Ptr Parser::parsePreIncDecExpr() {
 ExprAST::Ptr Parser::parsePostIncDecExpr() {
     ExprAST::Ptr expr = parseTopMemberExpr();
 
-    if (*current == PLUS_PLUS || *current == MINUS_MINUS)
-        return make_unique<UnaryExprAST>(
-            eat() == PLUS_PLUS ? UnaryOp::SINC : UnaryOp::SDEC, expr);
+    if (*current == PLUS_PLUS || *current == MINUS_MINUS) 
+        expr = make_unique<UnaryExprAST>(eat(), expr, true);    
     
     return expr;
 }
@@ -515,7 +520,7 @@ ExprAST::Ptr Parser::parseTopMemberExpr() {
     ExprAST::Ptr parent = parseIndexExpr();
 
     if (check(DOT)) {
-        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER).value);
+        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER));
 
         if (check(LPAREN))
             parent = parseCallExpr(std::move(parent));
@@ -530,12 +535,14 @@ ExprAST::Ptr Parser::parseIndexExpr(ExprAST::Ptr parent) {
     if (parent == nullptr)
         parent = parseMidMemberExpr(); 
     
-    if (check(ARRAY_BRACKET)) 
+    if (check(ARRAY_BRACKET)) {
         parent = make_unique<BinaryExprAST>(BinaryOp::IDX, parent);
-    else if (check(LBRACKET)) {
+        parent->meta.copyEnd(peek(-1));
+    } else if (check(LBRACKET)) {
         ExprAST::Ptr index = parseExpr();
-        eat(RBRACKET, ParseError::MISSING_PAREN);
+        Token &close = eat(RBRACKET, ParseError::MISSING_PAREN);
         parent = make_unique<BinaryExprAST>(BinaryOp::IDX, parent, index);
+        parent->meta.copyEnd(close);
     }
 
     if (check(LPAREN))
@@ -550,7 +557,7 @@ ExprAST::Ptr Parser::parseMidMemberExpr() {
     ExprAST::Ptr parent = parseCallExpr();
 
     if (check(DOT)) {
-        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER).value);
+        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER));
 
         if (check(LPAREN))
             parent = parseCallExpr(std::move(parent));
@@ -560,7 +567,7 @@ ExprAST::Ptr Parser::parseMidMemberExpr() {
 }
 
 ExprAST::Ptr Parser::parseCallExpr(ExprAST::Ptr callee) { 
-    bool async = false;
+    Token *asyncTok = nullptr;
 
     if (callee == nullptr) {
         if (*current != IDENTIFIER && *current != KEY_ASYNC)
@@ -568,7 +575,7 @@ ExprAST::Ptr Parser::parseCallExpr(ExprAST::Ptr callee) {
 
         Token::Iter backTok = current;
 
-        async = check(KEY_ASYNC);
+        asyncTok = check(KEY_ASYNC) ? &peek(-1) : nullptr;
         callee = parseBotMemberExpr();
                 
         if (!check(LPAREN)) {
@@ -582,7 +589,8 @@ ExprAST::Ptr Parser::parseCallExpr(ExprAST::Ptr callee) {
         arguments = parseExprList(RPAREN);
     eat(RPAREN, ParseError::MISSING_PAREN);
     
-    ExprAST::Ptr expr = make_unique<CallExprAST>(callee, arguments, async);
+    ExprAST::Ptr expr = make_unique<CallExprAST>(callee, arguments, (bool) asyncTok);
+    expr->meta.copyEnd(asyncTok ? *asyncTok : peek(-1));
 
     if (check(LPAREN))
         expr = parseCallExpr(std::move(expr));
@@ -596,16 +604,20 @@ ExprAST::Ptr Parser::parseBotMemberExpr() {
     ExprAST::Ptr parent = parsePrimaryExpr();
 
     while (check(DOT)) 
-        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER).value);
+        parent = make_unique<MemberExprAST>(parent, eat(IDENTIFIER));
     
     return parent;
 }
 
 ExprAST::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
+    ExprAST::Ptr expr;
 
-    if (that.isType())
-        return make_unique<VariableExprAST>(that.value);
+    if (that.isType()) {
+        expr = make_unique<VariableExprAST>(that.value);
+        expr->meta = Metadata(fileName, that);
+        return expr;
+    }
 
     switch (that.type) {
         case HEXADECIMAL:
@@ -613,6 +625,7 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
         case OCTAL:
         case BINARY: {
             ExprAST::Ptr beginExpr = parseNumberExpr(that);
+
             if (check(TRIPLE_DOT)) {
                 ExprAST::Ptr endExpr = nullptr;
                 Token endTok = eat();
@@ -627,41 +640,55 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
                         endTok.start, "Would have expected an integer here.", 
                         {"Help: The LHS and the RHS of a range expression have to be constants."});
                 
-                return make_unique<RangeExprAST>(beginExpr, endExpr);
+                beginExpr = make_unique<RangeExprAST>(beginExpr, endExpr);
+                beginExpr->meta.copyEnd(endExpr->meta);
             }
+            
             return beginExpr;
         }
-        case FLOAT:         return make_unique<NumberExprAST, _f64>(stod(that.value));
-        case CHAR:          return parseCharExpr(that);
-        case STRING:        return make_unique<StringExprAST>(escapeSequences(that.value)); 
-        case KEY_TRUE:      return make_unique<BoolExprAST>(true);
-        case KEY_FALSE:     return make_unique<BoolExprAST>(false);
-        case KEY_NULL:      return make_unique<NullExprAST>();
-        case LPAREN: {
-            ExprAST::Ptr expr = parseExpr();
+        case FLOAT:      
+            expr = make_unique<NumberExprAST, _f64>(stod(that.value));
+            expr->meta = Metadata(fileName, that);
+            return expr;
+        case CHAR:          
+            return parseCharExpr(that);
+        case STRING:        
+            expr = make_unique<StringExprAST>(escapeSequences(that.value)); 
+            expr->meta = Metadata(fileName, that);
+            return expr;
+        case KEY_TRUE:      
+        case KEY_FALSE:     
+            expr = make_unique<BoolExprAST>(that == KEY_TRUE);
+            expr->meta = Metadata(fileName, that);
+            return expr;
+        case KEY_NULL:     
+            expr = make_unique<NullExprAST>();
+            expr->meta = Metadata(fileName, that);
+            return expr;
+        case LPAREN: 
+            expr = parseExpr();
             eat(RPAREN, ParseError::MISSING_PAREN);
             return expr;
-        }
         case LBRACE: {
             ExprAST::Vec elements = parseExprList(RBRACE);
             eat(RBRACE, ParseError::MISSING_PAREN);
             return make_unique<ArrayExprAST>(elements);
         }
-        case _EOF: {
+        case _EOF: 
             createError(ParseError::UNEXPECTED_EOF, "Unexpected EOF while parsing Primary Expression",
                 that, "Expected a primay expression here", 0, "", {}, false, true);
-            return nullptr;
-        }
-        default: {        
+            return make_unique<NullExprAST>();
+        default:    
             createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing Primary Expression",
                 that, "Unexpected token "+string(TokenTypeString[that.type])+" '"+that.value+"'");
             recover();
-            return parsePrimaryExpr();
-        }
+            return make_unique<NullExprAST>();
     }
 }
 
 FuxType Parser::parseType(bool primitive) {
+    Metadata meta = Metadata(fileName, *current);
+    
     if (primitive) {
         int64_t pointerDepth = 0;
         while(check(ASTERISK)) 
@@ -669,8 +696,11 @@ FuxType Parser::parseType(bool primitive) {
         if (!current->isType()) 
             return FuxType(FuxType::NO_TYPE, pointerDepth);
         const FuxType::Kind kind = (FuxType::Kind) current->type;
-        const string &value = eat().value;
-        return FuxType::createPrimitive(kind, pointerDepth, check(ARRAY_BRACKET), value);
+        const Token &value = eat();
+        FuxType ret = FuxType::createPrimitive(kind, pointerDepth, check(ARRAY_BRACKET), value.value);
+        meta.copyEnd(value);
+        ret.meta = meta;
+        return ret;
     }
 
     FuxType::AccessList access = {FuxType::PUBLIC};
@@ -698,20 +728,28 @@ FuxType Parser::parseType(bool primitive) {
             createError(ParseError::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
                 peek(-1), "Given pointer-depth will be ignored",
                 0, "", {}, true);
-        return FuxType::createStd(FuxType::AUTO, 0, reference, access);
+        FuxType ret = FuxType::createStd(FuxType::AUTO, 0, reference, access);
+        meta.copyEnd(peek(-1));
+        ret.meta = meta;
+        return ret;
     }
 
     const FuxType::Kind kind = (FuxType::Kind) current->type;
     const string &value = eat().value;
+    FuxType ret;
 
     if (check(ARRAY_BRACKET)) 
-        return FuxType::createArray(kind, pointerDepth, reference, access, value);
+        ret = FuxType::createArray(kind, pointerDepth, reference, access, value);
     else if (check(LBRACKET)) {
         ExprAST::Ptr size = parseExpr();
         eat(RBRACKET, ParseError::MISSING_PAREN);
-        return FuxType::createArray(kind, pointerDepth, reference, access, value, root->addSizeExpr(size));
+        ret = FuxType::createArray(kind, pointerDepth, reference, access, value, root->addSizeExpr(size));
     } else 
-        return FuxType::createStd(kind, pointerDepth, reference, access, value);
+        ret = FuxType::createStd(kind, pointerDepth, reference, access, value);
+    
+    meta.copyEnd(peek(-1));
+    ret.meta = meta;
+    return ret;
 }
 
 ExprAST::Ptr Parser::parseNumberExpr(Token &tok) {
@@ -730,18 +768,24 @@ ExprAST::Ptr Parser::parseNumberExpr(Token &tok) {
         default:            break; // unreachable
     }
     size_t bits = (size_t) log2(value) + 1; // get amount of bits in (binary) value
-    if      (bits <= 8)     return make_unique<NumberExprAST, _u8>(value);
-    else if (bits <= 16)    return make_unique<NumberExprAST, _u16>(value);
-    else if (bits <= 32)    return make_unique<NumberExprAST, _u32>(value);
-    else if (bits <= 64)    return make_unique<NumberExprAST>(value);
-    else                    return nullptr; // unreachable   
+    ExprAST::Ptr expr;
+
+    if      (bits <= 8)     expr = make_unique<NumberExprAST, _u8>(value);
+    else if (bits <= 16)    expr = make_unique<NumberExprAST, _u16>(value);
+    else if (bits <= 32)    expr = make_unique<NumberExprAST, _u32>(value);
+    else if (bits <= 64)    expr = make_unique<NumberExprAST>(value);
+    else                    expr = nullptr; // unreachable   
+
+    expr->meta = Metadata(fileName, tok);
+    return expr;
 }
 
 ExprAST::Ptr Parser::parseCharExpr(Token &tok) {
     // TODO: add support for c16
-    _c8 value;
-    value = escapeSequences(tok.value).front();
-    return make_unique<CharExprAST>(value);
+    _c8 value = escapeSequences(tok.value).front();
+    ExprAST::Ptr expr = make_unique<CharExprAST>(value);
+    expr->meta = Metadata(fileName, tok);
+    return expr;
 }
 
 Token &Parser::eat() {

@@ -55,7 +55,7 @@ ParseError::~ParseError() {
 }
 
 void ParseError::report() {
-    if (hasFlag(REPORTED) /* || !fux.options.warnings && hasFlag(WARNING) */)
+    if (hasFlag(REPORTED) || !fux.options.warnings && hasFlag(WARNING))
         return;
     flags.push_back(REPORTED);
 
@@ -117,7 +117,7 @@ string ParseError::printSubject(const SUBJ_STRCT &subj) {
 string ParseError::printHead() {
     stringstream ss;
     ss << SC::BOLD;
-    if (/*!fux.options.werrors &&*/ hasFlag(WARNING)) 
+    if (!fux.options.werrors && hasFlag(WARNING)) 
         ss << CC::MAGENTA << "[warning]";
     else 
         ss << CC::RED << "[error]";
@@ -214,15 +214,3 @@ string ParseError::printNotes() {
     ss << SC::RESET;
     return ss.str();
 }
-
-// vector<string> ParseError::splitString(string data, size_t max) {
-//     vector<string> ret = {""};
-//     vector<string> tmp = vector<string>();
-//     tmp = split(data, ' ');
-//     for (string &word : tmp)
-//         if (ret.back().size() < max)
-//             ret.back() += word + " ";
-//         else
-//             ret.push_back(word + " ");
-//     return ret;
-// }

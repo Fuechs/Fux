@@ -14,6 +14,7 @@
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
 #include "../../backend/llvmheader.hpp"
+#include "../metadata.hpp"
 
 class FuxType {
 public:
@@ -98,4 +99,5 @@ public:
     // -1 -> no size
     //  N -> ID of array size expr stored in RootAST
     _i64 sizeID;
+    Metadata meta; // position where type was parsed 
 };

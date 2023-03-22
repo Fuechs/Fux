@@ -1,6 +1,6 @@
 # `src/` Tree
 
-> Last updated on 2023-03-18
+> Last updated on 2023-03-22
 
 ```
 src
@@ -51,7 +51,8 @@ src
 │   │   ├── type.hpp - FuxType
 │   │   ├── value.cpp - ValueStruct impl.
 │   │   └── value.hpp - ValueStruct
-│   └── metadata.hpp - Metadata struct
+│   ├── metadata.cpp - Metadata struct impl.
+│   └── metadata.hpp - Metadata struct 
 ├── fux.hpp - standard includes and definitions
 ├── main.cpp - main file; bootstrap & repl
 ├── output.ll - llvm module dump (debug)

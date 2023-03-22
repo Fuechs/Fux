@@ -1,7 +1,7 @@
 /**
  * @file metadata.hpp
  * @author fuechs
- * @brief metadata struct 
+ * @brief metadata struct header
  * @version 0.1
  * @date 2023-02-26
  * 
@@ -12,45 +12,28 @@
 #pragma once
 
 #include "../fux.hpp"
+#include "lexer/token.hpp"
 
 struct Metadata {
     Metadata(const string *fileName = nullptr, vector<string> *source = nullptr, 
-        size_t fstLine = 0, size_t lstLine = 0, 
-        size_t fstCol = 0, size_t lstCol = 0) 
-    : file(fileName), source(source), fstLine(fstLine), lstLine(lstLine), 
-        fstCol(fstCol), lstCol(lstCol) {}
+        size_t fstLine = 0, size_t lstLine = 0, size_t fstCol = 0, size_t lstCol = 0);
+    Metadata(const string &fileName, Token &token);
 
-    Metadata(const string &fileName, Token &token)
-    : file(&fileName), source(nullptr), fstLine(token.line), lstLine(token.line),
-        fstCol(token.start), lstCol(token.end) {}
-
-    Metadata &operator=(const Metadata &copy) {
-        file = copy.file;
-        source = copy.source;
-        fstLine = copy.fstLine;
-        lstLine = copy.lstLine;
-        fstCol = copy.fstCol;
-        lstCol = copy.lstCol;
-        return *this;
-    }
+    Metadata &operator=(const Metadata &copy);
 
     // get line from source code (line number, not index!)
-    string &operator[](size_t line) { return source->at(line - 1); }
-    const string &operator[](size_t line) const { return source->at(line - 1); }
+            string &operator[](size_t line);
+    const   string &operator[](size_t line) const;
 
-    // copy whole position of one token
-    void copyWhole(const Token &token) {
-        this->fstLine = token.line;
-        this->lstLine = token.line;
-        this->fstCol = token.start;
-        this->lstCol = token.end;
-    }
+    // copy whole position of a token
+    void copyWhole(const Token &token);
+    // copy whole position of other metadata (without file, source)
+    void copyWhole(const Metadata &meta);
 
-    // copy end position of one token
-    void copyEnd(const Token &token) {
-        this->lstLine = token.line;
-        this->lstCol = token.end;
-    }
+    // copy end position of a token
+    void copyEnd(const Token &token);
+    // copy end position of other metadata (without file, source)
+    void copyEnd(const Metadata &meta);
 
     const string *file;
     vector<string> *source;
