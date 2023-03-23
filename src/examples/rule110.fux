@@ -1,4 +1,4 @@
-main(argc: u64, argv: **c8): i64 {
+main(argc: u64, argv: **c8): u64 {
     board: u8[100];
     board[-2] = 1;
 

@@ -12,7 +12,7 @@
 ```rust
 array: i64[]; // {}
 
-main(argc: u64, argv: str[]): i64 {
+main(argc: u64, argv: **c8): u64 {
     array[] << 1; // {1}
     array[] << 3; // {1, 3}
     return 0;
@@ -25,7 +25,7 @@ main(argc: u64, argv: str[]): i64 {
 get core.file;
 using file;
 
-main(argc: u64, argv: str[]): i64 {
+main(argc: u64, argv: **c8): u64 {
     filePath := "path/to/file.txt";
     file := File(filePath, 'r');
     contents := file.read();
@@ -38,7 +38,7 @@ main(argc: u64, argv: str[]): i64 {
 ```rust
 get core.io;
 
-main(argc: u64, argv: str[]): i64 {
+main(argc: u64, argv: **c8): u64 {
     res := 1;
     io.putf("Result: %i", res);
     return 0;
@@ -52,7 +52,7 @@ get core.io;
 
 someFunction(msg: str): str;
 
-main(argc: u64, argv: str[]): i64 {
+main(argc: u64, argv: **c8): u64 {
     io.putln("Output: ") 
     << someFunction() << io.getln("Input: ");
     return 0;
@@ -66,10 +66,12 @@ main(argc: u64, argv: str[]): i64 {
 get core.io;
 
 fib(num: i64): i64
-    return num < 2 ? num : fib(num-1) + fib(num-2);
+    return num <= 2 
+        ? 1 
+        : fib(num - 1) + fib(num - 2);
 
 
-main(argc: u64, argv: str[]): i64 {
+main(argc: u64, argv: str[]): u64 {
     io.getint() >> fib() >> io.putln();
     return 0;
 }
@@ -78,7 +80,7 @@ main(argc: u64, argv: str[]): i64 {
 ###### Rule 110
 
 ```rust
-main(argc: u64, argv: str[]): i64 {
+main(argc: u64, argv: **c8): u64 {
     board: u8[100];
     board[-2] = 1;
 
