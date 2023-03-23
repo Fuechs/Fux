@@ -395,6 +395,21 @@ public:
     void addLocal(StmtAST::Ptr &local);
 };
 
+class EnumerationAST : public StmtAST {
+    string symbol;
+    vector<string> elements;
+
+public:
+    EnumerationAST(const string &symbol, vector<string> elements = {})
+    : symbol(symbol), elements(elements) {}
+
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
+    StmtAST::Ptr analyse(Analyser *analyser) override;
+    AST getASTType() override;
+    FuxType getFuxType() override;
+    void debugPrint(size_t indent = 0) override; 
+};
+
 class RootAST : public StmtAST {
     StmtAST::Vec program;
     // resting place for array size expressions

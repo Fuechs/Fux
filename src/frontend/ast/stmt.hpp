@@ -38,10 +38,11 @@ enum class AST {
     InbuiltCallAST,
     IfElseAST,
     CodeBlockAST,
-    PrototypeAST,
-    FunctionAST,
     WhileLoopAST,
     ForLoopAST,
+    PrototypeAST,
+    FunctionAST,
+    EnumerationAST,
     RootAST,
 };
 

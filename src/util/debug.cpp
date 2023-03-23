@@ -294,6 +294,13 @@ void FunctionAST::debugPrint(size_t indent) {
     debugBody(indent, body);
 }
 
+void EnumerationAST::debugPrint(size_t indent) {
+    debugIndent(indent, "enum "+symbol+" {\n");
+    for (const string &e : elements)
+        debugIndent(indent + 1, e+",\n");
+    debugIndent(indent, "}");
+}
+
 void RootAST::debugPrint(size_t indent) {
     if (!fux.options.debugMode)
         return;

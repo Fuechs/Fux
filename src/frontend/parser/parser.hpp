@@ -39,6 +39,8 @@ private:
 
     // parse a statement
     StmtAST::Ptr parseStmt(bool expectSemicolon = true);
+    // enumeration
+    StmtAST::Ptr parseEnumStmt();
     // function declaration
     StmtAST::Ptr parseFunctionDeclStmt();
     // for (each) loop

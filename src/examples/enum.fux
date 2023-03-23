@@ -1,0 +1,8 @@
+enum TheEnum {
+    SOME,
+    ITEM,
+    NONE,
+    OK,
+    CRIT,
+    WARN,
+}

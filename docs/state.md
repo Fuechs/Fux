@@ -26,7 +26,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [...] Statements
         - [&check;] ...
         - [&cross;] Structs
-        - [&cross;] Enumerations
+        - [&check;] Enumerations
         - [&cross;] Type Definitions
     - [...] Error Reporting
     - [&check;] Metadata

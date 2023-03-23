@@ -232,6 +232,9 @@ FuxType FunctionAST::getFuxType() { return proto->getFuxType(); }
 void FunctionAST::setBody(StmtAST::Ptr &body) { this->body = std::move(body); }
 void FunctionAST::addLocal(StmtAST::Ptr &local) { locals.push_back(std::move(local)); }
 
+AST EnumerationAST::getASTType() { return AST::EnumerationAST; }
+FuxType EnumerationAST::getFuxType() { return FuxType::U64; }
+
 AST RootAST::getASTType() { return AST::RootAST; }
 FuxType RootAST::getFuxType() { return FuxType::NO_TYPE; }
 

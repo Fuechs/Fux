@@ -46,19 +46,50 @@ StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
         return make_unique<NoOperationAST>();
     }
 
-    StmtAST::Ptr stmt = parseFunctionDeclStmt();
+    StmtAST::Ptr stmt = parseEnumStmt();
     if (expectSemicolon && stmt 
     && stmt->getASTType() != AST::CodeBlockAST 
     && stmt->getASTType() != AST::FunctionAST
     && stmt->getASTType() != AST::IfElseAST
     && stmt->getASTType() != AST::WhileLoopAST
-    && stmt->getASTType() != AST::ForLoopAST) // don't throw useless errors
+    && stmt->getASTType() != AST::ForLoopAST
+    && stmt->getASTType() != AST::EnumerationAST) // don't throw useless errors
         if (!check(SEMICOLON)) {
             if (!stmt->meta.file) // TODO: implement metadata for every ast
                 assert(!"metadata not implemented for parsed kind of AST");
             error->metaError(ParseError::UNEXPECTED_TOKEN, "Expected a Semicolon ';' after Statement", 
                 stmt->meta, "Parsed statement", peek(-1).end + 1, "Expected semicolon ';' here");
         }
+    return stmt;
+}
+
+StmtAST::Ptr Parser::parseEnumStmt() {
+    if (!check(KEY_ENUM))
+        return parseFunctionDeclStmt();
+
+    Metadata meta = Metadata(fileName, peek(-1));
+    const string &symbol = eat(IDENTIFIER).value;
+
+    if (*current == SEMICOLON) {
+        StmtAST::Ptr stmt = make_unique<EnumerationAST>(symbol);
+        meta.copyEnd(peek(-1));
+        stmt->meta = meta;
+        return stmt;
+    }
+
+    eat(LBRACE);
+    vector<string> elements = {};
+    do {
+        if (*current == RBRACE)
+            break;
+
+        elements.push_back(eat(IDENTIFIER).value);
+    } while (check(COMMA));
+    eat(RBRACE, ParseError::MISSING_PAREN);
+
+    StmtAST::Ptr stmt = make_unique<EnumerationAST>(symbol, elements);
+    meta.copyEnd(peek(-1));
+    stmt->meta = meta;
     return stmt;
 }
 
@@ -109,8 +140,12 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
 
     FuxType type = parseType();
 
-    if (*current == SEMICOLON)
-        return make_unique<PrototypeAST>(type, symbol, args);
+    if (*current == SEMICOLON) {
+        PrototypeAST::Ptr proto = make_unique<PrototypeAST>(type, symbol, args);
+        proto->meta = Metadata(fileName, *backToken);
+        proto->meta.copyEnd(type.meta);
+        return proto;
+    }
 
     FunctionAST::Ptr node = make_unique<FunctionAST>(type, symbol, args);
     parent = &*node;    
