@@ -1,1 +1,1 @@
-num -> intern safe final fixed **custom_int[1] = 4 ^ (1 / 2); 
+num -> intern safe final fixed **custom_int[1] = { 4 ^ (1 / 2) }; 

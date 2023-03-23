@@ -30,7 +30,8 @@ all: $(src) $(obj) $(out)
 
 $(out): $(obj)
 	@$(ECHO) Linking $@
-	@clang++ $(llvmflags) $(ldflags) $^ -o $@
+#	@clang++ $(llvmflags) $(ldflags) $^ -o $@
+	@clang++ $(ldflags) $^ -o $@
 
 %.o: %.cpp $(hdr)
 	@$(ECHO) Compiling $<

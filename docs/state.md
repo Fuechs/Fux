@@ -20,10 +20,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [&check;] Source Management
 - [&check;] Threading
 - [&check;] Lexer
-- [...] Abstract Syntax Tree
-    - [&check;] Expressions
-    - [&check;] Statements
-    - [...] Metadata 
+- [&check;] Abstract Syntax Tree
 - [...] Parser
     - [&check;] Expressions
     - [...] Statements
@@ -32,7 +29,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
         - [&cross;] Enumerations
         - [&cross;] Type Definitions
     - [...] Error Reporting
-    - [...] Metadata
+    - [&check;] Metadata
     - [&cross;] Threading
 - [...] Analyser
     - [...] Symbols

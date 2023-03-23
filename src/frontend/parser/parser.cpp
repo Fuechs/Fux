@@ -116,8 +116,10 @@ StmtAST::Ptr Parser::parseFunctionDeclStmt() {
     parent = &*node;    
     StmtAST::Ptr body = parseStmt();
     parent = nullptr;
+    node->meta = Metadata(fileName, *backToken);
+    node->meta.copyEnd(body->meta);
     node->setBody(body);
-    return std::move(node);
+    return node;
 }
 
 StmtAST::Ptr Parser::parseForLoopStmt() { 
@@ -128,6 +130,8 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
 
     if (!check(KEY_FOR))
         return parseWhileLoopStmt();
+
+    Metadata meta = Metadata(fileName, peek(-1));
 
     eat(LPAREN);
 
@@ -150,14 +154,24 @@ StmtAST::Ptr Parser::parseForLoopStmt() {
 
     eat(RPAREN, ParseError::MISSING_PAREN);
     StmtAST::Ptr body = parseStmt();
-    if (forEach)    return make_unique<ForLoopAST>(init, iter, body);
-    else            return make_unique<ForLoopAST>(init, cond, iter, body);
+    
+    meta.copyEnd(body->meta);
+    StmtAST::Ptr stmt;
+
+    if (forEach)    
+        stmt = make_unique<ForLoopAST>(init, iter, body);
+    else            
+        stmt = make_unique<ForLoopAST>(init, cond, iter, body);
+    
+    stmt->meta = meta;
+    return stmt;
 }
 
 StmtAST::Ptr Parser::parseWhileLoopStmt() {
     bool postCondition = false;
     ExprAST::Ptr condition = nullptr;
     StmtAST::Ptr body = nullptr;
+    Metadata meta = Metadata(fileName, *current);
 
     if (check(KEY_DO)) {
         postCondition = true;
@@ -174,7 +188,10 @@ StmtAST::Ptr Parser::parseWhileLoopStmt() {
     } else
         return parseBlockStmt();
 
-    return make_unique<WhileLoopAST>(condition, body, postCondition);
+    meta.copyEnd(body->meta);
+    StmtAST::Ptr stmt = make_unique<WhileLoopAST>(condition, body, postCondition);
+    stmt->meta = meta;
+    return stmt;
 }
 
 StmtAST::Ptr Parser::parseBlockStmt() {
@@ -189,7 +206,10 @@ StmtAST::Ptr Parser::parseBlockStmt() {
             }
             body.push_back(parseStmt());
         }
-        return make_unique<CodeBlockAST>(body);
+        StmtAST::Ptr stmt = make_unique<CodeBlockAST>(body);
+        stmt->meta = Metadata(fileName, opening);
+        stmt->meta.copyEnd(peek(-1));
+        return stmt;
     } 
     
     return parseIfElseStmt();
@@ -197,15 +217,26 @@ StmtAST::Ptr Parser::parseBlockStmt() {
 
 StmtAST::Ptr Parser::parseIfElseStmt() {
     if (check(KEY_IF)) {
+        Metadata meta = Metadata(fileName, peek(-1));
+
         eat(LPAREN);
         ExprAST::Ptr condition = parseExpr();
         eat(RPAREN, ParseError::MISSING_PAREN);
+        
         StmtAST::Ptr thenBody = parseStmt(); 
+
+        StmtAST::Ptr stmt;
         if (check(KEY_ELSE)) {
             StmtAST::Ptr elseBody = parseStmt(); 
-            return make_unique<IfElseAST>(condition, thenBody, elseBody);
-        } 
-        return make_unique<IfElseAST>(condition, thenBody);
+            meta.copyEnd(elseBody->meta);
+            stmt = make_unique<IfElseAST>(condition, thenBody, elseBody);
+        } else {
+            meta.copyEnd(thenBody->meta);
+            stmt = make_unique<IfElseAST>(condition, thenBody);
+        }
+        
+        stmt->meta = meta;
+        return stmt;
     } 
 
     return parseInbuiltCallStmt();
@@ -231,6 +262,7 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
     if (*current != IDENTIFIER || (peek() != COLON && peek() != POINTER))
         return parseExpr();
     
+    Metadata meta = Metadata(fileName, *current);
     const string symbol = eat().value; // get value from identifier
     FuxType type = parseType();
 
@@ -238,10 +270,14 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
         type.access.push_back(FuxType::CONSTANT);
     else if (!check(EQUALS)) {
         StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type);
+        meta.copyEnd(peek(-1));
+        decl->meta = meta;
 
         if (parent) {
             parent->addLocal(decl);
-            return make_unique<VariableExprAST>(symbol);
+            ExprAST::Ptr expr = make_unique<VariableExprAST>(symbol);
+            expr->meta = meta;
+            return expr;
         }
 
         return decl;
@@ -251,13 +287,21 @@ StmtAST::Ptr Parser::parseVariableDeclStmt() {
 
     if (parent) {
         StmtAST::Ptr decl = make_unique<VariableDeclAST>(symbol, type);
+        meta.copyEnd(value->meta); 
+        decl->meta = meta;
         parent->addLocal(decl);
+
         bool constant = find(type.access.begin(), type.access.end(), FuxType::CONSTANT) != type.access.end();
         ExprAST::Ptr ref = make_unique<VariableExprAST>(symbol);
-        return make_unique<BinaryExprAST>(constant ? BinaryOp::CONASG : BinaryOp::ASG, ref, value);
+        ExprAST::Ptr expr = make_unique<BinaryExprAST>(constant ? BinaryOp::CONASG : BinaryOp::ASG, ref, value);
+        expr->meta = meta;
+        return expr;
     }
 
-    return make_unique<VariableDeclAST>(symbol, type, value);
+    meta.copyEnd(value->meta);
+    StmtAST::Ptr stmt = make_unique<VariableDeclAST>(symbol, type, value);
+    stmt->meta = meta;
+    return stmt;
 }
 
 ExprAST::Vec Parser::parseExprList(TokenType end) { 
