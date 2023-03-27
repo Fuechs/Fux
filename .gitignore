@@ -13,6 +13,8 @@ web/
 llvm_testing/
 unused/
 old*
+test*
+src/frontend/error/Makefile
 
 # files
 CHANGELOG.md

@@ -38,7 +38,9 @@ src
 │   │   ├── error.cpp - ErrorManager impl.
 │   │   ├── error.hpp - ErrorManager
 │   │   ├── parseerror.cpp - ParseError impl.
-│   │   └── parseerror.hpp - ParseError
+│   │   ├── parseerror.hpp - ParseError
+│   │   ├── subject.cpp - Subject & Marking 
+│   │   └── subject.hpp - Subject & Marking impl.
 │   ├── lexer
 │   │   ├── lexer.cpp - Lexer impl.
 │   │   ├── lexer.hpp - Lexer 

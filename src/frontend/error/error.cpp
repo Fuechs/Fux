@@ -19,88 +19,143 @@ ErrorManager::~ErrorManager() {
     sources.clear();
 }
 
-void ErrorManager::addSourceFile(const string &fileName, const vector<string> &sourceLines) { sources[fileName] = sourceLines; }
-
-void ErrorManager::createError(
-    ParseError::Type type, string title,
-    // subject
-    const string &subjectFile,
-    size_t subjectFstLine, size_t subjectLstLine, 
-    size_t subjectFstCol, size_t subjectLstCol,
-    string subjectInfo, size_t subjectPtr, string subjectPtrText,
-    // reference
-    const string &refFile,
-    size_t refFstLine, size_t refLstLine, 
-    size_t refFstCol, size_t refLstCol,
-    string refInfo, size_t refPtr, string refPtrText,
-    // other
-    vector<string> notes, bool reference, bool warning, bool aggressive 
-) {
-    Metadata subjectMeta = Metadata(&subjectFile, &sources.at(subjectFile),
-        subjectFstLine, subjectLstLine, subjectFstCol, subjectLstCol);
-    Metadata refMeta = Metadata(&refFile, &sources.at(refFile),
-        refFstLine, refLstLine, refFstCol, refLstCol);
-    ParseError::FlagVec flags = {};
-    if (reference)
-        flags.push_back(ParseError::REFERENCE);
-    if (warning)
-        flags.push_back(ParseError::WARNING);
-    if (aggressive)
-        flags.push_back(ParseError::AGGRESSIVE);
-    ParseError pe = ParseError(flags, type, title, 
-        ParseError::SUBJ_STRCT(subjectMeta, subjectInfo, subjectPtrText, subjectPtr),
-        ParseError::SUBJ_STRCT(refMeta, refInfo, refPtrText, refPtr),
-        notes);
-    pe.report();
-    _errors.push_back(pe);
-    
-    if (warning)
-        warningCount++;
-    else
-        errorCount++;
+void ErrorManager::addSourceFile(const string &fileName, const vector<string> &sourceLines) { 
+    sources[fileName] = sourceLines; 
 }
 
-void ErrorManager::simpleError(
-    ParseError::Type type, string title,
-    const string &file,
-    size_t fstLine, size_t lstLine,
-    size_t fstCol, size_t lstCol,
-    string info, vector<string> notes, 
-    bool warning, bool aggressive) {
-        createError(
-            type, title, 
-            file, fstLine, lstLine, fstCol, lstCol, info, 0, "", 
-            file, 0, 0, 0, 0, "", 0, "", // empty reference
-            notes, false, warning, aggressive 
-        );
+void ErrorManager::plainError(ParseError::Type type, string title, 
+    Metadata meta, Marking::Vec marks, bool aggressive) {
+
+        meta.source = &sources[*meta.file];
+        if (aggressive)
+            update(ParseError({ParseError::AGGRESSIVE}, type, title, Subject(meta, marks))); 
+        else
+            update(ParseError({}, type, title, Subject(meta, marks)));
+}
+
+void ErrorManager::plainError(ParseError::Type type, string title,
+    const string &file, Marking::Vec marks, bool aggressive) {
+        return plainError(type, title, getMeta(file), marks, aggressive);
+}
+
+void ErrorManager::plainWarning(ParseError::Type type, string title, 
+    Metadata meta, Marking::Vec marks, bool aggressive) {
+
+        meta.source = &sources[*meta.file];
+        if (aggressive)
+            update(ParseError({ParseError::AGGRESSIVE, ParseError::WARNING}, 
+                type, title, Subject(meta, marks))); 
+        else
+            update(ParseError({ParseError::WARNING}, type, title, Subject(meta, marks)));
+}
+
+void ErrorManager::plainWarning(ParseError::Type type, string title,
+    const string &file, Marking::Vec marks, bool aggressive) {
+        return plainWarning(type, title, getMeta(file), marks, aggressive);
 }
 
 void ErrorManager::simpleError(ParseError::Type type, string title,
-    const string &file,
-    size_t fstLine, size_t lstLine,
-    size_t fstCol, size_t lstCol, 
-    string info, size_t ptr, string ptrText, 
-    vector<string> notes, bool warning, bool aggressive) {
-        createError(
-            type, title, 
-            file, fstLine, lstLine, fstCol, lstCol,
-            info, ptr, ptrText, 
-            file, 0, 0, 0, 0, "", 0, "", // empty reference
-            notes, false, warning, aggressive
-        );
+    Metadata meta, size_t line, size_t start, size_t end, string info, bool aggressive) {
+
+        meta.source = &sources[*meta.file];
+        Marking::Vec marks = {createUL(line, start, end, 0, info)};
+        if (aggressive)
+            update(ParseError({ParseError::AGGRESSIVE}, type, title, Subject(meta, marks)));
+        else
+            update(ParseError({}, type, title, Subject(meta, marks)));
 }
 
-void ErrorManager::metaError(ParseError::Type type, string title,
-    Metadata &subject, string info, size_t ptr, string ptrText, 
-    vector<string> notes, bool warning, bool aggressive ) {
-        createError(
-            type, title, *subject.file, 
-            subject.fstLine, subject.lstLine, subject.fstCol, subject.lstCol,
-            info, ptr, ptrText, *subject.file, 0, 0, 0, 0, "", 0, "", // empty reference
-            notes, false, warning, aggressive
-        );
+void ErrorManager::simpleWarning(ParseError::Type type, string title,
+    Metadata meta, size_t line, size_t start, size_t end, string info, bool aggressive) {
+
+        meta.source = &sources[*meta.file];
+        Marking::Vec marks = {createUL(line, start, end, 0, info)};
+        if (aggressive)
+            update(ParseError({ParseError::AGGRESSIVE, ParseError::WARNING}, 
+                type, title, Subject(meta, marks)));
+        else
+            update(ParseError({ParseError::WARNING}, type, title, Subject(meta, marks)));
+}
+
+void ErrorManager::refError(ParseError::Type type, string title,
+    Metadata subj, Marking::Vec subjMarks, Metadata ref, Marking::Vec refMarks,
+    bool warning, bool aggressive) {
+
+        subj.source = &sources[*subj.file];
+        ref.source = &sources[*ref.file];
+        ParseError::FlagVec flags = {ParseError::REFERENCE};
+
+        if (warning)
+            flags.push_back(ParseError::WARNING);
+        if (aggressive)
+            flags.push_back(ParseError::AGGRESSIVE);
+        
+        update(ParseError(flags, type, title, Subject(subj, subjMarks), Subject(ref, refMarks)));
+}
+
+Metadata ErrorManager::getMeta(const string &fileName) { 
+    return Metadata(&fileName, &sources[fileName], 1, sources[fileName].size(), 1, sources[fileName].back().size());
 }
 
 size_t ErrorManager::errors() { return errorCount; }
 
 size_t ErrorManager::warnings() { return warningCount; }
+
+Marking ErrorManager::createUL(size_t line, size_t start, size_t end, size_t except, string info) {
+    return Marking(except == 0 ? Marking::ARROW_UL : Marking::DASH_UL, info, line, start, except, end);
+}
+
+Marking ErrorManager::createUL(const Metadata &meta, size_t except, string info) {
+    return createUL(meta.fstLine, meta.fstCol, meta.lstCol, except, info);
+}
+
+Marking ErrorManager::createPtr(size_t line, size_t col, string info) {
+    return Marking(Marking::POINTER, info, line, col, col, col);
+}
+
+
+Marking::Vec ErrorManager::createMark(size_t fstLine, size_t lstLine, size_t start, size_t end, 
+    string info, size_t ptr, string ptrInfo, Marking::Vec append) {
+        
+        Marking::Vec marks = {};
+
+        if (fstLine != lstLine) 
+            marks.push_back(createMulti(fstLine, lstLine, info));
+        else {
+            marks.push_back(createUL(fstLine, start, end, ptr, info));
+            if (ptr != 0)
+                marks.push_back(createPtr(fstLine, ptr, ptrInfo));
+        }
+
+        marks.reserve(append.size());
+        for (Marking &mark : append)
+            marks.push_back(mark);
+        return marks;
+}
+
+Marking::Vec ErrorManager::createMark(const Metadata &meta, string info, size_t ptr, string ptrInfo, Marking::Vec append) {
+    return createMark(meta.fstLine, meta.lstLine, meta.fstCol, meta.lstCol, info, ptr, ptrInfo, append);
+}
+
+Marking ErrorManager::createHelp(size_t line, string message) {
+    return Marking(Marking::HELP, message, line);
+}
+
+Marking ErrorManager::createNote(size_t line, string message) {
+    return Marking(Marking::NOTE, message, line);
+}
+
+Marking ErrorManager::createMulti(size_t fstLine, size_t lstLine, string message) {
+    return Marking(Marking::MULTILINE, message, fstLine, fstLine, 0, lstLine);
+}
+
+void ErrorManager::update(ParseError pe) {
+    _errors.push_back(pe);
+
+    if (pe.hasFlag(ParseError::WARNING))
+        warningCount++;
+    else
+        errorCount++;
+    
+    pe.report();
+}

@@ -441,10 +441,11 @@ void Lexer::getToken() {
             }
             advance();
             if (current() != '\'')
-                error->simpleError(ParseError::ILLEGAL_CHAR_LITERAL_FORMAT, "Expected Ending Quote After Char Literal",
-                    fileName, line, line, currentToken.start, col, "",
-                    col, "Expected a single quote \"'\" here");
-            advance();
+                error->plainError(ParseError::ILLEGAL_CHAR_LITERAL_FORMAT, "Expected ending quote after char literal",
+                    fileName, {error->createUL(line, currentToken.start, col, col),
+                        error->createPtr(line, col, "Expected a single quote \"'\" here")});
+            else 
+                advance();
             break;
          
         case '"':
@@ -454,7 +455,9 @@ void Lexer::getToken() {
         
         default:
             if (!isalpha(current()) && currentToken.value != "_") {
-                error->simpleError(ParseError::UNKNOWN_CHARACTER, "Encountered an Unknown Character", fileName, line, line, col, col, "The character '"+currentToken.value+"' is unknown to the lexer");
+                error->simpleError(ParseError::UNKNOWN_CHARACTER, "Encountered an unknown character",
+                    error->getMeta(fileName), line, col, col, 
+                    "The character '"+currentToken.value+"' is unknown to the lexer");
                 advance();
             } else {
                 currentToken.type = IDENTIFIER;
@@ -486,9 +489,9 @@ void Lexer::getIdentifier() {
     } while ((isalpha(current()) || isdigit(current()) || current() == '_') && idx < source.length());
 
     if (!hasLetter)
-        error->simpleError(ParseError::GENERIC, "Invalid Identifier Format", fileName, 
-            currentToken.line, currentToken.line, 
-            currentToken.start, col, "Expected at least one alphabetic character in identifier");
+        error->simpleError(ParseError::GENERIC, "Invalid identifier format", 
+            error->getMeta(fileName), line, currentToken.start, col, 
+            "Expected at least one alphabetic character in identifier");
 }
 
 void Lexer::getString() {
@@ -496,22 +499,22 @@ void Lexer::getString() {
     advance();
 
     if (idx >= source.length())
-        error->simpleError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Unterminated String", fileName, 
-            currentToken.line, currentToken.line, currentToken.start, col, "Literal was not terminated before end of file", 
-            col, "Expected a double quote '\"' here");
+        error->plainError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Unterminated string", 
+            fileName, {error->createUL(currentToken.line, currentToken.start, col, col, "Literal was not terminated before end of file"),
+                error->createPtr(currentToken.line, col, "Expected a double quote '\"' here")});
     
     while (current() != '"') {
         if (current() == '\n') {
-            error->simpleError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Unterminated String", fileName, 
-                currentToken.line, currentToken.line, currentToken.start, col, "Literal was not terminated before end of line",
-                col, "Expected a double quote '\"' here");
+            error->plainError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Unterminated string", fileName, 
+                {error->createUL(line, currentToken.start, col, col, "Literal was not terminated before end of line"),
+                    error->createPtr(line, col, "Expected a double quote '\"' here")});
             return;
         }
 
         if (current() == '\\' & peek() != '\\' && !isalpha(peek())) {
-            error->simpleError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Invalid Escape Sequence found in String Literal",
-                fileName, currentToken.line, currentToken.line, currentToken.start, col, "", 
-                col, "Invalid escape sequence found here");
+            error->plainError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Invalid escape sequence found in string literal",
+                fileName, {error->createUL(line, currentToken.start, col, col),
+                    error->createPtr(line, col, "Invalid escape sequence found here")});
             return;
         }
 
@@ -519,9 +522,9 @@ void Lexer::getString() {
         advance();
 
         if (idx >= source.length()) {
-            error->simpleError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Unterminated String", fileName, 
-                currentToken.line, currentToken.line, currentToken.start, col, "Literal was not terminated before end of file", 
-                col, "Expected a double quote '\"' here");
+            error->plainError(ParseError::ILLEGAL_STRING_LITERAL_FORMAT, "Unterminated String", fileName,
+                error->createMark(currentToken.line, line, currentToken.start, col, "Literal was not terminated before end of file",
+                    col, "Expected a double quote '\"' here"));
             return;
         }
     } 
@@ -557,9 +560,9 @@ void Lexer::getNumber() {
             currentToken.value.push_back(current());
             advance();
         } else
-            error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Expected at least one Digit in Hexadecimal Number", 
-                fileName, currentToken.line, currentToken.line, currentToken.start, col, "Expected at least one digit after '0x'", 
-                col, "Expected at least one digit (0-9, a-f, A-F) here");
+            error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Expected at least one digit in hexadecimal number",
+                fileName, {error->createUL(line, currentToken.start, col, col, "Expected at least one digit after '0x'"),
+                    error->createPtr(line, col, "Expected at least one digit (0-9, a-f, A-F) here")});
         
         while ((ISHEX || current() == '_') && LENOK) {
             if (current() != '_')
@@ -577,9 +580,9 @@ void Lexer::getNumber() {
             currentToken.value.push_back(current());
             advance();
         } else
-            error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Expected at least one Digit in Octal Number", 
-                fileName, currentToken.line, currentToken.line, currentToken.start, col, "Expected at least one digit after '0o'", 
-                col, "Expected at least one digit (0-7) here");
+            error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Expected at least one digit in octal number", 
+                fileName, {error->createUL(line, currentToken.start, col, col, "Expected at least one digit after '0o'"),
+                    error->createPtr(line, col, "Expected at least one digit (0-7) here")});
 
         while ((ISOCT || current() == '_') && LENOK) {
             if (current() != '_')
@@ -598,9 +601,9 @@ void Lexer::getNumber() {
                 currentToken.value.push_back(current());
             advance();
         } else
-            error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Expected at least one Digit in Binary Number", 
-                fileName, currentToken.line, currentToken.line, currentToken.start, col, "Expected at least one digit after '0o'", 
-                col, "Expected at least one digit (0-1) here");
+            error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Expected at least one digit in binary number",
+                fileName, {error->createUL(line, currentToken.start, col, col, "Expected at least one digit after '0o'"),
+                    error->createPtr(line, col, "Expected at least one digit (0-1) here")});
 
         while ((ISBIN || current() == '_') && LENOK) {
             if (current() != '_')
@@ -626,18 +629,20 @@ void Lexer::getNumber() {
                 continue;
             } else if (current() == 'e') {
                 if (eFound) {
-                    error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected Character in Decimal Integer", 
-                        fileName, currentToken.line, currentToken.line, currentToken.start, col, "Unexpected 'e' in decimal integer",
-                        col, "'e' was found here");
+                    error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected character in decimal integer", 
+                        fileName, {error->createUL(line, currentToken.start, col, col, "Unexpected 'e' in decimal integer"),
+                            error->createPtr(line, col, "'e' was found here"),
+                            error->createNote(line, "An 'e' has already been found in this integer")});
                     advance();
                     return;
                 }
                 eFound = true;
             } else if (current() == '+' || current() == '-') {
                 if (signFound) {
-                    error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected Character in Decimal Integer", 
-                        fileName, currentToken.line, currentToken.line, currentToken.start, col, "Unexpected '"+string(1, current())+"' in decimal integer",
-                        col, "'"+string(1, current())+"' was found here");
+                    error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected character in decimal integer", 
+                        fileName, {error->createUL(line, currentToken.start, col, col, "Unexpected '"+string(1, current())+"' in decimal integer"),
+                            error->createPtr(line, col, "'"+string(1, current())+"' was found here"),
+                            error->createNote(line, "A '"+string(1, current())+"' has already been found in this integer")});
                     advance();
                     return;
                 }
@@ -656,10 +661,10 @@ void Lexer::getNumber() {
         || currentToken.value.back() == 'E'
         || currentToken.value.back() == '+'
         || currentToken.value.back() == '-')) {
-            error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected Character in Decimal Integer", 
-                        fileName, currentToken.line, currentToken.line, currentToken.start, col, 
-                        "Expected at least on digit (0-9) after '"+string(1, currentToken.value.back()),
-                        col-1, "'"+string(1, currentToken.value.back())+"' was found here");             
+            error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected character in decimal integer",
+                fileName, {error->createUL(line, currentToken.start, col, col - 1, 
+                            "Expected at least on digit (0-9) after '"+string(1, currentToken.value.back())),
+                    error->createPtr(line, col - 1,  "'"+string(1, currentToken.value.back())+"' was found here")});         
             return;
         }
         
@@ -681,19 +686,20 @@ void Lexer::getNumber() {
                 continue;
             } else if (current() == 'e') {
                 if (eFound) {
-                    error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected Character in Flaoting Point Integer", 
-                        fileName, currentToken.line, currentToken.line, currentToken.start, col, "Unexpected 'e' in float",
-                        col, "'e' was found here");            
+                    error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected character in floating point integer", 
+                        fileName, {error->createUL(line, currentToken.start, col, col, "Unexecpted 'e' in float"),
+                            error->createPtr(line, col, "'e' was found here"),
+                            error->createNote(line, "An 'e' has already been found in this float")});         
                     advance();
                     return;
                 }
                 eFound = true;
             } else if (current() == '+' || current() == '-') {
                 if (signFound) {
-                    error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected Character in Flaoting Point Integer", 
-                        fileName, currentToken.line, currentToken.line, currentToken.start, col, 
-                        "Unexpected '"+string(1, current())+"' in float",
-                        col, "'"+string(1, current())+"' was found here");
+                    error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected character in floating point integer", 
+                        fileName, {error->createUL(line, currentToken.start, col, col, "Unexecpted '"+string(1, current())+"' in float"),
+                            error->createPtr(line, col, "'"+string(1, current())+"' was found here"),
+                            error->createNote(line, "A '"+string(1, current())+"' has already been found in this float")});    
                     advance();
                     return;
                 }
@@ -712,10 +718,10 @@ void Lexer::getNumber() {
         || currentToken.value.back() == 'E'
         || currentToken.value.back() == '+'
         || currentToken.value.back() == '-')) {
-            error->simpleError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected Character in Floating Point Integer", 
-                        fileName, currentToken.line, currentToken.line, currentToken.start, col, 
-                        "Expected at least on digit (0-9) after '"+string(1, currentToken.value.back()),
-                        col-1, "'"+string(1, currentToken.value.back())+"' was found here");               
+            error->plainError(ParseError::ILLEGAL_NUMBER_FORMAT, "Unexpected character in floating point integer",
+                fileName, {error->createUL(line, currentToken.start, col, col - 1, 
+                            "Expected at least on digit (0-9) after '"+string(1, currentToken.value.back())),
+                    error->createPtr(line, col - 1,  "'"+string(1, currentToken.value.back())+"' was found here")});                  
             return;
         }
     }
@@ -734,6 +740,7 @@ bool Lexer::skipComment() {
         resetPos();
         return true;
     } else if (peek() == '*') { // multi line comment '/* ... */'
+        size_t start = line;
                                                 // check for  '*/'
         while (idx < source.length() && (current() != '*' || peek() != '/')) {
             advance();
@@ -742,8 +749,8 @@ bool Lexer::skipComment() {
         }
         
         if (idx >= source.length())
-            error->simpleError(ParseError::UNEXPECTED_EOF, "Expected Multi-Line Comment to end", 
-            fileName, line, line, col-1, col, "");
+            error->plainError(ParseError::UNEXPECTED_EOF, "Expected multi-line comment to end",
+                fileName, {error->createMulti(start, line, "The captured comment until EOF")});
         else
             advance(2); // skip the '*/'
         

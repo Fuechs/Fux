@@ -53,13 +53,17 @@ StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
     && stmt->getASTType() != AST::IfElseAST
     && stmt->getASTType() != AST::WhileLoopAST
     && stmt->getASTType() != AST::ForLoopAST
-    && stmt->getASTType() != AST::EnumerationAST) // don't throw useless errors
+    && stmt->getASTType() != AST::EnumerationAST) { // don't throw useless errors
         if (!check(SEMICOLON)) {
             if (!stmt->meta.file) // TODO: implement metadata for every ast
                 assert(!"metadata not implemented for parsed kind of AST");
-            error->metaError(ParseError::UNEXPECTED_TOKEN, "Expected a Semicolon ';' after Statement", 
-                stmt->meta, "Parsed statement", peek(-1).end + 1, "Expected semicolon ';' here");
-        }
+
+            error->plainError(ParseError::UNEXPECTED_TOKEN, "Expected a semicolon ';' after statement",
+                stmt->meta, error->createMark(stmt->meta, "Parsed statement", 
+                    stmt->meta.lstCol + 1, "Expected semicolon ';' here"));
+        } else
+            stmt->meta.lstCol++; // add semicolon 
+    }
     return stmt;
 }
 
@@ -235,9 +239,9 @@ StmtAST::Ptr Parser::parseBlockStmt() {
         StmtAST::Vec body;
         while (!check(RBRACE)) {
             if (!notEOF()) {
-                createError(ParseError::MISSING_PAREN, "Code Block was never closed", *(current - 1), "Expected a closing paren (RBRACE '}') here", 
+                createError(ParseError::MISSING_PAREN, "Code Block was never closed", *current, "Expected a closing paren (RBRACE '}') here", 
                     opening, "Opening paren found here (LBRACE '{')");
-                return make_unique<NoOperationAST>(); 
+                break;
             }
             body.push_back(parseStmt());
         }
@@ -718,10 +722,10 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
                 || endTok.type == BINARY)
                     endExpr = parseNumberExpr(endTok);
                 else 
-                    error->simpleError(ParseError::ILLEGAL_OPERANDS, "Incomplete Range Expression", fileName,
-                        that.line, endTok.line, that.start, endTok.end, "Range expression indicated by '...' operator.", 
-                        endTok.start, "Would have expected an integer here.", 
-                        {"Help: The LHS and the RHS of a range expression have to be constants."});
+                    error->plainError(ParseError::ILLEGAL_OPERANDS, "IncompleterRange expression", fileName,
+                        error->createMark(that.line, endTok.line, that.start, endTok.end,
+                            "Range expression indicated by '...' operato.", endTok.start, "Would have expected an integer here",
+                            {error->createHelp(endTok.line, "The LHS and RHS of a range expression have to be constants")}));
 
                 if (endExpr.get() == nullptr) {
                     endExpr = make_unique<NullExprAST>();
@@ -763,7 +767,7 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
         }
         case _EOF: 
             createError(ParseError::UNEXPECTED_EOF, "Unexpected EOF while parsing Primary Expression",
-                that, "Expected a primay expression here", 0, "", {}, false, true);
+                that, "Expected a primay expression here", 0, "", false, true);
             return make_unique<NullExprAST>();
         default:    
             createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing Primary Expression",
@@ -923,18 +927,22 @@ constexpr bool Parser::notEOF() { return *current != _EOF; }
 void Parser::createError(
     ParseError::Type type, string title, 
     const Token &token, string info, size_t ptr, string ptrText,
-    vector<string> notes, bool warning, bool aggressive) {
-        error->simpleError(type, title, fileName, token.line, token.line, token.start, token.end, 
-            info, ptr, ptrText, notes, warning, aggressive);
+    bool warning, bool aggressive) {
+        if (warning)
+            error->plainWarning(type, title, fileName, 
+                error->createMark(token.line, token.line, token.start, token.end, info, ptr, ptrText));
+        else
+            error->plainError(type, title, fileName, 
+                error->createMark(token.line, token.line, token.start, token.end, info, ptr, ptrText));
 }
 
 void Parser::createError(
     ParseError::Type type, string title,
     const Token &token, string info, 
     const Token &refTok, string refInfo,
-    vector<string> notes, bool warning, bool aggressive) {
-        error->createError(type, title, 
-            fileName, token.line, token.line, token.start, token.end, info, 0, "", 
-            fileName, refTok.line, refTok.line, refTok.start, refTok.end, refInfo, 0, "",
-            notes, true, warning, aggressive);
+    bool warning, bool aggressive) {
+        error->refError(type, title, 
+            error->getMeta(fileName), {error->createUL(token.line, token.start, token.end, 0, info)},
+            error->getMeta(fileName), {error->createUL(refTok.line, refTok.start, refTok.end, 0, refInfo)},
+            warning, aggressive);
 }

@@ -14,6 +14,7 @@
 #include "../../fux.hpp"
 #include "../lexer/token.hpp"
 #include "../metadata.hpp"
+#include "subject.hpp"
 
 // standard messages for each error type
 static const char *ErrorTypeString[] = {
@@ -89,48 +90,25 @@ public:
 
     typedef vector<Flag> FlagVec;
 
-    struct SUBJ_STRCT {
-        SUBJ_STRCT(Metadata meta = Metadata(), string info = "", string pointerText = "", size_t pointer = 0);
-        ~SUBJ_STRCT();
-
-        SUBJ_STRCT &operator=(const SUBJ_STRCT &copy);
-
-        Metadata meta;
-        string info;
-        string pointerText;
-        size_t pointer;
-    };
-
     ParseError();
-    ParseError(FlagVec flags, Type type, string title, SUBJ_STRCT subject, SUBJ_STRCT reference = SUBJ_STRCT(), vector<string> notes = {});
+    ParseError(FlagVec flags, Type type, string title, 
+        Subject subject, Subject reference = Subject());
     ~ParseError();
 
     void report();
 
-    constexpr bool hasFlag(Flag flag);
-    void addNote(string note);
+    bool hasFlag(Flag flag);
 
 private:
     FlagVec flags;
     Type type;
         
     string title;
-    SUBJ_STRCT subject, reference;
+    Subject subject, reference;
     
-    vector<string> notes;
+    // padding for line numbers
+    size_t padding = 5;
 
-    // helper functions for error reporting
-    size_t padding = 3;
-
-    string pad(size_t sub = 0, char fill = ' ');
-    string tripleDot();
-
+    // [error/warning][E-ID]: E-Type: E-Title 
     string printHead();
-    string printSubject(const SUBJ_STRCT &subj);
-    string printPosition(const Metadata &meta);
-    string printLine(size_t lineNumber, string line);
-    string printUnderline(size_t start, size_t end, size_t except = 0);
-    string printArrow(const SUBJ_STRCT &meta);
-    string printInfo(const string &info, bool wrap = false, bool color = false);
-    string printNotes();
 };

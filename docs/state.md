@@ -16,7 +16,9 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 #### [...] Stage I - Turing Complete in C++
 
 - [...] Syntax
-- [&check;] Error System
+- [...] Error System
+    - [&check;] Other errors
+    - [...] Replace, Insert, Remove
 - [&check;] Source Management
 - [&check;] Threading
 - [&check;] Lexer
@@ -24,7 +26,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [...] Parser
     - [&check;] Expressions
     - [...] Statements
-        - [&check;] ...
+        - [&check;] Other statements
         - [&cross;] Structs
         - [&check;] Enumerations
         - [&cross;] Type Definitions

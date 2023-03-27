@@ -155,13 +155,13 @@ private:
     void createError(
         ParseError::Type type, string title, 
         const Token &token, string info, size_t ptr = 0, string ptrText = "",
-        vector<string> notes = {}, bool warning = false, bool aggressive = false);
+        bool warning = false, bool aggressive = false);
     
     void createError(
         ParseError::Type type, string title,
         const Token &token, string info, 
         const Token &refTok, string refInfo,
-        vector<string> notes = {}, bool warning = false, bool aggressive = true);
+        bool warning = false, bool aggressive = true);
 
     void debugPrint(const string message);
 };
