@@ -40,3 +40,6 @@ template <typename Out>
 void split(const std::string &s, char delim, Out result);
 
 std::vector<std::string> split(const std::string &s, char delim);
+
+std::string highlightedInsert(const std::string &dest, size_t pos, 
+    std::string insert, size_t pos1 = 0, std::string insert1 = "");

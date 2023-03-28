@@ -19,6 +19,7 @@
 // standard messages for each error type
 static const char *ErrorTypeString[] = {
     "Generic",
+    "Recursion",
 
     "Unexpected Token",
     "Unexpected End of File",
@@ -53,6 +54,7 @@ public:
 
     enum Type {
         GENERIC,
+        RECURSION,
 
         UNEXPECTED_TOKEN,
         UNEXPECTED_EOF,

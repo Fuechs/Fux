@@ -145,6 +145,22 @@ Marking ErrorManager::createNote(size_t line, string message) {
     return Marking(Marking::NOTE, message, line);
 }
 
+Marking ErrorManager::createReplace(size_t line, size_t start, size_t end, string replacement) {
+    return Marking(Marking::REPLACE, replacement, line, start, 0, end);
+}
+
+Marking ErrorManager::createInsert(size_t line, size_t col, string insertion) {
+    return Marking(Marking::INSERT, insertion, line, col);
+}
+
+Marking ErrorManager::createInsert(size_t line, size_t col, string insertion, size_t col1, string insertion1) {
+    return Marking(Marking::DOUBLE_INSERT, insertion+"\n"+insertion1, line, col, 0, col1);
+}
+
+Marking ErrorManager::createRemove(size_t line, size_t start, size_t end) {
+    return Marking(Marking::REMOVE, "", line, start, 0, end);
+}
+
 Marking ErrorManager::createMulti(size_t fstLine, size_t lstLine, string message) {
     return Marking(Marking::MULTILINE, message, fstLine, fstLine, 0, lstLine);
 }

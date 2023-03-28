@@ -10,6 +10,7 @@
  */
 
 #include "io.hpp"
+#include "color.hpp"
 
 const std::string readFile(const std::string& path) {
     std::ifstream file(path);
@@ -91,4 +92,20 @@ std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> elems;
     split(s, delim, std::back_inserter(elems));
     return elems;
+}
+
+std::string highlightedInsert(const std::string &dest, size_t pos, 
+    std::string insert, size_t pos1, std::string insert1) {
+
+        std::stringstream ret; 
+        ret << CC::GRAY << dest.substr(0, pos) 
+            << CC::WHITE << SC::BOLD << insert << SC::RESET;
+
+        if (!insert1.empty())
+            ret << CC::GRAY << dest.substr(pos, pos1 - pos) << CC::WHITE << SC::BOLD << insert1 << SC::RESET;
+        else
+            pos1 = pos;
+
+        ret << CC::GRAY << dest.substr(pos1);
+        return ret.str();
 }

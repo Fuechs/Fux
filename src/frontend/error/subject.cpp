@@ -26,7 +26,7 @@ Marking &Marking::operator=(const Marking &copy) {
     return *this;
 }
 
-string Marking::print(size_t padding) {
+string Marking::print(size_t padding, string line) {
     stringstream ss;
 
     switch (kind) {
@@ -69,14 +69,77 @@ string Marking::print(size_t padding) {
         case HELP:
             ss << string(padding - 5, ' ') << CC::YELLOW << SC::BOLD << "Help |    " << text << "\n" << SC::RESET;
             break;
-        case REPLACE:
-            assert(!"Marking::print(): Marking::Kind not implemented.");
+        case REPLACE: {
+            if (line.empty())
+                assert(!"Marking::print(): Marking::REPLACE received empty line.");
+
+            ss << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    " << SC::RESET << CC::GRAY
+                << line.substr(0, start - 1) << CC::WHITE << SC::BOLD << text 
+                << SC::RESET << CC::GRAY << line.substr(end) << "\n" 
+                << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    ";
+            
+            size_t col = 1;
+            for (; col < start; col++)
+                ss << " ";
+            ss << "/";
+            for (col = 1; col < text.size(); col++)
+                ss << "~";
+            ss << "\n" << SC::RESET;
             break;
-        case INSERT:
-            assert(!"Marking::print(): Marking::Kind not implemented.");
+        }
+        case INSERT: {
+            if (line.empty())
+                assert(!"Marking::print(): Marking::INSERT received empty line.");
+
+            ss << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    " << highlightedInsert(line, start - 1, text) << "\n"
+                << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    ";
+            
+            size_t col = 1;
+            for (; col < start; col++)
+                ss << " ";
+            ss << "+";
+            for (col = 1; col <= text.size(); col++)
+                ss << "~";
+            ss << "\n" << SC::RESET;
             break;
+        }
+        case DOUBLE_INSERT: {
+            if (line.empty())
+                assert(!"Marking::print(): Marking::DOUBLE_INSERT; received empty line.");
+
+            vector<string> inserts = split(text, '\n');
+
+            ss << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    " 
+                << highlightedInsert(line, start - 1, inserts.at(0), end - 1, inserts.at(1)) << "\n"
+                << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    ";
+
+            size_t col = 1;
+            for (; col < start; col++)
+                ss << " ";
+            ss << "+";
+            col++;
+            for (; col < start + inserts[0].size(); col++)
+                ss << "~";
+            for (; col < end + inserts[0].size(); col++)
+                ss << " ";
+            ss << "+";
+            col++;
+            for (; col < end + inserts[0].size() + inserts[1].size(); col++)
+                ss << "~";
+            ss << "\n" << SC::RESET;
+            break;
+        }
         case REMOVE:
-            assert(!"Marking::print(): Marking::Kind not implemented.");
+            if (line.empty())
+                assert(!"Marking::print(): Marking::REMOVE received empty line.");
+
+            ss << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    " << SC::RESET << CC::GRAY 
+                << line.substr(0, start - 1) << line.substr(end) << "\n" << CC::WHITE << SC::BOLD
+                << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    ";
+
+            for (size_t col = 1; col < start - 2; col++)
+                ss << " ";
+            ss << "||||\n" << SC::RESET;
             break;
         case MULTILINE:
             ss << string(padding, ' ') << CC::RED << SC::BOLD << " \\___ " << text << "\n" << SC::RESET;
@@ -137,17 +200,15 @@ string Subject::print() {
 
     // determine error position
     size_t line = relevant_lines.begin()->first;
-    size_t col = 1; 
-    if (relevant_lines.begin()->second.front()->kind != Marking::MULTILINE)
-        col = relevant_lines.begin()->second.front()->start;
+    size_t col = UINT64_MAX; 
 
     for (Marking *&mark : relevant_lines.begin()->second)
-        if (mark->kind != Marking::MULTILINE)
-            col = std::max({col, mark->start});
+        if (mark && mark->kind != Marking::MULTILINE && mark->start != 0)
+            col = std::min({col, mark->start});
 
     // print error position
     ss << string(padding - 2, ' ') << CC::BLUE << SC::BOLD << ">>> " << SC::RESET
-        << *meta.file << ":" << line << ":" << col << "\n"; 
+        << *meta.file << ":" << line << ":" << (col == UINT64_MAX ? 1 : col) << "\n"; 
     
     for (line = 1; line <= meta.lstLine; line++) {
         if (!relevant_lines.contains(line))
@@ -161,7 +222,7 @@ string Subject::print() {
 
         for (Marking *&marking : relevant_lines[line])
             if (marking)
-                ss << marking->print(padding);
+                ss << marking->print(padding, meta[line]);
 
         if (!relevant_lines.contains(line + 1) && line != (--relevant_lines.end())->first)
             ss << CC::BLUE << string(padding - 4, ' ') << "... |    " << CC::GRAY << "...\n" << CC::DEFAULT;

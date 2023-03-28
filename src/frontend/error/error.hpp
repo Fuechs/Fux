@@ -80,6 +80,10 @@ public:
 
     Marking createHelp(size_t line, string message);
     Marking createNote(size_t line, string message);
+    Marking createReplace(size_t line, size_t start, size_t end, string replacement);
+    Marking createInsert(size_t line, size_t col, string insertion);
+    Marking createInsert(size_t line, size_t col, string insertion, size_t col1, string insertion1);
+    Marking createRemove(size_t line, size_t start, size_t end);
     Marking createMulti(size_t fstLine, size_t lstLine, string message);
 
 private:

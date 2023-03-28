@@ -26,6 +26,7 @@ struct Marking {
         HELP,
         REPLACE,
         INSERT,
+        DOUBLE_INSERT, // insert two single strings at two positions (start and end)
         REMOVE,
         MULTILINE, // information to multiple lines
         NONE,
@@ -37,7 +38,7 @@ struct Marking {
     Marking &operator=(const Marking &copy);
 
     // 'print' the marking; should be called by the subject owning this marking
-    string print(size_t padding);
+    string print(size_t padding, string line = "");
     // check when this marking should be printed
     size_t pos();
 
