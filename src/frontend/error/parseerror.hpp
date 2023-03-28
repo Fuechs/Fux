@@ -20,6 +20,7 @@
 static const char *ErrorTypeString[] = {
     "Generic",
     "Recursion",
+    "Useless Lifetime",
 
     "Unexpected Token",
     "Unexpected End of File",
@@ -55,6 +56,7 @@ public:
     enum Type {
         GENERIC,
         RECURSION,
+        USELESS_LIFETIME,
 
         UNEXPECTED_TOKEN,
         UNEXPECTED_EOF,

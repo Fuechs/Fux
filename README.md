@@ -13,7 +13,7 @@
 
 ## Flawless Unambiguous Programming
 
-[![version](https://img.shields.io/badge/pre--alpha-fcaa68?colorA=151515&style=for-the-badge)](./docs/state.md)
+[![0.1-dev](https://img.shields.io/badge/0.1--dev-fcaa68?colorA=151515&style=for-the-badge)](./docs/state.md)
 [![Apache License v2.0](https://img.shields.io/badge/Apache_License_v2.0-fcaa68?colorA=151515&style=for-the-badge)](./LICENSE)
 [![C++][cpp-badge]](./docs/state.md)
 [![LLVM][llvm-badge]](./docs/state.md)
@@ -43,30 +43,33 @@ main(argc: u64, argv: **c8): u64 {
 
 ## A Modern, Flexible Programming Language for All
 
-###### A Versatile and Innovative Language
-
 Fux is a modern and flexible programming language, perfect for use in a variety of domains by both novice and expert developers. With its efficient use of LLVM, it provides performance similar to C++, while being portable and running on a wide range of platforms.[^1]
 
-- **Large Core Package** \
-    Fux offers a comprehensive standard library, known as the Core Package, which includes features such as a string type, buffered console I/O, file I/O, mathematics and arithmetic operations, algorithms, key-value maps and dynamic pointers.[^1][^2][^3]
-- **Easy to Learn and Use** \
-    For new programmers, Fux offers a safe and intuitive programming environment, with features like built-in dynamic arrays and secure memory management. Experienced C/C++ developers will find the programming environment familiar, with added features and improvements over C++.
-- **Readable and Streamlined Syntax** \
-    The syntax of Fux is designed to be readable and easy to understand, with a focus on seamless integration of different aspects of the language. This is achieved through the use of "pipe" / "move" operators (`<<` and `>>`), as well as the ability to define functions and variables without any keywords.[^3][^4]
-- **Eliminating Common C++ Errors** \
-    Fux addresses common issues with C++ by eliminating potential sources of error, such as memory leaks, through its secure memory management. Its readable syntax and intuitive integration of different language elements also reduce the likelihood of bugs, making it easier for developers to write high-quality code.
+- **Easy to Write and Read** \
+    Fux is designed to be easy to write and read, making it accessible for new programmers and offering improved features for experienced developers. Its syntax emphasizes readability and seamless integration of different language elements. For instance, the pipe operators (`<<` and `>>`) provide a simple and intuitive way to connect multiple expressions.
+
+    ```rs
+        ptr: *i64;
+    //  ---------- Start of lifetime
+        reserve i64, 10, ptr;
+        ret := process(ptr, ptr + 9);
+    //         ------------ ^~~ ---- Last usage of `ptr`
+        free ptr;
+    //  +~~~~~~~~ 
+    //  Inserted by Fux at end of lifetime determined by usage
+        return ret;
+    ```
+
+- **Eliminating Common C++ Issues** \
+    Fux's secure memory management eliminates common issues like memory leaks. Its error system provides precise and informative error messages, making debugging easier. These improvements reduce the likelihood of bugs, enabling developers to produce high-quality code.
+
+    ![error demo](assets/error-demo.png)
 
 > __Note__
-> 1. Fux may have limited adoption and support compared to more established programming languages.
-> 2. Compatibility with other (programming) languages or technologies may be limited, which could restrict its use in certain domains.
-> 3. New bugs or security issues may arise as Fux is a new prorgamming language.
-> 4. As an ongoing development project, Fux may introduce new features or updates that could impact its performance, stability, or compatibility.
-> 5. Fux may have fewer resources available, such as documentation, forums, or tutorials, compared to more established programming languages.
+> - As an ongoing development project, Fux may introduce new features or updates that could impact its performance, stability, or compatibility.
+> - Fux may have fewer resources available, such as documentation, forums, or tutorials, compared to more established programming languages.
 
 [^1]: The usage of certain features may result in decreased program performance and slower compile times.
-[^2]: The inclusion of these features is not guaranteed in future versions of the language.
-[^3]: Further details can be found [here](./docs/).
-[^4]: Provided automatic typing is used.
 
 ## Getting Started
 
