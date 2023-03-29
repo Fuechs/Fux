@@ -237,14 +237,16 @@ StmtAST::Ptr Parser::parseBlockStmt() {
     if (check(LBRACE)) {
         Token &opening = peek(-1); // '{' position for error reporting 
         StmtAST::Vec body;
-        while (!check(RBRACE)) {
+        while (!check(RBRACE)) 
             if (!notEOF()) {
-                createError(ParseError::MISSING_PAREN, "Code Block was never closed", *current, "Expected a closing paren (RBRACE '}') here", 
-                    opening, "Opening paren found here (LBRACE '{')");
+                error->refError(ParseError::MISSING_PAREN, "Code block was never closed", error->getMeta(fileName),
+                    {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
+                        error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this code block")},
+                    error->getMeta(fileName),
+                    {error->createUL(opening.line, opening.start, opening.end, 0, "Opening paren found here (LBRACE '{')")});
                 break;
-            }
-            body.push_back(parseStmt());
-        }
+            } else
+                body.push_back(parseStmt());
         StmtAST::Ptr stmt = make_unique<CodeBlockAST>(body);
         stmt->meta = Metadata(fileName, opening);
         stmt->meta.copyEnd(peek(-1));

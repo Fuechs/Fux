@@ -165,6 +165,11 @@ Marking ErrorManager::createMulti(size_t fstLine, size_t lstLine, string message
     return Marking(Marking::MULTILINE, message, fstLine, fstLine, 0, lstLine);
 }
 
+Marking ErrorManager::createHighlight(size_t fstLine, size_t lstLine, size_t fstCol, size_t lstCol, string info) {
+    return Marking(Marking::HIGHLIGHT, info, lstLine, fstCol, fstLine, lstCol);
+}
+
+
 void ErrorManager::update(ParseError pe) {
     _errors.push_back(pe);
 

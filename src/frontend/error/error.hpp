@@ -85,6 +85,7 @@ public:
     Marking createInsert(size_t line, size_t col, string insertion, size_t col1, string insertion1);
     Marking createRemove(size_t line, size_t start, size_t end);
     Marking createMulti(size_t fstLine, size_t lstLine, string message);
+    Marking createHighlight(size_t fstLine, size_t lstLine, size_t fstCol, size_t lstCol, string info);
 
 private:
     ParseError::Vec _errors;

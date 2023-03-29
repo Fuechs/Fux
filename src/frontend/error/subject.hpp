@@ -19,16 +19,67 @@ struct Marking {
     using Vec = std::vector<Marking>;
 
     enum Kind {
-        DASH_UL,    // ---- underline
-        ARROW_UL,   // ^^^^ underline
+        /*
+           3 |        reserve i32, 2, ptr;
+             |        -------------------- Memory of type 'i32' is reserved here
+        */
+        DASH_UL,  
+
+        /*
+           2 |        ptr: *i64;
+             |        ^^^^^^^^^^ Pointer is declared with type '*i64' here
+        */
+        ARROW_UL,
+
+        /*
+           3 |        reserve i32, 2, ptr;
+             |        --------------- ^ -- Memory of type 'i32' is reserved here
+             |                        |
+             |                        Provided pointer `ptr` points to value of type 'i64', not 'i32'
+        */
         POINTER,   
+        
+        // Note |    This error got thrown because there is no condition enclosing the call
         NOTE,
+        
+        // Help |    Enclose the call in parenthesis to silence this error
         HELP,
+        
+        /*
+                 |        reserve i64, 2, ptr;
+                 |                /~~
+        */
         REPLACE,
+        
+        /*
+                 |        x = (self.process(x));
+                 |            +               +
+        */
         INSERT,
         DOUBLE_INSERT, // insert two single strings at two positions (start and end)
+
+        /*
+               10 |    (void *) ptr;
+                  |    ptr;
+        */
         REMOVE,
+
+        /*
+                2 |        ptr: *i64;
+                3 |        reserve i32, 2, ptr;
+                4 |        x = self.process(x);
+                5 |        free ptr;
+                   \___ Whole lifetime of `ptr`
+        */
         MULTILINE, // information to multiple lines
+
+        /*
+                  |  _______________
+                8 | | ptr: *void;
+                9 | | free ptr;
+                  | \_____ ^~~ This is a test message
+        */
+        HIGHLIGHT, // highlight of multiple lines (enclosed in a box)
         NONE,
     };
 
@@ -44,7 +95,12 @@ struct Marking {
 
     Kind kind;
     string text;
-    size_t line, start, except, end; // ! MULTILINE uses `start` as first line and `end` as last line
+    size_t line, start, except, end; 
+    
+    // MULTILINE uses `start` as first line and `end` as last line
+
+    // HIGHLIGHT uses `except` as first line and `except` as last line
+    //  since `start` and `end` are used for arrow positions
 };
 
 // error subject containing metadata and markings

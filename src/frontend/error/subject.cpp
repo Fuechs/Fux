@@ -98,7 +98,7 @@ string Marking::print(size_t padding, string line) {
             for (; col < start; col++)
                 ss << " ";
             ss << "+";
-            for (col = 1; col <= text.size(); col++)
+            for (col = 2; col <= text.size(); col++)
                 ss << "~";
             ss << "\n" << SC::RESET;
             break;
@@ -134,16 +134,40 @@ string Marking::print(size_t padding, string line) {
                 assert(!"Marking::print(): Marking::REMOVE received empty line.");
 
             ss << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    " << SC::RESET << CC::GRAY 
-                << line.substr(0, start - 1) << line.substr(end) << "\n" << CC::WHITE << SC::BOLD
-                << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    ";
-
-            for (size_t col = 1; col < start - 2; col++)
-                ss << " ";
-            ss << "||||\n" << SC::RESET;
+                << line.substr(0, start - 1) << line.substr(end) << "\n" << SC::RESET;
             break;
         case MULTILINE:
             ss << string(padding, ' ') << CC::RED << SC::BOLD << " \\___ " << text << "\n" << SC::RESET;
             break;
+        case HIGHLIGHT: {
+            if (line.empty())
+                assert(!"Marking::print(): Marking::HIGHLIGHT received empty line.");
+
+            if (start == UINT64_MAX) 
+                ss << string(padding, ' ') << CC::BLUE << SC::BOLD << "|  " << CC::RED << string(15, '_') << "\n";
+
+            string lineStr = to_string(this->line);
+            ss << string(padding - lineStr.size() - 1, ' ') << CC::BLUE << SC::BOLD << lineStr << " | " << CC::RED
+                << "| " << SC::RESET << CC::GRAY << line << "\n" << SC::RESET; 
+            
+            if (start == 0 || start == UINT64_MAX)
+                break;
+
+            ss << string(padding, ' ') << CC::BLUE << SC::BOLD << "| " << CC::RED << "\\";
+            size_t col = 1;
+            for (; col < start - 1; col++)
+                ss << "_";
+            ss << " ^";
+            col += col > 1 ? 2 : 1;
+            // handle these cases, where the ' ' is not below the content
+            // 9 | | free ptr;
+            //   | \ ^~~~ This is a test message
+            for (; col <= end; col++)
+                ss << "~";
+            ss << " " << text << "\n";
+            break;
+        }
+
         default:
             assert(!"Marking::print(): Marking::Kind not implemented.");
     }
@@ -184,18 +208,38 @@ string Subject::print() {
                 relevant_lines[marking.start].push_back(nullptr);
                 relevant_lines[marking.end].push_back(&marking);
                 break;
+            case Marking::HIGHLIGHT:   
+                                                                                            // pass this value so we know
+                                                                                            // that this is the first 
+                                                                                            // highlight marking when printing
+                relevant_lines[marking.except].push_back(new Marking(Marking::HIGHLIGHT, "", marking.except, UINT64_MAX));
+                relevant_lines[marking.line].push_back(&marking);
+                break;
             default:
                 relevant_lines[marking.line].push_back(&marking);
         }
     
     LineMap::iterator lmi = relevant_lines.begin();
     while (lmi != relevant_lines.end()) {
-        if (((++lmi)->first - (--lmi)->first) > 3 || (++lmi)->first == (--lmi)->first + 1) 
-            // if amount of lines between two markings is > 3 or == 0, advance
+        if (((++lmi)->first - (--lmi)->first) > 5 || (++lmi)->first == (--lmi)->first + 1) 
+            // if amount of lines between two markings is > 5 or == 0, advance
             lmi++;
         else  // else add lines inbetween to relevant_lines
-            for (size_t line = lmi++->first; line < lmi->first; line++)
-                relevant_lines[line].push_back(nullptr);
+            for (size_t line = lmi++->first; line < lmi->first; line++) {
+                if (lmi->second.front() 
+                && lmi->second.front()->kind == Marking::HIGHLIGHT) {
+                    bool push = true;
+                    for (Marking *&marking : relevant_lines[line])
+                        if (marking && marking->kind == Marking::HIGHLIGHT) {
+                            push = false;
+                            break;
+                        }
+
+                    if (push)
+                        relevant_lines[line].push_back(new Marking(Marking::HIGHLIGHT, "", line));
+                } else
+                    relevant_lines[line].push_back(nullptr);
+            }
     }
 
     // determine error position
@@ -214,11 +258,20 @@ string Subject::print() {
         if (!relevant_lines.contains(line))
             continue;
 
-        string lineStr = to_string(line);
-        ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ') << lineStr << " |    "
-                                                                  //  ^^^^                    ^^^
-                                                                  // we subtract 1 here for the space after the line number
-            << SC::RESET << CC::GRAY << meta[line] << "\n" << CC::DEFAULT;
+        bool skip = false;
+        for (Marking *&marking : relevant_lines[line]) 
+            if (marking && marking->kind == Marking::HIGHLIGHT) {
+                skip = true;
+                break;
+            }
+                
+        if (!skip) {
+            string lineStr = to_string(line);
+            ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ') << lineStr << " |    "
+                                                                    //   ^^^^                     ^^^
+                                                                    // we subtract 1 here for the space after the line number
+                << SC::RESET << CC::GRAY << meta[line] << "\n" << CC::DEFAULT;
+        }
 
         for (Marking *&marking : relevant_lines[line])
             if (marking)
