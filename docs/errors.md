@@ -36,13 +36,13 @@ The compiler uses flags to categorize errors as warnings or aggressive. This mak
 
 - **`Error`** \
     Errors stop the compiler process and must be fixed before the code can be executed.
-    ![img](../assets/type-%5Berror%5D.png)
+    ![img](../assets/type-error.png)
 - **`Warning`** \
     Warnings should be acknowledged, but can be ignored if the code is functioning as intended. They indicate potential issues, logical errors or subjective problems and do not halt the compiler process.
-    ![img](../assets/type-%5Bwarning%5D.png)
+    ![img](../assets/type-warning.png)
 - **`Aggressive`** \
     Aggressive errors are a type of error or warning that can be thrown by the Fux compiler when instructed to do so with the `-a` flag. These errors can potentially stop the compiler process, and typically involve subjective or logical issues.
-    ![img](../assets/type-%5Baggressive%5D.png)
+    ![img](../assets/type-aggressive.png)
 
 # Titles
 
