@@ -63,7 +63,7 @@ Fux is a modern and flexible programming language, perfect for use in a variety 
 - **Eliminating Common C++ Issues** \
     Fux's secure memory management eliminates common issues like memory leaks. Its error system provides precise and informative error messages, making debugging easier. These improvements reduce the likelihood of bugs, enabling developers to produce high-quality code.
 
-    ![error demo](assets/error-demo.png)
+   [![error demo](assets/error-demo.png)](docs/errors.md)
 
 > __Note__
 > - As an ongoing development project, Fux may introduce new features or updates that could impact its performance, stability, or compatibility.
