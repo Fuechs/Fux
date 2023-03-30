@@ -6,7 +6,7 @@ This documentation may also be used by contributors to understand how errors are
 
 ###### Example from [README](../README.md)
 
-![error demo](../assets/error-demo.png)
+![error demo](../assets/errors/error-demo.png)
 
 ### Table of Contents
 
@@ -36,13 +36,13 @@ The compiler uses flags to categorize errors as warnings or aggressive. This mak
 
 - **`Error`** \
     Errors stop the compiler process and must be fixed before the code can be executed.
-    ![img](../assets/type-error.png)
+    ![img](../assets/errors/type-error.png)
 - **`Warning`** \
     Warnings should be acknowledged, but can be ignored if the code is functioning as intended. They indicate potential issues, logical errors or subjective problems and do not halt the compiler process.
-    ![img](../assets/type-warning.png)
+    ![img](../assets/errors/type-warning.png)
 - **`Aggressive`** \
     Aggressive errors are a type of error or warning that can be thrown by the Fux compiler when instructed to do so with the `-a` flag. These errors can potentially stop the compiler process, and typically involve subjective or logical issues.
-    ![img](../assets/type-aggressive.png)
+    ![img](../assets/errors/type-aggressive.png)
 
 # Titles
 
@@ -69,7 +69,7 @@ Markings are used to pinpoint the exact location and reason for an error. They i
 
 Underlines can be represented by arrows (`^`) or dashes (`-`). Arrows are usually used to indicate the underline, but dashes are used if a [pointer](#pointer) needs to be shown in between.
 
-![img](../assets/error-underline.png)
+![img](../assets/errors/error-underline.png)
 
 ## Pointer
 
@@ -84,22 +84,22 @@ Error notes and tips can provide additional information to help diagnose and fix
 
 By reading and understanding the notes and tips provided with each error, developers can more easily identify the root cause of the issue and take appropriate action to resolve it.
 
-![img](../assets/error-note-help.png)
+![img](../assets/errors/error-note-help.png)
 
 ## Replace, Insert & Remove
 
 Errors may include suggestions on how to fix or resolve them by visually indicating modifications to the original code through insertions (`+~~~`), deletions or replacements (`/~~~`). These modifications are usually accompanied by a help message that explains them. 
 
-![img](../assets/error-insert.png)
+![img](../assets/errors/error-insert.png)
 
 ## Multiline
 
 Multiline markings insert information at the end of a range of lines of code.
 
-![img](../assets/error-multiline.png)
+![img](../assets/errors/error-multiline.png)
 
 ## Highlight
 
 Highlights usually bring out code blocks or a part of code where the compiler error itself was thrown by the user. 
 
-![img](../assets/error-highlight.png)
+![img](../assets/errors/error-highlight.png)
