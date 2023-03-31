@@ -24,6 +24,9 @@ public:
     virtual AST getASTType() = 0;
     virtual FuxType getFuxType() = 0;
     virtual void debugPrint(size_t indent = 0) = 0;
+
+    // enclosed in paranthesis, used to silence errors / warnings
+    bool enclosed = false; 
 };
 
 extern ExprAST::Ptr nullExpr;

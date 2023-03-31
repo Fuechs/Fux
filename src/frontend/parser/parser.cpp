@@ -46,14 +46,15 @@ StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
         return make_unique<NoOperationAST>();
     }
 
-    StmtAST::Ptr stmt = parseEnumStmt();
+    StmtAST::Ptr stmt = parseMacroStmt();
     if (expectSemicolon && stmt 
     && stmt->getASTType() != AST::CodeBlockAST 
     && stmt->getASTType() != AST::FunctionAST
     && stmt->getASTType() != AST::IfElseAST
     && stmt->getASTType() != AST::WhileLoopAST
     && stmt->getASTType() != AST::ForLoopAST
-    && stmt->getASTType() != AST::EnumerationAST) { // don't throw useless errors
+    && stmt->getASTType() != AST::EnumerationAST
+    && stmt->getASTType() != AST::MacroAST) { // don't throw useless errors
         if (!check(SEMICOLON)) {
             if (!stmt->meta.file) // TODO: implement metadata for every ast
                 assert(!"metadata not implemented for parsed kind of AST");
@@ -65,6 +66,77 @@ StmtAST::Ptr Parser::parseStmt(bool expectSemicolon) {
             stmt->meta.lstCol++; // add semicolon 
     }
     return stmt;
+}
+
+StmtAST::Ptr Parser::parseMacroStmt() {
+    if (!check(KEY_MACRO))
+        return parseEnumStmt();
+
+    Metadata meta = Metadata(fileName, peek(-1));
+    Token &symbol = eat(IDENTIFIER);
+
+    if (*current == LBRACE) {
+        /*
+            macro <symbol> {
+                ( <args> ) -> <ret>
+                ( <args> ) -> <ret>
+                ...
+            }
+        */
+        Token &opening = eat(); // {
+        MacroAST::Case::Vec cases = {};
+        
+        while (!check(RBRACE)) 
+            if (!notEOF()) {
+                error->refError(ParseError::MISSING_PAREN, "Macro body was never closed", error->getMeta(fileName),
+                    {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
+                        error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this macro body")},
+                    error->getMeta(fileName),
+                    {error->createUL(opening.line, opening.start, opening.end, 0, "Opening paren found here (LBRACE '{')")});
+                    break;
+            } else
+                cases.push_back(parseMacroCase());
+
+        meta.copyEnd(peek(-1));
+        StmtAST::Ptr macro = make_unique<MacroAST>(symbol.value, cases);
+        macro->meta = meta;
+        return macro;
+    } else if (*current == LPAREN) {
+        // macro <symbol> ( <args> ) -> <ret>
+        MacroAST::Case *_case = parseMacroCase();
+        meta.copyEnd(_case->meta);
+
+        StmtAST::Ptr macro = make_unique<MacroAST>(symbol.value, MacroAST::Case::Vec({_case}));
+        macro->meta = meta;
+        return macro;
+    } else if (*current == POINTER) {
+        // macro <symbol> -> <stmt>
+        Token &ptr = eat();
+        StmtAST::Ptr ret = parseStmt();
+
+        MacroAST::Case *wildcard = new MacroAST::Case({MacroAST::Arg("*", MacroAST::WILDCARD)}, ret);
+        wildcard->meta = Metadata(fileName, ptr);
+        wildcard->meta.copyEnd(wildcard->ret->meta);
+        meta.copyEnd(wildcard->meta);
+
+        StmtAST::Ptr macro = make_unique<MacroAST>(symbol.value, MacroAST::Case::Vec({wildcard}));
+        macro->meta = meta;
+        return macro;
+    } else if (*current == SEMICOLON) {
+        // macro <symbol> ;
+        meta.copyEnd(symbol);
+        StmtAST::Ptr macro = make_unique<MacroAST>(symbol.value);
+        macro->meta = meta;
+        return macro;
+    } 
+        
+    meta.copyEnd(symbol);
+    error->plainError(ParseError::UNEXPECTED_TOKEN, "Unexpected token while parsing a macro",
+        fileName, error->createMark(meta, "Parsed macro", current->start, "Unexpected token", 
+            {error->createHelp(current->line, "Would have expected a macro body, case or prototype here")}));
+    StmtAST::Ptr macro = make_unique<MacroAST>(symbol.value);
+    macro->meta = meta;
+    return macro;
 }
 
 StmtAST::Ptr Parser::parseEnumStmt() {
@@ -760,6 +832,7 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
             return expr;
         case LPAREN: 
             expr = parseExpr();
+            expr->enclosed = true;
             eat(RPAREN, ParseError::MISSING_PAREN);
             return expr;
         case LBRACE: {
@@ -879,6 +952,61 @@ ExprAST::Ptr Parser::parseCharExpr(Token &tok) {
     ExprAST::Ptr expr = make_unique<CharExprAST>(value);
     expr->meta = Metadata(fileName, tok);
     return expr;
+}
+
+MacroAST::Case *Parser::parseMacroCase() {
+    eat(LPAREN);
+    Metadata meta = Metadata(fileName, peek(-1));
+    MacroAST::Arg::Vec args = {};
+    
+    do {
+        if (*current == RPAREN)
+            break;
+        args.push_back(parseMacroArg());
+    } while (check(COMMA));
+    
+    eat(RPAREN, ParseError::MISSING_PAREN);
+    
+    eat(POINTER);
+
+    StmtAST::Ptr ret = parseStmt();
+    meta.copyEnd(ret->meta);
+    MacroAST::Case *that = new MacroAST::Case(args, ret);
+    that->meta = meta;
+    return that;
+}
+
+MacroAST::Arg Parser::parseMacroArg() {
+    if (check(ASTERISK)) {
+        MacroAST::Arg that("*", MacroAST::WILDCARD);
+        that.meta = Metadata(fileName, peek(-1));
+        return that;
+    }
+
+    Token &symbol = eat(IDENTIFIER);
+    MacroAST::Arg that(symbol.value, MacroAST::NONE);
+    eat(COLON);
+
+    Token &id = eat(IDENTIFIER);
+    if (id.value == "type")
+        that.type = MacroAST::TYPE;
+    else if (id.value == "ident")
+        that.type = MacroAST::IDENT;
+    else if (id.value == "expr")
+        that.type = MacroAST::EXPR;
+    else if (id.value == "stmt")
+        that.type = MacroAST::STMT;
+    else if (id.value == "block")
+        that.type = MacroAST::BLOCK;
+    else
+        error->plainError(ParseError::ILLEGAL_TYPE, "Expected macro parameter type", fileName,
+            {error->createMark(symbol.line, id.line, symbol.start, id.end, 
+                "Parsed macro parameter", id.start, 
+                "Expected a macro parameter type here", 
+                {error->createHelp(id.line, "Possible types are: 'type', 'ident', 'expr', 'stmt' or 'block'")})});
+
+    that.meta = Metadata(&fileName, nullptr, symbol.line, id.line, symbol.start, id.end);
+    return that;
 }
 
 Token &Parser::eat() {

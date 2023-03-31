@@ -410,6 +410,54 @@ public:
     void debugPrint(size_t indent = 0) override; 
 };
 
+class MacroAST : public StmtAST {
+public:
+    enum ID {
+        TYPE,
+        IDENT,
+        EXPR,
+        STMT,
+        BLOCK,
+        WILDCARD, // "all other cases"
+        NONE,
+    };
+
+    struct Arg {
+        using Vec = vector<Arg>;
+
+        Arg(string symbol = "", ID type = NONE) : symbol(symbol), type(type) {}
+
+        Arg &operator=(const Arg &copy);
+
+        string symbol;
+        ID type;
+        Metadata meta;
+    };
+
+    struct Case {
+        using Vec = vector<Case *>;
+
+        Case(Arg::Vec args, StmtAST::Ptr &ret) : args(args), ret(std::move(ret)) {}
+
+        Arg::Vec args;
+        StmtAST::Ptr ret;
+        Metadata meta;
+    };
+
+    MacroAST(const string &symbol, Case::Vec cases = {})
+    : symbol(symbol), cases(cases) {}
+
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
+    StmtAST::Ptr analyse(Analyser *analyser) override;
+    AST getASTType() override;
+    FuxType getFuxType() override;
+    void debugPrint(size_t indent = 0) override;
+
+private:
+    string symbol;
+    Case::Vec cases;    
+};
+
 class RootAST : public StmtAST {
     StmtAST::Vec program;
     // resting place for array size expressions

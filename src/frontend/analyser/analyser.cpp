@@ -69,6 +69,8 @@ StmtAST::Ptr FunctionAST::analyse(Analyser *analyser) {
 
 StmtAST::Ptr EnumerationAST::analyse(Analyser *analyser) { return nullptr; }
 
+StmtAST::Ptr MacroAST::analyse(Analyser *analyser) { return nullptr; }
+
 StmtAST::Ptr RootAST::analyse(Analyser *analyser) {
     RootAST::Ptr mod = make_unique<RootAST>();
     StmtAST::Ptr modStmt = nullptr;

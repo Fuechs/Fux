@@ -235,6 +235,17 @@ void FunctionAST::addLocal(StmtAST::Ptr &local) { locals.push_back(std::move(loc
 AST EnumerationAST::getASTType() { return AST::EnumerationAST; }
 FuxType EnumerationAST::getFuxType() { return FuxType::U64; }
 
+MacroAST::Arg &MacroAST::Arg::operator=(const MacroAST::Arg &copy) {
+    symbol = copy.symbol;
+    type = copy.type;
+    meta = copy.meta;
+    return *this;
+}
+
+AST MacroAST::getASTType() { return AST::MacroAST; }
+// impossible to evaluate due to multiple cases
+FuxType MacroAST::getFuxType() { return FuxType::NO_TYPE; }
+
 AST RootAST::getASTType() { return AST::RootAST; }
 FuxType RootAST::getFuxType() { return FuxType::NO_TYPE; }
 

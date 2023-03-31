@@ -43,6 +43,7 @@ enum class AST {
     PrototypeAST,
     FunctionAST,
     EnumerationAST,
+    MacroAST,
     RootAST,
 };
 

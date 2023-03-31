@@ -151,6 +151,7 @@ enum TokenType {
     KEY_UNION,
     KEY_CLASS,
     KEY_TEMPLATE,
+    KEY_MACRO,
 
     _EOF,           // end of file
     NONE,
@@ -293,6 +294,7 @@ static const char *TokenTypeString[] = {
     "KEY_UNION",
     "KEY_CLASS",
     "KEY_TEMPLATE",
+    "KEY_MACRO",
 
     "EOF",           // end of file
     "NONE",
@@ -435,6 +437,7 @@ static vector<string> TokenTypeValue = {
     "union",
     "class",
     "template",
+    "macro",
 
     "end of file",        
     "none",

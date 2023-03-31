@@ -301,6 +301,35 @@ void EnumerationAST::debugPrint(size_t indent) {
     debugIndent(indent, "}");
 }
 
+void MacroAST::debugPrint(size_t indent) {
+    debugIndent(indent, "macro "+symbol+" {\n");
+    for (Case *&_case : cases) {
+        debugIndent(indent + 1, "(");
+
+        for (Arg &arg : _case->args) {
+            cout << arg.symbol << ": ";
+
+            switch (arg.type) {
+                case TYPE:      cout << "type"; break;
+                case IDENT:     cout << "ident"; break;
+                case EXPR:      cout << "expr"; break;
+                case STMT:      cout << "stmt"; break;
+                case BLOCK:     cout << "block"; break;
+                case WILDCARD:  cout << "*"; break;
+                default:        cout << CC::RED << "NONE" << CC::DEFAULT; break;
+            }
+            
+            if (&arg != &_case->args.back())
+                cout << ", ";
+        }
+        
+        cout << ") ->\n";
+        callASTDebug(indent + 1, _case->ret);
+        cout << ";\n";
+    }
+    debugIndent(indent, "}");
+}
+
 void RootAST::debugPrint(size_t indent) {
     if (!fux.options.debugMode)
         return;

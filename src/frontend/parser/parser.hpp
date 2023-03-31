@@ -35,10 +35,13 @@ private:
     RootAST::Ptr root;
     const bool mainFile;
 
+    // current parent function
     FunctionAST *parent = nullptr;
 
     // parse a statement
     StmtAST::Ptr parseStmt(bool expectSemicolon = true);
+    // macro
+    StmtAST::Ptr parseMacroStmt();
     // enumeration
     StmtAST::Ptr parseEnumStmt();
     // function declaration
@@ -135,6 +138,11 @@ private:
     ExprAST::Ptr parseNumberExpr(Token &tok);
     // parse char with correct type and escape sequence
     ExprAST::Ptr parseCharExpr(Token &tok);
+
+    // ( <args> ) -> <stmt>
+    MacroAST::Case *parseMacroCase();
+    // <symbol> : <type>
+    MacroAST::Arg parseMacroArg();
 
     // get next token
     Token &eat();
