@@ -105,7 +105,7 @@ struct FuxStruct {
         ALPHA = 0,
     };
     const version current = ALPHA;
-    const string latest = "Alpha (0)";
+    const string latest = "0.1-dev";
 
     FuxOptions options;  
 };

@@ -16,21 +16,39 @@
 #include "../ast/ast.hpp"
 #include "../parser/type.hpp"
 #include "symbol.hpp"
+#include "scope.hpp"
 
 class Analyser {
 public:
-    Analyser(ErrorManager *error, RootAST::Ptr &root) 
-    : error(error), origin(root), table() {} 
+    Analyser(ErrorManager *error, RootAST::Ptr &root) : error(error), origin(root) {} 
 
     // analyse AST 
     StmtAST::Ptr analyse();
 
-    Table &getTable();
+    // enter new scope
+    void enter();
+    // leave current scope
+    void leave();
+
+    // insert new symbol in current scope
+    void insert(Symbol *symbol);
+    // search for symbol in current scope
+    Symbol *contains(string symbol);
+
+    // analyse AST and return casted pointer
+    template<typename Ast>
+    typename Ast::Ptr process(StmtAST::Ptr &ptr);
+
+    template<typename Ast>
+    typename Ast::Ptr process(typename Ast::Ptr &ptr);
+
+    // mangle a symbol name according to the parameters
+    string mangleSymbol(const string &original, StmtAST::Ptr &link);
 
 private:
     ErrorManager *error;
     RootAST::Ptr &origin;
-    Table table;
+    Scope *current;
 
     void debugPrint(const string message);
 };

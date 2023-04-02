@@ -26,6 +26,8 @@ src
 │   ├── analyser 
 │   │   ├── analyser.cpp - AST analyser impl.
 │   │   ├── analyser.hpp - AST analyser 
+│   │   ├── scope.cpp - Scope header
+│   │   ├── scope.hpp - Scope impl.
 │   │   ├── symbol.cpp - symbol header
 │   │   └── symbol.hpp - symbol impl.
 │   ├── ast

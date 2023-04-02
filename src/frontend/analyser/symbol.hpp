@@ -95,7 +95,7 @@ private:
     bool defined = false;
 };
 
-// TODO: (soon) class, struct, typedef, enum
+// TODO: (soon) class, struct, typedef, enum, macro
 
 class Table {
 public:

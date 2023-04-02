@@ -181,7 +181,7 @@ int printHelp() {
 }
 
 int printVersion() {
-    cout << "Fux Version '" << fux.latest << "'\n";
+    cout << "Fux v" << fux.latest << "\n";
     return 1;
 }
 

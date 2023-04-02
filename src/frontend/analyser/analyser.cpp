@@ -11,65 +11,149 @@
 
 #include "analyser.hpp"
 
-StmtAST::Ptr Analyser::analyse() { return origin->analyse(this); }
+StmtAST::Ptr Analyser::analyse() { 
+    current = new Scope();
+    return origin->analyse(this); 
+}
 
-Table &Analyser::getTable() { return table; }
+void Analyser::enter() { current = current->enter(); }
 
-StmtAST::Ptr NoOperationAST::analyse(Analyser *analyser) { return nullptr; }
+void Analyser::leave() { current = current->leave(); }
 
-StmtAST::Ptr NullExprAST::analyse(Analyser *analyser) { return nullptr; }
+void Analyser::insert(Symbol *symbol) { current->insert(symbol); }
 
-StmtAST::Ptr BoolExprAST::analyse(Analyser *analyser) { return nullptr; }
+Symbol *Analyser::contains(string symbol) { return current->contains(symbol); }
 
-StmtAST::Ptr NumberExprAST::analyse(Analyser *analyser) { return nullptr; }
+template<typename Ast>
+typename Ast::Ptr Analyser::process(StmtAST::Ptr &ptr) { 
+    return (typename Ast::Ptr) dynamic_cast<Ast *>(&*ptr->analyse(this)); 
+}
 
-StmtAST::Ptr CharExprAST::analyse(Analyser *analyser) { return nullptr; }
+template<typename Ast>
+typename Ast::Ptr Analyser::process(typename Ast::Ptr &ptr) {
+    StmtAST::Ptr tmp = (StmtAST::Ptr) &*ptr;
+    return process<Ast>(tmp);
+}
 
-StmtAST::Ptr StringExprAST::analyse(Analyser *analyser) { return nullptr; }
+string Analyser::mangleSymbol(const string &original, StmtAST::Ptr &link) {
+    string ret = "";
 
-StmtAST::Ptr RangeExprAST::analyse(Analyser *analyser) { return nullptr; }
+    switch (link->getASTType()) {
+        default: 
+            assert(!"Analyser::mangleSymbol(): AST type not implemented.");
+    }
+    
+    return ret;
+}
 
-StmtAST::Ptr ArrayExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr NoOperationAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr VariableExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr NullExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr MemberExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr BoolExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr CallExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr NumberExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr UnaryExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr CharExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr BinaryExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr StringExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr TypeCastExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr RangeExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr TernaryExprAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr ArrayExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr VariableDeclAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr VariableExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr InbuiltCallAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr MemberExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr IfElseAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr CallExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr CodeBlockAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr UnaryExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr WhileLoopAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr BinaryExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
-StmtAST::Ptr ForLoopAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr TypeCastExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr TernaryExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr VariableDeclAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr InbuiltCallAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr IfElseAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr CodeBlockAST::analyse(Analyser *analyser) {
+    analyser->enter();
+
+    StmtAST::Vec body = {};
+    for (StmtAST::Ptr &stmt : body)
+        body.push_back(stmt->analyse(analyser));
+    
+    analyser->leave();
+    return make_unique<CodeBlockAST>(body);
+}
+
+StmtAST::Ptr WhileLoopAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr ForLoopAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
 
 StmtAST::Ptr PrototypeAST::analyse(Analyser *analyser) {
     return (StmtAST::Ptr) this;
 }
 
 StmtAST::Ptr FunctionAST::analyse(Analyser *analyser) {
-    proto = (PrototypeAST::Ptr) dynamic_cast<PrototypeAST *>(&*proto->analyse(analyser));
+    proto = analyser->process<PrototypeAST>(proto);
     body = body->analyse(analyser);
     return (StmtAST::Ptr) this;
 }
 
-StmtAST::Ptr EnumerationAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr EnumerationAST::analyse(Analyser *analyser) { 
+    return (StmtAST::Ptr) this; 
+}
 
-StmtAST::Ptr MacroAST::analyse(Analyser *analyser) { return nullptr; }
+StmtAST::Ptr MacroAST::analyse(Analyser *analyser) { 
+    return (StmtAST::Ptr) this; 
+}
 
 StmtAST::Ptr RootAST::analyse(Analyser *analyser) {
     RootAST::Ptr mod = make_unique<RootAST>();
