@@ -12,6 +12,7 @@
 #pragma once
 
 #include "../metadata.hpp"
+#include "../parser/type.hpp"
 
 class Analyser;
 
@@ -57,6 +58,7 @@ public:
     virtual Ptr analyse(Analyser *analyser) = 0;
     virtual AST getASTType() = 0;
     virtual FuxType getFuxType() = 0;
+    virtual string getSymbol();
     virtual void debugPrint(size_t indent = 0) = 0;
 
     bool isExpr();

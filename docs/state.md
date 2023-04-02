@@ -32,6 +32,7 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
     - [&check;] Metadata
     - [&cross;] Threading
 - [...] Analyser
+    - [...] Scopes
     - [...] Symbols
         - [...] Table
         - [...] Variables

@@ -129,9 +129,8 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;  
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
-
-    string &getName();
 };
 
 class CallExprAST : public ExprAST {
@@ -149,6 +148,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override; 
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -165,6 +165,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;    
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -248,7 +249,6 @@ public:
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() override;
     
-    string &getSymbol();
     FuxType &getType();
     ExprAST::Ptr &getValue();
 
@@ -256,6 +256,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -366,9 +367,9 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
     
-    string &getSymbol();
     StmtAST::Vec &getArgs();
 };
 
@@ -389,6 +390,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;    
 
     void setBody(StmtAST::Ptr &body);
@@ -407,6 +409,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override; 
 };
 
@@ -451,6 +454,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 
 private:
@@ -474,6 +478,7 @@ public:
     StmtAST::Ptr analyse(Analyser *analyser) override;
     AST getASTType() override;
     FuxType getFuxType() override;
+    string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
  
     void addSub(StmtAST::Ptr &sub);

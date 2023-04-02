@@ -24,23 +24,31 @@ void Analyser::insert(Symbol *symbol) { current->insert(symbol); }
 
 Symbol *Analyser::contains(string symbol) { return current->contains(symbol); }
 
-template<typename Ast>
-typename Ast::Ptr Analyser::process(StmtAST::Ptr &ptr) { 
-    return (typename Ast::Ptr) dynamic_cast<Ast *>(&*ptr->analyse(this)); 
+template<typename To, typename From>
+typename To::Ptr Analyser::cast(From &ptr) {
+    return (typename To::Ptr) dynamic_cast<To *>(ptr.get());
 }
 
-template<typename Ast>
-typename Ast::Ptr Analyser::process(typename Ast::Ptr &ptr) {
-    StmtAST::Ptr tmp = (StmtAST::Ptr) &*ptr;
-    return process<Ast>(tmp);
+template<typename To, typename From>
+typename To::Ptr Analyser::process(From &ptr) { 
+    StmtAST::Ptr tmp = ptr->analyse(this);
+    return cast<To>(tmp); 
 }
 
-string Analyser::mangleSymbol(const string &original, StmtAST::Ptr &link) {
+string Analyser::mangleSymbol(StmtAST::Ptr &link) {
+    if (link->isExpr())
+        assert(!"Analyser::mangleSymbol(): Linked AST is not a statement, but an expression.");
+    
     string ret = "";
 
     switch (link->getASTType()) {
+        case AST::PrototypeAST:
+            ret += link->getSymbol() + "_" + link->getFuxType().mangledString();
+            for (StmtAST::Ptr &param : dynamic_cast<PrototypeAST *>(link.get())->getArgs())
+                ret += "_" + param->getFuxType().mangledString();
+            break;
         default: 
-            assert(!"Analyser::mangleSymbol(): AST type not implemented.");
+            assert(!"Analyser::mangleSymbol(): Type of linked AST is not implemented.");
     }
     
     return ret;

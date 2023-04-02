@@ -35,15 +35,15 @@ public:
     // search for symbol in current scope
     Symbol *contains(string symbol);
 
+    template<typename To, typename From = StmtAST::Ptr>
+    typename To::Ptr cast(From &ptr);
+
     // analyse AST and return casted pointer
-    template<typename Ast>
-    typename Ast::Ptr process(StmtAST::Ptr &ptr);
+    template<typename To, typename From = StmtAST::Ptr>
+    typename To::Ptr process(From &ptr);
 
-    template<typename Ast>
-    typename Ast::Ptr process(typename Ast::Ptr &ptr);
-
-    // mangle a symbol name according to the parameters
-    string mangleSymbol(const string &original, StmtAST::Ptr &link);
+    // mangle a symbol name according to the linked statement
+    string mangleSymbol(StmtAST::Ptr &link);
 
 private:
     ErrorManager *error;

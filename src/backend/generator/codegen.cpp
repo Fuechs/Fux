@@ -39,7 +39,7 @@ Eisdrache::Local &MemberExprAST::codegen(Eisdrache *eisdrache) { return nullLoca
 Eisdrache::Local &CallExprAST::codegen(Eisdrache *eisdrache) {
     // FIXME: can't get callee symbol as a local
     // Eisdrache::Local &calleeSymbol = callee->codegen(eisdrache);
-    Eisdrache::Func &callee = *eisdrache->getFunc(dynamic_cast<VariableExprAST *>(&*this->callee)->getName());
+    Eisdrache::Func &callee = *eisdrache->getFunc(callee->getSymbol());
 
     if ((*callee)->arg_size() != args.size())
         return nullLocal;

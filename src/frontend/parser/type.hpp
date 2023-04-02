@@ -73,9 +73,11 @@ public:
     static FuxType createPrimitive(Kind kind, size_t pointerDepth = 0, bool array = false, string name = "");
 
     // return FuxType::AccessList as string
-    string accessAsString();
+    string accessAsString(char delim = ' ');
     // return FuxType::Kind as string
     string kindAsString();
+    // return this type as a mangled string
+    string mangledString();
     // output string representation of type
     void debugPrint(bool primitive = false);
 
