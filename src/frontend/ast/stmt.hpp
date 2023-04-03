@@ -18,6 +18,7 @@ class Analyser;
 
 enum class AST {
     // expressions
+    VariadicExprAST,
     NullExprAST,
     BoolExprAST,
     NumberExprAST,

@@ -840,6 +840,10 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
             eat(RBRACE, ParseError::MISSING_PAREN);
             return make_unique<ArrayExprAST>(elements);
         }
+        case TRIPLE_DOT:
+            expr = make_unique<VariadicExprAST>();
+            expr->meta = Metadata(fileName, that);
+            return expr;
         case _EOF: 
             createError(ParseError::UNEXPECTED_EOF, "Unexpected EOF while parsing Primary Expression",
                 that, "Expected a primay expression here", 0, "", false, true);
@@ -983,6 +987,12 @@ MacroAST::Arg Parser::parseMacroArg() {
         return that;
     }
 
+    if (check(TRIPLE_DOT)) {
+        MacroAST::Arg that("...", MacroAST::NONE);
+        that.meta = Metadata(fileName, peek(-1));
+        return that;
+    }
+
     Token &symbol = eat(IDENTIFIER);
     MacroAST::Arg that(symbol.value, MacroAST::NONE);
     eat(COLON);
@@ -1004,6 +1014,13 @@ MacroAST::Arg Parser::parseMacroArg() {
                 "Parsed macro parameter", id.start, 
                 "Expected a macro parameter type here", 
                 {error->createHelp(id.line, "Possible types are: 'type', 'ident', 'expr', 'stmt' or 'block'")})});
+
+    // symbol: id[]
+    that.array = check(ARRAY_BRACKET);
+
+    // symbol: id, ...
+    // current = ^ 
+    that.variadic = (peek() == TRIPLE_DOT);
 
     that.meta = Metadata(&fileName, nullptr, symbol.line, id.line, symbol.start, id.end);
     return that;

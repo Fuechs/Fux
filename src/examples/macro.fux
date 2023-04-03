@@ -13,3 +13,8 @@ macro def (type_: type, symbol: ident, value: expr) -> {
 }
 
 y := def(f64, x, area(pi, pi, pi));
+
+macro test {
+    (args: expr[], ...) -> { test(args); }
+    (*) -> { test(); }
+}

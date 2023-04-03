@@ -54,7 +54,7 @@ string Analyser::mangleSymbol(StmtAST::Ptr &link) {
     return ret;
 }
 
-StmtAST::Ptr NoOperationAST::analyse(Analyser *analyser) {
+StmtAST::Ptr VariadicExprAST::analyse(Analyser *analyser) {
     return (StmtAST::Ptr) this;
 }
 
@@ -111,6 +111,10 @@ StmtAST::Ptr TypeCastExprAST::analyse(Analyser *analyser) {
 }
 
 StmtAST::Ptr TernaryExprAST::analyse(Analyser *analyser) {
+    return (StmtAST::Ptr) this;
+}
+
+StmtAST::Ptr NoOperationAST::analyse(Analyser *analyser) {
     return (StmtAST::Ptr) this;
 }
 

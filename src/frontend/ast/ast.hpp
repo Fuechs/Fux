@@ -23,6 +23,15 @@ typedef map<string, FuxType> ArgMap;
 
 /// EXPRESSIONS ///
 
+class VariadicExprAST : public ExprAST {
+public:
+    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
+    StmtAST::Ptr analyse(Analyser *analyser) override;
+    AST getASTType() override;
+    FuxType getFuxType() override;
+    void debugPrint(size_t indent = 0) override;
+};
+
 class NullExprAST : public ExprAST {
 public:    
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
@@ -428,12 +437,14 @@ public:
     struct Arg {
         using Vec = vector<Arg>;
 
-        Arg(string symbol = "", ID type = NONE) : symbol(symbol), type(type) {}
+        Arg(string symbol = "", ID type = NONE, bool array = false, bool variadic = false) 
+        : symbol(symbol), type(type), array(array), variadic(variadic) {}
 
         Arg &operator=(const Arg &copy);
 
         string symbol;
         ID type;
+        bool array, variadic;
         Metadata meta;
     };
 

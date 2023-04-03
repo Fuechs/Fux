@@ -14,6 +14,12 @@
 StmtAST::Ptr nullStmt = StmtAST::Ptr(nullptr);
 ExprAST::Ptr nullExpr = ExprAST::Ptr(nullptr);
 
+/// VARIADIC EXPR ///
+
+AST VariadicExprAST::getASTType() { return AST::VariadicExprAST; }
+
+FuxType VariadicExprAST::getFuxType() { return FuxType::NO_TYPE; }
+
 /// NULL EXPR ///
 
 AST NullExprAST::getASTType() { return AST::NullExprAST; }
@@ -320,7 +326,7 @@ _i64 RootAST::addSizeExpr(ExprAST::Ptr &sizeExpr) {
 string StmtAST::getSymbol() { return string(); }
 
 bool StmtAST::isExpr() { 
-    return (this->getASTType() >= AST::NullExprAST 
+    return (this->getASTType() >= AST::VariadicExprAST 
         && this->getASTType() <= AST::TernaryExprAST);  
 }
 

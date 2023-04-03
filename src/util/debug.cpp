@@ -81,11 +81,13 @@ void debugBody(size_t indent, StmtAST::Ptr &ast) {
         cout << CC::RED << "NULLBODY" << CC::DEFAULT;
 } 
 
-void NoOperationAST::debugPrint(size_t indent) { 
-    debugIndent(indent, "noop"); 
-} 
+void VariadicExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent, "..."); 
+}
 
-void NullExprAST::debugPrint(size_t indent) { debugIndent(indent, "null"); }
+void NullExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent, "null"); 
+}
 
 void BoolExprAST::debugPrint(size_t indent) { 
     debugIndent(indent);
@@ -190,6 +192,10 @@ void TernaryExprAST::debugPrint(size_t indent) {
     elseExpr->debugPrint();
     cout << ")";
 }
+
+void NoOperationAST::debugPrint(size_t indent) { 
+    debugIndent(indent, "noop"); 
+} 
 
 void VariableDeclAST::debugPrint(size_t indent) {
     debugIndent(indent, symbol);
@@ -318,6 +324,14 @@ void MacroAST::debugPrint(size_t indent) {
                 case WILDCARD:  cout << "*"; break;
                 default:        cout << CC::RED << "NONE" << CC::DEFAULT; break;
             }
+
+            if (arg.array) {
+                if (arg.variadic)
+                    cout << "[...]";
+                else
+                    cout << "[]";
+            }
+
             
             if (&arg != &_case->args.back())
                 cout << ", ";
