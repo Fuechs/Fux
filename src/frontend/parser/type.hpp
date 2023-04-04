@@ -70,7 +70,7 @@ public:
     // shorthand for array types
     static FuxType createArray(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "", _i64 sizeID = -1);    
     // shorthand for primitive types (e.g. for type casts)
-    static FuxType createPrimitive(Kind kind, size_t pointerDepth = 0, bool array = false, string name = "");
+    static FuxType createPrimitive(Kind kind, size_t pointerDepth = 0, bool reference = false, bool array = false, string name = "");
 
     // return FuxType::AccessList as string
     string accessAsString(char delim = ' ');

@@ -125,7 +125,9 @@ void ArrayExprAST::debugPrint(size_t indent) {
     cout << "}";
 }
 
-void VariableExprAST::debugPrint(size_t indent) { debugIndent(indent, name); }
+void VariableExprAST::debugPrint(size_t indent) { 
+    debugIndent(indent, name); 
+}
 
 void CallExprAST::debugPrint(size_t indent) { 
     if (asyncCall) 

@@ -611,9 +611,9 @@ ExprAST::Ptr Parser::parseAddressExpr() {
 ExprAST::Ptr Parser::parseDereferenceExpr() { 
     if (*current == ASTERISK) {
         Token &op = eat();
-        ExprAST::Ptr expr = parseTypeCastExpr();
+        ExprAST::Ptr expr = parseDereferenceExpr();
         return make_unique<UnaryExprAST>(op, expr);
-    }
+    } 
 
     return parseTypeCastExpr(); 
 }
@@ -774,6 +774,10 @@ ExprAST::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
     ExprAST::Ptr expr;
 
+    // Pointer Types will be parsed as dereference expressions.
+    // The analyser has to translate these to primitive types. 
+    // I don't know wether it is possible to filter these while parsing.
+    // e.g.: *(*(i64)) ---Analyser--> **i64  
     if (that.isType()) {
         expr = make_unique<VariableExprAST>(that.value);
         expr->meta = Metadata(fileName, that);
@@ -860,14 +864,18 @@ FuxType Parser::parseType(bool primitive) {
     Metadata meta = Metadata(fileName, *current);
     
     if (primitive) {
+        bool reference = check(POINTER);
+
         int64_t pointerDepth = 0;
-        while(check(ASTERISK)) 
+        while (check(ASTERISK)) 
             ++pointerDepth;
+
         if (!current->isType()) 
             return FuxType(FuxType::NO_TYPE, pointerDepth);
+        
         const FuxType::Kind kind = (FuxType::Kind) current->type;
         const Token &value = eat();
-        FuxType ret = FuxType::createPrimitive(kind, pointerDepth, check(ARRAY_BRACKET), value.value);
+        FuxType ret = FuxType::createPrimitive(kind, pointerDepth, reference, check(ARRAY_BRACKET), value.value);
         meta.copyEnd(value);
         ret.meta = meta;
         return ret;

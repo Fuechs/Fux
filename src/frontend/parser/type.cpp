@@ -21,6 +21,7 @@ FuxType::~FuxType() {
 FuxType &FuxType::operator=(const FuxType &copy) {
     this->kind = copy.kind;
     this->pointerDepth = copy.pointerDepth;
+    this->reference = copy.reference;
     this->access = copy.access;
     this->name = copy.name;
     this->array = copy.array;
@@ -49,8 +50,8 @@ FuxType FuxType::createArray(Kind kind, size_t pointerDepth, bool reference, Acc
     return FuxType(kind, pointerDepth, reference, accessList, true, sizeID, name);
 }
 
-FuxType FuxType::createPrimitive(Kind kind, size_t pointerDepth, bool array, string name) {
-    return FuxType(kind, pointerDepth, false, AccessList(), array, -1, name);
+FuxType FuxType::createPrimitive(Kind kind, size_t pointerDepth, bool reference, bool array, string name) {
+    return FuxType(kind, pointerDepth, reference, AccessList(), array, -1, name);
 }
 
 string FuxType::accessAsString(char delim) {
@@ -89,6 +90,8 @@ string FuxType::mangledString() {
 
 void FuxType::debugPrint(bool primitive) {
     if (primitive) {
+        if (reference)
+            cout << "-> ";
         for (size_t pd = pointerDepth; pd --> 0;)
             cout << "*";
         cout << kindAsString();

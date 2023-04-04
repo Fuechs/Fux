@@ -9,8 +9,6 @@
  * 
  */
 
-#pragma once
-
 #include "lifetime.hpp"
 
 Lifetime::~Lifetime() { uses.clear(); }
