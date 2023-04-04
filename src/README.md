@@ -1,6 +1,6 @@
 # `src/` Tree
 
-> Last updated on 2023-03-22
+> Last updated on 2023-04-04
 
 ```
 src
@@ -26,6 +26,8 @@ src
 │   ├── analyser 
 │   │   ├── analyser.cpp - AST analyser impl.
 │   │   ├── analyser.hpp - AST analyser 
+│   │   ├── lifetime.cpp - Object lifetime impl.
+│   │   ├── lifetime.hpp - Object lifetme header
 │   │   ├── scope.cpp - Scope header
 │   │   ├── scope.hpp - Scope impl.
 │   │   ├── symbol.cpp - symbol header

@@ -24,21 +24,22 @@ I've been inspired by [C++](https://isocpp.org/), [Python](https://python.org/),
 - [...] Parser
     - [&check;] Expressions
     - [...] Statements
-        - [&check;] Other statements
+        - [&check;] Other Statements
         - [&cross;] Structs
-        - [&check;] Enumerations
         - [&cross;] Type Definitions
     - [...] Error Reporting
     - [&check;] Metadata
     - [&cross;] Threading
 - [...] Analyser
     - [...] Scopes
+    - [...] Lifetimes
     - [...] Symbols
         - [...] Table
         - [...] Variables
         - [...] Functions
         - [&cross;] Structs / Classes
         - [&cross;] Enumerations
+        - [&cross;] Macros
         - [&cross;] Type Definitions
     - [...] Expressions
     - [...] Statements
