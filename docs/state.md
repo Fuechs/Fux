@@ -4,6 +4,9 @@
 
 ### Built with [![C++][cpp-badge]](https://isocpp.org/)&nbsp;[![LLVM][llvm-badge]](https://llvm.org/)
 
+> **The compiler is currently undergoing a major rework. \
+> See the `rework` branch for progress.**
+
 Fux is currently still in early development. There is no working compiler available for this language. \
 **Fux is not supposed to be a superset of C++.**
 

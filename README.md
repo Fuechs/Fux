@@ -39,7 +39,10 @@ main(argc: u64, argv: **c8): u64 {
 
 > __Warning__ \
 > Please note that Fux is still in early development. \
-> As of now only MacOS and Linux will be supported.
+> As of now only MacOS and Linux will be supported. \
+> \
+> **The compiler is currently undergoing a major rework. \
+> See the `rework` branch for progress.**
 
 ## A Modern, Flexible Programming Language for All
 
