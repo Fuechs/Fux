@@ -10,6 +10,7 @@
  */
 
 #include "symbol.hpp"
+#include "scope.hpp"
 
 /// SYMBOL ///
 
@@ -55,13 +56,11 @@ void Variable::addMember(Symbol *symbol) {
 
 /// FUNCTION ///
 
-Function::Function(FuxType type, string symbol, 
-    FuxType::Vec parameters, Symbol::Vec locals, 
+Function::Function(FuxType type, string symbol, FuxType::Vec parameters, 
     Metadata meta, Symbol *parent) {
         this->type = type;
         this->symbol = symbol;
         this->parameters = parameters;
-        this->locals = locals;
         this->parent = parent;
         this->meta = meta;
 }
@@ -69,7 +68,6 @@ Function::Function(FuxType type, string symbol,
 Function::~Function() { 
     symbol.clear(); 
     parameters.clear();
-    locals.clear();
 }
 
 Symbol::Kind Function::getKind() const { return FUNCTION; }
@@ -82,10 +80,7 @@ bool Function::isDefined() const { return defined; }
 
 void Function::setDefined() { defined = true; }
 
-void Function::addMember(Symbol *symbol) {
-    symbol->setParent(this);
-    locals.push_back(symbol);
-}
+void Function::addMember(Symbol *symbol) { symbol->setParent(this); }
 
 /// TABLE ///
 

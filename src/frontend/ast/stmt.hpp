@@ -51,8 +51,8 @@ enum class AST {
 
 class StmtAST {
 public:
-    typedef unique_ptr<StmtAST> Ptr;
-    typedef vector<Ptr> Vec;
+    using Ptr = unique_ptr<StmtAST>;
+    using Vec = vector<Ptr>;
 
     virtual ~StmtAST() {}
     FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache) = 0;)

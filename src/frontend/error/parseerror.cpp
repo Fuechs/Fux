@@ -33,7 +33,7 @@ ParseError::~ParseError() {
 }
 
 void ParseError::report() {
-    if (hasFlag(REPORTED) /*|| !fux.options.warnings && hasFlag(WARNING)*/)
+    if (hasFlag(REPORTED) /* TODO: || !fux.options.warnings && hasFlag(WARNING)*/)
         return;
     flags.push_back(REPORTED);
 
@@ -58,7 +58,7 @@ bool ParseError::hasFlag(Flag flag) {
 string ParseError::printHead() {
     stringstream ss;
     ss << SC::BOLD;
-    if (/*!fux.options.werrors &&*/ hasFlag(WARNING)) 
+    if (/* TODO: !fux.options.werrors &&*/ hasFlag(WARNING)) 
         ss << CC::MAGENTA << "[warning]";
     else 
         ss << CC::RED << "[error]";

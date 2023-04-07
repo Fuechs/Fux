@@ -14,6 +14,9 @@
 #include "../../fux.hpp"
 #include "../parser/type.hpp"
 #include "../metadata.hpp"
+#include "lifetime.hpp"
+
+class Scope;
 
 class Symbol {
 public:
@@ -72,12 +75,12 @@ public:
 
 private:
     FuxType type;
+    Lifetime *life;
 };
 
 class Function : public Symbol {
 public:
-    Function(FuxType type = FuxType::NO_TYPE, string symbol = "", 
-        FuxType::Vec parameters = {}, Symbol::Vec locals = {}, 
+    Function(FuxType type = FuxType::NO_TYPE, string symbol = "", FuxType::Vec parameters = {}, 
         Metadata meta = Metadata(), Symbol *parent = nullptr);
     ~Function() override;
     
@@ -91,8 +94,8 @@ public:
 private: 
     FuxType type;
     FuxType::Vec parameters;
-    Symbol::Vec locals;
     bool defined = false;
+    Lifetime *life;
 };
 
 // TODO: (soon) class, struct, typedef, enum, macro

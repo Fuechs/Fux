@@ -15,8 +15,8 @@
 
 class ExprAST : public StmtAST {
 public:
-    typedef unique_ptr<ExprAST> Ptr;
-    typedef vector<Ptr> Vec;
+    using Ptr = unique_ptr<ExprAST>;
+    using Vec = vector<Ptr>;
 
     virtual ~ExprAST() {}
     FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache) = 0;)

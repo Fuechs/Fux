@@ -254,6 +254,8 @@ class VariableDeclAST : public StmtAST {
     ExprAST::Ptr value;
 
 public:
+    using Ptr = unique_ptr<VariableDeclAST>;
+
     VariableDeclAST(string symbol, FuxType type = FuxType(), ExprAST::Ptr &value = nullExpr) 
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableDeclAST() override;

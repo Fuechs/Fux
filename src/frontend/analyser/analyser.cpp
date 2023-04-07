@@ -150,7 +150,23 @@ StmtAST::Ptr ForLoopAST::analyse(Analyser *analyser) {
 }
 
 StmtAST::Ptr PrototypeAST::analyse(Analyser *analyser) {
-    return (StmtAST::Ptr) this;
+    StmtAST::Ptr mod = (StmtAST::Ptr) this;
+    const string sym = analyser->mangleSymbol(mod);
+
+    if (analyser->contains(sym))
+        // TODO: duplicate declaration error...
+        return mod;
+    
+    FuxType::Vec types = {};
+    for (StmtAST::Ptr &arg : args) {
+        VariableDeclAST::Ptr mod_arg = analyser->process<VariableDeclAST>(arg);
+        if (mod_arg)
+            types.push_back(mod_arg->getFuxType());
+    }
+    
+    // TODO: parent
+    analyser->insert(new Function(type, sym, types, meta));
+    return mod;
 }
 
 StmtAST::Ptr FunctionAST::analyse(Analyser *analyser) {
