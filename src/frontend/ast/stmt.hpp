@@ -1,9 +1,9 @@
 /**
  * @file stmt.hpp
  * @author fuechs
- * @brief stmt ast class header
+ * @brief statement AST
  * @version 0.1
- * @date 2023-01-15
+ * @date 2023-04-07
  * 
  * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
@@ -11,60 +11,31 @@
 
 #pragma once
 
-#include "../metadata.hpp"
-#include "../parser/type.hpp"
+#include "../../fux.hpp"
+#include "../symbol.hpp"
+#include "../type.hpp"
 
-class Analyser;
+class Debug { public: using Ptr = std::shared_ptr<Debug>; };
+class Analyser { public: using Ptr = std::shared_ptr<Analyser>; };
+class Generator { public: using Ptr = std::shared_ptr<Generator>; };
 
 enum class AST {
-    // expressions
-    VariadicExprAST,
-    NullExprAST,
-    BoolExprAST,
-    NumberExprAST,
-    CharExprAST,
-    StringExprAST,
-    RangeExprAST,
-    ArrayExprAST,
-    VariableExprAST,
-    MemberExprAST,
-    CallExprAST,
-    UnaryExprAST,
-    BinaryExprAST,
-    TypeCastExprAST,
-    TernaryExprAST,
-
-    // statements
-    NoOperationAST,
-    VariableDeclAST,
-    InbuiltCallAST,
-    IfElseAST,
-    CodeBlockAST,
-    WhileLoopAST,
-    ForLoopAST,
-    PrototypeAST,
-    FunctionAST,
-    EnumerationAST,
-    MacroAST,
-    RootAST,
+    Stmt,
+    Expr,
 };
 
-class StmtAST {
+class Stmt {
 public:
-    using Ptr = unique_ptr<StmtAST>;
-    using Vec = vector<Ptr>;
+    using Ptr = std::unique_ptr<Stmt>;
+    using Vec = std::vector<Ptr>;
 
-    virtual ~StmtAST() {}
-    FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache) = 0;)
-    virtual Ptr analyse(Analyser *analyser) = 0;
+    virtual Ptr analyse(Analyser::Ptr analyser);
+    virtual Sym::Ptr codegen(Generator::Ptr generator);
+
+    virtual void debugPrint(Debug::Ptr debug);
+    virtual std::string getRawSym();
+    virtual Type::Ptr getType();
     virtual AST getASTType() = 0;
-    virtual FuxType getFuxType() = 0;
-    virtual string getSymbol();
-    virtual void debugPrint(size_t indent = 0) = 0;
 
     bool isExpr();
-
-    Metadata meta = Metadata();
 };
-
-extern StmtAST::Ptr nullStmt;

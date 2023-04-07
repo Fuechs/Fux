@@ -1,9 +1,9 @@
 /**
  * @file io.cpp
  * @author fuechs
- * @brief io / string operations
+ * @brief fux io util
  * @version 0.1
- * @date 2023-04-07
+ * @date 2022-11-07
  * 
  * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
@@ -33,12 +33,6 @@ const std::string getDirectory(const std::string path) {
 
 const std::string getFileName(const std::string &path) {
     return path.substr(path.find_last_of("/") + 1);
-}
-
-std::string toLower(std::string data) {
-    std::transform(data.begin(), data.end(), data.begin(), 
-        [](unsigned char c){ return std::tolower(c); });
-    return data;
 }
 
 std::string escapeSequences(std::string value) {

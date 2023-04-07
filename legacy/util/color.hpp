@@ -1,9 +1,9 @@
 /**
  * @file color.hpp
  * @author fuechs
- * @brief color header for output
+ * @brief fux color header - print in color
  * @version 0.1
- * @date 2023-04-07
+ * @date 2022-11-05
  * 
  * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
@@ -77,14 +77,19 @@ namespace {
     using BC = BackColor;
     using SC = StyleCode;
 
-    std::ostream &operator<<(std::ostream &os, CC code);
-    std::ostream &operator<<(std::ostream &os, BC code);
-    std::ostream &operator<<(std::ostream &os, SC code);
+    std::ostream &operator<<(std::ostream &os, CC code) {
+        return os << "\033[" << static_cast<int>(code) << "m";
+    }
 
-    std::string operator+(std::string LHS, CC RHS);
-    std::string operator+(std::string LHS, BC RHS);
-    std::string operator+(std::string LHS, SC RHS);
+    std::ostream &operator<<(std::ostream &os, BC code) {
+        return os << "\033[" << static_cast<int>(code) << "m";
+    }
+
+    std::ostream &operator<<(std::ostream &os, SC code) {
+        return os << "\033[" << static_cast<int>(code) << "m";
+    }
 
     // yellow string "Debug: "
-    extern std::string debugText;
+    std::string debugText = "\033[33mDebug\033[39m: ";
+
 }
