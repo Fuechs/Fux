@@ -1,9 +1,9 @@
 /**
  * @file stmt.hpp
  * @author fuechs
- * @brief statement AST
+ * @brief stmt ast class header
  * @version 0.1
- * @date 2023-04-07
+ * @date 2023-01-15
  * 
  * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
@@ -11,31 +11,62 @@
 
 #pragma once
 
-#include "../../fux.hpp"
-#include "../symbol.hpp"
-#include "../type.hpp"
+#include "../metadata.hpp"
+#include "../parser/type.hpp"
 
-class Debug { public: using Ptr = std::shared_ptr<Debug>; };
-class Analyser { public: using Ptr = std::shared_ptr<Analyser>; };
-class Generator { public: using Ptr = std::shared_ptr<Generator>; };
+FUX_AC(class Analyser;)
 
 enum class AST {
-    Stmt,
+    // expressions
+    VariadicExpr,
+    NullExpr,
+    BoolExpr,
+    NumberExpr,
+    CharExpr,
+    StringExpr,
+    RangeExpr,
+    ArrayExpr,
+    SymbolExpr,
+    MemberExpr,
+    CallExpr,
+    UnaryExpr,
+    BinaryExpr,
+    TypeCastExpr,
+    TernaryExpr,
     Expr,
+
+    // statements
+    NoOperationStmt,
+    VariableStmt,
+    InbuiltCallStmt,
+    IfElseStmt,
+    BlockStmt,
+    WhileStmt,
+    ForStmt,
+    PrototypeStmt,
+    FunctionStmt,
+    EnumStmt,
+    MacroStmt,
+    Root,
+    Stmt,
 };
 
 class Stmt {
 public:
-    using Ptr = std::unique_ptr<Stmt>;
-    using Vec = std::vector<Ptr>;
+    using Ptr = shared_ptr<Stmt>;
+    using Vec = vector<Ptr>;
 
-    virtual Ptr analyse(Analyser::Ptr analyser);
-    virtual Sym::Ptr codegen(Generator::Ptr generator);
-
-    virtual void debugPrint(Debug::Ptr debug);
-    virtual std::string getRawSym();
-    virtual Type::Ptr getType();
-    virtual AST getASTType() = 0;
+    virtual ~Stmt();
+    FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache);)
+    FUX_AC(virtual Ptr analyse(Analyser *analyser);)
+    virtual AST getASTType();
+    virtual FuxType getFuxType();
+    virtual string getSymbol();
+    virtual void debugPrint(size_t indent = 0);
 
     bool isExpr();
+
+    Metadata meta = Metadata();
 };
+
+extern Stmt::Ptr nullStmt;

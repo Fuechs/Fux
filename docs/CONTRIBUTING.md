@@ -3,7 +3,7 @@
 > __Note__ \
 > These guidelines are rather incomplete and may change at any time.
 > 
-> Last updated on 2023-03-03
+> Last updated on 2023-04-08
 
 - [Introduction](#introduction)
     - [Ways to contribute](#ways-to-contribute)
@@ -136,21 +136,21 @@ size_t id;
 - The same goes for dynamic pointers which are called `Ptr`.
 
 ```cpp
-class SourceFile {
-    typedef vector<SourceFile *> Vec;
-    typedef vector<Vec> Groups;
+class Source {
+    using Vec = vector<Source *>;
+    using Groups = vector<Vec>;
 };
 
-class StmtAST {
-    typedef unique_ptr<StmtAST> Ptr; 
-    typedef vector<Ptr> Vec;
+class Stmt {
+    using Ptr = shared_ptr<Stmt>;
+    using Vec = vector<Ptr>;
 };
 ```
 
 - (Especially regarding AST classes) Use references in the constructor for dynamic pointers and call `std::move` in the constructor.
 
 ```cpp
-SomeConstructor(ExprAST::Ptr &LHS, ExprAST::Ptr &RHS)
+SomeConstructor(Expr::Ptr &LHS, Expr::Ptr &RHS)
 : LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 ```
 

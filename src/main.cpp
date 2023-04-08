@@ -10,8 +10,13 @@
  */
 
 #include "fux.hpp"
+#include "util/source.hpp"
 
 FuxStruct fux;
+
+int parseArguments(int argc, char **argv);
+int printVersion();
+int printHelp();
 
 int main(int argc, char **argv) {
     int result = 1;
@@ -52,6 +57,13 @@ int main(int argc, char **argv) {
         std::cout << ".\n";
     }
 
+    ErrorManager *error = new ErrorManager();
+    Source *main = new Source(error, fux.mainFile, true);
+    fux.sources.push_back(main);
+
+    main->parse();
+    main->root->debugPrint();
+
     return result;
 }
 
@@ -65,7 +77,7 @@ int parseArguments(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
 
         if (cmp("-v"))
-            return printHelp();
+            return printVersion();
         
         else if (cmp("-c")) 
             fux.compileOnly = true;

@@ -1,9 +1,9 @@
 /**
  * @file io.hpp
  * @author fuechs
- * @brief io / string operations
+ * @brief fux io util header
  * @version 0.1
- * @date 2023-04-07
+ * @date 2022-11-06
  * 
  * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
@@ -11,13 +11,13 @@
 
 #pragma once
 
+#include <algorithm>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <vector>
 #include <iterator>
-#include <algorithm>
 
 // reads and returns contents of a file
 const std::string readFile(const std::string &path);
@@ -30,9 +30,9 @@ const std::string getDirectory(const std::string path);
 // "some/path/file.txt" --> "file.txt"
 const std::string getFileName(const std::string &path);
 
-// convert string to lowercase
+// convert a string to lowercase
 // from https://stackoverflow.com/a/313990
-std::string toLower(std::string);
+std::string toLower(std::string data);
 
 // escape all escape sequences in string
 std::string escapeSequences(std::string);

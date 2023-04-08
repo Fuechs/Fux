@@ -3,7 +3,7 @@
  * @author fuechs
  * @brief fux base header
  * @version 0.1
- * @date 2023-04-07
+ * @date 2022-11-03
  * 
  * @copyright Copyright (c) 2020-2023, Fuechs and Contributors. All rights reserved.
  * 
@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <future>
@@ -26,7 +27,11 @@
 #include "util/color.hpp"
 #include "util/io.hpp"
 
-using StringVec = std::vector<std::string>;
+using std::cout, std::cerr, std::endl, std::exception, std::make_shared, std::make_unique,
+        std::map, std::pair, std::reference_wrapper, std::shared_ptr, 
+        std::string, std::stringstream, std::to_string, std::unique_ptr, std::vector;
+
+using StringVec = vector<string>;
 
 // #define FUX_BACKEND
 
@@ -65,6 +70,8 @@ using StringVec = std::vector<std::string>;
     #define FUX_UNKNOWN_PLATFORM
 #endif
 
+class Source;
+
 // compiler options / flags
 struct FuxStruct {
     std::string mainFile = "";              // main file containing main() function
@@ -77,6 +84,8 @@ struct FuxStruct {
             "/usr/local/include/fux/"
         #endif
     }; 
+
+    vector<Source *> sources = {};
 
     bool aggressive     = false; // aggressive errors
     bool compileOnly    = false; // compile only to llvm ir

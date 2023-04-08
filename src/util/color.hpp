@@ -14,7 +14,6 @@
 #include <ostream>
 #include <string>
 
-namespace {
 
     enum class ColorCode {
         BLACK = 30,
@@ -87,4 +86,3 @@ namespace {
 
     // yellow string "Debug: "
     extern std::string debugText;
-}
