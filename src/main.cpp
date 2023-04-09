@@ -108,7 +108,7 @@ int parseArguments(int argc, char **argv) {
         else if (cmp("-w"))
             fux.warnings = false;
         
-        else if (cmp("-errlimti")) {
+        else if (cmp("-errlimit")) {
             if ((i + 1) >= argc)
                 std::cerr << "count required after option '-errlmt'\n";
             else 
