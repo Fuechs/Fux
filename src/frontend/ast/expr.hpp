@@ -15,7 +15,7 @@
 
 class Expr : public Stmt {
 public:
-    using Ptr = unique_ptr<Expr>;
+    using Ptr = shared_ptr<Expr>;
     using Vec = vector<Ptr>;
     
     // enclosed in paranthesis, used to silence errors / warnings

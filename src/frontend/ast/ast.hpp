@@ -18,6 +18,7 @@
 #include "../parser/value.hpp"
 #include "expr.hpp"
 #include "op.hpp"
+#include "func.hpp"
 
 typedef map<string, FuxType> ArgMap;
 
@@ -49,8 +50,7 @@ class NumberExpr : public Expr {
     ValueStruct *value;
 
 public:
-    template<typename T>
-    NumberExpr(T value) : value(new ValueStruct(value)) {}
+    NumberExpr(_u64 value) : value(new ValueStruct(value)) {}
     ~NumberExpr();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
@@ -292,6 +292,8 @@ class BlockStmt : public Stmt {
     Stmt::Vec body;
 
 public:
+    using Ptr = shared_ptr<BlockStmt>;
+
     BlockStmt() : body(Stmt::Vec()) {}
     BlockStmt(Stmt::Vec &body) : body(std::move(body)) {}
 
@@ -337,56 +339,6 @@ public:
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
     void debugPrint(size_t indent = 0) override;
-};
-
-typedef unique_ptr<BlockStmt> BlockPtr;
-
-// prototype of a function
-// name and arguments
-class PrototypeStmt : public Stmt {
-    FuxType type;
-    string symbol;
-    Stmt::Vec args;
-
-public:
-    typedef unique_ptr<PrototypeStmt> Ptr;
-
-    PrototypeStmt(FuxType type, const string &symbol, Stmt::Vec &args)
-    : type(type), symbol(symbol), args(std::move(args)) {}
-    ~PrototypeStmt() override;
-    
-    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
-    AST getASTType() override;
-    FuxType getFuxType() override;
-    string getSymbol() override;
-    void debugPrint(size_t indent = 0) override;
-    
-    Stmt::Vec &getArgs();
-};
-
-class FunctionStmt : public Stmt {
-    PrototypeStmt::Ptr proto;
-    Stmt::Ptr body;
-    Stmt::Vec locals; // local variables that are declared in this function
-
-public:
-    typedef unique_ptr<FunctionStmt> Ptr;
-
-    FunctionStmt(FuxType type, const string &symbol, Stmt::Vec &args)
-    : proto(make_unique<PrototypeStmt>(type, symbol, args)), body(nullptr), locals(Stmt::Vec()) {}
-    FunctionStmt(PrototypeStmt::Ptr &proto, Stmt::Ptr &body)
-    : proto(std::move(proto)), body(std::move(body)) {}
-
-    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
-    AST getASTType() override;
-    FuxType getFuxType() override;
-    string getSymbol() override;
-    void debugPrint(size_t indent = 0) override;    
-
-    void setBody(Stmt::Ptr &body);
-    void addLocal(Stmt::Ptr &local);
 };
 
 class EnumStmt : public Stmt {
@@ -462,7 +414,7 @@ class Root : public Stmt {
     Expr::Vec arraySizeExprs; 
 
 public:
-    typedef unique_ptr<Root> Ptr;
+    typedef shared_ptr<Root> Ptr;
     typedef vector<Ptr> Vec;
 
     Root() : program(Stmt::Vec()) {}        

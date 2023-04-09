@@ -54,14 +54,6 @@ void callASTDebug(size_t indent, Stmt::Ptr &ast) {
         cout << CC::RED << "NULLSTMT" << CC::DEFAULT;
 }
 
-void callASTDebug(size_t indent, PrototypeStmt::Ptr &ast) {
-    debugIndent(indent);
-    if (ast)
-        ast->debugPrint(indent);
-    else
-        cout << CC::RED << "NULLPROTO" << CC::DEFAULT;
-}
-
 void callASTDebug(size_t indent, Expr::Ptr &ast) {
     debugIndent(indent);
     if (ast)
@@ -273,20 +265,22 @@ void ForStmt::debugPrint(size_t indent) {
     debugBody(indent, body);
 }
 
-void PrototypeStmt::debugPrint(size_t indent) {
+void FunctionStmt::debugPrint(size_t indent) { 
     debugIndent(indent, symbol);
     cout << "(";
-    for (Stmt::Ptr &param : args) {
-        callASTDebug(0, param);
-        if (param != args.back())
+    for (Parameter::Ptr &param : parameters) {
+        cout << param->symbol;
+        param->type.debugPrint();
+        if (param->value) {
+            cout << " = ";
+            callASTDebug(0, param->value);
+        }
+
+        if (param != parameters.back())
             cout << ", ";
     }
     cout << ")";
     type.debugPrint();
-}
-
-void FunctionStmt::debugPrint(size_t indent) { 
-    callASTDebug(indent, proto);
     cout << "\n";
     debugIndent(indent, "[ ");
     for (Stmt::Ptr &local : locals) {

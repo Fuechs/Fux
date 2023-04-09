@@ -140,7 +140,7 @@ Stmt::Ptr BlockStmt::analyse(Analyser *analyser) {
         body.push_back(stmt->analyse(analyser));
     
     analyser->leave();
-    return make_unique<BlockStmt>(body);
+    return make_shared<BlockStmt>(body);
 }
 
 Stmt::Ptr WhileStmt::analyse(Analyser *analyser) {
@@ -186,7 +186,7 @@ Stmt::Ptr MacroStmt::analyse(Analyser *analyser) {
 }
 
 Stmt::Ptr Root::analyse(Analyser *analyser) {
-    Root::Ptr mod = make_unique<Root>();
+    Root::Ptr mod = make_shared<Root>();
     Stmt::Ptr modStmt = nullptr;
     for (Stmt::Ptr &stmt : program) 
         mod->addSub((modStmt = stmt->analyse(analyser)));  

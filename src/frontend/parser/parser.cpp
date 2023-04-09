@@ -14,7 +14,7 @@
 Parser::Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile) 
 : fileName(fileName), error(error), mainFile(mainFile) {
     lexer = new Lexer(source, fileName, error);
-    root = make_unique<Root>();
+    root = make_shared<Root>();
 }
 
 Parser::~Parser() {
@@ -34,17 +34,18 @@ Root::Ptr Parser::parse() {
         if ((branch = parseStmt())) // check for nullptr in case of error
             root->addSub(branch);
     
-    return std::move(root);
+    return root;
 }
 
 Stmt::Ptr Parser::parseStmt(bool expectSemicolon) {
     if (*current == SEMICOLON) { // handle while (...); or for (;;);
         if (expectSemicolon)
             eat();
-        return make_unique<NoOperationStmt>();
+        return make_shared<NoOperationStmt>();
     }
 
     Stmt::Ptr stmt = parseMacroStmt();
+
     if (expectSemicolon && stmt 
     && stmt->getASTType() != AST::BlockStmt 
     && stmt->getASTType() != AST::FunctionStmt
@@ -54,7 +55,7 @@ Stmt::Ptr Parser::parseStmt(bool expectSemicolon) {
     && stmt->getASTType() != AST::EnumStmt
     && stmt->getASTType() != AST::MacroStmt) { // don't throw useless errors
         if (!check(SEMICOLON)) {
-            if (stmt->meta.file.empty()) // TODO: implement metadata for every ast
+            if (stmt->meta.file.empty()) 
                 assert(!"metadata not implemented for parsed kind of AST");
 
             error->plainError(ParseError::UNEXPECTED_TOKEN, "Expected a semicolon ';' after statement",
@@ -63,6 +64,7 @@ Stmt::Ptr Parser::parseStmt(bool expectSemicolon) {
         } else
             stmt->meta.lstCol++; // add semicolon 
     }
+
     return stmt;
 }
 
@@ -96,7 +98,7 @@ Stmt::Ptr Parser::parseMacroStmt() {
                 cases.push_back(parseMacroCase());
 
         meta.copyEnd(peek(-1));
-        Stmt::Ptr macro = make_unique<MacroStmt>(symbol.value, cases);
+        Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value, cases);
         macro->meta = meta;
         return macro;
     } else if (*current == LPAREN) {
@@ -104,7 +106,7 @@ Stmt::Ptr Parser::parseMacroStmt() {
         MacroStmt::Case *_case = parseMacroCase();
         meta.copyEnd(_case->meta);
 
-        Stmt::Ptr macro = make_unique<MacroStmt>(symbol.value, MacroStmt::Case::Vec({_case}));
+        Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value, MacroStmt::Case::Vec({_case}));
         macro->meta = meta;
         return macro;
     } else if (*current == POINTER) {
@@ -117,13 +119,13 @@ Stmt::Ptr Parser::parseMacroStmt() {
         wildcard->meta.copyEnd(wildcard->ret->meta);
         meta.copyEnd(wildcard->meta);
 
-        Stmt::Ptr macro = make_unique<MacroStmt>(symbol.value, MacroStmt::Case::Vec({wildcard}));
+        Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value, MacroStmt::Case::Vec({wildcard}));
         macro->meta = meta;
         return macro;
     } else if (*current == SEMICOLON) {
         // macro <symbol> ;
         meta.copyEnd(symbol);
-        Stmt::Ptr macro = make_unique<MacroStmt>(symbol.value);
+        Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value);
         macro->meta = meta;
         return macro;
     } 
@@ -132,7 +134,7 @@ Stmt::Ptr Parser::parseMacroStmt() {
     error->plainError(ParseError::UNEXPECTED_TOKEN, "Unexpected token while parsing a macro",
         fileName, error->createMark(meta, "Parsed macro", current->start, "Unexpected token", 
             {error->createHelp(current->line, "Would have expected a macro body, case or prototype here")}));
-    Stmt::Ptr macro = make_unique<MacroStmt>(symbol.value);
+    Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value);
     macro->meta = meta;
     return macro;
 }
@@ -145,7 +147,7 @@ Stmt::Ptr Parser::parseEnumStmt() {
     const string &symbol = eat(IDENTIFIER).value;
 
     if (*current == SEMICOLON) {
-        Stmt::Ptr stmt = make_unique<EnumStmt>(symbol);
+        Stmt::Ptr stmt = make_shared<EnumStmt>(symbol);
         meta.copyEnd(peek(-1));
         stmt->meta = meta;
         return stmt;
@@ -161,7 +163,7 @@ Stmt::Ptr Parser::parseEnumStmt() {
     } while (check(COMMA));
     eat(RBRACE, ParseError::MISSING_PAREN);
 
-    Stmt::Ptr stmt = make_unique<EnumStmt>(symbol, elements);
+    Stmt::Ptr stmt = make_shared<EnumStmt>(symbol, elements);
     meta.copyEnd(peek(-1));
     stmt->meta = meta;
     return stmt;
@@ -201,33 +203,31 @@ Stmt::Ptr Parser::parseFunctionDeclStmt() {
     } else
         current = paramBegin;
 
-    Stmt::Vec args = Stmt::Vec();
+    FunctionStmt::Parameter::Vec parameters = {};
     
     do {
         if (*current == RPAREN)
             break;
-        Stmt::Ptr arg = parseVariableStmt();
-        if (arg) // error already created by parseVariableStmt
-            args.push_back(std::move(arg)); 
+        FunctionStmt::Parameter::Ptr parameter = parseFuncParameter();
+        if (parameter)
+            parameters.push_back(parameter);
     } while (check(COMMA));
     eat(RPAREN, ParseError::MISSING_PAREN);
 
     FuxType type = parseType();
 
     if (*current == SEMICOLON) {
-        PrototypeStmt::Ptr proto = make_unique<PrototypeStmt>(type, symbol, args);
-        proto->meta = Metadata(fileName, *backToken);
-        proto->meta.copyEnd(type.meta);
+        Metadata meta = Metadata(fileName, *backToken);
+        meta.copyEnd(type.meta);
+        FunctionStmt::Ptr proto = make_shared<FunctionStmt>(meta, symbol, type, parameters);
         return proto;
     }
 
-    FunctionStmt::Ptr node = make_unique<FunctionStmt>(type, symbol, args);
+    FunctionStmt::Ptr node = make_shared<FunctionStmt>(Metadata(fileName, *backToken), symbol, type, parameters);
     parent = &*node;    
-    Stmt::Ptr body = parseStmt();
+    node->body = parseStmt();
     parent = nullptr;
-    node->meta = Metadata(fileName, *backToken);
-    node->meta.copyEnd(body->meta);
-    node->setBody(body);
+    node->meta.copyEnd(peek(-1));
     return node;
 }
 
@@ -258,7 +258,7 @@ Stmt::Ptr Parser::parseForLoopStmt() {
         if (*current != RPAREN)
             iter = parseExpr();
         else
-            iter = make_unique<NullExpr>();
+            iter = make_shared<NullExpr>();
     }
 
     eat(RPAREN, ParseError::MISSING_PAREN);
@@ -268,9 +268,9 @@ Stmt::Ptr Parser::parseForLoopStmt() {
     Stmt::Ptr stmt;
 
     if (forEach)    
-        stmt = make_unique<ForStmt>(init, iter, body);
+        stmt = make_shared<ForStmt>(init, iter, body);
     else            
-        stmt = make_unique<ForStmt>(init, cond, iter, body);
+        stmt = make_shared<ForStmt>(init, cond, iter, body);
     
     stmt->meta = meta;
     return stmt;
@@ -298,7 +298,7 @@ Stmt::Ptr Parser::parseWhileLoopStmt() {
         return parseBlockStmt();
 
     meta.copyEnd(body->meta);
-    Stmt::Ptr stmt = make_unique<WhileStmt>(condition, body, postCondition);
+    Stmt::Ptr stmt = make_shared<WhileStmt>(condition, body, postCondition);
     stmt->meta = meta;
     return stmt;
 }
@@ -317,7 +317,7 @@ Stmt::Ptr Parser::parseBlockStmt() {
                 break;
             } else
                 body.push_back(parseStmt());
-        Stmt::Ptr stmt = make_unique<BlockStmt>(body);
+        Stmt::Ptr stmt = make_shared<BlockStmt>(body);
         stmt->meta = Metadata(fileName, opening);
         stmt->meta.copyEnd(peek(-1));
         return stmt;
@@ -340,10 +340,10 @@ Stmt::Ptr Parser::parseIfElseStmt() {
         if (check(KEY_ELSE)) {
             Stmt::Ptr elseBody = parseStmt(); 
             meta.copyEnd(elseBody->meta);
-            stmt = make_unique<IfElseStmt>(condition, thenBody, elseBody);
+            stmt = make_shared<IfElseStmt>(condition, thenBody, elseBody);
         } else {
             meta.copyEnd(thenBody->meta);
-            stmt = make_unique<IfElseStmt>(condition, thenBody);
+            stmt = make_shared<IfElseStmt>(condition, thenBody);
         }
         
         stmt->meta = meta;
@@ -361,7 +361,7 @@ Stmt::Ptr Parser::parseInbuiltCallStmt() {
         if (*current != SEMICOLON)
             args = parseExprList(SEMICOLON);
         meta.copyEnd(peek(-1));
-        Stmt::Ptr stmt = make_unique<InbuiltCallStmt>(callee, args);
+        Stmt::Ptr stmt = make_shared<InbuiltCallStmt>(callee, args);
         stmt->meta = meta;
         return stmt;
     }
@@ -380,13 +380,13 @@ Stmt::Ptr Parser::parseVariableStmt() {
     if (check(TRIPLE_EQUALS)) // ===
         type.access.push_back(FuxType::CONSTANT);
     else if (!check(EQUALS)) {
-        Stmt::Ptr decl = make_unique<VariableStmt>(symbol, type);
+        Stmt::Ptr decl = make_shared<VariableStmt>(symbol, type);
         meta.copyEnd(peek(-1));
         decl->meta = meta;
 
         if (parent) {
-            parent->addLocal(decl);
-            Expr::Ptr expr = make_unique<SymbolExpr>(symbol);
+            parent->locals.push_back(decl);
+            Expr::Ptr expr = make_shared<SymbolExpr>(symbol);
             expr->meta = meta;
             return expr;
         }
@@ -397,20 +397,20 @@ Stmt::Ptr Parser::parseVariableStmt() {
     Expr::Ptr value = parseExpr();
 
     if (parent) {
-        Stmt::Ptr decl = make_unique<VariableStmt>(symbol, type);
+        Stmt::Ptr decl = make_shared<VariableStmt>(symbol, type);
         meta.copyEnd(value->meta); 
         decl->meta = meta;
-        parent->addLocal(decl);
+        parent->locals.push_back(decl);
 
         bool constant = find(type.access.begin(), type.access.end(), FuxType::CONSTANT) != type.access.end();
-        Expr::Ptr ref = make_unique<SymbolExpr>(symbol);
-        Expr::Ptr expr = make_unique<BinaryExpr>(constant ? BinaryOp::CONASG : BinaryOp::ASG, ref, value);
+        Expr::Ptr ref = make_shared<SymbolExpr>(symbol);
+        Expr::Ptr expr = make_shared<BinaryExpr>(constant ? BinaryOp::CONASG : BinaryOp::ASG, ref, value);
         expr->meta = meta;
         return expr;
     }
 
     meta.copyEnd(value->meta);
-    Stmt::Ptr stmt = make_unique<VariableStmt>(symbol, type, value);
+    Stmt::Ptr stmt = make_shared<VariableStmt>(symbol, type, value);
     stmt->meta = meta;
     return stmt;
 }
@@ -439,7 +439,7 @@ Expr::Ptr Parser::parseAssignmentExpr() {
     if (current->isAssignment()) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr value = parsePipeExpr();
-        dest = make_unique<BinaryExpr>(op, dest, value);
+        dest = make_shared<BinaryExpr>(op, dest, value);
     }
     
     return dest;
@@ -451,7 +451,7 @@ Expr::Ptr Parser::parsePipeExpr() {
     while (*current == LSHIFT || *current == RSHIFT) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr RHS = parseTernaryExpr();
-        LHS = make_unique<BinaryExpr>(op, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(op, LHS, RHS);
     }
 
     return LHS;
@@ -464,7 +464,7 @@ Expr::Ptr Parser::parseTernaryExpr() {
         Expr::Ptr thenExpr = parseLogicalOrExpr();
         eat(COLON);
         Expr::Ptr elseExpr = parseLogicalOrExpr();
-        condition = make_unique<TernaryExpr>(condition, thenExpr, elseExpr);
+        condition = make_shared<TernaryExpr>(condition, thenExpr, elseExpr);
     }
 
     return condition; 
@@ -475,7 +475,7 @@ Expr::Ptr Parser::parseLogicalOrExpr() {
 
     while (check(OR)) {
         Expr::Ptr RHS = parseLogicalAndExpr();
-        LHS = make_unique<BinaryExpr>(BinaryOp::LOR, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(BinaryOp::LOR, LHS, RHS);
     }
 
     return LHS;
@@ -486,7 +486,7 @@ Expr::Ptr Parser::parseLogicalAndExpr() {
 
     while (check(AND)) {
         Expr::Ptr RHS = parseBitwiseOrExpr();
-        LHS = make_unique<BinaryExpr>(BinaryOp::LAND, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(BinaryOp::LAND, LHS, RHS);
     }
 
     return LHS;
@@ -497,7 +497,7 @@ Expr::Ptr Parser::parseBitwiseOrExpr() {
 
     while (check(BIT_OR)) {
         Expr::Ptr RHS = parseBitwiseXorExpr();
-        LHS = make_unique<BinaryExpr>(BinaryOp::BOR, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(BinaryOp::BOR, LHS, RHS);
     }
 
     return LHS;
@@ -508,7 +508,7 @@ Expr::Ptr Parser::parseBitwiseXorExpr() {
 
     while (check(BIT_XOR)) {
         Expr::Ptr RHS = parseBitwiseAndExpr();
-        LHS = make_unique<BinaryExpr>(BinaryOp::BXOR, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(BinaryOp::BXOR, LHS, RHS);
     }
 
     return LHS;
@@ -519,7 +519,7 @@ Expr::Ptr Parser::parseBitwiseAndExpr() {
 
     while (check(BIT_AND)) {
         Expr::Ptr RHS = parseEqualityExpr();
-        LHS = make_unique<BinaryExpr>(BinaryOp::BAND, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(BinaryOp::BAND, LHS, RHS);
     }
 
     return LHS;
@@ -531,7 +531,7 @@ Expr::Ptr Parser::parseEqualityExpr() {
     while (*current == EQUALS_EQUALS || *current == NOT_EQUALS) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr RHS = parseRelationalExpr();
-        LHS = make_unique<BinaryExpr>(op, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(op, LHS, RHS);
     }
 
     return LHS;
@@ -543,7 +543,7 @@ Expr::Ptr Parser::parseRelationalExpr() {
     while (current->isRelational()) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr RHS = parseBitwiseShiftExpr();
-        LHS = make_unique<BinaryExpr>(op, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(op, LHS, RHS);
     }
 
     return LHS;
@@ -555,7 +555,7 @@ Expr::Ptr Parser::parseBitwiseShiftExpr() {
     while (*current == BIT_LSHIFT || *current == BIT_RSHIFT) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr RHS = parseAdditiveExpr();
-        LHS = make_unique<BinaryExpr>(op, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(op, LHS, RHS);
     }
 
     return LHS;
@@ -567,7 +567,7 @@ Expr::Ptr Parser::parseAdditiveExpr() {
     while (*current == PLUS || *current == MINUS) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr RHS = parseMultiplicativeExpr();
-        LHS = make_unique<BinaryExpr>(op, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(op, LHS, RHS);
     }
 
     return LHS;
@@ -579,7 +579,7 @@ Expr::Ptr Parser::parseMultiplicativeExpr() {
     while (*current == ASTERISK || *current == SLASH || *current == PERCENT) {
         BinaryOp op = (BinaryOp) eat().type;
         Expr::Ptr RHS = parsePowerExpr();
-        LHS = make_unique<BinaryExpr>(op, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(op, LHS, RHS);
     }
 
     return LHS;
@@ -590,7 +590,7 @@ Expr::Ptr Parser::parsePowerExpr() {
 
     while (check(CARET)) {
         Expr::Ptr RHS = parseAddressExpr();
-        LHS = make_unique<BinaryExpr>(BinaryOp::POW, LHS, RHS);
+        LHS = make_shared<BinaryExpr>(BinaryOp::POW, LHS, RHS);
     }    
 
     return LHS;
@@ -600,7 +600,7 @@ Expr::Ptr Parser::parseAddressExpr() {
     if (*current == BIT_AND) {
         Token &op = eat();
         Expr::Ptr expr = parseDereferenceExpr();
-        return make_unique<UnaryExpr>(op, expr);
+        return make_shared<UnaryExpr>(op, expr);
     }
 
     return parseDereferenceExpr(); 
@@ -610,7 +610,7 @@ Expr::Ptr Parser::parseDereferenceExpr() {
     if (*current == ASTERISK) {
         Token &op = eat();
         Expr::Ptr expr = parseDereferenceExpr();
-        return make_unique<UnaryExpr>(op, expr);
+        return make_shared<UnaryExpr>(op, expr);
     } 
 
     return parseTypeCastExpr(); 
@@ -627,7 +627,7 @@ Expr::Ptr Parser::parseTypeCastExpr() {
         }
         eat(RPAREN, ParseError::MISSING_PAREN);
         Expr::Ptr expr = parseExpr();
-        expr = make_unique<TypeCastExpr>(type, expr);
+        expr = make_shared<TypeCastExpr>(type, expr);
         expr->meta.fstLine = open.line;
         expr->meta.fstCol = open.start;
         return expr;
@@ -640,7 +640,7 @@ Expr::Ptr Parser::parseLogBitUnaryExpr() {
     if (*current == EXCLAMATION || *current == BIT_NOT || *current == QUESTION) {
         Token &op = eat();
         Expr::Ptr expr = parsePlusMinusUnaryExpr();
-        return make_unique<UnaryExpr>(op, expr);
+        return make_shared<UnaryExpr>(op, expr);
     }
 
     return parsePlusMinusUnaryExpr(); 
@@ -650,7 +650,7 @@ Expr::Ptr Parser::parsePlusMinusUnaryExpr() {
     if (*current == PLUS || *current == MINUS) {
         Token &op = eat();
         Expr::Ptr expr = parsePreIncDecExpr();
-        return make_unique<UnaryExpr>(op, expr);
+        return make_shared<UnaryExpr>(op, expr);
     }
     
     return parsePreIncDecExpr(); 
@@ -660,7 +660,7 @@ Expr::Ptr Parser::parsePreIncDecExpr() {
     if (*current == PLUS_PLUS || *current == MINUS_MINUS) {
         Token &op = eat();
         Expr::Ptr expr = parsePostIncDecExpr();
-        return make_unique<UnaryExpr>(op, expr);
+        return make_shared<UnaryExpr>(op, expr);
     } 
     
     return parsePostIncDecExpr(); 
@@ -670,7 +670,7 @@ Expr::Ptr Parser::parsePostIncDecExpr() {
     Expr::Ptr expr = parseTopMemberExpr();
 
     if (*current == PLUS_PLUS || *current == MINUS_MINUS) 
-        expr = make_unique<UnaryExpr>(eat(), expr, true);    
+        expr = make_shared<UnaryExpr>(eat(), expr, true);    
     
     return expr;
 }
@@ -679,7 +679,7 @@ Expr::Ptr Parser::parseTopMemberExpr() {
     Expr::Ptr parent = parseIndexExpr();
 
     if (check(DOT)) {
-        parent = make_unique<MemberExpr>(parent, eat(IDENTIFIER));
+        parent = make_shared<MemberExpr>(parent, eat(IDENTIFIER));
 
         if (check(LPAREN))
             parent = parseCallExpr(std::move(parent));
@@ -695,12 +695,12 @@ Expr::Ptr Parser::parseIndexExpr(Expr::Ptr parent) {
         parent = parseMidMemberExpr(); 
     
     if (check(ARRAY_BRACKET)) {
-        parent = make_unique<BinaryExpr>(BinaryOp::IDX, parent);
+        parent = make_shared<BinaryExpr>(BinaryOp::IDX, parent);
         parent->meta.copyEnd(peek(-1));
     } else if (check(LBRACKET)) {
         Expr::Ptr index = parseExpr();
         Token &close = eat(RBRACKET, ParseError::MISSING_PAREN);
-        parent = make_unique<BinaryExpr>(BinaryOp::IDX, parent, index);
+        parent = make_shared<BinaryExpr>(BinaryOp::IDX, parent, index);
         parent->meta.copyEnd(close);
     }
 
@@ -716,7 +716,7 @@ Expr::Ptr Parser::parseMidMemberExpr() {
     Expr::Ptr parent = parseCallExpr();
 
     if (check(DOT)) {
-        parent = make_unique<MemberExpr>(parent, eat(IDENTIFIER));
+        parent = make_shared<MemberExpr>(parent, eat(IDENTIFIER));
 
         if (check(LPAREN))
             parent = parseCallExpr(std::move(parent));
@@ -748,7 +748,7 @@ Expr::Ptr Parser::parseCallExpr(Expr::Ptr callee) {
         arguments = parseExprList(RPAREN);
     eat(RPAREN, ParseError::MISSING_PAREN);
     
-    Expr::Ptr expr = make_unique<CallExpr>(callee, arguments, (bool) asyncTok);
+    Expr::Ptr expr = make_shared<CallExpr>(callee, arguments, (bool) asyncTok);
     expr->meta.copyEnd(asyncTok ? *asyncTok : peek(-1));
 
     if (check(LPAREN))
@@ -763,7 +763,7 @@ Expr::Ptr Parser::parseBotMemberExpr() {
     Expr::Ptr parent = parsePrimaryExpr();
 
     while (check(DOT)) 
-        parent = make_unique<MemberExpr>(parent, eat(IDENTIFIER));
+        parent = make_shared<MemberExpr>(parent, eat(IDENTIFIER));
     
     return parent;
 }
@@ -777,7 +777,7 @@ Expr::Ptr Parser::parsePrimaryExpr() {
     // I don't know wether it is possible to filter these while parsing.
     // e.g.: *(*(i64)) ---Analyser--> **i64  
     if (that.isType()) {
-        expr = make_unique<SymbolExpr>(that.value);
+        expr = make_shared<SymbolExpr>(that.value);
         expr->meta = Metadata(fileName, that);
         return expr;
     }
@@ -804,32 +804,32 @@ Expr::Ptr Parser::parsePrimaryExpr() {
                             {error->createHelp(endTok.line, "The LHS and RHS of a range expression have to be constants")}));
 
                 if (endExpr.get() == nullptr) {
-                    endExpr = make_unique<NullExpr>();
+                    endExpr = make_shared<NullExpr>();
                     endExpr->meta.copyWhole(endTok);
                 }
 
-                beginExpr = make_unique<RangeExpr>(beginExpr, endExpr);
+                beginExpr = make_shared<RangeExpr>(beginExpr, endExpr);
             }
             
             return beginExpr;
         }
         case FLOAT:      
-            expr = make_unique<NumberExpr, _f64>(stod(that.value));
+            expr = make_shared<NumberExpr, _f64>(stod(that.value));
             expr->meta = Metadata(fileName, that);
             return expr;
         case CHAR:          
             return parseCharExpr(that);
         case STRING:        
-            expr = make_unique<StringExpr>(escapeSequences(that.value)); 
+            expr = make_shared<StringExpr>(escapeSequences(that.value)); 
             expr->meta = Metadata(fileName, that);
             return expr;
         case KEY_TRUE:      
         case KEY_FALSE:     
-            expr = make_unique<BoolExpr>(that == KEY_TRUE);
+            expr = make_shared<BoolExpr>(that == KEY_TRUE);
             expr->meta = Metadata(fileName, that);
             return expr;
         case KEY_NULL:     
-            expr = make_unique<NullExpr>();
+            expr = make_shared<NullExpr>();
             expr->meta = Metadata(fileName, that);
             return expr;
         case LPAREN: 
@@ -840,17 +840,17 @@ Expr::Ptr Parser::parsePrimaryExpr() {
         case LBRACE: {
             Expr::Vec elements = parseExprList(RBRACE);
             eat(RBRACE, ParseError::MISSING_PAREN);
-            return make_unique<ArrayExpr>(elements);
+            return make_shared<ArrayExpr>(elements);
         }
         case _EOF: 
             createError(ParseError::UNEXPECTED_EOF, "Unexpected EOF while parsing Primary Expression",
-                that, "Expected a primay expression here", 0, "", false, true);
-            return make_unique<NullExpr>();
+                peek(-2), "Last token pased", peek(-1).start, "Expected an expression here", false);
+            return nullptr;
         default:    
             createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing Primary Expression",
                 that, "Unexpected token "+string(TokenTypeString[that.type])+" '"+that.value+"'");
             recover();
-            return make_unique<NullExpr>();
+            return make_shared<NullExpr>();
     }
 }
 
@@ -939,15 +939,8 @@ Expr::Ptr Parser::parseNumberExpr(Token &tok) {
             break;
         default:            break; // unreachable
     }
-    size_t bits = (size_t) log2(value) + 1; // get amount of bits in (binary) value
-    Expr::Ptr expr;
 
-    if      (bits <= 8)     expr = make_unique<NumberExpr, _u8>(value);
-    else if (bits <= 16)    expr = make_unique<NumberExpr, _u16>(value);
-    else if (bits <= 32)    expr = make_unique<NumberExpr, _u32>(value);
-    else if (bits <= 64)    expr = make_unique<NumberExpr>(value);
-    else                    expr = nullptr; // unreachable   
-
+    Expr::Ptr expr = make_shared<NumberExpr>(value);
     expr->meta = Metadata(fileName, tok);
     return expr;
 }
@@ -955,7 +948,7 @@ Expr::Ptr Parser::parseNumberExpr(Token &tok) {
 Expr::Ptr Parser::parseCharExpr(Token &tok) {
     // TODO: add support for c16
     _c8 value = escapeSequences(tok.value).front();
-    Expr::Ptr expr = make_unique<CharExpr>(value);
+    Expr::Ptr expr = make_shared<CharExpr>(value);
     expr->meta = Metadata(fileName, tok);
     return expr;
 }
@@ -989,12 +982,6 @@ MacroStmt::Arg Parser::parseMacroArg() {
         return that;
     }
 
-    if (check(TRIPLE_DOT)) {
-        MacroStmt::Arg that("...", MacroStmt::NONE);
-        that.meta = Metadata(fileName, peek(-1));
-        return that;
-    }
-
     Token &symbol = eat(IDENTIFIER);
     MacroStmt::Arg that(symbol.value, MacroStmt::NONE);
     eat(COLON);
@@ -1012,20 +999,42 @@ MacroStmt::Arg Parser::parseMacroArg() {
         that.type = MacroStmt::BLOCK;
     else
         error->plainError(ParseError::ILLEGAL_TYPE, "Expected macro parameter type", fileName,
-            {error->createMark(symbol.line, id.line, symbol.start, id.end, 
+            error->createMark(symbol.line, id.line, symbol.start, id.end, 
                 "Parsed macro parameter", id.start, 
                 "Expected a macro parameter type here", 
-                {error->createHelp(id.line, "Possible types are: 'type', 'ident', 'expr', 'stmt' or 'block'")})});
+                {error->createHelp(id.line, "Possible types are: 'type', 'ident', 'expr', 'stmt' or 'block'")}));
 
     // symbol: id[]
     that.array = check(ARRAY_BRACKET);
 
     // symbol: id, ...
-    // current = ^ 
-    that.variadic = (peek() == TRIPLE_DOT);
+    that.variadic = check(COMMA, TRIPLE_DOT);
 
     that.meta = Metadata(fileName, symbol.line, id.line, symbol.start, id.end);
     return that;
+}
+
+FunctionStmt::Parameter::Ptr Parser::parseFuncParameter() {
+    // TODO: add proper errors
+
+    Metadata meta = Metadata(fileName);
+    Token &symbol = eat(IDENTIFIER);
+    meta.copyWhole(symbol);
+    FuxType type = parseType();
+    Expr::Ptr value = nullptr;
+
+    if (check(EQUALS)) {
+        value = parseExpr();
+        meta.copyEnd(value->meta);
+    } else
+        meta.copyEnd(type.meta);
+
+    // <parameter>, ...                
+    bool variadic = check(COMMA, TRIPLE_DOT);
+    if (variadic)
+        meta.copyEnd(peek(-1));
+
+    return make_shared<FunctionStmt::Parameter>(meta, symbol.value, type, value, variadic);
 }
 
 Token &Parser::eat() {
@@ -1038,7 +1047,7 @@ Token &Parser::eat(TokenType type, ParseError::Type errType) {
     Token curTok = eat();
 
     if (curTok != type) {
-        createError(errType, "Got Unexpected Token "+string(TokenTypeString[curTok.type])+" '"+curTok.value+"'", 
+        createError(errType, "Got unexpected token "+string(TokenTypeString[curTok.type])+" '"+curTok.value+"'", 
             peek(-1), "", curTok.start, 
             "Expected "+string(TokenTypeString[type])+" '"+TokenTypeValue[type]+"' here instead"); 
         // TODO: better error

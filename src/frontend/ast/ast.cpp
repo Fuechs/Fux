@@ -75,7 +75,7 @@ string SymbolExpr::getSymbol() { return name; }
 /// CALL EXPR ///
 
 CallExpr::CallExpr(const string &callee, Expr::Vec &args, bool asyncCall) {
-    this->callee = make_unique<SymbolExpr>(callee);
+    this->callee = make_shared<SymbolExpr>(callee);
     this->args = std::move(args);
     this->asyncCall = asyncCall;
 }
@@ -232,30 +232,6 @@ AST WhileStmt::getASTType() { return AST::WhileStmt; }
 /// FOR LOOP ///
 
 AST ForStmt::getASTType() { return AST::ForStmt; }
-
-/// PROTOTYPE ///
-
-PrototypeStmt::~PrototypeStmt() { args.clear(); }
-
-AST PrototypeStmt::getASTType() { return AST::PrototypeStmt; }
-
-FuxType PrototypeStmt::getFuxType() { return type; }
-
-string PrototypeStmt::getSymbol() { return symbol; }
-
-Stmt::Vec &PrototypeStmt::getArgs() { return args; }
-
-/// FUNCTION ///
-
-AST FunctionStmt::getASTType() { return AST::FunctionStmt; }
-
-FuxType FunctionStmt::getFuxType() { return proto->getFuxType(); }
-
-string FunctionStmt::getSymbol() { return proto->getSymbol(); }
-
-void FunctionStmt::setBody(Stmt::Ptr &body) { this->body = std::move(body); }
-
-void FunctionStmt::addLocal(Stmt::Ptr &local) { locals.push_back(std::move(local)); }
 
 /// ENUMERATION ///
 

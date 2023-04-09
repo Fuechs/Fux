@@ -144,6 +144,9 @@ private:
     // <symbol> : <type>
     MacroStmt::Arg parseMacroArg();
 
+    // parse a function parameter
+    FunctionStmt::Parameter::Ptr parseFuncParameter();
+
     // get next token
     Token &eat();
     // expect and get next token
