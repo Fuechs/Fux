@@ -104,31 +104,17 @@ private:
     // + <expr> , - <expr> 
     Expr::Ptr parsePlusMinusUnaryExpr();
     // ++<expr> , --<expr> 
-    Expr::Ptr parsePreIncDecExpr();
-    // <expr>++, <expr>--
-    Expr::Ptr parsePostIncDecExpr();
+    Expr::Ptr parsePreIncDecExpr(Expr::Ptr parent = nullptr);
     // <expr>.<symbol> 
-    Expr::Ptr parseTopMemberExpr();
+    Expr::Ptr parseMemberExpr();
+    // <expr>++, <expr>--
+    Expr::Ptr parsePostIncDecExpr(Expr::Ptr parent = nullptr); 
     // <expr> [ <expr> ]
     Expr::Ptr parseIndexExpr(Expr::Ptr parent = nullptr);
-    // <expr>.<symbol>
-    Expr::Ptr parseMidMemberExpr();
     // <expr>  ( <expr>, <expr>, ... )
     Expr::Ptr parseCallExpr(Expr::Ptr callee = nullptr);
-    // <expr>.<symbol>
-    Expr::Ptr parseBotMemberExpr();
     // <identifier>, <value>, (<expr>)
     Expr::Ptr parsePrimaryExpr();
-
-    /**
-     * Since member expressions can contain 
-     *  call expressions, index expressions
-     *  and vice versa, there are three different 
-     *  functions to parse a member expression.
-     * - TOP: Has Call, Index 
-     * - MID: Has Call, Can be carried by Index
-     * - BOT: Can be carried by Call, Index
-     */
 
     // parse : | -> + access + pointer depth + type name + array
     // primitive: only parse pointer depth + type name + array

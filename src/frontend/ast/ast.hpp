@@ -19,6 +19,7 @@
 #include "expr.hpp"
 #include "op.hpp"
 #include "func.hpp"
+#include "macro.hpp"
 
 typedef map<string, FuxType> ArgMap;
 
@@ -51,6 +52,7 @@ class NumberExpr : public Expr {
 
 public:
     NumberExpr(_u64 value) : value(new ValueStruct(value)) {}
+    NumberExpr(_f64 value) : value(new ValueStruct(value)) {}
     ~NumberExpr();
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
@@ -355,56 +357,6 @@ public:
     FuxType getFuxType() override;
     string getSymbol() override;
     void debugPrint(size_t indent = 0) override; 
-};
-
-class MacroStmt : public Stmt {
-public:
-    enum ID {
-        TYPE,
-        IDENT,
-        EXPR,
-        STMT,
-        BLOCK,
-        WILDCARD, // "all other cases"
-        NONE,
-    };
-
-    struct Arg {
-        using Vec = vector<Arg>;
-
-        Arg(string symbol = "", ID type = NONE, bool array = false, bool variadic = false) 
-        : symbol(symbol), type(type), array(array), variadic(variadic) {}
-
-        Arg &operator=(const Arg &copy);
-
-        string symbol;
-        ID type;
-        bool array, variadic;
-        Metadata meta;
-    };
-
-    struct Case {
-        using Vec = vector<Case *>;
-
-        Case(Arg::Vec args, Stmt::Ptr &ret) : args(args), ret(std::move(ret)) {}
-
-        Arg::Vec args;
-        Stmt::Ptr ret;
-        Metadata meta;
-    };
-
-    MacroStmt(const string &symbol, Case::Vec cases = {})
-    : symbol(symbol), cases(cases) {}
-
-    FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
-    FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
-    AST getASTType() override;
-    string getSymbol() override;
-    void debugPrint(size_t indent = 0) override;
-
-private:
-    string symbol;
-    Case::Vec cases;    
 };
 
 class Root : public Stmt {

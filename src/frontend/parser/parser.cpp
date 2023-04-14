@@ -114,7 +114,7 @@ Stmt::Ptr Parser::parseMacroStmt() {
         Token &ptr = eat();
         Stmt::Ptr ret = parseStmt();
 
-        MacroStmt::Case *wildcard = new MacroStmt::Case({MacroStmt::Arg("*", MacroStmt::WILDCARD)}, ret);
+        MacroStmt::Case *wildcard = new MacroStmt::Case({MacroStmt::Arg(Metadata(fileName, ptr),"*", MacroStmt::WILDCARD)}, ret);
         wildcard->meta = Metadata(fileName, ptr);
         wildcard->meta.copyEnd(wildcard->ret->meta);
         meta.copyEnd(wildcard->meta);
@@ -656,43 +656,47 @@ Expr::Ptr Parser::parsePlusMinusUnaryExpr() {
     return parsePreIncDecExpr(); 
 }
 
-Expr::Ptr Parser::parsePreIncDecExpr() { 
+
+Expr::Ptr Parser::parsePreIncDecExpr(Expr::Ptr parent) { 
     if (*current == PLUS_PLUS || *current == MINUS_MINUS) {
         Token &op = eat();
-        Expr::Ptr expr = parsePostIncDecExpr();
+        Expr::Ptr expr = parseMemberExpr();
         return make_shared<UnaryExpr>(op, expr);
     } 
     
-    return parsePostIncDecExpr(); 
+    return parseMemberExpr(); 
 }
 
-Expr::Ptr Parser::parsePostIncDecExpr() {
-    Expr::Ptr expr = parseTopMemberExpr();
+Expr::Ptr Parser::parseMemberExpr() {
+    Expr::Ptr parent = parsePostIncDecExpr();
 
-    if (*current == PLUS_PLUS || *current == MINUS_MINUS) 
-        expr = make_shared<UnaryExpr>(eat(), expr, true);    
-    
-    return expr;
-}
-
-Expr::Ptr Parser::parseTopMemberExpr() {
-    Expr::Ptr parent = parseIndexExpr();
-
-    if (check(DOT)) {
+    while (check(DOT)) {
         parent = make_shared<MemberExpr>(parent, eat(IDENTIFIER));
 
         if (check(LPAREN))
             parent = parseCallExpr(std::move(parent));
         else if (*current == ARRAY_BRACKET || *current == LBRACKET)
             parent = parseIndexExpr(std::move(parent));
+        else if (*current == PLUS_PLUS || *current == MINUS_MINUS)
+            return parsePostIncDecExpr(parent);
     }
 
     return parent;
 }
 
+Expr::Ptr Parser::parsePostIncDecExpr(Expr::Ptr parent) {
+    if (!parent)
+        parent = parseIndexExpr();
+
+    if (*current == PLUS_PLUS || *current == MINUS_MINUS) 
+        parent = make_shared<UnaryExpr>(eat(), parent, true);    
+    
+    return parent;
+}
+
 Expr::Ptr Parser::parseIndexExpr(Expr::Ptr parent) { 
     if (parent == nullptr)
-        parent = parseMidMemberExpr(); 
+        parent = parseCallExpr(); 
     
     if (check(ARRAY_BRACKET)) {
         parent = make_shared<BinaryExpr>(BinaryOp::IDX, parent);
@@ -712,34 +716,21 @@ Expr::Ptr Parser::parseIndexExpr(Expr::Ptr parent) {
     return parent;
 }
 
-Expr::Ptr Parser::parseMidMemberExpr() {
-    Expr::Ptr parent = parseCallExpr();
-
-    if (check(DOT)) {
-        parent = make_shared<MemberExpr>(parent, eat(IDENTIFIER));
-
-        if (check(LPAREN))
-            parent = parseCallExpr(std::move(parent));
-    }
-
-    return parent;
-}
-
 Expr::Ptr Parser::parseCallExpr(Expr::Ptr callee) { 
     Token *asyncTok = nullptr;
 
     if (callee == nullptr) {
         if (*current != IDENTIFIER && *current != KEY_ASYNC)
-            return parseBotMemberExpr();
+            return parsePrimaryExpr();
 
         Token::Iter backTok = current;
 
         asyncTok = check(KEY_ASYNC) ? &peek(-1) : nullptr;
-        callee = parseBotMemberExpr();
+        callee = parsePrimaryExpr();
                 
         if (!check(LPAREN)) {
             current = backTok;
-            return parseBotMemberExpr();
+            return parsePrimaryExpr();
         }
     }
     
@@ -758,15 +749,6 @@ Expr::Ptr Parser::parseCallExpr(Expr::Ptr callee) {
     
     return expr;
 } 
-
-Expr::Ptr Parser::parseBotMemberExpr() {
-    Expr::Ptr parent = parsePrimaryExpr();
-
-    while (check(DOT)) 
-        parent = make_shared<MemberExpr>(parent, eat(IDENTIFIER));
-    
-    return parent;
-}
 
 Expr::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
@@ -976,14 +958,11 @@ MacroStmt::Case *Parser::parseMacroCase() {
 }
 
 MacroStmt::Arg Parser::parseMacroArg() {
-    if (check(ASTERISK)) {
-        MacroStmt::Arg that("*", MacroStmt::WILDCARD);
-        that.meta = Metadata(fileName, peek(-1));
-        return that;
-    }
+    if (check(ASTERISK)) 
+        return MacroStmt::Arg(Metadata(fileName, peek(-1)), "*", MacroStmt::WILDCARD);
 
     Token &symbol = eat(IDENTIFIER);
-    MacroStmt::Arg that(symbol.value, MacroStmt::NONE);
+    MacroStmt::Arg that(Metadata(), symbol.value, MacroStmt::NONE);
     eat(COLON);
 
     Token &id = eat(IDENTIFIER);

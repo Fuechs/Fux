@@ -241,19 +241,6 @@ FuxType EnumStmt::getFuxType() { return FuxType::U64; }
 
 string EnumStmt::getSymbol() { return symbol; }
 
-/// MACRO ///
-
-MacroStmt::Arg &MacroStmt::Arg::operator=(const MacroStmt::Arg &copy) {
-    symbol = copy.symbol;
-    type = copy.type;
-    meta = copy.meta;
-    return *this;
-}
-
-AST MacroStmt::getASTType() { return AST::MacroStmt; }
-
-string MacroStmt::getSymbol() { return symbol; }
-
 /// ROOT ///
 
 AST Root::getASTType() { return AST::Root; }

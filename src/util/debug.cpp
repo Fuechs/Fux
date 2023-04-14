@@ -131,9 +131,11 @@ void CallExpr::debugPrint(size_t indent) {
 }
 
 void MemberExpr::debugPrint(size_t indent) {
+    debugIndent(indent, "(");
     callASTDebug(indent, parent);
     cout << ".";
     debugIndent(0, member);
+    cout << ")";
 }
 
 void UnaryExpr::debugPrint(size_t indent) {
@@ -371,6 +373,7 @@ void Parser::debugPrint(const string message) {
 }
 
 void ValueStruct::debugPrint() {
+    cout << std::setprecision(20); // display all digits of a float
     switch (type.kind) {
         case FuxType::BOOL:     cout << (__bool ? "true" : "false"); break;
         case FuxType::I8:       cout << __i8; break;
