@@ -15,7 +15,7 @@
 
 class ErrorManager {
 public:
-    typedef map<string, vector<string>> SourceMap;
+    typedef map<string, StringVec> SourceMap;
 
     ErrorManager();
     ~ErrorManager();

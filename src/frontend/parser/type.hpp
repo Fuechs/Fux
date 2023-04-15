@@ -16,6 +16,8 @@
 #include "../../backend/llvmheader.hpp"
 #include "../metadata.hpp"
 
+class Expr;
+
 class FuxType {
 public:
     // Possible kinds of data types -- Mapped to respective keyword value
@@ -55,8 +57,8 @@ public:
     using AccessList = vector<Access>;
     using Vec = vector<FuxType>;
 
-    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, bool array = false, _i64 sizeID = -1, string name = "")
-    : kind(kind), pointerDepth(pointerDepth), reference(reference), access(accessList), array(array), sizeID(sizeID), name(name) {}
+    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, 
+        bool array = false, shared_ptr<Expr> size = nullptr, string name = "");
     ~FuxType();
 
     FuxType &operator=(const FuxType &copy);
@@ -68,7 +70,7 @@ public:
     // shorthand for reference types
     static FuxType createRef(Kind kind, size_t pointerDepth = 0, AccessList accessList = {}, string name = "");
     // shorthand for array types
-    static FuxType createArray(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "", _i64 sizeID = -1);    
+    static FuxType createArray(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "", shared_ptr<Expr> size = nullptr);    
     // shorthand for primitive types (e.g. for type casts)
     static FuxType createPrimitive(Kind kind, size_t pointerDepth = 0, bool reference = false, bool array = false, string name = "");
 
@@ -97,9 +99,7 @@ public:
     string name;
     // is an array type
     bool array; 
-    // relevant for array types
-    // -1 -> no size
-    //  N -> ID of array size expr stored in Root
-    _i64 sizeID;
+    // relevant for array types, constant size of the array
+    shared_ptr<Expr> size;
     Metadata meta; // position where type was parsed 
 };

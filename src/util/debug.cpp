@@ -284,13 +284,12 @@ void FunctionStmt::debugPrint(size_t indent) {
     cout << ")";
     type.debugPrint();
     cout << "\n";
-    debugIndent(indent, "[ ");
+    debugIndent(indent, "[\n");
     for (Stmt::Ptr &local : locals) {
-        callASTDebug(0, local);
-        if (local != locals.back())
-            cout << "; ";
+        callASTDebug(indent + 1, local);
+        cout << ";\n";
     }
-    cout << " ]\n";
+    debugIndent(indent, "]\n");
     debugBody(indent, body);
 }
 
@@ -345,13 +344,6 @@ void Root::debugPrint(size_t indent) {
         return;
 
     cout << debugText << "Root AST";
-
-    for (size_t i = 0; i < arraySizeExprs.size(); i++) {
-        cout << "\n";
-        cout << "[" << CC::YELLOW << SC::UNDERLINE << i << CC::DEFAULT << SC::RESET << "]: ";
-        callASTDebug(indent, arraySizeExprs.at(i));
-    }
-
     for (Stmt::Ptr &stmt : program) {
         cout << "\n";
         callASTDebug(0, stmt);
@@ -376,16 +368,8 @@ void ValueStruct::debugPrint() {
     cout << std::setprecision(20); // display all digits of a float
     switch (type.kind) {
         case FuxType::BOOL:     cout << (__bool ? "true" : "false"); break;
-        case FuxType::I8:       cout << __i8; break;
-        case FuxType::U8:       cout << to_string(__u8); break;
         case FuxType::C8:       cout << "'" << unescapeSequences(&__c8) << "'"; break;
-        case FuxType::I16:      cout << __i16; break;
-        case FuxType::U16:      cout << __u16; break;
         case FuxType::C16:      cout << "'" << to_string(__c16) << "'"; break;
-        // case FuxType::F16:      cout << __f16; break;
-        case FuxType::I32:      cout << __i32; break;
-        case FuxType::U32:      cout << __u32; break;
-        case FuxType::F32:      cout << __f32; break;
         case FuxType::I64:      cout << __i64; break;
         case FuxType::U64:      cout << __u64; break;
         case FuxType::F64:      cout << __f64; break;

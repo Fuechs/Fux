@@ -107,7 +107,7 @@ string Marking::print(size_t padding, string line) {
             if (line.empty())
                 assert(!"Marking::print(): Marking::DOUBLE_INSERT; received empty line.");
 
-            vector<string> inserts = split(text, '\n');
+            StringVec inserts = split(text, '\n');
 
             ss << string(padding, ' ') << CC::WHITE << SC::BOLD << "|    " 
                 << highlightedInsert(line, start - 1, inserts.at(0), end - 1, inserts.at(1)) << "\n"

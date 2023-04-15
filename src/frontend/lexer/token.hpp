@@ -300,7 +300,7 @@ static const char *TokenTypeString[] = {
     "NONE",
 };
 
-static vector<string> TokenTypeValue = {
+static StringVec TokenTypeValue = {
     // structure
     "(",     
     ")",        

@@ -154,7 +154,7 @@ Stmt::Ptr Parser::parseEnumStmt() {
     }
 
     eat(LBRACE);
-    vector<string> elements = {};
+    StringVec elements = {};
     do {
         if (*current == RBRACE)
             break;
@@ -857,7 +857,7 @@ FuxType Parser::parseType(bool primitive) {
         return ret;
     }
 
-    FuxType::AccessList access = {FuxType::PUBLIC};
+    FuxType::AccessList access = { };
     size_t pointerDepth = 0;
 
     Token &typeDenotion = eat(); // ':' or '->' for error tracking
@@ -897,7 +897,7 @@ FuxType Parser::parseType(bool primitive) {
     else if (check(LBRACKET)) {
         Expr::Ptr size = parseExpr();
         eat(RBRACKET, ParseError::MISSING_PAREN);
-        ret = FuxType::createArray(kind, pointerDepth, reference, access, value, root->addSizeExpr(size));
+        ret = FuxType::createArray(kind, pointerDepth, reference, access, value, size);
     } else 
         ret = FuxType::createStd(kind, pointerDepth, reference, access, value);
     

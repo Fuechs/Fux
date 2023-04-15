@@ -10,13 +10,15 @@
  */
 
 #include "type.hpp"
+#include "../ast/expr.hpp"
+
+FuxType::FuxType(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, bool array, Expr::Ptr size, string name)
+: kind(kind), pointerDepth(pointerDepth), reference(reference), access(accessList), array(array), size(size), name(name) {}
 
 FuxType::~FuxType() {
     access.clear();
     name.clear();
 }
-
-// FuxType::FuxType(const FuxType &copy) {}
 
 FuxType &FuxType::operator=(const FuxType &copy) {
     this->kind = copy.kind;
@@ -25,7 +27,7 @@ FuxType &FuxType::operator=(const FuxType &copy) {
     this->access = copy.access;
     this->name = copy.name;
     this->array = copy.array;
-    this->sizeID = copy.sizeID;
+    this->size = copy.size;
     return *this;
 }
 
@@ -33,25 +35,25 @@ bool FuxType::operator==(const FuxType &comp) const {
     return (kind == comp.kind 
             && access == comp.access 
             && array == comp.array 
-            /* && sizeID == comp.sizeID (shouldn't be required to be equal as of now)*/ );
+            /* && size == comp.size (shouldn't be required to be equal as of now)*/ );
 }
 
 bool FuxType::operator!() { return kind == NO_TYPE; }
 
 FuxType FuxType::createStd(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name) {
-    return FuxType(kind, pointerDepth, reference, accessList, false, -1, name);
+    return FuxType(kind, pointerDepth, reference, accessList, false, nullptr, name);
 }
 
 FuxType FuxType::createRef(Kind kind, size_t pointerDepth, AccessList accessList, string name) {
-    return FuxType(kind, pointerDepth, true, accessList, false, -1, name); 
+    return FuxType(kind, pointerDepth, true, accessList, false, nullptr, name); 
 }
 
-FuxType FuxType::createArray(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name, _i64 sizeID) {
-    return FuxType(kind, pointerDepth, reference, accessList, true, sizeID, name);
+FuxType FuxType::createArray(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name, Expr::Ptr size) {
+    return FuxType(kind, pointerDepth, reference, accessList, true, size, name);
 }
 
 FuxType FuxType::createPrimitive(Kind kind, size_t pointerDepth, bool reference, bool array, string name) {
-    return FuxType(kind, pointerDepth, reference, AccessList(), array, -1, name);
+    return FuxType(kind, pointerDepth, reference, AccessList(), array, nullptr, name);
 }
 
 string FuxType::accessAsString(char delim) {
@@ -110,9 +112,8 @@ void FuxType::debugPrint(bool primitive) {
     
     if (array) {
         cout << "[";
-        if (sizeID > -1)
-            cout << SC::UNDERLINE << CC::YELLOW 
-                << sizeID << SC::RESET << CC::DEFAULT;
+        if (size)
+            size->debugPrint();
         cout << "]";
     }
 }

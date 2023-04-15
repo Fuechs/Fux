@@ -345,10 +345,10 @@ public:
 
 class EnumStmt : public Stmt {
     string symbol;
-    vector<string> elements;
+    StringVec elements;
 
 public:
-    EnumStmt(const string &symbol, vector<string> elements = {})
+    EnumStmt(const string &symbol, StringVec elements = {})
     : symbol(symbol), elements(elements) {}
 
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
@@ -361,9 +361,6 @@ public:
 
 class Root : public Stmt {
     Stmt::Vec program;
-    // resting place for array size expressions
-    // FuxTypes refer to these by IDs
-    Expr::Vec arraySizeExprs; 
 
 public:
     typedef shared_ptr<Root> Ptr;
@@ -378,5 +375,4 @@ public:
     void debugPrint(size_t indent = 0) override;
  
     void addSub(Stmt::Ptr &sub);
-    _i64 addSizeExpr(Expr::Ptr &sizeExpr);
 };

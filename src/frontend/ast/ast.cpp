@@ -249,11 +249,6 @@ string Root::getSymbol() { return "root"; }
 
 void Root::addSub(Stmt::Ptr &sub) { program.push_back(std::move(sub)); }
 
-_i64 Root::addSizeExpr(Expr::Ptr &sizeExpr) {
-    arraySizeExprs.push_back(std::move(sizeExpr));
-    return arraySizeExprs.size() - 1;
-}
-
 /// PARENTS ///
 
 Stmt::~Stmt() {}
