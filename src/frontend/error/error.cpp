@@ -28,16 +28,29 @@ void Error::report() {
 
     flag = REPORTED;
 
+    if (isWarning(type) && !fux.warnings
+    ||  isAggressive(type) && !fux.aggressive)
+        return;
+
     size_t padding = 4;
     for (Subject &subj : subjects) 
         padding = std::max(padding, std::max(subj.meta.fstLine + 4, subj.meta.lstLine + 4));
 
     stringstream ss;
 
-    if (isWarning(type))    ss << SC::BOLD << CC::MAGENTA << "[warning]";
-    else                    ss << SC::BOLD << CC::RED << "[error]";
+    if (isWarning(type) && !fux.werrors)    
+        ss << SC::BOLD << CC::MAGENTA << "[warning]";
+    else                    
+        ss << SC::BOLD << CC::RED << "[error]";
 
-    ss << CC::DEFAULT << getLiteral(type) << ": " << title << ":\n" << SC::RESET;
+    ss << CC::DEFAULT 
+        << "[" << (isAggressive(type) ? "EA" : "E") << to_string(type) << "]: "
+        << getLiteral(type); 
+
+    if (!title.empty())     
+        ss << ": " << title;
+        
+    ss << ":\n" << SC::RESET;
     
     for (Subject &subj : subjects)
         ss << subj.print();
