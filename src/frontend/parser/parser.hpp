@@ -20,7 +20,7 @@
 
 class Parser {
 public:
-    Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile = false);
+    Parser(const string &fileName, const string &source, const bool mainFile = false);
     ~Parser();
 
     // parse the Tokens and return AST root
@@ -30,7 +30,6 @@ private:
     const string &fileName;
     Token::Vec tokens;
     Token::Iter current;
-    ErrorManager *error;
     Lexer *lexer;
     Root::Ptr root;
     const bool mainFile;
@@ -136,7 +135,7 @@ private:
     // get next token
     Token &eat();
     // expect and get next token
-    Token &eat(TokenType type, ParseError::Type = ParseError::UNEXPECTED_TOKEN);
+    Token &eat(TokenType type, Error::Type = Error::UNEXPECTED_TOKEN);
     // peek to Nth token
     Token &peek(size_t steps = 1);
     // check current token and advance if true
@@ -150,12 +149,12 @@ private:
     constexpr bool notEOF();
 
     void createError(
-        ParseError::Type type, string title, 
+        Error::Type type, string title, 
         const Token &token, string info, size_t ptr = 0, string ptrText = "",
         bool warning = false, bool aggressive = false);
     
     void createError(
-        ParseError::Type type, string title,
+        Error::Type type, string title,
         const Token &token, string info, 
         const Token &refTok, string refInfo,
         bool warning = false, bool aggressive = true);

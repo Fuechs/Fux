@@ -1,7 +1,7 @@
 /**
  * @file error.hpp
  * @author fuechs
- * @brief fux error manager header
+ * @brief Fux Compiler Error Header
  * @version 0.1
  * @date 2022-10-30
  * 
@@ -11,83 +11,64 @@
 
 #pragma once
 
-#include "parseerror.hpp"
+#include "../../fux.hpp"
+#include "subject.hpp"
 
-class ErrorManager {
+class Error {
 public:
-    typedef map<string, StringVec> SourceMap;
+    // NOTE: 
+    //      ID <= 100 is reserved for special IDs
+    //      error: ID % 2 == 0
+    //      warning: ID % 2 != 0
+    //      aggressive: ID >= 800 && ID < 900
+    //      fatal error: ID >= 900
+    enum Type {
+        UNKNOWN                 = 0,
 
-    ErrorManager();
-    ~ErrorManager();
+        UNEXPECTED_TOKEN        = 101,
+        REDUNDANT_CAST          = 102, 
+        ILLEGAL_NUMBER_FORMAT   = 103,
+        RECURSION               = 104,
+        ILLEGAL_CHAR_FORMAT     = 105,
+        USELESS_LIFETIME        = 106,
+        ILLEGAL_STRING_FORMAT   = 107,
+        REDUNDANT_IMPORT        = 108,
+        UNKNOWN_CHARACTER       = 109, 
+        UNEXPECTED_TYPE         = 111,
+        INVALID_CAST            = 113,
+        INVALID_TYPE            = 115,
+        DUPLICATE_SYMBOL        = 117,
+        DUPLICATE_DECL          = 119,
+        EXPECTED_LVALUE         = 121, 
+        VIOLATED_ACCESS         = 123,
+        INVALID_ACCESS          = 125,
+        INVALID_CALL            = 127,
+        UNKNOWN_SYMBOL          = 129,
+        MISSING_PAREN           = 131,
+        ILLEGAL_OPERANDS        = 133,
+        IMPLICIT_CAST           = 800,
+    };
 
-    // provide metadata and markings
-    void plainError(ParseError::Type type, string title,
-        Metadata meta, Marking::Vec marks, bool aggressive = false);
+    enum Flag {
+        REPORTED,
+        NEUTRAL,
+        CANCELLED,
+    };
 
-    void plainError(ParseError::Type type, string title,
-        const string &file, Marking::Vec marks, bool aggressive = false);
+    Error(Type type = UNKNOWN, string title = "", Subject::Vec subjects = {});
+    ~Error();
 
-    // provide metadata and markings (creates warning)
-    void plainWarning(ParseError::Type type, string title,
-        Metadata meta, Marking::Vec marks, bool aggressive = false);
-    
-    void plainWarning(ParseError::Type type, string title,
-        const string &file, Marking::Vec marks, bool aggressive = false);
+    void report();
+    void cancel();
 
-    // create an error with an underline from `start` to `end`
-    // and an additional information
-    void simpleError(ParseError::Type type, string title,
-        Metadata meta, size_t line, size_t start, size_t end, 
-        string info = "", bool aggressive = false);
-
-    // create a warning with an underline from `start` to `end`
-    // and an additional information
-    void simpleWarning(ParseError::Type type, string title,
-        Metadata meta, size_t line, size_t start, size_t end, 
-        string info = "", bool aggressive = false);
-
-    // error with reference
-    void refError(ParseError::Type type, string title,
-        Metadata subj, Marking::Vec subjMarks, Metadata ref, Marking::Vec refMarks,
-        bool warning = false, bool aggressive = false);
-
-    size_t errors();
-    size_t warnings();
-
-    // create underline marking
-    // if except == 0 then ARROW_UL else DASH_UL
-    // except needs to be provided if there is a pointer marking on the same line
-    Marking createUL(size_t line, size_t start, size_t end, size_t except = 0, string info = "");
-    // uses meta.fstLine, meta.fstCol, meta.lstCol
-    Marking createUL(const Metadata &meta, size_t except = 0, string info = "");
-    // create pointer marking
-    Marking createPtr(size_t line, size_t col, string info = "");
-
-    // create underline marking
-    // if ptr != 0 then create pointer marking too
-    // if fstLine != lstLine then create only multi-line marking
-    Marking::Vec createMark(size_t fstLine, size_t lstLine, size_t start, size_t end, 
-        string info = "", size_t ptr = 0, string ptrInfo = "", Marking::Vec append = {});
-
-    // create underline marking
-    // if ptr != 0 then create pointer marking too
-    // if fstLine != lstLine then create only multi-line marking
-    Marking::Vec createMark(const Metadata &meta, string info = "", size_t ptr = 0, string ptrInfo = "", Marking::Vec append = {});
-
-    Marking createHelp(size_t line, string message);
-    Marking createNote(size_t line, string message);
-    Marking createReplace(size_t line, size_t start, size_t end, string replacement);
-    Marking createInsert(size_t line, size_t col, string insertion);
-    Marking createInsert(size_t line, size_t col, string insertion, size_t col1, string insertion1);
-    Marking createRemove(size_t line, size_t start, size_t end);
-    Marking createMulti(size_t fstLine, size_t lstLine, string message);
-    Marking createHighlight(size_t fstLine, size_t lstLine, size_t fstCol, size_t lstCol, string info);
+    static string getLiteral(Type type);
+    static constexpr bool isWarning(Type type);
+    static constexpr bool isAggressive(Type type);
+    static constexpr bool isFatal(Type type);
 
 private:
-    ParseError::Vec _errors;
-    size_t errorCount;
-    size_t warningCount;
-
-    // update count and report error
-    void update(ParseError pe);
+    Type type;
+    Flag flag;
+    string title;
+    Subject::Vec subjects;
 };

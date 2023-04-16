@@ -18,7 +18,7 @@
 
 class Lexer {
 public:
-    Lexer(const string source, const string &fileName, ErrorManager *error);
+    Lexer(const string source, const string &fileName);
     ~Lexer();
 
     // lex source
@@ -34,7 +34,6 @@ private:
     Token::Vec tokens;
     Token currentToken;
     size_t idx, col, line;
-    ErrorManager *error;
     
     // peek to next chararacter
     char peek(int offset = 1);

@@ -11,9 +11,9 @@
 
 #include "parser.hpp"
 
-Parser::Parser(ErrorManager *error, const string &fileName, const string &source, const bool mainFile) 
-: fileName(fileName), error(error), mainFile(mainFile) {
-    lexer = new Lexer(source, fileName, error);
+Parser::Parser(const string &fileName, const string &source, const bool mainFile) 
+: fileName(fileName), mainFile(mainFile) {
+    lexer = new Lexer(source, fileName);
     root = make_shared<Root>();
 }
 
@@ -58,7 +58,7 @@ Stmt::Ptr Parser::parseStmt(bool expectSemicolon) {
             if (stmt->meta.file.empty()) 
                 assert(!"metadata not implemented for parsed kind of AST");
 
-            error->plainError(ParseError::UNEXPECTED_TOKEN, "Expected a semicolon ';' after statement",
+            error->plainError(Error::UNEXPECTED_TOKEN, "Expected a semicolon ';' after statement",
                 stmt->meta, error->createMark(stmt->meta, "Parsed statement", 
                     stmt->meta.lstCol + 1, "Expected semicolon ';' here"));
         } else
@@ -88,7 +88,7 @@ Stmt::Ptr Parser::parseMacroStmt() {
         
         while (!check(RBRACE)) 
             if (!notEOF()) {
-                error->refError(ParseError::MISSING_PAREN, "Macro body was never closed", Metadata(fileName),
+                error->refError(Error::MISSING_PAREN, "Macro body was never closed", Metadata(fileName),
                     {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
                         error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this macro body")},
                     Metadata(fileName),
@@ -131,7 +131,7 @@ Stmt::Ptr Parser::parseMacroStmt() {
     } 
         
     meta.copyEnd(symbol);
-    error->plainError(ParseError::UNEXPECTED_TOKEN, "Unexpected token while parsing a macro",
+    error->plainError(Error::UNEXPECTED_TOKEN, "Unexpected token while parsing a macro",
         fileName, error->createMark(meta, "Parsed macro", current->start, "Unexpected token", 
             {error->createHelp(current->line, "Would have expected a macro body, case or prototype here")}));
     Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value);
@@ -161,7 +161,7 @@ Stmt::Ptr Parser::parseEnumStmt() {
 
         elements.push_back(eat(IDENTIFIER).value);
     } while (check(COMMA));
-    eat(RBRACE, ParseError::MISSING_PAREN);
+    eat(RBRACE, Error::MISSING_PAREN);
 
     Stmt::Ptr stmt = make_shared<EnumStmt>(symbol, elements);
     meta.copyEnd(peek(-1));
@@ -186,7 +186,7 @@ Stmt::Ptr Parser::parseFunctionDeclStmt() {
         if      (check(LPAREN)) ++depth;
         else if (check(RPAREN)) --depth; // we don't care about any errors here, so we don't check wether depth is < 0
         else if (check(_EOF))   {
-            createError(ParseError::MISSING_PAREN, "Expected Closing Paren after Parameter List", peek(-1), "Expected closing paren here",
+            createError(Error::MISSING_PAREN, "Expected Closing Paren after Parameter List", peek(-1), "Expected closing paren here",
                 *paramBegin, "Opening paren found here"); 
             recover();
             break;
@@ -212,7 +212,7 @@ Stmt::Ptr Parser::parseFunctionDeclStmt() {
         if (parameter)
             parameters.push_back(parameter);
     } while (check(COMMA));
-    eat(RPAREN, ParseError::MISSING_PAREN);
+    eat(RPAREN, Error::MISSING_PAREN);
 
     FuxType type = parseType();
 
@@ -261,7 +261,7 @@ Stmt::Ptr Parser::parseForLoopStmt() {
             iter = make_shared<NullExpr>();
     }
 
-    eat(RPAREN, ParseError::MISSING_PAREN);
+    eat(RPAREN, Error::MISSING_PAREN);
     Stmt::Ptr body = parseStmt();
     
     meta.copyEnd(body->meta);
@@ -288,11 +288,11 @@ Stmt::Ptr Parser::parseWhileLoopStmt() {
         eat(KEY_WHILE);
         eat(LPAREN);
         condition = parseExpr();
-        eat(RPAREN, ParseError::MISSING_PAREN);
+        eat(RPAREN, Error::MISSING_PAREN);
     } else if (check(KEY_WHILE)) {
         eat(LPAREN);
         condition = parseExpr();
-        eat(RPAREN, ParseError::MISSING_PAREN);
+        eat(RPAREN, Error::MISSING_PAREN);
         body = parseStmt();
     } else
         return parseBlockStmt();
@@ -309,7 +309,7 @@ Stmt::Ptr Parser::parseBlockStmt() {
         Stmt::Vec body;
         while (!check(RBRACE)) 
             if (!notEOF()) {
-                error->refError(ParseError::MISSING_PAREN, "Code block was never closed", Metadata(fileName),
+                error->refError(Error::MISSING_PAREN, "Code block was never closed", Metadata(fileName),
                     {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
                         error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this code block")},
                     Metadata(fileName),
@@ -332,7 +332,7 @@ Stmt::Ptr Parser::parseIfElseStmt() {
 
         eat(LPAREN);
         Expr::Ptr condition = parseExpr();
-        eat(RPAREN, ParseError::MISSING_PAREN);
+        eat(RPAREN, Error::MISSING_PAREN);
         
         Stmt::Ptr thenBody = parseStmt(); 
 
@@ -625,7 +625,7 @@ Expr::Ptr Parser::parseTypeCastExpr() {
             current = backToken; // get '*'s, identifier and '(' back
             return parseLogBitUnaryExpr();
         }
-        eat(RPAREN, ParseError::MISSING_PAREN);
+        eat(RPAREN, Error::MISSING_PAREN);
         Expr::Ptr expr = parseExpr();
         expr = make_shared<TypeCastExpr>(type, expr);
         expr->meta.fstLine = open.line;
@@ -703,7 +703,7 @@ Expr::Ptr Parser::parseIndexExpr(Expr::Ptr parent) {
         parent->meta.copyEnd(peek(-1));
     } else if (check(LBRACKET)) {
         Expr::Ptr index = parseExpr();
-        Token &close = eat(RBRACKET, ParseError::MISSING_PAREN);
+        Token &close = eat(RBRACKET, Error::MISSING_PAREN);
         parent = make_shared<BinaryExpr>(BinaryOp::IDX, parent, index);
         parent->meta.copyEnd(close);
     }
@@ -737,7 +737,7 @@ Expr::Ptr Parser::parseCallExpr(Expr::Ptr callee) {
     Expr::Vec arguments = Expr::Vec();
     if (*current != RPAREN)
         arguments = parseExprList(RPAREN);
-    eat(RPAREN, ParseError::MISSING_PAREN);
+    eat(RPAREN, Error::MISSING_PAREN);
     
     Expr::Ptr expr = make_shared<CallExpr>(callee, arguments, (bool) asyncTok);
     expr->meta.copyEnd(asyncTok ? *asyncTok : peek(-1));
@@ -780,7 +780,7 @@ Expr::Ptr Parser::parsePrimaryExpr() {
                 || endTok.type == BINARY)
                     endExpr = parseNumberExpr(endTok);
                 else 
-                    error->plainError(ParseError::ILLEGAL_OPERANDS, "IncompleterRange expression", fileName,
+                    error->plainError(Error::ILLEGAL_OPERANDS, "Incomplete range expression", fileName,
                         error->createMark(that.line, endTok.line, that.start, endTok.end,
                             "Range expression indicated by '...' operato.", endTok.start, "Would have expected an integer here",
                             {error->createHelp(endTok.line, "The LHS and RHS of a range expression have to be constants")}));
@@ -817,19 +817,19 @@ Expr::Ptr Parser::parsePrimaryExpr() {
         case LPAREN: 
             expr = parseExpr();
             expr->enclosed = true;
-            eat(RPAREN, ParseError::MISSING_PAREN);
+            eat(RPAREN, Error::MISSING_PAREN);
             return expr;
         case LBRACE: {
             Expr::Vec elements = parseExprList(RBRACE);
-            eat(RBRACE, ParseError::MISSING_PAREN);
+            eat(RBRACE, Error::MISSING_PAREN);
             return make_shared<ArrayExpr>(elements);
         }
         case _EOF: 
-            createError(ParseError::UNEXPECTED_EOF, "Unexpected EOF while parsing Primary Expression",
+            createError(Error::UNEXPECTED_TOKEN, "Unexpected EOF while parsing Primary Expression",
                 peek(-2), "Last token pased", peek(-1).start, "Expected an expression here", false);
             return nullptr;
         default:    
-            createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing Primary Expression",
+            createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing Primary Expression",
                 that, "Unexpected token "+string(TokenTypeString[that.type])+" '"+that.value+"'");
             recover();
             return make_shared<NullExpr>();
@@ -866,7 +866,7 @@ FuxType Parser::parseType(bool primitive) {
         case COLON:     reference = false; break;
         case POINTER:   reference = true; break;
         default:        
-            createError(ParseError::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
+            createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
                 typeDenotion, "Expected a COLON ':' or POINTER '->' here");
             return FuxType();
     }
@@ -879,7 +879,7 @@ FuxType Parser::parseType(bool primitive) {
 
     if (!current->isType()) {
         if (pointerDepth > 0)
-            createError(ParseError::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
+            createError(Error::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
                 peek(-1), "Given pointer-depth will be ignored",
                 0, "", {}, true);
         FuxType ret = FuxType::createStd(FuxType::AUTO, 0, reference, access);
@@ -896,7 +896,7 @@ FuxType Parser::parseType(bool primitive) {
         ret = FuxType::createArray(kind, pointerDepth, reference, access, value);
     else if (check(LBRACKET)) {
         Expr::Ptr size = parseExpr();
-        eat(RBRACKET, ParseError::MISSING_PAREN);
+        eat(RBRACKET, Error::MISSING_PAREN);
         ret = FuxType::createArray(kind, pointerDepth, reference, access, value, size);
     } else 
         ret = FuxType::createStd(kind, pointerDepth, reference, access, value);
@@ -946,7 +946,7 @@ MacroStmt::Case *Parser::parseMacroCase() {
         args.push_back(parseMacroArg());
     } while (check(COMMA));
     
-    eat(RPAREN, ParseError::MISSING_PAREN);
+    eat(RPAREN, Error::MISSING_PAREN);
     
     eat(POINTER);
 
@@ -977,7 +977,7 @@ MacroStmt::Arg Parser::parseMacroArg() {
     else if (id.value == "block")
         that.type = MacroStmt::BLOCK;
     else
-        error->plainError(ParseError::ILLEGAL_TYPE, "Expected macro parameter type", fileName,
+        error->plainError(Error::UNEXPECTED_TYPE, "Expected macro parameter type", fileName,
             error->createMark(symbol.line, id.line, symbol.start, id.end, 
                 "Parsed macro parameter", id.start, 
                 "Expected a macro parameter type here", 
@@ -996,16 +996,16 @@ MacroStmt::Arg Parser::parseMacroArg() {
 FunctionStmt::Parameter::Ptr Parser::parseFuncParameter() {
     // TODO: add proper errors
 
-    Metadata meta = Metadata(fileName);
     Token &symbol = eat(IDENTIFIER);
-    meta.copyWhole(symbol);
+    Metadata meta = Metadata(fileName, symbol);
     FuxType type = parseType();
     Expr::Ptr value = nullptr;
 
     if (check(EQUALS)) {
         value = parseExpr();
         meta.copyEnd(value->meta);
-    } else
+    } // TODO: if (check(TRIPLE_EQUALS)) { throw error, should use final instead. } 
+    else
         meta.copyEnd(type.meta);
 
     // <parameter>, ...                
@@ -1022,7 +1022,7 @@ Token &Parser::eat() {
     return *current++;
 }
 
-Token &Parser::eat(TokenType type, ParseError::Type errType) {
+Token &Parser::eat(TokenType type, Error::Type errType) {
     Token curTok = eat();
 
     if (curTok != type) {
@@ -1062,7 +1062,7 @@ void Parser::recover(TokenType type) {
 constexpr bool Parser::notEOF() { return *current != _EOF; }
 
 void Parser::createError(
-    ParseError::Type type, string title, 
+    Error::Type type, string title, 
     const Token &token, string info, size_t ptr, string ptrText,
     bool warning, bool aggressive) {
         if (warning)
@@ -1074,7 +1074,7 @@ void Parser::createError(
 }
 
 void Parser::createError(
-    ParseError::Type type, string title,
+    Error::Type type, string title,
     const Token &token, string info, 
     const Token &refTok, string refInfo,
     bool warning, bool aggressive) {

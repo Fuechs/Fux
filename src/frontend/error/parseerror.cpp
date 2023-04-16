@@ -1,7 +1,7 @@
 /**
- * @file parseerror.cpp
+ * @file Error.cpp
  * @author fuechs
- * @brief fux ParseError
+ * @brief fux Error
  * @version 0.1
  * @date 2023-01-16
  * 
@@ -9,9 +9,9 @@
  * 
  */
 
-#include "parseerror.hpp"
+#include "Error.hpp"
 
-ParseError::ParseError() {
+Error::Error() {
     flags = FlagVec();
     type = UNKNOWN_ERROR;
     title = "";
@@ -19,7 +19,7 @@ ParseError::ParseError() {
     reference = Subject();
 }
 
-ParseError::ParseError(FlagVec flags, Type type, string title, Subject subject, Subject reference) {
+Error::Error(FlagVec flags, Type type, string title, Subject subject, Subject reference) {
     this->flags = flags;
     this->type = type;
     this->title = title;
@@ -27,12 +27,12 @@ ParseError::ParseError(FlagVec flags, Type type, string title, Subject subject, 
     this->reference = reference;
 }
 
-ParseError::~ParseError() { 
+Error::~Error() { 
     flags.clear(); 
     title.clear();
 }
 
-void ParseError::report() {
+void Error::report() {
     if (hasFlag(REPORTED) /* TODO: || !fux.options.warnings && hasFlag(WARNING)*/)
         return;
     flags.push_back(REPORTED);
@@ -51,11 +51,11 @@ void ParseError::report() {
     cerr << ss.str();
 }
 
-bool ParseError::hasFlag(Flag flag) {
+bool Error::hasFlag(Flag flag) {
     return find(flags.begin(), flags.end(), flag) != flags.end();
 }
 
-string ParseError::printHead() {
+string Error::printHead() {
     stringstream ss;
     ss << SC::BOLD;
     if (/* TODO: !fux.options.werrors &&*/ hasFlag(WARNING)) 

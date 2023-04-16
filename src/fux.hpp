@@ -95,9 +95,14 @@ struct FuxStruct {
     bool threading      = true;  // use threading 
     bool debug          = true;  // debug logs 
     size_t errorLimit   = 1000;  // amount of errors until stop
+                                 // this will be decremented with every throw
+                                 // when it hits zero, the compilation is halted
     std::string target  = "";    // targeted architecture / platform
                                  // e.g. arm64-apple-darwin22.2.0
                                  //      x86_64-unknown-linux-gnu
+
+    bool errorThrown    = false; // wether an error was thrown
+    bool warningThrown  = false; // wether a warning was thrown
 };
 
 extern FuxStruct fux;
