@@ -13,6 +13,8 @@
 
 #ifdef FUX_ANALYSER
 
+Analyser::Analyser(const string &file, Root::Ptr &root) : file(file), root(root) {}
+
 Stmt::Ptr Analyser::analyse() { 
     current = new Scope();
     return origin->analyse(this); 

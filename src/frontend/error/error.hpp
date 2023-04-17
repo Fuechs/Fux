@@ -16,36 +16,40 @@
 
 class Error {
 public:
+    using Ptr = shared_ptr<Error>;
+
     // NOTE: 
-    //      ID <= 100 is reserved for special IDs
-    //      error: ID % 2 == 0
-    //      warning: ID % 2 != 0
+    //      ID <= 100 is reserved for now
+    //      error: ID > 100 && ID < 500 
+    //      warning: ID >= 500 && ID < 800
     //      aggressive: ID >= 800 && ID < 900
     //      fatal error: ID >= 900
     enum Type {
         UNKNOWN                 = 0,
 
         UNEXPECTED_TOKEN        = 101,
-        REDUNDANT_CAST          = 102, 
-        ILLEGAL_NUMBER_FORMAT   = 103,
-        RECURSION               = 104,
-        ILLEGAL_CHAR_FORMAT     = 105,
-        USELESS_LIFETIME        = 106,
-        ILLEGAL_STRING_FORMAT   = 107,
-        REDUNDANT_IMPORT        = 108,
-        UNKNOWN_CHARACTER       = 109, 
-        UNEXPECTED_TYPE         = 111,
-        INVALID_CAST            = 113,
-        INVALID_TYPE            = 115,
-        DUPLICATE_SYMBOL        = 117,
-        DUPLICATE_DECL          = 119,
-        EXPECTED_LVALUE         = 121, 
-        VIOLATED_ACCESS         = 123,
-        INVALID_ACCESS          = 125,
-        INVALID_CALL            = 127,
-        UNKNOWN_SYMBOL          = 129,
-        MISSING_PAREN           = 131,
-        ILLEGAL_OPERANDS        = 133,
+        ILLEGAL_NUMBER_FORMAT   = 102,
+        ILLEGAL_CHAR_FORMAT     = 103,
+        ILLEGAL_STRING_FORMAT   = 104,
+        UNKNOWN_CHARACTER       = 105, 
+        UNEXPECTED_TYPE         = 106,
+        INVALID_CAST            = 107,
+        INVALID_TYPE            = 108,
+        DUPLICATE_SYMBOL        = 109,
+        DUPLICATE_DECL          = 110,
+        EXPECTED_LVALUE         = 111, 
+        VIOLATED_ACCESS         = 112,
+        INVALID_ACCESS          = 113,
+        INVALID_CALL            = 114,
+        UNKNOWN_SYMBOL          = 115,
+        MISSING_PAREN           = 116,
+        ILLEGAL_OPERANDS        = 117,
+
+        REDUNDANT_CAST          = 500, 
+        RECURSION               = 501,
+        USELESS_LIFETIME        = 502,
+        REDUNDANT_IMPORT        = 503,
+        
         IMPLICIT_CAST           = 800,
     };
 

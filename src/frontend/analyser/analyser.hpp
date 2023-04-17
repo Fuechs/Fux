@@ -22,7 +22,7 @@
 
 class Analyser {
 public:
-    Analyser(ErrorManager *error, Root::Ptr &root) : error(error), origin(root) {} 
+    Analyser(const string &file, Root::Ptr &root);
 
     // analyse AST 
     Stmt::Ptr analyse();
@@ -48,7 +48,7 @@ public:
     string mangleSymbol(Stmt::Ptr &link);
 
 private:
-    ErrorManager *error;
+    const string &file;
     Root::Ptr &origin;
     Scope *current;
 

@@ -12,7 +12,6 @@
 #pragma once
 
 #include "../fux.hpp"
-#include "../frontend/error/error.hpp"
 #include "../frontend/parser/parser.hpp"
 #include "../frontend/analyser/analyser.hpp"
 
@@ -21,7 +20,9 @@ public:
     using Vec = vector<Source *>;
     using Groups = vector<Vec>;
 
-    Source(ErrorManager *error, const string &filePath, const bool mainFile = false);
+    [[deprecated("This constructor is only for debugging purposes.")]]
+    Source(const string &file, const string &source);
+    Source(const string &filePath, const bool mainFile = false);
     
     ~Source();
 
@@ -35,9 +36,6 @@ public:
     // will be called for every file that's referenced 
     void parse();
 
-    // check if file has errors
-    size_t errors();
-
     // return file size in bytes
     // from https://stackoverflow.com/a/32286531
     size_t getFileSize();
@@ -45,14 +43,13 @@ public:
     string fileName;
     string filePath;
     string fileDir;
+    string fileContent;
 
     Root::Ptr root;
     
 private:
     StringVec sourceCode;
-    ErrorManager *error;
     Parser *parser;
     FUX_AC(Analyser *analyser;)
-    string contents;
     bool mainFile;
 };

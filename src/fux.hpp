@@ -33,6 +33,8 @@ using std::cout, std::cerr, std::endl, std::exception, std::make_shared, std::ma
 
 using StringVec = vector<string>;
 
+#define ERROR_TEST
+
 // #define FUX_BACKEND
 
 #ifdef FUX_BACKEND
@@ -91,7 +93,7 @@ struct FuxStruct {
     bool compileOnly    = false; // compile only to llvm ir
     bool warnings       = true;  // throw warnings
     bool optimize       = true;  // optimize generated code
-    bool werrors        = true;  // treat warnings as errors
+    bool werrors        = false;  // treat warnings as errors
     bool threading      = true;  // use threading 
     bool debug          = true;  // debug logs 
     size_t errorLimit   = 1000;  // amount of errors until stop

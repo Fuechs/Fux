@@ -14,6 +14,8 @@
 
 FuxStruct fux;
 
+#ifndef ERROR_TEST
+
 int parseArguments(int argc, char **argv);
 int printVersion();
 int printHelp();
@@ -57,9 +59,7 @@ int main(int argc, char **argv) {
         std::cout << ".\n";
     }
 
-    ErrorManager *error = new ErrorManager();
-    Source *main = new Source(error, fux.mainFile, true);
-    fux.sources.push_back(main);
+    Source *main = new Source(fux.mainFile, true);
 
     main->parse();
     main->root->debugPrint();
@@ -175,3 +175,18 @@ int printHelp() {
         << "    -help -h            show this message and exit\n";
     return 1; 
 }
+
+#else
+
+int main(void) {
+    string file = "main.fux";
+    string content = "main(void): u64 return 0;";
+    Source dummy(file, content);
+
+    fux.aggressive = true;
+    Error::Ptr error = make_shared<Error>(Error::REDUNDANT_CAST, "This is a warning");
+    error->report();
+    return 0;
+}
+
+#endif

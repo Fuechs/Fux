@@ -44,13 +44,13 @@ void Error::report() {
         ss << SC::BOLD << CC::RED << "[error]";
 
     ss << CC::DEFAULT 
-        << "[" << (isAggressive(type) ? "EA" : "E") << to_string(type) << "]: "
+        << "[" << (isAggressive(type) ? "AE" : "E") << to_string(type) << "]: "
         << getLiteral(type); 
 
     if (!title.empty())     
         ss << ": " << title;
         
-    ss << ":\n" << SC::RESET;
+    ss << "\n" << SC::RESET;
     
     for (Subject &subj : subjects)
         ss << subj.print();
@@ -73,17 +73,21 @@ void Error::cancel() {
         assert("Error::cancel(): Cannot cancel an error that was already reported.");
 
     flag = CANCELLED;
-    delete this;
 }
 
 string Error::getLiteral(Type type) {
     switch (type) {
         case UNKNOWN:           return "Unknown Error";
+        case REDUNDANT_CAST:    return "Redundant Cast";
+        case RECURSION:         return "Recursion";
+        case USELESS_LIFETIME:  return "Useless Lifetime";
+        case REDUNDANT_IMPORT:  return "Redundant Import";
+        case IMPLICIT_CAST:     return "Implicit Cast";
         default:                assert(!"Error::getLiteral(): Error Type not implemented.");
     }
 }
 
-constexpr bool Error::isWarning(Type type) { return type % 2 != 0; }
+constexpr bool Error::isWarning(Type type) { return type >= 500 && type < 800; }
 
 constexpr bool Error::isAggressive(Type type) { return type >= 800 && type < 900; }
 

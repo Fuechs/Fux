@@ -58,9 +58,10 @@ Stmt::Ptr Parser::parseStmt(bool expectSemicolon) {
             if (stmt->meta.file.empty()) 
                 assert(!"metadata not implemented for parsed kind of AST");
 
-            error->plainError(Error::UNEXPECTED_TOKEN, "Expected a semicolon ';' after statement",
-                stmt->meta, error->createMark(stmt->meta, "Parsed statement", 
-                    stmt->meta.lstCol + 1, "Expected semicolon ';' here"));
+            // FIXME:
+            // error->plainError(Error::UNEXPECTED_TOKEN, "Expected a semicolon ';' after statement",
+            //     stmt->meta, error->createMark(stmt->meta, "Parsed statement", 
+            //         stmt->meta.lstCol + 1, "Expected semicolon ';' here"));
         } else
             stmt->meta.lstCol++; // add semicolon 
     }
@@ -88,12 +89,13 @@ Stmt::Ptr Parser::parseMacroStmt() {
         
         while (!check(RBRACE)) 
             if (!notEOF()) {
-                error->refError(Error::MISSING_PAREN, "Macro body was never closed", Metadata(fileName),
-                    {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
-                        error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this macro body")},
-                    Metadata(fileName),
-                    {error->createUL(opening.line, opening.start, opening.end, 0, "Opening paren found here (LBRACE '{')")});
-                    break;
+                // FIXME:
+                // error->refError(Error::MISSING_PAREN, "Macro body was never closed", Metadata(fileName),
+                //     {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
+                //         error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this macro body")},
+                //     Metadata(fileName),
+                //     {error->createUL(opening.line, opening.start, opening.end, 0, "Opening paren found here (LBRACE '{')")});
+                break;
             } else
                 cases.push_back(parseMacroCase());
 
@@ -131,9 +133,10 @@ Stmt::Ptr Parser::parseMacroStmt() {
     } 
         
     meta.copyEnd(symbol);
-    error->plainError(Error::UNEXPECTED_TOKEN, "Unexpected token while parsing a macro",
-        fileName, error->createMark(meta, "Parsed macro", current->start, "Unexpected token", 
-            {error->createHelp(current->line, "Would have expected a macro body, case or prototype here")}));
+    // FIXME:
+    // error->plainError(Error::UNEXPECTED_TOKEN, "Unexpected token while parsing a macro",
+    //     fileName, error->createMark(meta, "Parsed macro", current->start, "Unexpected token", 
+    //         {error->createHelp(current->line, "Would have expected a macro body, case or prototype here")}));
     Stmt::Ptr macro = make_shared<MacroStmt>(symbol.value);
     macro->meta = meta;
     return macro;
@@ -309,11 +312,12 @@ Stmt::Ptr Parser::parseBlockStmt() {
         Stmt::Vec body;
         while (!check(RBRACE)) 
             if (!notEOF()) {
-                error->refError(Error::MISSING_PAREN, "Code block was never closed", Metadata(fileName),
-                    {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
-                        error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this code block")},
-                    Metadata(fileName),
-                    {error->createUL(opening.line, opening.start, opening.end, 0, "Opening paren found here (LBRACE '{')")});
+                // FIXME:
+                // error->refError(Error::MISSING_PAREN, "Code block was never closed", Metadata(fileName),
+                //     {error->createUL(peek(-1).line, peek(-1).end + 1, peek(-1).end + 1, 0, "Expected a closing paren (RBRACE '}') here"),
+                //         error->createHelp(peek(-1).line, "You may have not closed a code block or array inside this code block")},
+                //     Metadata(fileName),
+                //     {error->createUL(opening.line, opening.start, opening.end, 0, "Opening paren found here (LBRACE '{')")});
                 break;
             } else
                 body.push_back(parseStmt());
@@ -779,11 +783,11 @@ Expr::Ptr Parser::parsePrimaryExpr() {
                 || endTok.type == OCTAL
                 || endTok.type == BINARY)
                     endExpr = parseNumberExpr(endTok);
-                else 
-                    error->plainError(Error::ILLEGAL_OPERANDS, "Incomplete range expression", fileName,
-                        error->createMark(that.line, endTok.line, that.start, endTok.end,
-                            "Range expression indicated by '...' operato.", endTok.start, "Would have expected an integer here",
-                            {error->createHelp(endTok.line, "The LHS and RHS of a range expression have to be constants")}));
+                // FIXME: else 
+                //     error->plainError(Error::ILLEGAL_OPERANDS, "Incomplete range expression", fileName,
+                //         error->createMark(that.line, endTok.line, that.start, endTok.end,
+                //             "Range expression indicated by '...' operato.", endTok.start, "Would have expected an integer here",
+                //             {error->createHelp(endTok.line, "The LHS and RHS of a range expression have to be constants")}));
 
                 if (endExpr.get() == nullptr) {
                     endExpr = make_shared<NullExpr>();
@@ -878,10 +882,10 @@ FuxType Parser::parseType(bool primitive) {
         ++pointerDepth;
 
     if (!current->isType()) {
-        if (pointerDepth > 0)
-            createError(Error::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
-                peek(-1), "Given pointer-depth will be ignored",
-                0, "", {}, true);
+        // FIXME: if (pointerDepth > 0)
+        //     createError(Error::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
+        //         peek(-1), "Given pointer-depth will be ignored",
+        //         0, "", {}, true);
         FuxType ret = FuxType::createStd(FuxType::AUTO, 0, reference, access);
         meta.copyEnd(peek(-1));
         ret.meta = meta;
@@ -977,11 +981,12 @@ MacroStmt::Arg Parser::parseMacroArg() {
     else if (id.value == "block")
         that.type = MacroStmt::BLOCK;
     else
-        error->plainError(Error::UNEXPECTED_TYPE, "Expected macro parameter type", fileName,
-            error->createMark(symbol.line, id.line, symbol.start, id.end, 
-                "Parsed macro parameter", id.start, 
-                "Expected a macro parameter type here", 
-                {error->createHelp(id.line, "Possible types are: 'type', 'ident', 'expr', 'stmt' or 'block'")}));
+        // FIXME: 
+        // error->plainError(Error::UNEXPECTED_TYPE, "Expected macro parameter type", fileName,
+        //     error->createMark(symbol.line, id.line, symbol.start, id.end, 
+        //         "Parsed macro parameter", id.start, 
+        //         "Expected a macro parameter type here", 
+        //         {error->createHelp(id.line, "Possible types are: 'type', 'ident', 'expr', 'stmt' or 'block'")}));
 
     // symbol: id[]
     that.array = check(ARRAY_BRACKET);
@@ -1065,12 +1070,12 @@ void Parser::createError(
     Error::Type type, string title, 
     const Token &token, string info, size_t ptr, string ptrText,
     bool warning, bool aggressive) {
-        if (warning)
-            error->plainWarning(type, title, fileName, 
-                error->createMark(token.line, token.line, token.start, token.end, info, ptr, ptrText));
-        else
-            error->plainError(type, title, fileName, 
-                error->createMark(token.line, token.line, token.start, token.end, info, ptr, ptrText));
+        // FIXME: if (warning)
+        //     error->plainWarning(type, title, fileName, 
+        //         error->createMark(token.line, token.line, token.start, token.end, info, ptr, ptrText));
+        // else
+        //     error->plainError(type, title, fileName, 
+        //         error->createMark(token.line, token.line, token.start, token.end, info, ptr, ptrText));
 }
 
 void Parser::createError(
@@ -1078,8 +1083,8 @@ void Parser::createError(
     const Token &token, string info, 
     const Token &refTok, string refInfo,
     bool warning, bool aggressive) {
-        error->refError(type, title, 
-            Metadata(fileName), {error->createUL(token.line, token.start, token.end, 0, info)},
-            Metadata(fileName), {error->createUL(refTok.line, refTok.start, refTok.end, 0, refInfo)},
-            warning, aggressive);
+        // FIXME: error->refError(type, title, 
+        //     Metadata(fileName), {error->createUL(token.line, token.start, token.end, 0, info)},
+        //     Metadata(fileName), {error->createUL(refTok.line, refTok.start, refTok.end, 0, refInfo)},
+        //     warning, aggressive);
 }

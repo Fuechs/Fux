@@ -13,20 +13,28 @@
 
 #include <filesystem>
 
-Source::Source(ErrorManager *error, const string &filePath, const bool mainFile) {
-    this->error = error;
+Source::Source(const string &file, const string &source) {
+    this->filePath = file;
+    this->fileContent = source;
+    fux.sources.push_back(this);
+    fux.libraries.push_back(file);
+}
+
+Source::Source(const string &filePath, const bool mainFile) {
     this->filePath = filePath;
     this->fileName = getFileName(filePath);
     this->fileDir = getDirectory(filePath);
-    this->contents = readFile(filePath);
+    this->fileContent = readFile(filePath);
     this->mainFile = mainFile;
+    fux.sources.push_back(this);
+    fux.libraries.push_back(fileDir);
 }
 
 Source::~Source() {
     filePath.clear();
     fileName.clear();
     fileDir.clear();
-    contents.clear();
+    fileContent.clear();
     delete parser;
     FUX_AC(delete analyser);
 }
@@ -36,13 +44,14 @@ void Source::operator()() { parse(); }
 string &Source::operator[](size_t line) { return sourceCode.at(line - 1); }
 
 void Source::parse() {
-    parser = new Parser(error, filePath, contents, mainFile);
+    parser = new Parser(filePath, fileContent, mainFile);
     root = parser->parse();
-    FUX_AC( analyser = new Analyser(error, root);
-            analyser->analyse();)
-}
 
-size_t Source::errors() { return error->errors(); }
+    #ifdef FUX_ANALYSER
+    analyser = new Analyser(filePath, root);
+    analyser->analyse();
+    #endif
+}
 
 size_t Source::getFileSize() {
     std::__fs::filesystem::path p {filePath};
