@@ -1,7 +1,7 @@
 /**
  * @file subject.hpp
  * @author fuechs
- * @brief subject struct header
+ * @brief Error Subject Header
  * @version 0.1
  * @date 2023-03-25
  * 
@@ -13,111 +13,51 @@
 
 #include "../../fux.hpp"
 #include "../metadata.hpp"
+#include "marking.hpp"
 
-// error markings (underline, arrows, notes, help, replacement, etc.)
-struct Marking {
-    using Vec = std::vector<Marking>;
+// suggestions to fix the error
+struct Suggestion {
+    using Ptr = shared_ptr<Subject>;
+    using Vec = vector<Ptr>;
 
-    enum Kind {
-        /*
-           3 |        reserve i32, 2, ptr;
-             |        -------------------- Memory of type 'i32' is reserved here
-        */
-        DASH_UL,  
+    virtual ~Suggestion();
 
-        /*
-           2 |        ptr: *i64;
-             |        ^^^^^^^^^^ Pointer is declared with type '*i64' here
-        */
-        ARROW_UL,
-
-        /*
-           3 |        reserve i32, 2, ptr;
-             |        --------------- ^ -- Memory of type 'i32' is reserved here
-             |                        |
-             |                        Provided pointer `ptr` points to value of type 'i64', not 'i32'
-        */
-        POINTER,   
-        
-        // Note |    This error got thrown because there is no condition enclosing the call
-        NOTE,
-        
-        // Help |    Enclose the call in parenthesis to silence this error
-        HELP,
-        
-        /*
-                 |        reserve i64, 2, ptr;
-                 |                /~~
-        */
-        REPLACE,
-        
-        /*
-                 |        x = (self.process(x));
-                 |            +               +
-        */
-        INSERT,
-        DOUBLE_INSERT, // insert two single strings at two positions (start and end)
-
-        /*
-               10 |    (void *) ptr;
-                  |    ptr;
-        */
-        REMOVE,
-
-        /*
-                2 |        ptr: *i64;
-                3 |        reserve i32, 2, ptr;
-                4 |        x = self.process(x);
-                5 |        free ptr;
-                   \___ Whole lifetime of `ptr`
-        */
-        MULTILINE, // information to multiple lines
-
-        /*
-                  |  _______________
-                8 | | ptr: *void;
-                9 | | free ptr;
-                  | \_____ ^~~ This is a test message
-        */
-        HIGHLIGHT, // highlight of multiple lines (enclosed in a box)
-        NONE,
-    };
-
-    Marking(Kind kind = Kind::NONE, string text = "", size_t line = 0, size_t start = 0, size_t except = 0, size_t end = 0);
-    ~Marking();
-
-    Marking &operator=(const Marking &copy);
-
-    // 'print' the marking; should be called by the subject owning this marking
-    string print(size_t padding, string line = "");
-    // check when this marking should be printed
-    size_t pos();
-
-    Kind kind;
-    string text;
-    size_t line, start, except, end; 
-    
-    // MULTILINE uses `start` as first line and `end` as last line
-
-    // HIGHLIGHT uses `except` as first line and `except` as last line
-    //  since `start` and `end` are used for arrow positions
+    virtual string print() = 0;
 };
 
-// error subject containing metadata and markings
-struct Subject {
-    using Vec = std::vector<Subject>;
+struct HelpSuggestion : public Suggestion {
+    HelpSuggestion(size_t line = 0, string message = "");
+    ~HelpSuggestion() override;
 
-    Subject(Metadata meta = Metadata(), Marking::Vec marks = {});
+    string print() override;
+
+    size_t line; // print after line
+    string message;     
+};
+
+struct NoteSuggestion : public Suggestion {
+    NoteSuggestion(size_t line = 0, string message = "");
+    ~NoteSuggestion() override;
+
+    string print() override;
+
+    size_t line; // print after line
+    string message; 
+};
+
+struct Subject {
+    using Ptr = shared_ptr<Subject>;
+    using Vec = vector<Ptr>;
+
+    Subject(Metadata meta = {}, Marking::Vec markings = {}, Suggestion::Vec suggestions = {},
+        Vec references = {}, Ptr traceback = nullptr);
     ~Subject();
 
-    Subject &operator=(const Subject &copy);
-
-    // 'print' the subject; get the string with all contents of the subject
     string print();
 
+    Marking::Vec markings;
+    Suggestion::Vec suggestions;
+    Vec references;
+    Ptr traceback;
     Metadata meta;
-    Marking::Vec marks;
-    // TODO: Subject *traceback;
-
-    size_t padding;
 };

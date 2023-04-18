@@ -13,9 +13,9 @@
 
 #include <filesystem>
 
-Source::Source(const string &file, const string &source) {
+Source::Source(const string &file, const StringVec &source) {
     this->filePath = file;
-    this->fileContent = source;
+    this->sourceCode = source;
     fux.sources.push_back(this);
     fux.libraries.push_back(file);
 }
@@ -35,8 +35,6 @@ Source::~Source() {
     fileName.clear();
     fileDir.clear();
     fileContent.clear();
-    delete parser;
-    FUX_AC(delete analyser);
 }
 
 void Source::operator()() { parse(); }
@@ -44,7 +42,7 @@ void Source::operator()() { parse(); }
 string &Source::operator[](size_t line) { return sourceCode.at(line - 1); }
 
 void Source::parse() {
-    parser = new Parser(filePath, fileContent, mainFile);
+    parser = make_shared<Parser>(filePath, fileContent, mainFile);
     root = parser->parse();
 
     #ifdef FUX_ANALYSER

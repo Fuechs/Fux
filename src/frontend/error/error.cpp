@@ -11,12 +11,11 @@
 
 #include "error.hpp"
 
-Error::Error(Type type, string title, Subject::Vec subjects) 
-: type(type), flag(NEUTRAL), title(title), subjects(subjects) {}
+Error::Error(Type type, string title, Subject::Ptr subject) 
+: type(type), flag(NEUTRAL), title(title), subject(subject) {}
 
 Error::~Error() { 
     title.clear();
-    subjects.clear();
 
     if (flag == NEUTRAL)
         assert(!"Error was neither reported or cancelled.");
@@ -32,10 +31,6 @@ void Error::report() {
     ||  isAggressive(type) && !fux.aggressive)
         return;
 
-    size_t padding = 4;
-    for (Subject &subj : subjects) 
-        padding = std::max(padding, std::max(subj.meta.fstLine + 4, subj.meta.lstLine + 4));
-
     stringstream ss;
 
     if (isWarning(type) && !fux.werrors)    
@@ -44,7 +39,7 @@ void Error::report() {
         ss << SC::BOLD << CC::RED << "[error]";
 
     ss << CC::DEFAULT 
-        << "[" << (isAggressive(type) ? "AE" : "E") << to_string(type) << "]: "
+        << "[E" << to_string(type) << "]: "
         << getLiteral(type); 
 
     if (!title.empty())     
@@ -52,8 +47,7 @@ void Error::report() {
         
     ss << "\n" << SC::RESET;
     
-    for (Subject &subj : subjects)
-        ss << subj.print();
+    ss << subject->print();
 
     if (--fux.errorLimit == 0) {
         ss << CC::RED << SC::BOLD << "\n[fatal error]" << CC::DEFAULT << ": Hit error limit.\n" << SC::RESET;
@@ -78,6 +72,7 @@ void Error::cancel() {
 string Error::getLiteral(Type type) {
     switch (type) {
         case UNKNOWN:           return "Unknown Error";
+        case UNEXPECTED_TYPE:   return "Unexpected Type";
         case REDUNDANT_CAST:    return "Redundant Cast";
         case RECURSION:         return "Recursion";
         case USELESS_LIFETIME:  return "Useless Lifetime";

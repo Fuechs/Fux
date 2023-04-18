@@ -20,6 +20,8 @@
 
 class Parser {
 public:
+    using Ptr = shared_ptr<Parser>;
+
     Parser(const string &fileName, const string &source, const bool mainFile = false);
     ~Parser();
 

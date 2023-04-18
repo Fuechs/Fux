@@ -180,11 +180,19 @@ int printHelp() {
 
 int main(void) {
     string file = "main.fux";
-    string content = "main(void): u64 return 0;";
+    StringVec content = {
+        "main(void): u64", 
+        "   return \"Hello World!\\n\";"};
     Source dummy(file, content);
 
     fux.aggressive = true;
-    Error::Ptr error = make_shared<Error>(Error::REDUNDANT_CAST, "This is a warning");
+    Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "This is an error",
+        make_shared<Subject>(Metadata(file, 1, 2, 1, content.back().size()), 
+            (Marking::Vec) {Marking(Marking::DASH_UL, "Declaration of `main`", 1, 1, 13, 15), 
+            Marking(Marking::POINTER, "Declared with type `u64`", 1, 0, 13),
+            Marking(Marking::DASH_UL, "Expected an expression of type `u64` here", 2, 11, 4, 26),
+            Marking(Marking::POINTER, "Trying to return a value of type `*c8` here", 2, 0, 4)})
+    );
     error->report();
     return 0;
 }

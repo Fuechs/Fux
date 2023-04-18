@@ -21,7 +21,7 @@ public:
     using Groups = vector<Vec>;
 
     [[deprecated("This constructor is only for debugging purposes.")]]
-    Source(const string &file, const string &source);
+    Source(const string &file, const StringVec &source);
     Source(const string &filePath, const bool mainFile = false);
     
     ~Source();
@@ -44,12 +44,12 @@ public:
     string filePath;
     string fileDir;
     string fileContent;
+    StringVec sourceCode;
 
     Root::Ptr root;
     
 private:
-    StringVec sourceCode;
-    Parser *parser;
+    Parser::Ptr parser;
     FUX_AC(Analyser *analyser;)
     bool mainFile;
 };
