@@ -17,7 +17,7 @@
 
 // suggestions to fix the error
 struct Suggestion {
-    using Ptr = shared_ptr<Subject>;
+    using Ptr = shared_ptr<Suggestion>;
     using Vec = vector<Ptr>;
 
     virtual ~Suggestion();

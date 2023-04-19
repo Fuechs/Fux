@@ -10,6 +10,7 @@
  */
 
 #include "subject.hpp"
+#include "../../util/source.hpp"
 
 Suggestion::~Suggestion() {}
 
@@ -34,4 +35,26 @@ Subject::~Subject() {
     references.clear();
 }
 
-string Subject::print() { return "not implemented"; }
+string Subject::print() {
+    size_t padding = meta.lstLine + 4;
+    stringstream ss;
+
+    for (Source *&src : fux.sources)
+        if (src->filePath == meta.file) {
+            for (size_t line = 0; line < src->sourceCode.size(); line++) {
+                string lineStr = to_string(line);
+                
+                ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
+                    << lineStr << " |     " << SC::RESET << CC::GRAY 
+                    << (*src)[line + 1] << "\n" << SC::RESET;
+
+                for (Marking::Ptr &mark : markings)
+                    if (mark->printAt(line + 1))
+                        ss << mark->print(padding, (*src)[line + 1]);
+            } 
+
+            break;
+        }
+
+    return ss.str();
+}
