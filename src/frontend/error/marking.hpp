@@ -19,6 +19,7 @@ struct Marking {
 
     enum Kind {
         UNDERLINE,
+        ARROW,
     };
 
     virtual ~Marking();
@@ -52,7 +53,7 @@ struct Underline : public Marking {
             |
           except
 */
-    size_t line, start, end, except;
+    size_t line, start, end, except; // TODO: Subject should set except, not the user
 /*
     foo_bar_foo;
     ~~~~~~~~~~~~ The message.
@@ -63,4 +64,27 @@ struct Underline : public Marking {
     The message.
 */
     string message;
+};
+
+struct Arrow : public Marking {
+    Arrow(size_t line = 0, size_t col = 0, string message = "");
+    ~Arrow() override; 
+
+    string print(size_t padding, string line) override;
+    bool printAt(size_t line) override;
+    Kind kind() override;
+
+    CC color; // the color of the arrow (set by Subject)
+/*
+        col
+        |
+[line] foobar;
+        ^ (arrow previously printed by underline)
+        | 
+        | - size = 3 (size of the arrow)
+        | 
+        <message>
+*/
+    size_t line, col, size;
+    string message;    
 };

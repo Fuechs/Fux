@@ -41,16 +41,16 @@ string Subject::print() {
 
     for (Source *&src : fux.sources)
         if (src->filePath == meta.file) {
-            for (size_t line = 0; line < src->sourceCode.size(); line++) {
+            for (size_t line = 1; line <= src->sourceCode.size(); line++) {
                 string lineStr = to_string(line);
                 
                 ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
                     << lineStr << " |     " << SC::RESET << CC::GRAY 
-                    << (*src)[line + 1] << "\n" << SC::RESET;
+                    << (*src)[line] << "\n" << SC::RESET;
 
                 for (Marking::Ptr &mark : markings)
-                    if (mark->printAt(line + 1))
-                        ss << mark->print(padding, (*src)[line + 1]);
+                    if (mark->printAt(line)) 
+                        ss << mark->print(padding, (*src)[line]);
             } 
 
             break;

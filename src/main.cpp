@@ -192,7 +192,12 @@ int main(void) {
             // Marking(Marking::POINTER, "Declared with type `u64`", 1, 0, 13),
             // Marking(Marking::DASH_UL, "Expected an expression of type `u64` here", 2, 11, 4, 26),
             // Marking(Marking::POINTER, "Trying to return a value of type `*c8` here", 2, 0, 4)}
-            (Marking::Vec) { make_shared<Underline>(1, 1, 16, 13, "Declaration of `main`") }
+            (Marking::Vec) { 
+                make_shared<Underline>(1, 1, 15, 13, "Declaration of `main`"),
+                make_shared<Arrow>(1, 13, "Declared with type `u64`"),
+                // make_shared<Underline>(2, 11, 27, 4, "Expected an expression of type `u64` here"),
+                // make_shared<Arrow>(2, 4, "Trying to return a value of type `*c8` here")
+            }
     ));
     error->report();
     return 0;
