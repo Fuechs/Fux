@@ -27,6 +27,8 @@ struct Marking {
 
     virtual string print(size_t padding, string line) = 0;
     virtual constexpr bool printAt(size_t line) = 0;
+    virtual constexpr size_t getLine() = 0;
+    virtual constexpr size_t getCol() = 0;
     virtual constexpr Kind kind() = 0;
 
     // create a standard underline and pointer marking
@@ -41,6 +43,8 @@ struct Underline : public Marking {
 
     string print(size_t padding, string line) override;
     constexpr bool printAt(size_t line) override;
+    constexpr size_t getLine() override;
+    constexpr size_t getCol() override;
     constexpr Kind kind() override;
 
     // false: (red) ~~~~~~
@@ -81,6 +85,8 @@ struct Arrow : public Marking {
 
     string print(size_t padding, string line) override;
     constexpr bool printAt(size_t line) override;
+    constexpr size_t getLine() override;
+    constexpr size_t getCol() override;
     constexpr Kind kind() override;
 
 /*
@@ -103,6 +109,8 @@ struct Comment : public Marking {
 
     string print(size_t padding, string line) override;
     constexpr bool printAt(size_t line) override;
+    constexpr size_t getLine() override;
+    constexpr size_t getCol() override;
     constexpr Kind kind() override;
 
 

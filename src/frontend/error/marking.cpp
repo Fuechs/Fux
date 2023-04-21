@@ -52,6 +52,10 @@ string Underline::print(size_t padding, string line) {
 
 constexpr bool Underline::printAt(size_t line) { return this->line == line; }
 
+constexpr size_t Underline::getLine() { return line; }
+
+constexpr size_t Underline::getCol() { return start; }
+
 constexpr Marking::Kind Underline::kind() { return UNDERLINE; }
 
 Arrow::Arrow(size_t line, size_t col, string message) 
@@ -74,6 +78,10 @@ string Arrow::print(size_t padding, string line) {
 
 constexpr bool Arrow::printAt(size_t line) { return this->line == line; }
 
+constexpr size_t Arrow::getLine() { return line; }
+
+constexpr size_t Arrow::getCol() { return col; }
+
 constexpr Marking::Kind Arrow::kind() { return ARROW; }
 
 Comment::Comment(size_t line, size_t col, string message) 
@@ -87,6 +95,10 @@ string Comment::print(size_t padding, string line) {
 }
 
 constexpr bool Comment::printAt(size_t line) { return this->line == line; }
+
+constexpr size_t Comment::getLine() { return line; }
+
+constexpr size_t Comment::getCol() { return col; }
 
 constexpr Marking::Kind Comment::kind() { return COMMENT; }
 

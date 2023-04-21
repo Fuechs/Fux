@@ -186,12 +186,13 @@ int main(void) {
         "    x: u64 = compute();",
         "    vector[] << x;",
         "    return \"Hello World!\\n\";",
-        "}"};
+        "}"
+    };
     Source dummy(file, content);
 
     fux.aggressive = true;
-    Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "This is an error",
-        make_shared<Subject>(Metadata(file, 1, 2, 1, content.back().size()), 
+    Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "",
+        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
             Marking::std(5, 12, 27, "Expected an expression of type `u64` here", 
                 5, "Trying to return a value of type `*c8` here")
             + Marking::std(2, 1, 15, "Declaration of `main`", 13, "Declared with type `u64`")));
@@ -199,7 +200,7 @@ int main(void) {
 
     error = make_shared<Error>(Error::EXCEEDED_LIFETIME, 
         "Lifetime of reference to `x` exceeds lifetime of `x` itself",
-        make_shared<Subject>(Metadata(file, 1, 6, 1, content.back().size()),
+        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()),
             make_shared<Underline>(4, 5, 18, "Reference to `x` is created here")
             + make_shared<Underline>(3, 5, 23, "`x` is declared here")
             + (Marking::Ptr) make_shared<Comment>(6, 1, "`x` is deleted here")

@@ -22,16 +22,18 @@ struct Suggestion {
 
     virtual ~Suggestion();
 
-    virtual string print(size_t padding) = 0;
-    virtual bool printAt(size_t line) = 0;
+    virtual string print(size_t padding, string line) = 0;
+    virtual constexpr bool printAt(size_t line) = 0;
+    virtual constexpr size_t getLine() = 0;
 };
 
 struct HelpSuggestion : public Suggestion {
     HelpSuggestion(size_t line = 0, string message = "");
     ~HelpSuggestion() override;
 
-    string print(size_t padding) override;
-    bool printAt(size_t line) override;
+    string print(size_t padding, string line) override;
+    constexpr bool printAt(size_t line) override;
+    constexpr size_t getLine() override;
 
     size_t line; // print after line
     string message;     
@@ -41,14 +43,16 @@ struct NoteSuggestion : public Suggestion {
     NoteSuggestion(size_t line = 0, string message = "");
     ~NoteSuggestion() override;
 
-    string print(size_t padding) override;
-    bool printAt(size_t line) override;
+    string print(size_t padding, string line) override;
+    constexpr bool printAt(size_t line) override;
+    constexpr size_t getLine() override;
 
     size_t line; // print after line
     string message; 
 };
 
-struct Subject {
+class Subject {
+public:
     using Ptr = shared_ptr<Subject>;
     using Vec = vector<Ptr>;
 
@@ -58,6 +62,7 @@ struct Subject {
 
     string print();
 
+private:
     Marking::Vec markings;
     Suggestion::Vec suggestions;
     Vec references;
