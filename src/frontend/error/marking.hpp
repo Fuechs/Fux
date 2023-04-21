@@ -20,22 +20,28 @@ struct Marking {
     enum Kind {
         UNDERLINE,
         ARROW,
+        COMMENT,
     };
 
     virtual ~Marking();
 
     virtual string print(size_t padding, string line) = 0;
-    virtual bool printAt(size_t line) = 0;
-    virtual Kind kind() = 0;
+    virtual constexpr bool printAt(size_t line) = 0;
+    virtual constexpr Kind kind() = 0;
+
+    // create a standard underline and pointer marking
+    static Ptr std(size_t line, size_t start, size_t end, string message = "", size_t ptr = 0, string info = "");
 };
 
+struct Arrow;
+
 struct Underline : public Marking {
-    Underline(size_t line = 0, size_t start = 0, size_t end = 0, size_t except = 0, string message = "");
+    Underline(size_t line = 0, size_t start = 0, size_t end = 0, string message = "", shared_ptr<Arrow> arrow = nullptr);
     ~Underline() override;
 
     string print(size_t padding, string line) override;
-    bool printAt(size_t line) override;
-    Kind kind() override;
+    constexpr bool printAt(size_t line) override;
+    constexpr Kind kind() override;
 
     // false: (red) ~~~~~~
     // true : (blue) ------
@@ -53,7 +59,7 @@ struct Underline : public Marking {
             |
           except
 */
-    size_t line, start, end, except; // TODO: Subject should set except, not the user
+    size_t line, start, end;
 /*
     foo_bar_foo;
     ~~~~~~~~~~~~ The message.
@@ -64,17 +70,19 @@ struct Underline : public Marking {
     The message.
 */
     string message;
+    shared_ptr<Arrow> arrow;
 };
 
 struct Arrow : public Marking {
+    using Ptr = shared_ptr<Arrow>;
+
     Arrow(size_t line = 0, size_t col = 0, string message = "");
     ~Arrow() override; 
 
     string print(size_t padding, string line) override;
-    bool printAt(size_t line) override;
-    Kind kind() override;
+    constexpr bool printAt(size_t line) override;
+    constexpr Kind kind() override;
 
-    CC color; // the color of the arrow (set by Subject)
 /*
         col
         |
@@ -88,3 +96,27 @@ struct Arrow : public Marking {
     size_t line, col, size;
     string message;    
 };
+
+struct Comment : public Marking {
+    Comment(size_t line = 0, size_t col = 0, string message = "");
+    ~Comment() override;
+
+    string print(size_t padding, string line) override;
+    constexpr bool printAt(size_t line) override;
+    constexpr Kind kind() override;
+
+
+/*
+        {
+            foo
+            bar
+        }
+[line]  ; <message>
+        |
+       col 
+*/
+    size_t line, col;
+    string message;
+};
+
+Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs);

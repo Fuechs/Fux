@@ -22,14 +22,16 @@ struct Suggestion {
 
     virtual ~Suggestion();
 
-    virtual string print() = 0;
+    virtual string print(size_t padding) = 0;
+    virtual bool printAt(size_t line) = 0;
 };
 
 struct HelpSuggestion : public Suggestion {
     HelpSuggestion(size_t line = 0, string message = "");
     ~HelpSuggestion() override;
 
-    string print() override;
+    string print(size_t padding) override;
+    bool printAt(size_t line) override;
 
     size_t line; // print after line
     string message;     
@@ -39,7 +41,8 @@ struct NoteSuggestion : public Suggestion {
     NoteSuggestion(size_t line = 0, string message = "");
     ~NoteSuggestion() override;
 
-    string print() override;
+    string print(size_t padding) override;
+    bool printAt(size_t line) override;
 
     size_t line; // print after line
     string message; 

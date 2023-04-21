@@ -16,11 +16,31 @@ Suggestion::~Suggestion() {}
 
 HelpSuggestion::HelpSuggestion(size_t line, string message) : line(line), message(message) {}
 
-string HelpSuggestion::print() { return "not implemented"; }
+string HelpSuggestion::print(size_t padding) {
+    stringstream ss;
+
+    ss << CC::YELLOW << SC::BOLD 
+        << (padding <= 5 ? "" : string(padding - 5, ' ')) 
+        << "Help |     " << message << '\n' << SC::RESET;
+
+    return ss.str();
+}
+
+bool HelpSuggestion::printAt(size_t line) { return this->line == line; }
 
 NoteSuggestion::NoteSuggestion(size_t line, string message) : line(line), message(message) {}
 
-string NoteSuggestion::print() { return "not implemented"; }
+string NoteSuggestion::print(size_t padding) {
+    stringstream ss;
+
+    ss << CC::YELLOW << SC::BOLD 
+        << (padding <= 5 ? "" : string(padding - 5, ' ')) 
+        << "Help |     " << message << '\n' << SC::RESET;
+
+    return ss.str();
+}
+
+bool NoteSuggestion::printAt(size_t line) { return this->line == line; }
 
 HelpSuggestion::~HelpSuggestion() { message.clear(); }
 
@@ -36,8 +56,17 @@ Subject::~Subject() {
 }
 
 string Subject::print() {
-    size_t padding = meta.lstLine + 4;
+    size_t padding = to_string(meta.lstLine).size() + 4;
     stringstream ss;
+
+    ss << CC::BLUE << SC::BOLD << string(padding - 2, ' ') 
+        << ">>> " << CC::DEFAULT << meta.file << ':' << meta.fstLine << ':' << meta.fstCol << '\n';
+
+    for (Marking::Ptr &mark : markings) 
+        if (mark->kind() == Marking::UNDERLINE) {
+            dynamic_cast<Underline *>(mark.get())->dashed = false;
+            break;
+        }
 
     for (Source *&src : fux.sources)
         if (src->filePath == meta.file) {
@@ -51,6 +80,10 @@ string Subject::print() {
                 for (Marking::Ptr &mark : markings)
                     if (mark->printAt(line)) 
                         ss << mark->print(padding, (*src)[line]);
+
+                for (Suggestion::Ptr &suggest : suggestions)
+                    if (suggest->printAt(line))
+                        ss << suggest->print(padding);
             } 
 
             break;

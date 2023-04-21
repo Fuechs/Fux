@@ -46,7 +46,7 @@ void Error::report() {
         ss << ": " << title;
         
     ss << "\n" << SC::RESET;
-    
+
     ss << subject->print();
 
     if (--fux.errorLimit == 0) {
@@ -73,6 +73,7 @@ string Error::getLiteral(Type type) {
     switch (type) {
         case UNKNOWN:           return "Unknown Error";
         case UNEXPECTED_TYPE:   return "Unexpected Type";
+        case EXCEEDED_LIFETIME: return "Exceeded Lifetime";
         case REDUNDANT_CAST:    return "Redundant Cast";
         case RECURSION:         return "Recursion";
         case USELESS_LIFETIME:  return "Useless Lifetime";

@@ -44,6 +44,7 @@ public:
         UNKNOWN_SYMBOL,
         MISSING_PAREN,
         ILLEGAL_OPERANDS,
+        EXCEEDED_LIFETIME,
 
         REDUNDANT_CAST          = 500,
         RECURSION,

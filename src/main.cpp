@@ -181,26 +181,49 @@ int printHelp() {
 int main(void) {
     string file = "main.fux";
     StringVec content = {
-        "main(void): u64", 
-        "   return \"Hello World!\\n\";"};
+        "vector -> u64[] = {};",
+        "main(void): u64 {", 
+        "    x: u64 = compute();",
+        "    vector[] << x;",
+        "    return \"Hello World!\\n\";",
+        "}"};
     Source dummy(file, content);
 
     fux.aggressive = true;
     Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "This is an error",
         make_shared<Subject>(Metadata(file, 1, 2, 1, content.back().size()), 
-            // (Marking::Vec) {Marking(Marking::DASH_UL, "Declaration of `main`", 1, 1, 13, 15), 
-            // Marking(Marking::POINTER, "Declared with type `u64`", 1, 0, 13),
-            // Marking(Marking::DASH_UL, "Expected an expression of type `u64` here", 2, 11, 4, 26),
-            // Marking(Marking::POINTER, "Trying to return a value of type `*c8` here", 2, 0, 4)}
-            (Marking::Vec) { 
-                make_shared<Underline>(1, 1, 15, 13, "Declaration of `main`"),
-                make_shared<Arrow>(1, 13, "Declared with type `u64`"),
-                // make_shared<Underline>(2, 11, 27, 4, "Expected an expression of type `u64` here"),
-                // make_shared<Arrow>(2, 4, "Trying to return a value of type `*c8` here")
-            }
-    ));
+            Marking::std(5, 12, 27, "Expected an expression of type `u64` here", 
+                5, "Trying to return a value of type `*c8` here")
+            + Marking::std(2, 1, 15, "Declaration of `main`", 13, "Declared with type `u64`")));
+    error->report();
+
+    error = make_shared<Error>(Error::EXCEEDED_LIFETIME, 
+        "Lifetime of reference to `x` exceeds lifetime of `x` itself",
+        make_shared<Subject>(Metadata(file, 1, 6, 1, content.back().size()),
+            make_shared<Underline>(4, 5, 18, "Reference to `x` is created here")
+            + make_shared<Underline>(3, 5, 23, "`x` is declared here")
+            + (Marking::Ptr) make_shared<Comment>(6, 1, "`x` is deleted here")
+            + (Marking::Ptr) make_shared<Comment>(6, 1, "Reference to `x` is still alive here")));
     error->report();
     return 0;
+}
+
+template<typename T, typename A>
+vector<T, A> operator+(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+    vector<T, A> result;
+    result.reserve(lhs.size() + rhs.size()); // reserve enough space to avoid reallocations
+    result.insert(result.end(), lhs.begin(), lhs.end()); // copy elements from lhs
+    result.insert(result.end(), rhs.begin(), rhs.end()); // append elements from rhs
+    return result;
+}
+
+template<typename T, typename A>
+vector<T, A> operator+(const vector<T, A> &lhs, const T &rhs) {
+    vector<T, A> result;
+    result.reserve(lhs.size() + 1);
+    result.insert(result.end(), lhs.begin(), lhs.end());
+    result.insert(result.end(), rhs);
+    return result;
 }
 
 #endif

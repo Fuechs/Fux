@@ -108,3 +108,9 @@ struct FuxStruct {
 };
 
 extern FuxStruct fux;
+
+template<typename T, typename A>
+vector<T, A> operator+(const vector<T, A> &lhs, const vector<T, A> &rhs);
+
+template<typename T, typename A>
+vector<T, A> operator+(const vector<T, A> &lhs, const T &rhs);

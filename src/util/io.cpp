@@ -86,7 +86,7 @@ std::string unescapeSequences(std::string value) {
     return buffer;
 }
 
-template <typename Out>
+template<typename Out>
 void split(const std::string &s, char delim, Out result) {
     std::istringstream iss(s);
     std::string item;

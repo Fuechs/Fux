@@ -41,7 +41,7 @@ std::string escapeSequences(std::string);
 std::string unescapeSequences(std::string);
 
 // from https://stackoverflow.com/a/236803
-template <typename Out>
+template<typename Out>
 void split(const std::string &s, char delim, Out result);
 
 std::vector<std::string> split(const std::string &s, char delim);
