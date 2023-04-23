@@ -97,7 +97,7 @@ string Subject::print() {
     // figure out which lines inbetween markings should be printed 
     for (lineIter = ++lineMeta.begin(); lineIter != lineMeta.end(); lineIter++)    
         // if gap is <= 3, add missing lines
-        for (size_t i = prev()->first; (i - prev()->first <= 3) && i < lineIter->first; i++)
+        for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
             if (!lineMeta.contains(i))
                 lineMeta[i] = {};
 
@@ -127,7 +127,11 @@ string Subject::print() {
                     ss << mark->print(padding, (*src)[line]);
 
                 for (Suggestion::Ptr &suggest : lineMeta[line].second)
-                    ss << suggest->print(padding, (*src)[line]);        
+                    ss << suggest->print(padding, (*src)[line]);
+                
+                if (!lineMeta.contains(line + 1) && line != (--lineMeta.end())->first)
+                    ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
+                        << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
             } 
 
             break;
