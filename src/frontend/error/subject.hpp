@@ -51,6 +51,32 @@ struct NoteSuggestion : public Suggestion {
     string message; 
 };
 
+// markings, suggestions, etc. on a line
+class LineMeta {
+public:
+    using Ptr = shared_ptr<LineMeta>;
+    using Map = map<size_t, Ptr>;
+    using Iter = Map::iterator;
+
+    LineMeta(size_t line = 0, string content = "");
+    ~LineMeta();
+
+    string print(size_t padding);
+
+    void addElement(Marking::Ptr &marking);
+    void addElement(Suggestion::Ptr &suggestion);
+
+    size_t getLine();
+    // the column of the first maring
+    size_t getCol();
+
+private:
+    size_t line; // line number
+    string content; // line content
+    Marking::Vec markings;
+    Suggestion::Vec suggestions;
+};
+
 class Subject {
 public:
     using Ptr = shared_ptr<Subject>;

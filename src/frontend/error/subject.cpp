@@ -12,6 +12,8 @@
 #include "subject.hpp"
 #include "../../util/source.hpp"
 
+/// SUGGESTION ///
+
 Suggestion::~Suggestion() {}
 
 HelpSuggestion::HelpSuggestion(size_t line, string message) : line(line), message(message) {}
@@ -50,6 +52,54 @@ HelpSuggestion::~HelpSuggestion() { message.clear(); }
 
 NoteSuggestion::~NoteSuggestion() { message.clear(); }
 
+/// LINE META ///
+
+LineMeta::LineMeta(size_t line, string content) 
+: line(line), content(content), markings({}), suggestions({}) {}
+
+LineMeta::~LineMeta() {
+    content.clear();
+    markings.clear();
+    suggestions.clear();
+}
+
+string LineMeta::print(size_t padding) {
+    stringstream ss;
+
+    string lineStr = to_string(line);
+
+    ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
+        << line << " |     " << SC::RESET << CC::GRAY << content 
+        << '\n' << SC::RESET;
+
+    size_t paragraphs = 0;
+
+    for (Marking::Ptr &mark : markings) {
+        mark->setSize(paragraphs);
+        ss << mark->print(padding, content);
+        paragraphs += (size_t) mark->hasMessage();
+    }
+    
+    for (Suggestion::Ptr &suggest : suggestions)
+        ss << suggest->print(padding, content);
+
+    return ss.str();
+}
+
+void LineMeta::addElement(Marking::Ptr &marking) {
+    markings.push_back(marking);
+}
+
+void LineMeta::addElement(Suggestion::Ptr &suggestion) {
+    suggestions.push_back(suggestion);
+}
+
+size_t LineMeta::getLine() { return line; }
+
+size_t LineMeta::getCol() { return markings.front()->getCol(); }
+
+/// SUBJECT ///
+
 Subject::Subject(Metadata meta, Marking::Vec markings, Suggestion::Vec suggestions, Vec references, Ptr traceback) 
 : meta(meta), markings(markings), suggestions(suggestions), references(references), traceback(traceback){}
 
@@ -65,6 +115,13 @@ string Subject::print() {
 
     size_t line = 0, col = 0;
 
+    Source *src = nullptr;
+    for (Source *_ : fux.sources)
+        if (meta.file == _->filePath) {
+            src = _;
+            break;
+        }
+
     // make first underline marking use '~' instead of '-'
     for (Marking::Ptr &mark : markings) 
         if (mark->kind() == Marking::UNDERLINE) { 
@@ -77,66 +134,61 @@ string Subject::print() {
             }
         }
 
-    using LineMap = map<size_t, pair<Marking::Vec, Suggestion::Vec>>;
+    // using LineMap = map<size_t, pair<Marking::Vec, Suggestion::Vec>>;
     //                line number      markings      suggestions
 
-    LineMap lineMeta = {};
+    LineMeta::Map lines = {};
 
     // figure out which lines have markings or suggestions
-    for (Marking::Ptr &mark : markings)
-        lineMeta[mark->getLine()].first.push_back(mark);
+    for (Marking::Ptr &mark : markings) {
+        if (!lines.contains(mark->getLine()))
+            lines[mark->getLine()] = make_shared<LineMeta>(mark->getLine(), (*src)[mark->getLine()]);
 
-    for (Suggestion::Ptr &suggest : suggestions)
-        lineMeta[suggest->getLine()].second.push_back(suggest);
+        lines[mark->getLine()]->addElement(mark);
+    }
 
-    LineMap::iterator lineIter;
+    for (Suggestion::Ptr &suggest : suggestions) {
+        if (!lines.contains(suggest->getLine()))
+            lines[suggest->getLine()] = make_shared<LineMeta>(suggest->getLine(), (*src)[suggest->getLine()]);
+
+        lines[suggest->getLine()]->addElement(suggest);
+    }
 
     // previous line
     #define prev() (--lineIter)++ 
 
     // figure out which lines inbetween markings should be printed 
-    for (lineIter = ++lineMeta.begin(); lineIter != lineMeta.end(); lineIter++)    
+    for (LineMeta::Iter lineIter = ++lines.begin(); lineIter != lines.end(); lineIter++)    
         // if gap is <= 3, add missing lines
         for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
-            if (!lineMeta.contains(i))
-                lineMeta[i] = {};
+            if (!lines.contains(i))
+                lines[i] = make_shared<LineMeta>(i, (*src)[i]);
 
     #undef prev
 
     if (line == 0 || col == 0) {
-        line = lineMeta.begin()->second.first.front()->getLine();
-        col = lineMeta.begin()->second.first.front()->getCol();
+        line = lines.begin()->second->getLine();
+        col = lines.begin()->second->getCol();
     }
 
     ss << CC::BLUE << SC::BOLD << string(padding - 2, ' ') << ">>> " << CC::DEFAULT 
         << meta.file << ':' << line << ':' << col << '\n';
 
-    for (Source *&src : fux.sources)
-        if (src->filePath == meta.file) {
-            for (size_t line = 1; line <= meta.lstLine; line++) {
-                if (!lineMeta.contains(line))
-                    continue;
+    for (size_t line = 1; line <= meta.lstLine; line++) {
+        if (!lines.contains(line))
+            continue;
+        
+        ss << lines[line]->print(padding);
 
-                string lineStr = to_string(line);
-                        
-                ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
-                    << lineStr << " |     " << SC::RESET << CC::GRAY 
-                    << (*src)[line] << '\n' << SC::RESET;
+        if (!lines.contains(line + 1) && line != (--lines.end())->first)
+            ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
+                << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
+            
+        lines.erase(line);
 
-                for (Marking::Ptr &mark : lineMeta[line].first)
-                    ss << mark->print(padding, (*src)[line]);
-
-                for (Suggestion::Ptr &suggest : lineMeta[line].second)
-                    ss << suggest->print(padding, (*src)[line]);
-                
-                if (!lineMeta.contains(line + 1) && line != (--lineMeta.end())->first)
-                    ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
-                        << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
-            } 
-
+        if (lines.empty())
             break;
-        }
-
+    }
 
     return ss.str();
 }

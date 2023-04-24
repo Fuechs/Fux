@@ -19,7 +19,6 @@ struct Marking {
 
     enum Kind {
         UNDERLINE,
-        ARROW,
         COMMENT,
     };
 
@@ -29,23 +28,46 @@ struct Marking {
     virtual constexpr bool printAt(size_t line) = 0;
     virtual constexpr size_t getLine() = 0;
     virtual constexpr size_t getCol() = 0;
+    virtual constexpr bool hasMessage() = 0;
     virtual constexpr Kind kind() = 0;
+    virtual void setSize(size_t size) = 0;
 
     // create a standard underline and pointer marking
     static Ptr std(size_t line, size_t start, size_t end, string message = "", size_t ptr = 0, string info = "");
+
+    // print '<padding>|     '
+    static constexpr string printLeft(size_t padding);
 };
 
-struct Arrow;
+struct Arrow {
+    using Ptr = shared_ptr<Arrow>;
+
+    Arrow(size_t line = 0, size_t col = 0, string message = "");
+    ~Arrow(); 
+
+/*
+        col
+        |
+[line] foobar;
+        ^ 
+        | 
+        <message>
+*/
+    size_t line, col;
+    string message;    
+};
 
 struct Underline : public Marking {
-    Underline(size_t line = 0, size_t start = 0, size_t end = 0, string message = "", shared_ptr<Arrow> arrow = nullptr);
+    Underline(size_t line = 0, size_t start = 0, size_t end = 0, string message = "", Arrow::Ptr arrow = nullptr);
     ~Underline() override;
 
     string print(size_t padding, string line) override;
     constexpr bool printAt(size_t line) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
+    constexpr bool hasMessage() override;
     constexpr Kind kind() override;
+    void setSize(size_t size) override;
 
     // false: (red) ~~~~~~
     // true : (blue) ------
@@ -63,7 +85,13 @@ struct Underline : public Marking {
             |
           except
 */
-    size_t line, start, end;
+    size_t line, start, end, size; // size is the same as for `Arrow`
+                                /* foo_bar;
+                                   |~~~~~~
+                                   | <- size = 3
+                                   | 
+                                   <message>
+                                */
 /*
     foo_bar_foo;
     ~~~~~~~~~~~~ The message.
@@ -74,33 +102,7 @@ struct Underline : public Marking {
     The message.
 */
     string message;
-    shared_ptr<Arrow> arrow;
-};
-
-struct Arrow : public Marking {
-    using Ptr = shared_ptr<Arrow>;
-
-    Arrow(size_t line = 0, size_t col = 0, string message = "");
-    ~Arrow() override; 
-
-    string print(size_t padding, string line) override;
-    constexpr bool printAt(size_t line) override;
-    constexpr size_t getLine() override;
-    constexpr size_t getCol() override;
-    constexpr Kind kind() override;
-
-/*
-        col
-        |
-[line] foobar;
-        ^ (arrow previously printed by underline)
-        | 
-        | - size = 3 (size of the arrow)
-        | 
-        <message>
-*/
-    size_t line, col, size;
-    string message;    
+    Arrow::Ptr arrow;
 };
 
 struct Comment : public Marking {
@@ -111,7 +113,9 @@ struct Comment : public Marking {
     constexpr bool printAt(size_t line) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
+    constexpr bool hasMessage() override;
     constexpr Kind kind() override;
+    void setSize(size_t size) override;
 
 
 /*

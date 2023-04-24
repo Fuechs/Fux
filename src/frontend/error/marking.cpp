@@ -11,7 +11,6 @@
 
 #include "marking.hpp"
 
-
 Marking::~Marking() {}
 
 Marking::Ptr Marking::std(size_t line, size_t start, size_t end, string message, size_t ptr, string info) {
@@ -19,22 +18,50 @@ Marking::Ptr Marking::std(size_t line, size_t start, size_t end, string message,
         ptr == 0 ? nullptr : make_shared<Arrow>(line, ptr, info));
 }
 
+constexpr string Marking::printLeft(size_t padding) {
+    return string(padding, ' ') + CC::RED + SC::BOLD + "|     " + SC::RESET;
+}
+
+Arrow::Arrow(size_t line, size_t col, string message) 
+: line(line), col(col), message(message) {}
+
+Arrow::~Arrow() { message.clear(); }
+
 Underline::Underline(size_t line, size_t start, size_t end, string message, Arrow::Ptr arrow) 
-: dashed(true), line(line), start(start), end(end), message(message), arrow(arrow) {}
+: dashed(true), line(line), start(start), end(end), size(0), message(message), arrow(arrow) {}
 
 Underline::~Underline() { message.clear(); }
 
 string Underline::print(size_t padding, string line) {
     stringstream ss;
+    
+    #define color() (dashed ? CC::BLUE : CC::RED) << SC::BOLD
 
-    ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|     ";
+    ss << Marking::printLeft(padding) << color() << SC::BOLD;
 
-    if (!dashed) 
-        ss << CC::RED;
+    size = 1;
+
+    /* handle this case:
+        foobarfoobar
+        | ---- ^ --- <taken>
+        |      |
+        |      <arrow>
+        <underline>
+        
+        ^start ^arrow->col
+    */
+    if (arrow && arrow->col > start && size != 0) 
+        size += (size == 1) + 1;
+
+    // used later for printing the message
+    bool isLong = size != 0;
 
     for (size_t col = 1; col <= end || (arrow && col <= arrow->col); col++) 
-        if (arrow && col == arrow->col)
-            ss << CC::MAGENTA << '^' << (dashed ? CC::BLUE : CC::RED);
+        if (isLong && col == start) {
+            ss << '|';
+            size--;
+        } else if (arrow && col == arrow->col)
+            ss << CC::MAGENTA << '^' << color();
         else if (arrow && (col == arrow->col - 1 || col == arrow->col + 1))
             ss << ' ';
         else if (col >= start && col <= end)
@@ -42,10 +69,48 @@ string Underline::print(size_t padding, string line) {
         else
             ss << ' '; 
 
-    ss << ' ' << message << '\n' << SC::RESET;
+    for (size_t i = size; i --> 0;) {
+        if (arrow && i + 1 == size && arrow->col > start) {
+            ss << '\n' << Marking::printLeft(padding)
+                << string(start - 1, ' ') << color() << '|'
+                << string(arrow->col - start - 1, ' ') << CC::MAGENTA << "|\n"
+                << Marking::printLeft(padding) << color() <<  string(start - 1, ' ') << '|'
+                << CC::MAGENTA << string(arrow->col - start - 1, ' ') << arrow->message;
 
-    if (arrow) 
-        ss << arrow->print(padding, line);
+            if (i != 0)
+                i--;
+        } else {
+            ss << '\n' << Marking::printLeft(padding);
+
+            if (arrow && arrow->col < start) 
+                ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << '|'
+                    << color() << string(start - arrow->col - 1, ' ') << '|';
+            else 
+                ss << color() << string(start - 1, ' ') << '|';
+        }
+    }
+
+    if (isLong) {
+        ss << '\n' << Marking::printLeft(padding); 
+
+        if (arrow && arrow->col < start) {
+            ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << '|'
+                << color() << string(start - arrow->col - 1, ' ') << message << '\n'
+                << Marking::printLeft(padding) << string(arrow->col - 1, ' ')
+                << CC::MAGENTA << SC::BOLD << arrow->message << '\n';
+        } else
+            ss << color() << string(start - 1, ' ') << message << '\n' << SC::RESET;
+    } else {
+        ss << ' ' << message << '\n' << SC::RESET;
+
+        if (arrow)
+            ss << Marking::printLeft(padding) 
+                << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') 
+                << "|\n" << Marking::printLeft(padding) << CC::MAGENTA << SC::BOLD
+                << string(arrow->col - 1, ' ') << arrow->message << '\n';
+    }
+
+    #undef color
 
     return ss.str();
 }
@@ -56,33 +121,11 @@ constexpr size_t Underline::getLine() { return line; }
 
 constexpr size_t Underline::getCol() { return start; }
 
+constexpr bool Underline::hasMessage() { return !message.empty(); }
+
 constexpr Marking::Kind Underline::kind() { return UNDERLINE; }
 
-Arrow::Arrow(size_t line, size_t col, string message) 
-: line(line), col(col), size(1), message(message) {}
-
-Arrow::~Arrow() { message.clear(); }
-
-string Arrow::print(size_t padding, string line) {
-    stringstream ss;
-
-    while (size --> 0)
-        ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|     " << string(col - 1, ' ') 
-            << CC::MAGENTA << "|\n";
-    
-    ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|     " << string(col - 1, ' ') 
-        << CC::MAGENTA << message << '\n' << SC::RESET;
-    
-    return ss.str();
-}
-
-constexpr bool Arrow::printAt(size_t line) { return this->line == line; }
-
-constexpr size_t Arrow::getLine() { return line; }
-
-constexpr size_t Arrow::getCol() { return col; }
-
-constexpr Marking::Kind Arrow::kind() { return ARROW; }
+void Underline::setSize(size_t size) { this->size = size; }
 
 Comment::Comment(size_t line, size_t col, string message) 
 : line(line), col(col), message(message) {}
@@ -90,8 +133,7 @@ Comment::Comment(size_t line, size_t col, string message)
 Comment::~Comment() { message.clear(); }
 
 string Comment::print(size_t padding, string line) {
-    return "" + CC::BLUE + SC::BOLD + string(padding, ' ') + "|     " 
-        + string(col - 1, ' ') + CC::GREEN + "; " + message + "\n" + SC::RESET;
+    return Marking::printLeft(padding) + string(col - 1, ' ') + CC::GREEN + SC::BOLD + "; " + message + "\n" + SC::RESET;
 }
 
 constexpr bool Comment::printAt(size_t line) { return this->line == line; }
@@ -100,6 +142,11 @@ constexpr size_t Comment::getLine() { return line; }
 
 constexpr size_t Comment::getCol() { return col; }
 
+// always false, since it does not affect message positions
+constexpr bool Comment::hasMessage() { return false; }
+
 constexpr Marking::Kind Comment::kind() { return COMMENT; }
+
+void Comment::setSize(size_t size) { return; /* just ignore */ }
 
 Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs) { return {lhs, rhs}; }
