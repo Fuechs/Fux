@@ -25,13 +25,12 @@ struct Marking {
 
     virtual ~Marking();
 
-    virtual string print(size_t padding, string line) = 0;
-    virtual constexpr bool printAt(size_t line) = 0;
+    virtual string print(size_t padding, string line, bool isInHighlight = false) = 0;
     virtual constexpr size_t getLine() = 0;
     virtual constexpr size_t getCol() = 0;
     virtual constexpr bool hasMessage() = 0;
     virtual constexpr Kind kind() = 0;
-    virtual void setSize(size_t size) = 0;
+    virtual void setSize(size_t size);
 
     // create a standard underline and pointer marking
     static Ptr std(size_t line, size_t start, size_t end, string message = "", size_t ptr = 0, string info = "");
@@ -62,8 +61,7 @@ struct Underline : public Marking {
     Underline(size_t line = 0, size_t start = 0, size_t end = 0, string message = "", Arrow::Ptr arrow = nullptr);
     ~Underline() override;
 
-    string print(size_t padding, string line) override;
-    constexpr bool printAt(size_t line) override;
+    string print(size_t padding, string line, bool isInHighlight = false) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;
@@ -110,14 +108,11 @@ struct Comment : public Marking {
     Comment(size_t line = 0, size_t col = 0, string message = "");
     ~Comment() override;
 
-    string print(size_t padding, string line) override;
-    constexpr bool printAt(size_t line) override;
+    string print(size_t padding, string line, bool isInHighlight = false) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;
     constexpr Kind kind() override;
-    void setSize(size_t size) override;
-
 
 /*
         {
@@ -137,22 +132,20 @@ struct Highlight : public Marking {
         string message = "", Marking::Vec markings = {});
     ~Highlight() override;
 
-    string print(size_t padding, string line) override;
-    constexpr bool printAt(size_t line) override;
+    string print(size_t padding, string line, bool isInHighlight = false) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;
     constexpr Kind kind() override;
-    void setSize(size_t size) override;
 
 /*
-          |   ______
-<fstLine> |  | foo;
-<line   > |  | bar;
-<line   > |  | foo;
-          |  | <some marking>
-<lstLine> |  | bar_thing;
-          |  \ ^~~~~~~~~ <message>
+          |  ┏━━━━━━━━
+<fstLine> |  ┃ foo;
+<line   > |  ┃ bar;
+<line   > |  ┃ foo;
+          |  ┃ <some marking>
+<lstLine> |  ┃ bar_thing;
+          |  ┗━┻━━━━━━━┻━ <message>
                |       |
              fstCol  lstCol
 */

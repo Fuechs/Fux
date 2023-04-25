@@ -215,7 +215,10 @@ int main(void) {
 
     error = make_shared<Error>(Error::UNREACHABLE, "Unreachable code in while loop",
         make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()),
-            (Marking::Vec) {make_shared<Highlight>(4, 9, 5, 5, "Body of while loop ends here")}));
+            (Marking::Vec) {make_shared<Highlight>(4, 9, 5, 5, "Body of while loop ends here", 
+                make_shared<Underline>(4, 12, 16, "This condition always evaluates to false", 
+                    make_shared<Arrow>(4, 12, "..."))
+                + make_shared<Comment>(4, 12, "(i1) false -> 0"))}));
     error->report();
     return 0;
 }

@@ -13,6 +13,8 @@
 
 Marking::~Marking() {}
 
+void Marking::setSize(size_t size) { return; }
+
 Marking::Ptr Marking::std(size_t line, size_t start, size_t end, string message, size_t ptr, string info) {
     return make_shared<Underline>(line, start, end, message, 
         ptr == 0 ? nullptr : make_shared<Arrow>(line, ptr, info));
@@ -32,12 +34,15 @@ Underline::Underline(size_t line, size_t start, size_t end, string message, Arro
 
 Underline::~Underline() { message.clear(); }
 
-string Underline::print(size_t padding, string line) {
+string Underline::print(size_t padding, string line, bool isInHighlight) {
     stringstream ss;
     
     #define color() (dashed ? CC::BLUE : CC::RED) << SC::BOLD
 
-    ss << Marking::printLeft(padding) << color();
+    if (isInHighlight)
+        ss << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  " << color();
+    else
+        ss << Marking::printLeft(padding) << color();
 
     /* handle this case:
         foobarfoobar
@@ -69,51 +74,79 @@ string Underline::print(size_t padding, string line) {
 
     for (size_t i = size; i --> 0;) {
         if (arrow && i + 1 == size && arrow->col > start) {
-            ss << '\n' << Marking::printLeft(padding)
-                << string(start - 1, ' ') << color() << '|'
-                << string(arrow->col - start - 1, ' ') << CC::MAGENTA << "|\n"
-                << Marking::printLeft(padding) << color() <<  string(start - 1, ' ') << '|'
-                << CC::MAGENTA << string(arrow->col - start - 1, ' ') << arrow->message;
+            if (isInHighlight)
+                ss << '\n' << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  "
+                    << string(start - 1, ' ') << color() << '|' 
+                    << string(arrow->col - start - 1, ' ') << CC::MAGENTA << "|\n"
+                    << CC::RED << string(padding, ' ') << "|  ┃  "
+                    << string(start - 1, ' ') << color() << '|'
+                    << string(arrow->col - start - 1, ' ') << CC::MAGENTA << arrow->message;
+            else
+                ss << '\n' << Marking::printLeft(padding)
+                    << string(start - 1, ' ') << color() << '|'
+                    << string(arrow->col - start - 1, ' ') << CC::MAGENTA << "|\n"
+                    << Marking::printLeft(padding) << color() <<  string(start - 1, ' ') << '|'
+                    << CC::MAGENTA << string(arrow->col - start - 1, ' ') << arrow->message;
 
             if (i != 0)
                 i--;
         } else {
-            ss << '\n' << Marking::printLeft(padding);
+            if (isInHighlight)
+                ss << '\n' << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  ";
+            else
+                ss << '\n' << Marking::printLeft(padding);
 
             if (arrow && arrow->col < start) 
-                ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << '|'
-                    << color() << string(start - arrow->col - 1, ' ') << '|';
+                    ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << '|'
+                        << color() << string(start - arrow->col - 1, ' ') << '|';
             else 
                 ss << color() << string(start - 1, ' ') << '|';
         }
     }
 
     if (isLong) {
-        ss << '\n' << Marking::printLeft(padding); 
+        if (isInHighlight)
+            ss << '\n' << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  ";
+        else
+            ss << '\n' << Marking::printLeft(padding); 
 
         if (arrow && arrow->col < start) {
             ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << '|'
-                << color() << string(start - arrow->col - 1, ' ') << message << '\n'
-                << Marking::printLeft(padding) << string(arrow->col - 1, ' ')
+                << color() << string(start - arrow->col - 1, ' ') << message << '\n';
+
+            if (isInHighlight)
+                ss << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  ";
+            else
+                ss << Marking::printLeft(padding);
+
+            ss << string(arrow->col - 1, ' ')
                 << CC::MAGENTA << SC::BOLD << arrow->message << '\n';
         } else
             ss << color() << string(start - 1, ' ') << message << '\n' << SC::RESET;
     } else {
         ss << ' ' << message << '\n' << SC::RESET;
 
-        if (arrow)
-            ss << Marking::printLeft(padding) 
-                << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') 
-                << "|\n" << Marking::printLeft(padding) << CC::MAGENTA << SC::BOLD
-                << string(arrow->col - 1, ' ') << arrow->message << '\n';
+        if (arrow) {
+            if (isInHighlight)
+                ss << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  ";
+            else
+                ss << Marking::printLeft(padding) ;
+
+            ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << "|\n"; 
+            
+            if (isInHighlight)
+                ss << CC::RED << SC::BOLD << string(padding, ' ') << "|  ┃  ";
+            else
+                ss << Marking::printLeft(padding) ;
+
+            ss << CC::MAGENTA << SC::BOLD << string(arrow->col - 1, ' ') << arrow->message << '\n';
+        }
     }
 
     #undef color
 
     return ss.str();
 }
-
-constexpr bool Underline::printAt(size_t line) { return this->line == line; }
 
 constexpr size_t Underline::getLine() { return line; }
 
@@ -130,11 +163,13 @@ Comment::Comment(size_t line, size_t col, string message)
 
 Comment::~Comment() { message.clear(); }
 
-string Comment::print(size_t padding, string line) {
+string Comment::print(size_t padding, string line, bool isInHighlight) {
+    if (isInHighlight)
+        return string(padding, ' ') + CC::RED + SC::BOLD + "|  ┃  " 
+            + string(col - 1, ' ') + CC::GREEN + "; " + message + '\n' + SC::RESET;
+
     return Marking::printLeft(padding) + string(col - 1, ' ') + CC::GREEN + SC::BOLD + "; " + message + "\n" + SC::RESET;
 }
-
-constexpr bool Comment::printAt(size_t line) { return this->line == line; }
 
 constexpr size_t Comment::getLine() { return line; }
 
@@ -145,10 +180,10 @@ constexpr bool Comment::hasMessage() { return false; }
 
 constexpr Marking::Kind Comment::kind() { return COMMENT; }
 
-void Comment::setSize(size_t size) { return; /* just ignore */ }
-
-Highlight::Highlight(size_t fstLine, size_t lstLine, size_t fstCol, size_t lstCol, string message, Marking::Vec markings) 
-: fstLine(fstLine), lstLine(lstLine), fstCol(fstCol), lstCol(lstCol), message(message), markings(markings), content({}) {}
+Highlight::Highlight(size_t fstLine, size_t lstLine, 
+    size_t fstCol, size_t lstCol, string message, Marking::Vec markings) 
+: fstLine(fstLine), lstLine(lstLine), fstCol(fstCol), lstCol(lstCol), 
+    message(message), markings(markings), content({}) {}
 
 Highlight::~Highlight() {
     message.clear();
@@ -156,7 +191,10 @@ Highlight::~Highlight() {
     content.clear();
 }
 
-string Highlight::print(size_t padding, string line) {
+string Highlight::print(size_t padding, string line, bool isInHighlight) {
+    if (isInHighlight) 
+        return "INTERNAL ERROR: Can not render a HIGHLIGHT inside another HIGHLIGHT.\n";
+
     stringstream ss;
 
 
@@ -170,11 +208,16 @@ string Highlight::print(size_t padding, string line) {
     ss << '\n';
 
     // <line> |  ┃  <content>
-    for (size_t i = fstLine; i <= lstLine; i++)
+    for (size_t i = fstLine; i <= lstLine; i++) {
         ss << CC::BLUE << SC::BOLD << string(padding - to_string(i).size() - 1, ' ') << i << " |  " 
             << CC::RED << "┃  " << SC::RESET << CC::GRAY << content[i - fstLine] << '\n';
+        
+        for (Marking::Ptr &mark : markings)
+            if (mark->getLine() == i) 
+                ss << mark->print(padding, content[i - fstLine], true);
+    }
 
-    // <padding>|  ┗━━━━┻━━━┻ <message>
+    // <padding>|  ┗━━━━┻━━━┻━ <message>
     ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|  " << CC::RED << "┗"; 
 
     // offset created by the highlight
@@ -192,8 +235,6 @@ string Highlight::print(size_t padding, string line) {
     return ss.str();
 }
 
-constexpr bool Highlight::printAt(size_t line) { return lstLine; }
-
 constexpr size_t Highlight::getLine() { return fstLine; }
 
 constexpr size_t Highlight::getCol() { return fstCol; }
@@ -201,7 +242,5 @@ constexpr size_t Highlight::getCol() { return fstCol; }
 constexpr bool Highlight::hasMessage() { return !message.empty(); }
 
 constexpr Marking::Kind Highlight::kind() { return HIGHLIGHT; }
-
-void Highlight::setSize(size_t size) { return; }
 
 Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs) { return {lhs, rhs}; }
