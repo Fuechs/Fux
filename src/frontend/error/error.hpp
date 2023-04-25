@@ -50,6 +50,7 @@ public:
         RECURSION,
         USELESS_LIFETIME,
         REDUNDANT_IMPORT,
+        UNREACHABLE,
         
         IMPLICIT_CAST           = 800,
     };

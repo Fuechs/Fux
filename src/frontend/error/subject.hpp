@@ -58,7 +58,7 @@ public:
     using Map = map<size_t, Ptr>;
     using Iter = Map::iterator;
 
-    LineMeta(size_t line = 0, string content = "");
+    LineMeta(size_t line = 0, Source *src = nullptr);
     ~LineMeta();
 
     string print(size_t padding);
@@ -72,7 +72,7 @@ public:
 
 private:
     size_t line; // line number
-    string content; // line content
+    Source *src;
     Marking::Vec markings;
     Suggestion::Vec suggestions;
 };

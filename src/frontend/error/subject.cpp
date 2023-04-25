@@ -54,11 +54,10 @@ NoteSuggestion::~NoteSuggestion() { message.clear(); }
 
 /// LINE META ///
 
-LineMeta::LineMeta(size_t line, string content) 
-: line(line), content(content), markings({}), suggestions({}) {}
+LineMeta::LineMeta(size_t line, Source *src) 
+: line(line), src(src), markings({}), suggestions({}) {}
 
 LineMeta::~LineMeta() {
-    content.clear();
     markings.clear();
     suggestions.clear();
 }
@@ -68,20 +67,33 @@ string LineMeta::print(size_t padding) {
 
     string lineStr = to_string(line);
 
+    if (!markings.empty() && markings.front()->kind() == Marking::HIGHLIGHT) {
+        Highlight *hl = dynamic_cast<Highlight *>(markings.front().get());
+
+        if (hl) {
+            for (size_t i = hl->fstLine; i <= hl->lstLine; i++)
+                hl->content.push_back((*src)[i]);
+            
+            ss << hl->print(padding, "");
+        
+            return ss.str();
+        }
+    }
+
     ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
-        << line << " |     " << SC::RESET << CC::GRAY << content 
+        << line << " |     " << SC::RESET << CC::GRAY << (*src)[line] 
         << '\n' << SC::RESET;
 
     size_t paragraphs = 0;
 
     for (Marking::Ptr &mark : markings) {
         mark->setSize(paragraphs);
-        ss << mark->print(padding, content);
+        ss << mark->print(padding, (*src)[line]);
         paragraphs += (size_t) mark->hasMessage();
     }
     
     for (Suggestion::Ptr &suggest : suggestions)
-        ss << suggest->print(padding, content);
+        ss << suggest->print(padding, (*src)[line]);
 
     return ss.str();
 }
@@ -142,14 +154,14 @@ string Subject::print() {
     // figure out which lines have markings or suggestions
     for (Marking::Ptr &mark : markings) {
         if (!lines.contains(mark->getLine()))
-            lines[mark->getLine()] = make_shared<LineMeta>(mark->getLine(), (*src)[mark->getLine()]);
+            lines[mark->getLine()] = make_shared<LineMeta>(mark->getLine(), src);
 
         lines[mark->getLine()]->addElement(mark);
     }
 
     for (Suggestion::Ptr &suggest : suggestions) {
         if (!lines.contains(suggest->getLine()))
-            lines[suggest->getLine()] = make_shared<LineMeta>(suggest->getLine(), (*src)[suggest->getLine()]);
+            lines[suggest->getLine()] = make_shared<LineMeta>(suggest->getLine(), src);
 
         lines[suggest->getLine()]->addElement(suggest);
     }
@@ -162,7 +174,7 @@ string Subject::print() {
         // if gap is <= 3, add missing lines
         for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
             if (!lines.contains(i))
-                lines[i] = make_shared<LineMeta>(i, (*src)[i]);
+                lines[i] = make_shared<LineMeta>(i, src);
 
     #undef prev
 

@@ -37,9 +37,7 @@ string Underline::print(size_t padding, string line) {
     
     #define color() (dashed ? CC::BLUE : CC::RED) << SC::BOLD
 
-    ss << Marking::printLeft(padding) << color() << SC::BOLD;
-
-    size = 1;
+    ss << Marking::printLeft(padding) << color();
 
     /* handle this case:
         foobarfoobar
@@ -148,5 +146,62 @@ constexpr bool Comment::hasMessage() { return false; }
 constexpr Marking::Kind Comment::kind() { return COMMENT; }
 
 void Comment::setSize(size_t size) { return; /* just ignore */ }
+
+Highlight::Highlight(size_t fstLine, size_t lstLine, size_t fstCol, size_t lstCol, string message, Marking::Vec markings) 
+: fstLine(fstLine), lstLine(lstLine), fstCol(fstCol), lstCol(lstCol), message(message), markings(markings), content({}) {}
+
+Highlight::~Highlight() {
+    message.clear();
+    markings.clear();
+    content.clear();
+}
+
+string Highlight::print(size_t padding, string line) {
+    stringstream ss;
+
+
+
+    // <padding>|    ┏━━━━━━━━━━━
+    ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|  " << CC::RED << "┏";
+
+    for (size_t i = 0; i < content.front().size() + 3; i++)
+        ss << "━";
+    
+    ss << '\n';
+
+    // <line> |  ┃  <content>
+    for (size_t i = fstLine; i <= lstLine; i++)
+        ss << CC::BLUE << SC::BOLD << string(padding - to_string(i).size() - 1, ' ') << i << " |  " 
+            << CC::RED << "┃  " << SC::RESET << CC::GRAY << content[i - fstLine] << '\n';
+
+    // <padding>|  ┗━━━━┻━━━┻ <message>
+    ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|  " << CC::RED << "┗"; 
+
+    // offset created by the highlight
+    fstCol += 2;
+    lstCol += 2;
+
+    for (size_t col = 1; col <= lstCol; col++)
+        if (col == fstCol || col == lstCol) 
+            ss << "┻";
+        else
+            ss << "━";
+
+    ss << "━ " << message << '\n' << SC::RESET;
+
+    return ss.str();
+}
+
+constexpr bool Highlight::printAt(size_t line) { return lstLine; }
+
+constexpr size_t Highlight::getLine() { return fstLine; }
+
+constexpr size_t Highlight::getCol() { return fstCol; }
+
+constexpr bool Highlight::hasMessage() { return !message.empty(); }
+
+constexpr Marking::Kind Highlight::kind() { return HIGHLIGHT; }
+
+void Highlight::setSize(size_t size) { return; }
 
 Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs) { return {lhs, rhs}; }

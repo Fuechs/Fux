@@ -20,6 +20,7 @@ struct Marking {
     enum Kind {
         UNDERLINE,
         COMMENT,
+        HIGHLIGHT,
     };
 
     virtual ~Marking();
@@ -129,6 +130,36 @@ struct Comment : public Marking {
 */
     size_t line, col;
     string message;
+};
+
+struct Highlight : public Marking {
+    Highlight(size_t fstLine = 0, size_t lstLine = 0, size_t fstCol = 0, size_t lstCol = 0, 
+        string message = "", Marking::Vec markings = {});
+    ~Highlight() override;
+
+    string print(size_t padding, string line) override;
+    constexpr bool printAt(size_t line) override;
+    constexpr size_t getLine() override;
+    constexpr size_t getCol() override;
+    constexpr bool hasMessage() override;
+    constexpr Kind kind() override;
+    void setSize(size_t size) override;
+
+/*
+          |   ______
+<fstLine> |  | foo;
+<line   > |  | bar;
+<line   > |  | foo;
+          |  | <some marking>
+<lstLine> |  | bar_thing;
+          |  \ ^~~~~~~~~ <message>
+               |       |
+             fstCol  lstCol
+*/
+    size_t fstLine, lstLine, fstCol, lstCol;
+    string message;
+    Marking::Vec markings; 
+    StringVec content; // source lines
 };
 
 Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs);

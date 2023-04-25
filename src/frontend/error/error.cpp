@@ -79,6 +79,7 @@ string Error::getLiteral(Type type) {
         case USELESS_LIFETIME:  return "Useless Lifetime";
         case REDUNDANT_IMPORT:  return "Redundant Import";
         case IMPLICIT_CAST:     return "Implicit Cast";
+        case UNREACHABLE:       return "Unreachable";
         default:                assert(!"Error::getLiteral(): Error Type not implemented.");
     }
 }
