@@ -14,68 +14,7 @@
 #include "../../fux.hpp"
 #include "../metadata.hpp"
 #include "marking.hpp"
-
-// suggestions to fix the error
-struct Suggestion {
-    using Ptr = shared_ptr<Suggestion>;
-    using Vec = vector<Ptr>;
-
-    virtual ~Suggestion();
-
-    virtual string print(size_t padding, string line) = 0;
-    virtual constexpr bool printAt(size_t line) = 0;
-    virtual constexpr size_t getLine() = 0;
-};
-
-struct HelpSuggestion : public Suggestion {
-    HelpSuggestion(size_t line = 0, string message = "");
-    ~HelpSuggestion() override;
-
-    string print(size_t padding, string line) override;
-    constexpr bool printAt(size_t line) override;
-    constexpr size_t getLine() override;
-
-    size_t line; // print after line
-    string message;     
-};
-
-struct NoteSuggestion : public Suggestion {
-    NoteSuggestion(size_t line = 0, string message = "");
-    ~NoteSuggestion() override;
-
-    string print(size_t padding, string line) override;
-    constexpr bool printAt(size_t line) override;
-    constexpr size_t getLine() override;
-
-    size_t line; // print after line
-    string message; 
-};
-
-// markings, suggestions, etc. on a line
-class LineMeta {
-public:
-    using Ptr = shared_ptr<LineMeta>;
-    using Map = map<size_t, Ptr>;
-    using Iter = Map::iterator;
-
-    LineMeta(size_t line = 0, Source *src = nullptr);
-    ~LineMeta();
-
-    string print(size_t padding);
-
-    void addElement(Marking::Ptr &marking);
-    void addElement(Suggestion::Ptr &suggestion);
-
-    size_t getLine();
-    // the column of the first maring
-    size_t getCol();
-
-private:
-    size_t line; // line number
-    Source *src;
-    Marking::Vec markings;
-    Suggestion::Vec suggestions;
-};
+#include "suggestion.hpp"
 
 class Subject {
 public:

@@ -192,7 +192,8 @@ int main(void) {
         "    }",
         "    vector[] << x;",
         "    return \"Hello World!\\n\";",
-        "}"
+        "}",
+        "y: u64 = \"Hello World!\\n\";"
     };
     Source dummy(file, content);
 
@@ -219,6 +220,12 @@ int main(void) {
                 make_shared<Underline>(4, 12, 16, "This condition always evaluates to false", 
                     make_shared<Arrow>(4, 12, "..."))
                 + make_shared<Comment>(4, 12, "(i1) false -> 0"))}));
+    error->report();
+
+    error = make_shared<Error>(Error::UNEXPECTED_TYPE, "Cannot assign a value of type `*c8` to a variable of type `u64`",
+        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
+            make_shared<Underline>(13, 10, 25, "Expected an expression of type `u64`")
+            + make_shared<Underline>(13, 4, 6, "since `y` was declared with type `u64`")));
     error->report();
     return 0;
 }

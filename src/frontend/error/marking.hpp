@@ -25,7 +25,6 @@ struct Marking {
 
     virtual ~Marking();
 
-    virtual string print(size_t padding, string line, bool isInHighlight = false) = 0;
     virtual constexpr size_t getLine() = 0;
     virtual constexpr size_t getCol() = 0;
     virtual constexpr bool hasMessage() = 0;
@@ -34,9 +33,6 @@ struct Marking {
 
     // create a standard underline and pointer marking
     static Ptr std(size_t line, size_t start, size_t end, string message = "", size_t ptr = 0, string info = "");
-
-    // print '<padding>|     '
-    static constexpr string printLeft(size_t padding);
 };
 
 struct Arrow {
@@ -61,7 +57,6 @@ struct Underline : public Marking {
     Underline(size_t line = 0, size_t start = 0, size_t end = 0, string message = "", Arrow::Ptr arrow = nullptr);
     ~Underline() override;
 
-    string print(size_t padding, string line, bool isInHighlight = false) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;
@@ -108,7 +103,6 @@ struct Comment : public Marking {
     Comment(size_t line = 0, size_t col = 0, string message = "");
     ~Comment() override;
 
-    string print(size_t padding, string line, bool isInHighlight = false) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;
@@ -132,7 +126,6 @@ struct Highlight : public Marking {
         string message = "", Marking::Vec markings = {});
     ~Highlight() override;
 
-    string print(size_t padding, string line, bool isInHighlight = false) override;
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;

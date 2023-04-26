@@ -11,105 +11,40 @@
 
 #include "subject.hpp"
 #include "../../util/source.hpp"
+#include "renderer.hpp"
 
-/// SUGGESTION ///
+// string LineMeta::print(size_t padding) {
+//     stringstream ss;
 
-Suggestion::~Suggestion() {}
+//     string lineStr = to_string(line);
 
-HelpSuggestion::HelpSuggestion(size_t line, string message) : line(line), message(message) {}
+//     if (!markings.empty() && markings.front()->kind() == Marking::HIGHLIGHT) {
+//         Highlight *hl = dynamic_cast<Highlight *>(markings.front().get());
 
-string HelpSuggestion::print(size_t padding, string line) {
-    stringstream ss;
-
-    ss << CC::YELLOW << SC::BOLD 
-        << (padding <= 5 ? "" : string(padding - 5, ' ')) 
-        << "Help |     " << message << '\n' << SC::RESET;
-
-    return ss.str();
-}
-
-constexpr bool HelpSuggestion::printAt(size_t line) { return this->line == line; }
-
-constexpr size_t HelpSuggestion::getLine() { return line; }
-
-NoteSuggestion::NoteSuggestion(size_t line, string message) : line(line), message(message) {}
-
-string NoteSuggestion::print(size_t padding, string line) {
-    stringstream ss;
-
-    ss << CC::YELLOW << SC::BOLD 
-        << (padding <= 5 ? "" : string(padding - 5, ' ')) 
-        << "Help |     " << message << '\n' << SC::RESET;
-
-    return ss.str();
-}
-
-constexpr bool NoteSuggestion::printAt(size_t line) { return this->line == line; }
-
-constexpr size_t NoteSuggestion::getLine() { return line; }
-
-HelpSuggestion::~HelpSuggestion() { message.clear(); }
-
-NoteSuggestion::~NoteSuggestion() { message.clear(); }
-
-/// LINE META ///
-
-LineMeta::LineMeta(size_t line, Source *src) 
-: line(line), src(src), markings({}), suggestions({}) {}
-
-LineMeta::~LineMeta() {
-    markings.clear();
-    suggestions.clear();
-}
-
-string LineMeta::print(size_t padding) {
-    stringstream ss;
-
-    string lineStr = to_string(line);
-
-    if (!markings.empty() && markings.front()->kind() == Marking::HIGHLIGHT) {
-        Highlight *hl = dynamic_cast<Highlight *>(markings.front().get());
-
-        if (hl) {
-            for (size_t i = hl->fstLine; i <= hl->lstLine; i++)
-                hl->content.push_back((*src)[i]);
+//         if (hl) {
+//             for (size_t i = hl->fstLine; i <= hl->lstLine; i++)
+//                 hl->content.push_back((*src)[i]);
             
-            ss << hl->print(padding, "");
+//             // ss << hl->print(padding, "");
         
-            return ss.str();
-        }
-    }
+//             return ss.str();
+//         }
+//     }
 
-    ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
-        << line << " |     " << SC::RESET << CC::GRAY << (*src)[line] 
-        << '\n' << SC::RESET;
+//     ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
+//         << line << " |     " << SC::RESET << CC::GRAY << (*src)[line] 
+//         << '\n' << SC::RESET;
 
-    size_t paragraphs = 0;
+//     size_t paragraphs = 0;
 
-    for (Marking::Ptr &mark : markings) {
-        mark->setSize(paragraphs);
-        ss << mark->print(padding, (*src)[line]);
-        paragraphs += (size_t) mark->hasMessage();
-    }
+//     for (Marking::Ptr &mark : markings) {
+//         mark->setSize(paragraphs);
+//         // ss << mark->print(padding, (*src)[line]);
+//         paragraphs += (size_t) mark->hasMessage();
+//     }
     
-    for (Suggestion::Ptr &suggest : suggestions)
-        ss << suggest->print(padding, (*src)[line]);
-
-    return ss.str();
-}
-
-void LineMeta::addElement(Marking::Ptr &marking) {
-    markings.push_back(marking);
-}
-
-void LineMeta::addElement(Suggestion::Ptr &suggestion) {
-    suggestions.push_back(suggestion);
-}
-
-size_t LineMeta::getLine() { return line; }
-
-size_t LineMeta::getCol() { return markings.front()->getCol(); }
-
+//     return ss.str();
+// }
 /// SUBJECT ///
 
 Subject::Subject(Metadata meta, Marking::Vec markings, Suggestion::Vec suggestions, Vec references, Ptr traceback) 
@@ -146,61 +81,49 @@ string Subject::print() {
             }
         }
 
-    // using LineMap = map<size_t, pair<Marking::Vec, Suggestion::Vec>>;
-    //                line number      markings      suggestions
+    using LineMap = map<size_t, Marking::Vec>;
+//                  line number, markings
 
-    LineMeta::Map lines = {};
+    LineMap lines = {};
 
     // figure out which lines have markings or suggestions
-    for (Marking::Ptr &mark : markings) {
-        if (!lines.contains(mark->getLine()))
-            lines[mark->getLine()] = make_shared<LineMeta>(mark->getLine(), src);
-
-        lines[mark->getLine()]->addElement(mark);
-    }
-
-    for (Suggestion::Ptr &suggest : suggestions) {
-        if (!lines.contains(suggest->getLine()))
-            lines[suggest->getLine()] = make_shared<LineMeta>(suggest->getLine(), src);
-
-        lines[suggest->getLine()]->addElement(suggest);
-    }
+    for (Marking::Ptr &mark : markings) 
+        lines[mark->getLine()].push_back(mark);
 
     // previous line
     #define prev() (--lineIter)++ 
 
     // figure out which lines inbetween markings should be printed 
-    for (LineMeta::Iter lineIter = ++lines.begin(); lineIter != lines.end(); lineIter++)    
+    for (LineMap::iterator lineIter = ++lines.begin(); lineIter != lines.end(); lineIter++)    
         // if gap is <= 3, add missing lines
         for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
             if (!lines.contains(i))
-                lines[i] = make_shared<LineMeta>(i, src);
+                lines[i] = {};
 
     #undef prev
 
     if (line == 0 || col == 0) {
-        line = lines.begin()->second->getLine();
-        col = lines.begin()->second->getCol();
+        line = lines.begin()->second.front()->getLine();
+        col = lines.begin()->second.front()->getCol();
     }
 
     ss << CC::BLUE << SC::BOLD << string(padding - 2, ' ') << ">>> " << CC::DEFAULT 
-        << meta.file << ':' << line << ':' << col << '\n';
+        << meta.file << ':' << line << ':' << col << '\n'
+        << Renderer(src, lines, suggestions).render(padding);
 
-    for (size_t line = 1; line <= meta.lstLine; line++) {
-        if (!lines.contains(line))
-            continue;
-        
-        ss << lines[line]->print(padding);
-
-        if (!lines.contains(line + 1) && line != (--lines.end())->first)
-            ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
-                << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
+    // for (size_t line = 1; line <= meta.lstLine; line++) {
+    //     if (!lines.contains(line))
+    //         continue;        
+ 
+    //     if (!lines.contains(line + 1) && line != (--lines.end())->first)
+    //         ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
+    //             << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
             
-        lines.erase(line);
+    //     lines.erase(line);
 
-        if (lines.empty())
-            break;
-    }
+    //     if (lines.empty())
+    //         break;
+    // }
 
     return ss.str();
 }
