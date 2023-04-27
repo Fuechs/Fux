@@ -248,4 +248,11 @@ vector<T, A> operator+(const vector<T, A> &lhs, const T &rhs) {
     return result;
 }
 
+string operator*(const string &lhs, size_t rhs) {
+    string ret = "";
+    while (rhs --> 0)
+        ret += lhs;
+    return ret;
+}
+
 #endif

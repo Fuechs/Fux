@@ -27,6 +27,7 @@ struct Marking {
 
     virtual constexpr size_t getLine() = 0;
     virtual constexpr size_t getCol() = 0;
+    virtual constexpr size_t getSize();
     virtual constexpr bool hasMessage() = 0;
     virtual constexpr Kind kind() = 0;
     virtual void setSize(size_t size);
@@ -59,6 +60,7 @@ struct Underline : public Marking {
 
     constexpr size_t getLine() override;
     constexpr size_t getCol() override;
+    constexpr size_t getSize() override;
     constexpr bool hasMessage() override;
     constexpr Kind kind() override;
     void setSize(size_t size) override;

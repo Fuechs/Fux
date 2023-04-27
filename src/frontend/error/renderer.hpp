@@ -33,9 +33,15 @@ private:
     LineMap lines;
     Suggestion::Vec suggestions;
     size_t padding;
+    bool highlight; // is currently rendering a highlight
 
     string renderLine(size_t line, Marking::Vec markings);
 
+    string renderHighlight(size_t line, Marking::Ptr mark);
+
+    // render the border left with optional line number
     constexpr string renderBorder(size_t line = 0);
-    constexpr string renderHighlightBorder(size_t line = 0);
+
+    Marking::Vec getSorted(const Marking::Vec &markings);
+    size_t getMaxSize(Marking::Vec markings);
 };

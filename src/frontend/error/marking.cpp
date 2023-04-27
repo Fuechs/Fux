@@ -13,6 +13,8 @@
 
 Marking::~Marking() {}
 
+constexpr size_t Marking::getSize() { return 0; }
+
 void Marking::setSize(size_t size) { return; }
 
 Marking::Ptr Marking::std(size_t line, size_t start, size_t end, string message, size_t ptr, string info) {
@@ -130,6 +132,8 @@ Underline::~Underline() { message.clear(); }
 constexpr size_t Underline::getLine() { return line; }
 
 constexpr size_t Underline::getCol() { return start; }
+
+constexpr size_t Underline::getSize() { return size; }
 
 constexpr bool Underline::hasMessage() { return !message.empty(); }
 
