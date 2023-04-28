@@ -94,11 +94,26 @@ string Subject::print() {
     #define prev() (--lineIter)++ 
 
     // figure out which lines inbetween markings should be printed 
-    for (LineMap::iterator lineIter = ++lines.begin(); lineIter != lines.end(); lineIter++)    
-        // if gap is <= 3, add missing lines
-        for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
-            if (!lines.contains(i))
-                lines[i] = {};
+    for (LineMap::iterator lineIter = lines.begin(); lineIter != lines.end(); lineIter++) {
+
+        if (lineIter != lines.begin())
+            // if gap is <= 3, add missing lines
+            for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
+                if (!lines.contains(i))
+                    lines[i] = {}; 
+
+        // fill highlight gaps
+        if (lineIter->second.front()->kind() == Marking::HIGHLIGHT 
+        && lineIter->second.front()->getLine() != 0) {
+            Highlight *hl = dynamic_cast<Highlight *>(lineIter->second.front().get());
+
+            for (size_t i = hl->fstLine + 1; i <= hl->lstLine; i++)        
+                if (hl->lstLine == i)
+                    lines[i].insert(lines[i].begin(), make_unique<Highlight>(0, i, hl->fstCol, hl->lstCol, hl->message));
+                else
+                    lines[i].insert(lines[i].begin(), make_unique<Highlight>());
+        }
+    }
 
     #undef prev
 
@@ -110,20 +125,6 @@ string Subject::print() {
     ss << CC::BLUE << SC::BOLD << string(padding - 2, ' ') << ">>> " << CC::DEFAULT 
         << meta.file << ':' << line << ':' << col << '\n'
         << Renderer(src, lines, suggestions).render(padding);
-
-    // for (size_t line = 1; line <= meta.lstLine; line++) {
-    //     if (!lines.contains(line))
-    //         continue;        
- 
-    //     if (!lines.contains(line + 1) && line != (--lines.end())->first)
-    //         ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
-    //             << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
-            
-    //     lines.erase(line);
-
-    //     if (lines.empty())
-    //         break;
-    // }
 
     return ss.str();
 }

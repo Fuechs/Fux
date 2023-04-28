@@ -198,6 +198,7 @@ int main(void) {
     Source dummy(file, content);
 
     fux.aggressive = true;
+    
     Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "",
         make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
             Marking::std(11, 12, 27, "Expected an expression of type `u64` here", 
@@ -216,10 +217,9 @@ int main(void) {
 
     error = make_shared<Error>(Error::UNREACHABLE, "Unreachable code in while loop",
         make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()),
-            (Marking::Vec) {make_shared<Highlight>(4, 9, 5, 5, "Body of while loop ends here", 
-                make_shared<Underline>(4, 12, 16, "This condition always evaluates to false", 
-                    make_shared<Arrow>(4, 12, "..."))
-                + make_shared<Comment>(4, 12, "(i1) false -> 0"))}));
+            (Marking::Vec) {make_shared<Highlight>(4, 9, 5, 5, "Body of while loop ends here"),
+                make_shared<Underline>(4, 12, 16, "This condition always evaluates to false", make_shared<Arrow>(4, 12, "...")),
+                make_shared<Comment>(4, 12, "(i1) false -> 0")}));
     error->report();
 
     error = make_shared<Error>(Error::UNEXPECTED_TYPE, "Cannot assign a value of type `*c8` to a variable of type `u64`",

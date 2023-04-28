@@ -32,16 +32,20 @@ private:
     Source *source;
     LineMap lines;
     Suggestion::Vec suggestions;
-    size_t padding;
+    size_t padding, cursor;
     bool highlight; // is currently rendering a highlight
+    Marking::Ptr next;
 
     string renderLine(size_t line, Marking::Vec markings);
-
+    string renderMarking(Marking::Ptr &mark);
+    string renderUnderline(Underline *ul);
+    string renderComment(Comment *ct);
     string renderHighlight(size_t line, Marking::Ptr mark);
 
     // render the border left with optional line number
     constexpr string renderBorder(size_t line = 0);
 
     Marking::Vec getSorted(const Marking::Vec &markings);
+    // assign size to each marking and return end result
     size_t getMaxSize(Marking::Vec markings);
 };

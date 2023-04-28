@@ -12,7 +12,7 @@
 #include "renderer.hpp"
 
 Renderer::Renderer(Source *source, LineMap lines, Suggestion::Vec suggestions)
-: source(source), lines(lines), suggestions(suggestions), padding(0) {}
+: source(source), lines(lines), suggestions(suggestions), padding(0), cursor(1), highlight(false) {}
 
 Renderer::~Renderer() {
     lines.clear();
@@ -22,12 +22,19 @@ Renderer::~Renderer() {
 string Renderer::render(size_t padding) {
     stringstream ss;
 
+    this->padding = padding;
+
     for (size_t line = 1; !lines.empty(); line++) {
         if (!lines.contains(line))
             continue;
 
+        cursor = 1;
         ss << renderLine(line, lines[line]);
 
+        if (!lines.contains(line + 1) && line != (--lines.end())->first)
+            ss << CC::BLUE << SC::BOLD << string(padding - 4, ' ') << "... |     "
+                << SC::RESET << CC::GRAY << "...\n" << SC::RESET;
+        
         lines.erase(line);
     }
   
@@ -39,7 +46,7 @@ string Renderer::renderLine(size_t line, Marking::Vec markings) {
 
     highlight = !markings.empty() && markings.front()->kind() == Marking::HIGHLIGHT;
 
-    if (highlight)
+    if (highlight && markings.front()->getLine() != 0)
         ss << renderHighlight(line, markings.front()); // render top
 
     // source code
@@ -50,23 +57,85 @@ string Renderer::renderLine(size_t line, Marking::Vec markings) {
     Marking::Vec sorted = getSorted(markings);
 
     // markings
-    for (size_t i = maxSize; i --> 0;) 
-        for (size_t col = 1; col <= (*source)[line].size(); col++) {
-            ss << renderBorder();
+    for (size_t i = maxSize; i --> 0;) {
+        if (sorted.empty() 
+        || (sorted.size() == 1 && sorted[0]->kind() == Marking::HIGHLIGHT))
+            break;
 
-            if (i == maxSize) {
-                
-            } else {
+        ss << renderBorder();
 
+        if (i + 1 == maxSize) 
+            for (size_t j = 0; j < sorted.size(); j++) {
+                next = j + 1 == sorted.size() ? nullptr : sorted[j + 1];
+                ss << renderMarking(sorted[j]);
+
+                if (next && next->kind() == Marking::COMMENT 
+                && sorted[j]->kind() != Marking::COMMENT)
+                    ss << '\n' << renderBorder();
             }
+        else if (i == 0) {
+        } else {
         }
+        
+        ss << '\n';
+    }
 
-    if (highlight) {        
+    if (highlight
+    && dynamic_cast<Highlight *>(markings.front().get())->lstLine == line) {        
         ss << renderHighlight(line, markings.front()); // render bottom 
         highlight = false;
     }
 
     return ss.str();
+}
+
+string Renderer::renderMarking(Marking::Ptr &mark) {
+    switch (mark->kind()) {
+        case Marking::UNDERLINE:   
+            return renderUnderline(dynamic_cast<Underline *>(mark.get()));
+        case Marking::COMMENT:
+            return renderComment(dynamic_cast<Comment *>(mark.get()));
+        default:                    
+            return string();
+    }
+}
+
+string Renderer::renderUnderline(Underline *ul) {
+    stringstream ss;
+
+    #define color() (ul->dashed ? CC::BLUE : CC::RED)
+
+    ss << color();
+
+    size_t last = ul->arrow ? std::max(ul->arrow->col, ul->end) : ul->end;
+
+    for (; cursor <= last; cursor++) {
+        if (ul->size != 0 && cursor == ul->start) 
+            ss << '|';
+        else if (ul->arrow && cursor == ul->arrow->col)
+            ss << CC::MAGENTA << '^' << color();
+        else if (ul->arrow 
+        && (cursor == ul->arrow->col - 1 || cursor == ul->arrow->col + 1))
+            ss << ' ';
+        else if (cursor >= ul->start && cursor <= ul->end)
+            ss << (ul->dashed ? '-' : '~');
+        else
+            ss << ' '; 
+    }
+
+    if (ul->size == 0)
+        ss << ' ' << ul->message;
+
+    return ss.str();
+}
+
+string Renderer::renderComment(Comment *ct) {
+    string ret = string(ct->col - 1, ' ') + CC::GREEN + "; " + ct->message;
+
+    if (next && next->kind() == Marking::COMMENT)
+        ret += '\n' + renderBorder();
+    
+    return ret;
 }
 
 string Renderer::renderHighlight(size_t line, Marking::Ptr mark) {
@@ -75,11 +144,11 @@ string Renderer::renderHighlight(size_t line, Marking::Ptr mark) {
     
     if (hl->fstLine == line)
         ss << string(padding, ' ') << CC::RED << SC::BOLD << "|  " 
-            << "┏" << string("━") * ((*source)[line].size() + 3) << '\n';
+            << "┏" << string("━") * ((*source)[line].size() + 5) << '\n';
                     // adjust size of line to source code
 
     else if (hl->lstLine == line) {
-        ss << string(padding, ' ') << CC::RED << SC::BOLD << "|  " << "┗";
+        ss << string(padding, ' ') << CC::RED << SC::BOLD << "|  " << "┗━━";
 
         for (size_t col = 1; col <= hl->lstCol; col++)
             if (col == hl->fstCol || col == hl->lstCol) 
@@ -102,8 +171,8 @@ constexpr string Renderer::renderBorder(size_t line) {
             return string(padding, ' ') + CC::RED + SC::BOLD + "|  ┃  ";
         
         return string(padding - to_string(line).size() - 1, ' ')
-        + CC::BLUE + SC::BOLD + to_string(line) + " |  "
-        + CC::RED + "┃  ";
+            + CC::BLUE + SC::BOLD + to_string(line) + " |  "
+            + CC::RED + "┃  ";
     }
 
     if (!line)
@@ -114,6 +183,9 @@ constexpr string Renderer::renderBorder(size_t line) {
 }
 
 Marking::Vec Renderer::getSorted(const Marking::Vec &markings) {
+    if (markings.empty())
+        return Marking::Vec();
+
     Marking::Vec sorted = markings;
 
                     // skip highlight marking
@@ -129,10 +201,11 @@ Marking::Vec Renderer::getSorted(const Marking::Vec &markings) {
 }
 
 size_t Renderer::getMaxSize(Marking::Vec markings) {
-    size_t ret = 0;
+    size_t paragraphs = 0;
 
     for (Marking::Ptr &mark : markings) 
-        ret = std::max(ret, mark->getSize());
+        if (mark->hasMessage())
+            mark->setSize(paragraphs++);
 
-    return ret;
+    return paragraphs == 0 ? 0 : paragraphs - 1;
 }

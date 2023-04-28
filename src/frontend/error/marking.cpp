@@ -220,7 +220,7 @@ constexpr size_t Highlight::getLine() { return fstLine; }
 
 constexpr size_t Highlight::getCol() { return fstCol; }
 
-constexpr bool Highlight::hasMessage() { return !message.empty(); }
+constexpr bool Highlight::hasMessage() { return false; }
 
 constexpr Marking::Kind Highlight::kind() { return HIGHLIGHT; }
 
