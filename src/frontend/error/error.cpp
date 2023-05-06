@@ -18,7 +18,7 @@ Error::~Error() {
     title.clear();
 
     if (flag == NEUTRAL)
-        assert(!"Error was neither reported or cancelled.");
+        internalError("Error was neither reported or cancelled.");
 }
 
 void Error::report() {

@@ -202,30 +202,23 @@ int main(void) {
     Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "",
         make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
             Marking::std(11, 12, 27, "Expected an expression of type `u64` here", 
-                5, "Trying to return a value of type `*c8` here")
-            + Marking::std(2, 1, 15, "Declaration of `main`", 13, "Declared with type `u64`")));
+                5, "Trying to return a value of type `*c8` here"),
+            Marking::std(2, 1, 15, "Declaration of `main`", 13, "Declared with type `u64`")));
     error->report();
 
     error = make_shared<Error>(Error::EXCEEDED_LIFETIME, 
         "Lifetime of reference to `x` exceeds lifetime of `x` itself",
         make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()),
-            make_shared<Underline>(10, 5, 18, "Reference to `x` is created here")
-            + make_shared<Underline>(3, 5, 23, "`x` is declared here")
-            + (Marking::Ptr) make_shared<Comment>(12, 1, "`x` is deleted here")
+            make_shared<Underline>(10, 5, 18, "Reference to `x` is created here"),
+            make_shared<Underline>(3, 5, 23, "`x` is declared here"),
+            (Marking::Ptr) make_shared<Comment>(12, 1, "`x` is deleted here")
             + (Marking::Ptr) make_shared<Comment>(12, 1, "Reference to `x` is still alive here")));
-    error->report();
-
-    error = make_shared<Error>(Error::UNREACHABLE, "Unreachable code in while loop",
-        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()),
-            (Marking::Vec) {make_shared<Highlight>(4, 9, 5, 5, "Body of while loop ends here"),
-                make_shared<Underline>(4, 12, 16, "This condition always evaluates to false", make_shared<Arrow>(4, 12, "...")),
-                make_shared<Comment>(4, 12, "(i1) false -> 0")}));
     error->report();
 
     error = make_shared<Error>(Error::UNEXPECTED_TYPE, "Cannot assign a value of type `*c8` to a variable of type `u64`",
         make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
-            make_shared<Underline>(13, 10, 25, "Expected an expression of type `u64`")
-            + make_shared<Underline>(13, 4, 6, "since `y` was declared with type `u64`")));
+            make_shared<Underline>(13, 10, 25, "Expected an expression of type `u64`"),
+            make_shared<Underline>(13, 4, 6, "since `y` was declared with type `u64`")));
     error->report();
     return 0;
 }
@@ -253,6 +246,12 @@ string operator*(const string &lhs, size_t rhs) {
     while (rhs --> 0)
         ret += lhs;
     return ret;
+}
+
+void internalError(std::string message) {
+    cerr << CC::RED << SC::BOLD << "[Internal Error]: "  
+        << CC::WHITE << message << '\n' << SC::RESET;
+    exit(1); 
 }
 
 #endif

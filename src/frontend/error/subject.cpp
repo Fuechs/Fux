@@ -13,45 +13,15 @@
 #include "../../util/source.hpp"
 #include "renderer.hpp"
 
-// string LineMeta::print(size_t padding) {
-//     stringstream ss;
-
-//     string lineStr = to_string(line);
-
-//     if (!markings.empty() && markings.front()->kind() == Marking::HIGHLIGHT) {
-//         Highlight *hl = dynamic_cast<Highlight *>(markings.front().get());
-
-//         if (hl) {
-//             for (size_t i = hl->fstLine; i <= hl->lstLine; i++)
-//                 hl->content.push_back((*src)[i]);
-            
-//             // ss << hl->print(padding, "");
-        
-//             return ss.str();
-//         }
-//     }
-
-//     ss << CC::BLUE << SC::BOLD << string(padding - lineStr.size() - 1, ' ')
-//         << line << " |     " << SC::RESET << CC::GRAY << (*src)[line] 
-//         << '\n' << SC::RESET;
-
-//     size_t paragraphs = 0;
-
-//     for (Marking::Ptr &mark : markings) {
-//         mark->setSize(paragraphs);
-//         // ss << mark->print(padding, (*src)[line]);
-//         paragraphs += (size_t) mark->hasMessage();
-//     }
-    
-//     return ss.str();
-// }
 /// SUBJECT ///
 
-Subject::Subject(Metadata meta, Marking::Vec markings, Suggestion::Vec suggestions, Vec references, Ptr traceback) 
-: meta(meta), markings(markings), suggestions(suggestions), references(references), traceback(traceback){}
+Subject::Subject(Metadata meta, Marking::Ptr primary, Marking::Ptr secondary, Marking::Vec other, 
+    Suggestion::Vec suggestions, Vec references, Ptr traceback) 
+: meta(meta), primary(primary), secondary(secondary), other(other), 
+    suggestions(suggestions), references(references), traceback(traceback){}
 
 Subject::~Subject() {
-    markings.clear();
+    other.clear();
     suggestions.clear();
     references.clear();
 }
@@ -69,51 +39,36 @@ string Subject::print() {
             break;
         }
 
-    // make first underline marking use '~' instead of '-'
-    for (Marking::Ptr &mark : markings) 
-        if (mark->kind() == Marking::UNDERLINE) { 
-            Underline *ul = dynamic_cast<Underline *>(mark.get());
-            if (ul) {
-                ul->dashed = false;
-                line = mark->getLine();
-                col = mark->getCol();
-                break;
-            }
-        }
+    if (primary->kind() == Marking::UNDERLINE) {
+        Underline *ul = dynamic_cast<Underline *>(primary.get());
+        ul->dashed = false;
+        line = ul->line;
+        col = ul->start;
+    } else 
+        internalError("Primary marking is not an underline.");
 
     using LineMap = map<size_t, Marking::Vec>;
-//                  line number, markings
+//                   line number, markings
 
     LineMap lines = {};
 
     // figure out which lines have markings or suggestions
-    for (Marking::Ptr &mark : markings) 
+    for (Marking::Ptr &mark : other) 
         lines[mark->getLine()].push_back(mark);
+
+    lines[primary->getLine()].push_back(primary);
+    lines[secondary->getLine()].push_back(secondary);
 
     // previous line
     #define prev() (--lineIter)++ 
 
     // figure out which lines inbetween markings should be printed 
-    for (LineMap::iterator lineIter = lines.begin(); lineIter != lines.end(); lineIter++) {
-
+    for (LineMap::iterator lineIter = lines.begin(); lineIter != lines.end(); lineIter++) 
         if (lineIter != lines.begin())
             // if gap is <= 3, add missing lines
             for (size_t i = prev()->first; (lineIter->first - i <= 3) && i < lineIter->first; i++)
                 if (!lines.contains(i))
                     lines[i] = {}; 
-
-        // fill highlight gaps
-        if (lineIter->second.front()->kind() == Marking::HIGHLIGHT 
-        && lineIter->second.front()->getLine() != 0) {
-            Highlight *hl = dynamic_cast<Highlight *>(lineIter->second.front().get());
-
-            for (size_t i = hl->fstLine + 1; i <= hl->lstLine; i++)        
-                if (hl->lstLine == i)
-                    lines[i].insert(lines[i].begin(), make_unique<Highlight>(0, i, hl->fstCol, hl->lstCol, hl->message));
-                else
-                    lines[i].insert(lines[i].begin(), make_unique<Highlight>());
-        }
-    }
 
     #undef prev
 

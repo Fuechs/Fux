@@ -116,3 +116,6 @@ template<typename T, typename A>
 vector<T, A> operator+(const vector<T, A> &lhs, const T &rhs);
 
 string operator*(const string &lhs, size_t rhs);
+
+// throw internal compiler error
+void internalError(std::string message = "Unknown Error.");

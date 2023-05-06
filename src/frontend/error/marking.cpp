@@ -32,6 +32,13 @@ Underline::Underline(size_t line, size_t start, size_t end, string message, Arro
 
 Underline::~Underline() { message.clear(); }
 
+string Underline::print(size_t padding, size_t cursor, size_t size) {
+    return "[Internal Error]: Underline not implemented. ("
+        +to_string(padding)+", "
+        +to_string(cursor)+", "
+        +to_string(size)+"); ";
+}
+
 // string Underline::print(size_t padding, string line, bool isInHighlight) {
 //     stringstream ss;
     
@@ -146,13 +153,9 @@ Comment::Comment(size_t line, size_t col, string message)
 
 Comment::~Comment() { message.clear(); }
 
-// string Comment::print(size_t padding, string line, bool isInHighlight) {
-//     if (isInHighlight)
-//         return string(padding, ' ') + CC::RED + SC::BOLD + "|  ┃  " 
-//             + string(col - 1, ' ') + CC::GREEN + "; " + message + '\n' + SC::RESET;
-
-//     return Marking::printLeft(padding) + string(col - 1, ' ') + CC::GREEN + SC::BOLD + "; " + message + "\n" + SC::RESET;
-// }
+string Comment::print() {
+    return string(col - 1, ' ') + CC::GREEN + SC::BOLD + "; " + message + "\n" + SC::RESET;
+}
 
 constexpr size_t Comment::getLine() { return line; }
 
@@ -162,66 +165,5 @@ constexpr size_t Comment::getCol() { return col; }
 constexpr bool Comment::hasMessage() { return false; }
 
 constexpr Marking::Kind Comment::kind() { return COMMENT; }
-
-Highlight::Highlight(size_t fstLine, size_t lstLine, 
-    size_t fstCol, size_t lstCol, string message, Marking::Vec markings) 
-: fstLine(fstLine), lstLine(lstLine), fstCol(fstCol), lstCol(lstCol), 
-    message(message), markings(markings), content({}) {}
-
-Highlight::~Highlight() {
-    message.clear();
-    markings.clear();
-    content.clear();
-}
-
-// string Highlight::print(size_t padding, string line, bool isInHighlight) {
-//     if (isInHighlight) 
-//         return "INTERNAL ERROR: Can not render a HIGHLIGHT inside another HIGHLIGHT.\n";
-
-//     stringstream ss;
-
-//     // <padding>|    ┏━━━━━━━━━━━
-//     ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|  " << CC::RED << "┏";
-
-//     for (size_t i = 0; i < content.front().size() + 3; i++)
-//         ss << "━";
-    
-//     ss << '\n';
-
-//     // <line> |  ┃  <content>
-//     for (size_t i = fstLine; i <= lstLine; i++) {
-//         ss << CC::BLUE << SC::BOLD << string(padding - to_string(i).size() - 1, ' ') << i << " |  " 
-//             << CC::RED << "┃  " << SC::RESET << CC::GRAY << content[i - fstLine] << '\n';
-        
-//         for (Marking::Ptr &mark : markings)
-//             if (mark->getLine() == i) 
-//                 ss << mark->print(padding, content[i - fstLine], true);
-//     }
-
-//     // <padding>|  ┗━━━━┻━━━┻━ <message>
-//     ss << CC::BLUE << SC::BOLD << string(padding, ' ') << "|  " << CC::RED << "┗"; 
-
-//     // offset created by the highlight
-//     fstCol += 2;
-//     lstCol += 2;
-
-//     for (size_t col = 1; col <= lstCol; col++)
-//         if (col == fstCol || col == lstCol) 
-//             ss << "┻";
-//         else
-//             ss << "━";
-
-//     ss << "━ " << message << '\n' << SC::RESET;
-
-//     return ss.str();
-// }
-
-constexpr size_t Highlight::getLine() { return fstLine; }
-
-constexpr size_t Highlight::getCol() { return fstCol; }
-
-constexpr bool Highlight::hasMessage() { return false; }
-
-constexpr Marking::Kind Highlight::kind() { return HIGHLIGHT; }
 
 Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs) { return {lhs, rhs}; } 

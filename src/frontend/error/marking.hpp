@@ -20,7 +20,6 @@ struct Marking {
     enum Kind {
         UNDERLINE,
         COMMENT,
-        HIGHLIGHT,
     };
 
     virtual ~Marking();
@@ -55,6 +54,9 @@ struct Arrow {
 };
 
 struct Underline : public Marking {
+    using Ptr = shared_ptr<Underline>;
+    using Vec = vector<Ptr>;
+
     Underline(size_t line = 0, size_t start = 0, size_t end = 0, string message = "", Arrow::Ptr arrow = nullptr);
     ~Underline() override;
 
@@ -64,6 +66,8 @@ struct Underline : public Marking {
     constexpr bool hasMessage() override;
     constexpr Kind kind() override;
     void setSize(size_t size) override;
+
+    string print(size_t padding, size_t cursor, size_t size);
 
     // false: (red) ~~~~~~
     // true : (blue) ------
@@ -81,7 +85,7 @@ struct Underline : public Marking {
             |
           except
 */
-    size_t line, start, end, size; // size is the same as for `Arrow`
+    size_t line, start, end, size;
                                 /* foo_bar;
                                    |~~~~~~
                                    | <- size = 3
@@ -102,6 +106,9 @@ struct Underline : public Marking {
 };
 
 struct Comment : public Marking {
+    using Ptr = shared_ptr<Comment>;
+    using Vec = vector<Ptr>;
+
     Comment(size_t line = 0, size_t col = 0, string message = "");
     ~Comment() override;
 
@@ -109,6 +116,8 @@ struct Comment : public Marking {
     constexpr size_t getCol() override;
     constexpr bool hasMessage() override;
     constexpr Kind kind() override;
+
+    string print();
 
 /*
         {
@@ -121,33 +130,6 @@ struct Comment : public Marking {
 */
     size_t line, col;
     string message;
-};
-
-struct Highlight : public Marking {
-    Highlight(size_t fstLine = 0, size_t lstLine = 0, size_t fstCol = 0, size_t lstCol = 0, 
-        string message = "", Marking::Vec markings = {});
-    ~Highlight() override;
-
-    constexpr size_t getLine() override;
-    constexpr size_t getCol() override;
-    constexpr bool hasMessage() override;
-    constexpr Kind kind() override;
-
-/*
-          |  ┏━━━━━━━━
-<fstLine> |  ┃ foo;
-<line   > |  ┃ bar;
-<line   > |  ┃ foo;
-          |  ┃ <some marking>
-<lstLine> |  ┃ bar_thing;
-          |  ┗━┻━━━━━━━┻━ <message>
-               |       |
-             fstCol  lstCol
-*/
-    size_t fstLine, lstLine, fstCol, lstCol;
-    string message;
-    Marking::Vec markings; 
-    StringVec content; // source lines
 };
 
 Marking::Vec operator+(const Marking::Ptr &lhs, const Marking::Ptr &rhs);
