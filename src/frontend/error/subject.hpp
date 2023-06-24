@@ -21,8 +21,8 @@ public:
     using Ptr = shared_ptr<Subject>;
     using Vec = vector<Ptr>;
 
-    Subject(Metadata meta = {}, Marking::Ptr primary = nullptr, 
-        Marking::Ptr secondary = nullptr, Marking::Vec other = {}, 
+    Subject(Metadata meta = {}, Underline::Ptr primary = nullptr, 
+        Underline::Ptr secondary = nullptr, Comment::Vec comments = {}, 
         Suggestion::Vec suggestions = {},
         Vec references = {}, Ptr traceback = nullptr);
     ~Subject();
@@ -30,9 +30,9 @@ public:
     string print();
 
 private:
-    Marking::Ptr primary;
-    Marking::Ptr secondary;
-    Marking::Vec other;
+    Underline::Ptr primary;
+    Underline::Ptr secondary;
+    Comment::Vec comments;
     Suggestion::Vec suggestions;
     Vec references;
     Ptr traceback;

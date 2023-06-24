@@ -15,13 +15,13 @@
 
 /// SUBJECT ///
 
-Subject::Subject(Metadata meta, Marking::Ptr primary, Marking::Ptr secondary, Marking::Vec other, 
+Subject::Subject(Metadata meta, Underline::Ptr primary, Underline::Ptr secondary, Comment::Vec comments, 
     Suggestion::Vec suggestions, Vec references, Ptr traceback) 
-: meta(meta), primary(primary), secondary(secondary), other(other), 
+: meta(meta), primary(primary), secondary(secondary), comments(comments), 
     suggestions(suggestions), references(references), traceback(traceback){}
 
 Subject::~Subject() {
-    other.clear();
+    comments.clear();
     suggestions.clear();
     references.clear();
 }
@@ -38,26 +38,22 @@ string Subject::print() {
             src = _;
             break;
         }
+    
+    primary->dashed = false;
+    line = primary->line;
+    col = primary->start;
 
-    if (primary->kind() == Marking::UNDERLINE) {
-        Underline *ul = dynamic_cast<Underline *>(primary.get());
-        ul->dashed = false;
-        line = ul->line;
-        col = ul->start;
-    } else 
-        internalError("Primary marking is not an underline.");
-
-    using LineMap = map<size_t, Marking::Vec>;
-//                   line number, markings
+    using LineMap = map<size_t, pair<Underline::Vec, Comment::Vec>>;
+//                   line number              markings
 
     LineMap lines = {};
 
     // figure out which lines have markings or suggestions
-    for (Marking::Ptr &mark : other) 
-        lines[mark->getLine()].push_back(mark);
+    for (Comment::Ptr &mark : comments) 
+        lines[mark->line].second.push_back(mark);
 
-    lines[primary->getLine()].push_back(primary);
-    lines[secondary->getLine()].push_back(secondary);
+    lines[primary->line].first.push_back(primary);
+    lines[secondary->line].first.push_back(secondary);
 
     // previous line
     #define prev() (--lineIter)++ 
@@ -73,8 +69,8 @@ string Subject::print() {
     #undef prev
 
     if (line == 0 || col == 0) {
-        line = lines.begin()->second.front()->getLine();
-        col = lines.begin()->second.front()->getCol();
+        line = lines.begin()->second.first.front()->line;
+        col = lines.begin()->second.first.front()->start;
     }
 
     ss << CC::BLUE << SC::BOLD << string(padding - 2, ' ') << ">>> " << CC::DEFAULT 

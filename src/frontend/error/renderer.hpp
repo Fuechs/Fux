@@ -15,7 +15,7 @@
 #include "suggestion.hpp"
 #include "../../util/source.hpp"
 
-using LineMap = map<size_t, Marking::Vec>;
+using LineMap = map<size_t, pair<Underline::Vec, Comment::Vec>>;
 
 /**
  * @brief This class formats and outputs each error.
@@ -33,17 +33,13 @@ private:
     LineMap lines;
     Suggestion::Vec suggestions;
     size_t padding, cursor;
-    Marking::Ptr next;
 
-    string renderLine(size_t line, Marking::Vec markings);
-    string renderMarking(Marking::Ptr &mark);
-    string renderUnderline(Underline *ul);
-    string renderComment(Comment *ct);
+    string renderLine(size_t line, Underline::Vec uls, Comment::Vec cmts);
 
     // render the border left with optional line number
     constexpr string renderBorder(size_t line = 0);
 
-    Marking::Vec getSorted(const Marking::Vec &markings);
+    Underline::Vec getSorted(const Underline::Vec &markings);
     // assign size to each marking and return end result
-    size_t getMaxSize(Marking::Vec markings);
+    size_t getMaxSize(Underline::Vec markings);
 };
