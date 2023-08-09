@@ -12,17 +12,17 @@
 #include "color.hpp"
 #include "io.hpp"
 
-#include "../frontend/lexer/token.hpp"
-#include "../frontend/lexer/lexer.hpp"
-#include "../frontend/ast/ast.hpp"
-#include "../frontend/parser/parser.hpp"
-#include "../frontend/parser/value.hpp"
-#include "../frontend/analyser/analyser.hpp"
-#include "../frontend/error/error.hpp"
+#include "../lexer/token.hpp"
+#include "../lexer/lexer.hpp"
+#include "../ast/ast.hpp"
+#include "../parser/parser.hpp"
+#include "../parser/value.hpp"
+#include "../analyser/analyser.hpp"
+#include "../error/error.hpp"
 #ifdef FUX_BACKEND
-#include "../backend/context/context.hpp"
-#include "../backend/generator/generator.hpp"
-#include "../backend/compiler/compiler.hpp"
+#include "../context/context.hpp"
+#include "../generator/generator.hpp"
+#include "../compiler/compiler.hpp"
 #include "threading.hpp"
 #endif
 

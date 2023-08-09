@@ -12,8 +12,8 @@
 #pragma once
 
 #include "../fux.hpp"
-#include "../frontend/parser/parser.hpp"
-#include "../frontend/analyser/analyser.hpp"
+#include "../parser/parser.hpp"
+#include "../analyser/analyser.hpp"
 
 class Source {
 public:
