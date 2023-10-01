@@ -60,7 +60,7 @@ public:
     FUX_BC(virtual Eisdrache::Local &codegen(Eisdrache *eisdrache);)
     FUX_AC(virtual Ptr analyse(Analyser *analyser);)
     virtual AST getASTType();
-    virtual FuxType getFuxType();
+    virtual Fux::Type getFuxType();
     virtual string getSymbol();
     virtual void debugPrint(size_t indent = 0);
 

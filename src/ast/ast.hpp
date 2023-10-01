@@ -21,7 +21,7 @@
 #include "func.hpp"
 #include "macro.hpp"
 
-typedef map<string, FuxType> ArgMap;
+typedef map<string, Fux::Type> ArgMap;
 
 /// EXPRESSIONS ///
 
@@ -43,7 +43,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -58,7 +58,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -73,7 +73,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -87,7 +87,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;) 
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -102,7 +102,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)  
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -115,7 +115,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;) 
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -147,7 +147,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;) 
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 };
@@ -180,7 +180,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)  
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -194,21 +194,21 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)   
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
 class TypeCastExpr : public Expr {
-    FuxType type;
+    Fux::Type type;
     Expr::Ptr expr;
 
 public:
-    TypeCastExpr(FuxType type, Expr::Ptr &expr);
+    TypeCastExpr(Fux::Type type, Expr::Ptr &expr);
     
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -223,7 +223,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;) 
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     void debugPrint(size_t indent = 0) override;
 };
 
@@ -239,13 +239,13 @@ public:
 
 class VariableStmt : public Stmt {
     string symbol;
-    FuxType type;
+    Fux::Type type;
     Expr::Ptr value;
 
 public:
     using Ptr = unique_ptr<VariableStmt>;
 
-    VariableStmt(string symbol, FuxType type = FuxType(), Expr::Ptr &value = nullExpr) 
+    VariableStmt(string symbol, Fux::Type type = Fux::Type(), Expr::Ptr &value = nullExpr) 
     : symbol(symbol), type(type), value(std::move(value)) {}
     ~VariableStmt() override;
     
@@ -254,7 +254,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 };
@@ -354,7 +354,7 @@ public:
     FUX_BC(Eisdrache::Local &codegen(Eisdrache *eisdrache) override;)
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     string getSymbol() override;
     void debugPrint(size_t indent = 0) override; 
 };

@@ -12,51 +12,31 @@
 #include "type.hpp"
 #include "../ast/expr.hpp"
 
-FuxType::FuxType(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, bool array, Expr::Ptr size, string name)
-: kind(kind), pointerDepth(pointerDepth), reference(reference), access(accessList), array(array), size(size), name(name) {}
+namespace Fux {
 
-FuxType::~FuxType() {
+Type::Type(Kind kind, AccessList accessList, string name) : kind(kind), access(accessList), name(name) {}
+
+Type::~Type() {
     access.clear();
     name.clear();
 }
 
-FuxType &FuxType::operator=(const FuxType &copy) {
+Type &Type::operator=(const Type &copy) {
     this->kind = copy.kind;
-    this->pointerDepth = copy.pointerDepth;
-    this->reference = copy.reference;
     this->access = copy.access;
     this->name = copy.name;
-    this->array = copy.array;
-    this->size = copy.size;
     return *this;
 }
 
-bool FuxType::operator==(const FuxType &comp) const {
-    return (kind == comp.kind 
-            && access == comp.access 
-            && array == comp.array 
-            /* && size == comp.size (shouldn't be required to be equal as of now)*/ );
+bool Type::operator==(const Type &comp) const {
+    return kind == comp.kind && access == comp.access;
 }
 
-bool FuxType::operator!() { return kind == NO_TYPE; }
+bool Type::operator!() const { return kind == NO_TYPE; }
 
-FuxType FuxType::createStd(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name) {
-    return FuxType(kind, pointerDepth, reference, accessList, false, nullptr, name);
-}
+Pointer Type::getPointerTo() { return Pointer(*this); }
 
-FuxType FuxType::createRef(Kind kind, size_t pointerDepth, AccessList accessList, string name) {
-    return FuxType(kind, pointerDepth, true, accessList, false, nullptr, name); 
-}
-
-FuxType FuxType::createArray(Kind kind, size_t pointerDepth, bool reference, AccessList accessList, string name, Expr::Ptr size) {
-    return FuxType(kind, pointerDepth, reference, accessList, true, size, name);
-}
-
-FuxType FuxType::createPrimitive(Kind kind, size_t pointerDepth, bool reference, bool array, string name) {
-    return FuxType(kind, pointerDepth, reference, AccessList(), array, nullptr, name);
-}
-
-string FuxType::accessAsString(char delim) {
+string Type::accessAsString(char delim) {
     stringstream ss;
 
     for (Access &a : access)
@@ -69,7 +49,7 @@ string FuxType::accessAsString(char delim) {
     return ss.str();
 }
 
-string FuxType::kindAsString() {
+string Type::kindAsString() {
     switch (kind) {
         case CUSTOM:    return "'"+name+"'";
         case AUTO:      return "auto";
@@ -78,53 +58,34 @@ string FuxType::kindAsString() {
     }
 }
 
-string FuxType::mangledString() {
+string Type::mangled() {
     string ret = "";
     ret += accessAsString('_');
     ret += '_';
     ret += kindAsString();
-
-    if (array)
-        ret += "_array";
     
     return ret;
 }
 
-void FuxType::debugPrint(bool primitive) {
-    if (primitive) {
-        if (reference)
-            cout << "-> ";
-        for (size_t pd = pointerDepth; pd --> 0;)
-            cout << "*";
-        cout << kindAsString();
-        if (array)
-            cout << "[]";
-        return;
-    }
-
-    cout << (reference ? " -> " : ": ");
-    cout << accessAsString();
-
-    for (size_t pd = pointerDepth; pd --> 0;)
-        cout << "*";
-    
-    cout << kindAsString();
-    
-    if (array) {
-        cout << "[";
-        if (size)
-            size->debugPrint();
-        cout << "]";
-    }
+bool Type::valid() {
+    // Type is invalid if it is both INTERN and SAFE or there's no name for a custom type provided
+    return (std::find(access.begin(), access.end(), INTERN) != access.end() 
+        && std::find(access.begin(), access.end(), SAFE) != access.end()) 
+        || kind == CUSTOM && name.empty();
 }
 
-bool FuxType::valid() {
-    if (std::find(access.begin(), access.end(), INTERN) != access.end() 
-    && std::find(access.begin(), access.end(), SAFE) != access.end())
-        return false;
+string Pointer::mangled() {
+    return pointee.mangled() + "_ptr";
+}
 
-    if (kind == CUSTOM && name.empty())
-        return false;
+string Reference::mangled() {
+    return reference.mangled() + "_ref";
+}
 
-    return pointerDepth >= -1;
+Array::Array(Type member, Expr::Ptr size) : member(member), size(size) {}
+
+string Array::mangled() {
+    return member.mangled() + "_arr";
+}
+
 }

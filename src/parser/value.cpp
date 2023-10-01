@@ -12,7 +12,7 @@
 #include "value.hpp"
 
 ValueStruct::~ValueStruct() {
-    if (type.kind == FuxType::LIT)
+    if (type.kind == Fux::Type::LIT)
         __lit.clear();
 }
 

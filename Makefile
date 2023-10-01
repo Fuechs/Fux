@@ -24,18 +24,18 @@ hdr = $(wildcard src/*.hpp src/*/*.hpp src/*/*/*.hpp)
 out = fux
 cflags = -g -O3 -std=c++20
 ldflags = -g 
-llvmflags = `llvm-config --cxxflags --ldflags --system-libs --libs core`
+llvmflags = `llvm-config --cxxflags --ldflags --libs core`
 
 all: $(src) $(obj) $(out)
 
 $(out): $(obj)
 	@$(ECHO) Linking $@
-#	@clang++ $(llvmflags) $(ldflags) $^ -o $@
-	@clang++ $(ldflags) $^ -o $@
+	@clang++ $(llvmflags) $(ldflags) $^ -o $@
+#	@clang++ $(ldflags) $^ -o $@
 
 %.o: %.cpp $(hdr)
 	@$(ECHO) Compiling $<
-	@clang++ $(cflags) -c $< -o $@
+	@clang++ `llvm-config --cxxflags` $(cflags) -c $< -o $@
 
 clean: 
 	@rm $(obj)

@@ -367,15 +367,61 @@ void Parser::debugPrint(const string message) {
 void ValueStruct::debugPrint() {
     cout << std::setprecision(20); // display all digits of a float
     switch (type.kind) {
-        case FuxType::BOOL:     cout << (__bool ? "true" : "false"); break;
-        case FuxType::C8:       cout << "'" << unescapeSequences(&__c8) << "'"; break;
-        case FuxType::C16:      cout << "'" << to_string(__c16) << "'"; break;
-        case FuxType::I64:      cout << __i64; break;
-        case FuxType::U64:      cout << __u64; break;
-        case FuxType::F64:      cout << __f64; break;
-        case FuxType::LIT:      cout << '"' << unescapeSequences(__lit) << '"'; break;
+        case Fux::Type::BOOL:   cout << (__bool ? "true" : "false"); break;
+        case Fux::Type::C8:     cout << "'" << unescapeSequences(&__c8) << "'"; break;
+        case Fux::Type::C16:    cout << "'" << to_string(__c16) << "'"; break;
+        case Fux::Type::I64:    cout << __i64; break;
+        case Fux::Type::U64:    cout << __u64; break;
+        case Fux::Type::F64:    cout << __f64; break;
+        case Fux::Type::LIT:    cout << '"' << unescapeSequences(__lit) << '"'; break;
         default:                cout << "???";
     }
+}
+
+void Fux::Type::debugPrint(bool primitive) {
+    if (primitive) {
+        cout << kindAsString();
+        return;
+    }
+
+    cout << ": " << accessAsString() << kindAsString();
+} 
+
+void Fux::Pointer::debugPrint(bool primitive) {
+    if (primitive) {
+        cout << "*";
+        pointee.debugPrint(true);
+        return;
+    }
+
+    cout << ": " << pointee.accessAsString() << "*";
+    pointee.debugPrint(true);
+}
+
+void Fux::Reference::debugPrint(bool primitive) {
+    if (primitive) {
+        cout << "-> ";
+        reference.debugPrint(true);
+        return;
+    }
+
+    cout << "-> " << reference.accessAsString();
+    reference.debugPrint(true);
+}
+
+void Fux::Array::debugPrint(bool primitive) {
+    if (primitive) {
+        member.debugPrint(true);
+        cout << "[]";
+        return;
+    }
+
+    // : (<type>)[<size>]
+    cout << ": (" << member.accessAsString(); 
+    member.debugPrint(true);
+    cout << ")[";
+    size->debugPrint();
+    cout << "]";
 }
 
 // * ANALYSER

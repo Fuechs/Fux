@@ -217,7 +217,7 @@ Stmt::Ptr Parser::parseFunctionDeclStmt() {
     } while (check(COMMA));
     eat(RPAREN, Error::MISSING_PAREN);
 
-    FuxType type = parseType();
+    Fux::Type type = parseType();
 
     if (*current == SEMICOLON) {
         Metadata meta = Metadata(fileName, *backToken);
@@ -379,10 +379,10 @@ Stmt::Ptr Parser::parseVariableStmt() {
     
     Metadata meta = Metadata(fileName, *current);
     const string symbol = eat().value; // get value from identifier
-    FuxType type = parseType();
+    Fux::Type type = parseType();
 
     if (check(TRIPLE_EQUALS)) // ===
-        type.access.push_back(FuxType::CONSTANT);
+        type.access.push_back(Fux::Type::CONSTANT);
     else if (!check(EQUALS)) {
         Stmt::Ptr decl = make_shared<VariableStmt>(symbol, type);
         meta.copyEnd(peek(-1));
@@ -406,7 +406,7 @@ Stmt::Ptr Parser::parseVariableStmt() {
         decl->meta = meta;
         parent->locals.push_back(decl);
 
-        bool constant = find(type.access.begin(), type.access.end(), FuxType::CONSTANT) != type.access.end();
+        bool constant = find(type.access.begin(), type.access.end(), Fux::Type::CONSTANT) != type.access.end();
         Expr::Ptr ref = make_shared<SymbolExpr>(symbol);
         Expr::Ptr expr = make_shared<BinaryExpr>(constant ? BinaryOp::CONASG : BinaryOp::ASG, ref, value);
         expr->meta = meta;
@@ -624,7 +624,7 @@ Expr::Ptr Parser::parseTypeCastExpr() {
     Token::Iter backToken = current;
     if (check(LPAREN)) {
         Token &open = peek(-1);
-        FuxType type = parseType(true); // analyser will check wether type is primitive or not
+        Fux::Type type = parseType(true); // analyser will check wether type is primitive or not
         if (!type || *current != RPAREN) { // TODO: test more possible cases
             current = backToken; // get '*'s, identifier and '(' back
             return parseLogBitUnaryExpr();
@@ -840,7 +840,7 @@ Expr::Ptr Parser::parsePrimaryExpr() {
     }
 }
 
-FuxType Parser::parseType(bool primitive) {
+Fux::Type Parser::parseType(bool primitive) {
     Metadata meta = Metadata(fileName, *current);
     
     if (primitive) {
@@ -850,18 +850,22 @@ FuxType Parser::parseType(bool primitive) {
         while (check(ASTERISK)) 
             ++pointerDepth;
 
-        if (!current->isType()) 
-            return FuxType(FuxType::NO_TYPE, pointerDepth);
+        if (!current->isType()) {
+            Fux::Type ret = Fux::Type(Fux::Type::NO_TYPE);
+            for (; pointerDepth > 0; pointerDepth--)
+                ret = ret.getPointerTo();
+            return ret;
+        }
         
-        const FuxType::Kind kind = (FuxType::Kind) current->type;
+        const Fux::Type::Kind kind = (Fux::Type::Kind) current->type;
         const Token &value = eat();
-        FuxType ret = FuxType::createPrimitive(kind, pointerDepth, reference, check(ARRAY_BRACKET), value.value);
+        Fux::Type ret = Fux::Type(); // FIXME: Fux::Type::createPrimitive(kind, pointerDepth, reference, check(ARRAY_BRACKET), value.value);
         meta.copyEnd(value);
         ret.meta = meta;
         return ret;
     }
 
-    FuxType::AccessList access = { };
+    Fux::Type::AccessList access = { };
     size_t pointerDepth = 0;
 
     Token &typeDenotion = eat(); // ':' or '->' for error tracking
@@ -872,11 +876,11 @@ FuxType Parser::parseType(bool primitive) {
         default:        
             createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
                 typeDenotion, "Expected a COLON ':' or POINTER '->' here");
-            return FuxType();
+            return Fux::Type();
     }
 
     while (current->isModifier())
-        access.push_back((FuxType::Access) eat().type);
+        access.push_back((Fux::Type::Access) eat().type);
     
     while (check(ASTERISK)) 
         ++pointerDepth;
@@ -886,24 +890,24 @@ FuxType Parser::parseType(bool primitive) {
         //     createError(Error::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
         //         peek(-1), "Given pointer-depth will be ignored",
         //         0, "", {}, true);
-        FuxType ret = FuxType::createStd(FuxType::AUTO, 0, reference, access);
+        Fux::Type ret = Fux::Type(); // FIXME: Fux::Type::createStd(FuxType::AUTO, 0, reference, access);
         meta.copyEnd(peek(-1));
         ret.meta = meta;
         return ret;
     }
 
-    const FuxType::Kind kind = (FuxType::Kind) current->type;
+    const Fux::Type::Kind kind = (Fux::Type::Kind) current->type;
     const string &value = eat().value;
-    FuxType ret;
+    Fux::Type ret;
 
     if (check(ARRAY_BRACKET)) 
-        ret = FuxType::createArray(kind, pointerDepth, reference, access, value);
+        ret = Fux::Type(); // FIXME: Fux::Type::createArray(kind, pointerDepth, reference, access, value);
     else if (check(LBRACKET)) {
         Expr::Ptr size = parseExpr();
         eat(RBRACKET, Error::MISSING_PAREN);
-        ret = FuxType::createArray(kind, pointerDepth, reference, access, value, size);
+        ret = Fux::Type(); // FIXME: Fux::Type::createArray(kind, pointerDepth, reference, access, value, size);
     } else 
-        ret = FuxType::createStd(kind, pointerDepth, reference, access, value);
+        ret = Fux::Type(); // FIXME: Fux::Type::createStd(kind, pointerDepth, reference, access, value);
     
     meta.copyEnd(peek(-1));
     ret.meta = meta;
@@ -1003,7 +1007,7 @@ FunctionStmt::Parameter::Ptr Parser::parseFuncParameter() {
 
     Token &symbol = eat(IDENTIFIER);
     Metadata meta = Metadata(fileName, symbol);
-    FuxType type = parseType();
+    Fux::Type type = parseType();
     Expr::Ptr value = nullptr;
 
     if (check(EQUALS)) {

@@ -35,8 +35,6 @@
 
 #include "eisdrache.hpp"
 
-#ifdef FUX_BACKEND
-
 namespace llvm {
 
 /// ENTITY ///
@@ -1153,5 +1151,3 @@ std::nullptr_t Eisdrache::complain(std::string message) {
 } 
 
 } // namespace llvm
-
-#endif

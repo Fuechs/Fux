@@ -119,7 +119,7 @@ private:
 
     // parse : | -> + access + pointer depth + type name + array
     // primitive: only parse pointer depth + type name + array
-    FuxType parseType(bool primitive = false);
+    Fux::Type parseType(bool primitive = false);
 
     // parse number with correct type
     Expr::Ptr parseNumberExpr(Token &tok);

@@ -18,7 +18,13 @@
 
 class Expr;
 
-class FuxType {
+namespace Fux {
+
+class Pointer;
+class Reference; 
+class Array;
+
+class Type {
 public:
     // Possible kinds of data types -- Mapped to respective keyword value
     enum Kind { 
@@ -41,6 +47,9 @@ public:
         LIT,                    // string ; array of c8
         VAR     = KEY_VAR,      // dynamic 
         AUTO,                   // automatic typing
+        PTR,                    // pointer
+        REF,                    // reference
+        ARR,                    // array
         NO_TYPE,                
     };
 
@@ -55,51 +64,69 @@ public:
     };
 
     using AccessList = vector<Access>;
-    using Vec = vector<FuxType>;
+    using Vec = vector<Type>;
 
-    FuxType(Kind kind = NO_TYPE, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, 
-        bool array = false, shared_ptr<Expr> size = nullptr, string name = "");
-    ~FuxType();
+    Type(Kind kind = NO_TYPE, AccessList accessList = {}, string name = "");
+    ~Type();
 
-    FuxType &operator=(const FuxType &copy);
-    bool operator==(const FuxType &comp) const;
-    bool operator!();
+    Type &operator=(const Type &copy);
+    bool operator==(const Type &comp) const;
+    bool operator!() const;
 
-    // shorthand for normal types
-    static FuxType createStd(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "");
-    // shorthand for reference types
-    static FuxType createRef(Kind kind, size_t pointerDepth = 0, AccessList accessList = {}, string name = "");
-    // shorthand for array types
-    static FuxType createArray(Kind kind, size_t pointerDepth = 0, bool reference = false, AccessList accessList = {}, string name = "", shared_ptr<Expr> size = nullptr);    
-    // shorthand for primitive types (e.g. for type casts)
-    static FuxType createPrimitive(Kind kind, size_t pointerDepth = 0, bool reference = false, bool array = false, string name = "");
+    Pointer getPointerTo();
 
     // return FuxType::AccessList as string
     string accessAsString(char delim = ' ');
     // return FuxType::Kind as string
     string kindAsString();
     // return this type as a mangled string
-    string mangledString();
+    virtual string mangled();
     // output string representation of type
-    void debugPrint(bool primitive = false);
+    virtual void debugPrint(bool primitive = false);
 
     // check wether type is valid
     bool valid();
     
     Kind kind;
-    
-    //  0 --> Value
-    //  N --> Pointer with depth of N 
-    size_t pointerDepth; 
-    bool reference;
+
     // access modifiers
     AccessList access;
+    
     // string value of the type
     // relevant for user defined types and debugPrint()
     string name;
-    // is an array type
-    bool array; 
-    // relevant for array types, constant size of the array
-    shared_ptr<Expr> size;
-    Metadata meta; // position where type was parsed 
+
+    // position where type was parsed 
+    Metadata meta;
 };
+
+class Pointer : public Type {
+public:
+    Pointer(Type &pointee) : pointee(pointee) {}
+
+    string mangled() override;
+    void debugPrint(bool primitive = false) override;
+
+    Type pointee;
+};
+
+class Reference : public Type {
+public:
+    string mangled() override;
+    void debugPrint(bool primitive = false) override;
+
+    Type reference;
+};
+
+class Array : public Type {
+public:
+    Array(Type member = NO_TYPE, shared_ptr<Expr> size = nullptr);
+
+    string mangled() override;
+    void debugPrint(bool primitive = false) override;
+
+    Type member;
+    shared_ptr<Expr> size;
+};
+
+}

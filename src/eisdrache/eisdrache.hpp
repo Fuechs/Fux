@@ -35,8 +35,6 @@
 
 #pragma once
 
-#ifdef FUX_BACKEND
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -44,7 +42,7 @@
 
 #include <llvm/PassRegistry.h>
 #include <llvm/InitializePasses.h>
-#include <llvm/ADT/Triple.h>
+// #include <llvm/ADT/Triple.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/IRBuilder.h>
@@ -924,5 +922,3 @@ private:
 };
 
 } // namespace llvm
-
-#endif

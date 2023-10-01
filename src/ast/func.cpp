@@ -11,7 +11,7 @@
 
 #include "func.hpp"
 
-FunctionStmt::Parameter::Parameter(Metadata meta, string symbol, FuxType type, Expr::Ptr value, bool variadic)
+FunctionStmt::Parameter::Parameter(Metadata meta, string symbol, Fux::Type type, Expr::Ptr value, bool variadic)
 : meta(meta), symbol(symbol), type(type), value(value), variadic(variadic) {}
 
 FunctionStmt::Parameter::~Parameter() { symbol.clear(); }
@@ -25,7 +25,7 @@ FunctionStmt::Parameter &FunctionStmt::Parameter::operator=(const Parameter &cop
     return *this;
 }
 
-FunctionStmt::FunctionStmt(Metadata meta, string symbol, FuxType type, Parameter::Vec parameters, Stmt::Ptr body, Stmt::Vec locals) 
+FunctionStmt::FunctionStmt(Metadata meta, string symbol, Fux::Type type, Parameter::Vec parameters, Stmt::Ptr body, Stmt::Vec locals) 
 : symbol(symbol), type(type), parameters(parameters), body(body), locals(locals) {
     this->meta = meta;
 }
@@ -38,6 +38,6 @@ FunctionStmt::~FunctionStmt() {
 
 AST FunctionStmt::getASTType() { return AST::FunctionStmt; }
 
-FuxType FunctionStmt::getFuxType() { return type; }
+Fux::Type FunctionStmt::getFuxType() { return type; }
 
 string FunctionStmt::getSymbol() { return symbol; }

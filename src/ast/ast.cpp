@@ -24,7 +24,7 @@ BoolExpr::~BoolExpr() { delete value; }
 
 AST BoolExpr::getASTType() { return AST::BoolExpr; }
 
-FuxType BoolExpr::getFuxType() { return FuxType::BOOL; }
+Fux::Type BoolExpr::getFuxType() { return Fux::Type::BOOL; }
 
 /// NUMBER EXPR ///
 
@@ -32,7 +32,7 @@ NumberExpr::~NumberExpr() { delete value; }
 
 AST NumberExpr::getASTType() { return AST::NumberExpr; }
 
-FuxType NumberExpr::getFuxType() { return value->type; }
+Fux::Type NumberExpr::getFuxType() { return value->type; }
 
 /// CHAR EXPR ///
 
@@ -40,7 +40,7 @@ CharExpr::~CharExpr() { delete value; }
 
 AST CharExpr::getASTType() { return AST::CharExpr; }
 
-FuxType CharExpr::getFuxType() { return value->type;  }
+Fux::Type CharExpr::getFuxType() { return value->type;  }
 
 /// STRING EXPR ///
 
@@ -48,21 +48,21 @@ StringExpr::~StringExpr() { delete value; }
 
 AST StringExpr::getASTType() { return AST::StringExpr; }
 
-FuxType StringExpr::getFuxType() { return FuxType::LIT; }
+Fux::Type StringExpr::getFuxType() { return Fux::Type::LIT; }
 
 /// RANGE EXPR ///
 
 AST RangeExpr::getASTType() { return AST::RangeExpr; }
 
 // TODO: combine begin & end type
-FuxType RangeExpr::getFuxType() { return end->getFuxType(); }
+Fux::Type RangeExpr::getFuxType() { return end->getFuxType(); }
 
 /// ARRAY EXPR ///
 
 AST ArrayExpr::getASTType() { return AST::ArrayExpr; }
 
 // TODO: get element types for this
-FuxType ArrayExpr::getFuxType() { return FuxType::createArray(FuxType::NO_TYPE);  }
+Fux::Type ArrayExpr::getFuxType() { return Fux::Array();  }
 
 /// VARIABLE EXPR ///
 
@@ -90,7 +90,7 @@ CallExpr::CallExpr(Expr::Ptr &callee, Expr::Vec &args, bool asyncCall) {
 AST CallExpr::getASTType() { return AST::CallExpr; }
 
 // TODO: evaluate type
-FuxType CallExpr::getFuxType() { return FuxType::NO_TYPE; }
+Fux::Type CallExpr::getFuxType() { return Fux::Type::NO_TYPE; }
 
 string CallExpr::getSymbol() { return callee->getSymbol(); }
 
@@ -148,7 +148,7 @@ UnaryExpr::UnaryExpr(UnaryOp op, Expr::Ptr &expr) {
 AST UnaryExpr::getASTType() { return AST::UnaryExpr; }
 
 // TODO: evaluate type
-FuxType UnaryExpr::getFuxType() { return FuxType::NO_TYPE; }
+Fux::Type UnaryExpr::getFuxType() { return Fux::Type::NO_TYPE; }
 
 /// BINARY EXPR ///
 
@@ -164,11 +164,11 @@ BinaryExpr::BinaryExpr(BinaryOp op, Expr::Ptr &LHS, Expr::Ptr &RHS) {
 AST BinaryExpr::getASTType() { return AST::BinaryExpr; }
 
 // TODO: evaluate type
-FuxType BinaryExpr::getFuxType() { return FuxType::NO_TYPE; }
+Fux::Type BinaryExpr::getFuxType() { return Fux::Type::NO_TYPE; }
 
 /// TYPE CAST ///
 
-TypeCastExpr::TypeCastExpr(FuxType type, Expr::Ptr &expr) {
+TypeCastExpr::TypeCastExpr(Fux::Type type, Expr::Ptr &expr) {
     this->type = type;
     this->expr = std::move(expr);
     this->meta = this->type.meta;
@@ -177,7 +177,7 @@ TypeCastExpr::TypeCastExpr(FuxType type, Expr::Ptr &expr) {
 
 AST TypeCastExpr::getASTType() { return AST::TypeCastExpr; }
 
-FuxType TypeCastExpr::getFuxType() { return type; }
+Fux::Type TypeCastExpr::getFuxType() { return type; }
 
 /// TERNARY EXPR ///
 
@@ -193,7 +193,7 @@ TernaryExpr::TernaryExpr(Expr::Ptr &condition,
 AST TernaryExpr::getASTType() { return AST::TernaryExpr; }
 
 // TODO: evaluate
-FuxType TernaryExpr::getFuxType() { return FuxType::NO_TYPE; }
+Fux::Type TernaryExpr::getFuxType() { return Fux::Type::NO_TYPE; }
 
 /// NO OPERATION ///
 
@@ -205,7 +205,7 @@ VariableStmt::~VariableStmt() { symbol.clear(); }
 
 AST VariableStmt::getASTType() { return AST::VariableStmt; }
 
-FuxType VariableStmt::getFuxType() { return type; }
+Fux::Type VariableStmt::getFuxType() { return type; }
 
 string VariableStmt::getSymbol() { return symbol; }
 
@@ -237,7 +237,7 @@ AST ForStmt::getASTType() { return AST::ForStmt; }
 
 AST EnumStmt::getASTType() { return AST::EnumStmt; }
 
-FuxType EnumStmt::getFuxType() { return FuxType::U64; }
+Fux::Type EnumStmt::getFuxType() { return Fux::Type::U64; }
 
 string EnumStmt::getSymbol() { return symbol; }
 
@@ -255,7 +255,7 @@ Stmt::~Stmt() {}
 
 AST Stmt::getASTType() { return AST::Stmt; }
 
-FuxType Stmt::getFuxType() { return FuxType::NO_TYPE; }
+Fux::Type Stmt::getFuxType() { return Fux::Type::NO_TYPE; }
 
 string Stmt::getSymbol() { return string(); }
 

@@ -22,14 +22,14 @@ public:
         using Ptr = shared_ptr<Parameter>;
         using Vec = vector<Ptr>;
 
-        Parameter(Metadata meta = Metadata(), string symbol = "", FuxType type = FuxType::NO_TYPE, 
+        Parameter(Metadata meta = Metadata(), string symbol = "", Fux::Type type = Fux::Type::NO_TYPE, 
             Expr::Ptr value = nullptr, bool variadic = false);
         ~Parameter();
 
         Parameter &operator=(const Parameter &copy);
 
         string symbol;      
-        FuxType type;
+        Fux::Type type;
         Expr::Ptr value;    // default value if no value was passed in call
         bool variadic;      // variadic argument
                             // e.g.: func(args: var[], ...): void;
@@ -38,7 +38,7 @@ public:
         Metadata meta;
     };
 
-    FunctionStmt(Metadata meta = Metadata(), string symbol = "", FuxType type = FuxType::NO_TYPE, 
+    FunctionStmt(Metadata meta = Metadata(), string symbol = "", Fux::Type type = Fux::Type::NO_TYPE, 
         Parameter::Vec parameters = {}, Stmt::Ptr body = nullptr, Stmt::Vec locals = {});
     ~FunctionStmt();
 
@@ -46,12 +46,12 @@ public:
     FUX_AC(Stmt::Ptr analyse(Analyser *analyser) override;)
 
     AST getASTType() override;
-    FuxType getFuxType() override;
+    Fux::Type getFuxType() override;
     string getSymbol() override;
     void debugPrint(size_t indent = 0) override;
 
     string symbol;              
-    FuxType type;               
+    Fux::Type type;               
     Parameter::Vec parameters;  
     Stmt::Ptr body;             
     Stmt::Vec locals;   // any variable that was declared in the body of this function;
