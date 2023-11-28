@@ -18,6 +18,7 @@ struct Metadata {
     Metadata(string file = "", size_t fstLine = 0, size_t lstLine = 0, 
         size_t fstCol = 0, size_t lstCol = 0);
     Metadata(const string &fileName, Token &token);
+    Metadata(const string &fileName, const StringVec &content);
 
     Metadata &operator=(const Metadata &copy);
 

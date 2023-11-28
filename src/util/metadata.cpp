@@ -18,6 +18,9 @@ Metadata::Metadata(string file, size_t fstLine, size_t lstLine, size_t fstCol, s
 Metadata::Metadata(const string &fileName, Token &token)
     : file(fileName), fstLine(token.line), lstLine(token.line), fstCol(token.start), lstCol(token.end) {}
 
+Metadata::Metadata(const string &fileName, const StringVec &content) 
+    : file(fileName), fstLine(1), lstLine(content.size()), fstCol(1), lstCol(content.back().size()) {}
+
 Metadata &Metadata::operator=(const Metadata &copy) {
     file = copy.file;
     fstLine = copy.fstLine;

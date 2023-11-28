@@ -394,8 +394,9 @@ void Fux::Pointer::debugPrint(bool primitive) {
         return;
     }
 
-    cout << ": " << pointee.accessAsString() << "*";
-    pointee.debugPrint(true);
+    cout << ": " << accessAsString() << "*(";
+    pointee.debugPrint();
+    cout << ")";
 }
 
 void Fux::Reference::debugPrint(bool primitive) {

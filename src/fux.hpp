@@ -33,7 +33,7 @@ using std::cout, std::cerr, std::endl, std::exception, std::make_shared, std::ma
 
 using StringVec = vector<string>;
 
-#define ERROR_TEST
+// #define ERROR_TEST
 
 // #define FUX_BACKEND
 

@@ -200,14 +200,14 @@ int main(void) {
     fux.aggressive = true;
     
     Error::Ptr error = make_shared<Error>(Error::UNEXPECTED_TYPE, "",
-        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
+        make_shared<Subject>(Metadata(file, content), 
             make_shared<Underline>(11, 12, 27, "Expected an expression of type `u64` here, got `*c8` instead"),
             make_shared<Underline>(2, 1, 15, "Declaration of `main` with type `u64`")));
     error->report();
 
     error = make_shared<Error>(Error::EXCEEDED_LIFETIME, 
         "Lifetime of reference to `x` exceeds lifetime of `x` itself",
-        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()),
+        make_shared<Subject>(Metadata(file, content),
             make_shared<Underline>(10, 5, 18, "Reference to `x` is created here"),
             make_shared<Underline>(3, 5, 23, "`x` is declared here"),
             make_shared<Comment>(12, 1, "`x` is deleted here")
@@ -215,12 +215,14 @@ int main(void) {
     error->report();
 
     error = make_shared<Error>(Error::UNEXPECTED_TYPE, "Cannot assign a value of type `*c8` to a variable of type `u64`",
-        make_shared<Subject>(Metadata(file, 1, content.size(), 1, content.back().size()), 
+        make_shared<Subject>(Metadata(file, content), 
             make_shared<Underline>(13, 10, 25, "Expected an expression of type `u64`"),
             make_shared<Underline>(13, 4, 6, "since `y` was declared with type `u64`")));
     error->report();
     return 0;
 }
+
+#endif
 
 template<typename T, typename A>
 vector<T, A> operator+(const vector<T, A> &lhs, const vector<T, A> &rhs) {
@@ -252,5 +254,3 @@ void internalError(std::string message) {
         << CC::WHITE << message << '\n' << SC::RESET;
     exit(1); 
 }
-
-#endif

@@ -185,13 +185,15 @@ Stmt::Ptr Parser::parseFunctionDeclStmt() {
     }
     
     Token::Iter paramBegin = current;
-    for (size_t depth = 1;;) {
+    for (size_t depth = 1;;) { 
         if      (check(LPAREN)) ++depth;
-        else if (check(RPAREN)) --depth; // we don't care about any errors here, so we don't check wether depth is < 0
-        else if (check(_EOF))   {
+        else if (check(RPAREN)) --depth; 
+        // it doesn't check wether depth is < 0
+        // as the function parameters will be parsed later and any error doesn't matter yet
+        else if (check(_EOF)) {
             createError(Error::MISSING_PAREN, "Expected Closing Paren after Parameter List", peek(-1), "Expected closing paren here",
                 *paramBegin, "Opening paren found here"); 
-            recover();
+            recover(); // FIXME: instead of skipping until end of file, try to recover until after the function declaration
             break;
         } else                  eat();
 
@@ -199,12 +201,12 @@ Stmt::Ptr Parser::parseFunctionDeclStmt() {
             break;
     } // skip ( ... )
 
-    if (*current != COLON && *current != POINTER) {
+    if (*current != COLON && *current != POINTER) { // not a function definition but a function call
         current = backToken;
         return parseExpr(); // We have to call parseExpr() instead of parseCallExpr() to handle situations like this one:
                             // someCall() << someArgument;
     } else
-        current = paramBegin;
+        current = paramBegin; // parse the parameters
 
     FunctionStmt::Parameter::Vec parameters = {};
     
@@ -426,7 +428,7 @@ Expr::Vec Parser::parseExprList(TokenType end) {
     while (check(COMMA)) {
         if (*current == end)
             break;
-        list.push_back(std::move(expr));
+        list.push_back(expr);
         expr = parseExpr();
     }
 
@@ -622,6 +624,7 @@ Expr::Ptr Parser::parseDereferenceExpr() {
 
 Expr::Ptr Parser::parseTypeCastExpr() { 
     Token::Iter backToken = current;
+
     if (check(LPAREN)) {
         Token &open = peek(-1);
         Fux::Type type = parseType(true); // analyser will check wether type is primitive or not
@@ -754,6 +757,8 @@ Expr::Ptr Parser::parseCallExpr(Expr::Ptr callee) {
     return expr;
 } 
 
+// TODO: parse range expr with own function
+
 Expr::Ptr Parser::parsePrimaryExpr() {
     Token that = eat();
     Expr::Ptr expr;
@@ -786,7 +791,7 @@ Expr::Ptr Parser::parsePrimaryExpr() {
                 // FIXME: else 
                 //     error->plainError(Error::ILLEGAL_OPERANDS, "Incomplete range expression", fileName,
                 //         error->createMark(that.line, endTok.line, that.start, endTok.end,
-                //             "Range expression indicated by '...' operato.", endTok.start, "Would have expected an integer here",
+                //             "Range expression indicated by '...' operator.", endTok.start, "Would have expected an integer here",
                 //             {error->createHelp(endTok.line, "The LHS and RHS of a range expression have to be constants")}));
 
                 if (endExpr.get() == nullptr) {
@@ -840,79 +845,208 @@ Expr::Ptr Parser::parsePrimaryExpr() {
     }
 }
 
-Fux::Type Parser::parseType(bool primitive) {
+
+Fux::Type Parser::parseType(bool needColon) { 
+    if (*current != POINTER && needColon && !check(COLON)) {
+        createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
+            *current, "Expected a COLON ':' or POINTER '->' here");
+        return Fux::Type(); // TODO: add explanation to error
+    }
+
+    return parseReferenceType(); 
+}
+
+Fux::Type Parser::parseReferenceType() {
+    Fux::Type ret = Fux::Type();
     Metadata meta = Metadata(fileName, *current);
-    
-    if (primitive) {
-        bool reference = check(POINTER);
 
-        int64_t pointerDepth = 0;
-        while (check(ASTERISK)) 
-            ++pointerDepth;
+    if (check(POINTER)) {
+        Fux::Type::AccessList access = {};
 
-        if (!current->isType()) {
-            Fux::Type ret = Fux::Type(Fux::Type::NO_TYPE);
-            for (; pointerDepth > 0; pointerDepth--)
-                ret = ret.getPointerTo();
-            return ret;
-        }
-        
-        const Fux::Type::Kind kind = (Fux::Type::Kind) current->type;
-        const Token &value = eat();
-        Fux::Type ret = Fux::Type(); // FIXME: Fux::Type::createPrimitive(kind, pointerDepth, reference, check(ARRAY_BRACKET), value.value);
-        meta.copyEnd(value);
-        ret.meta = meta;
-        return ret;
-    }
+        while (current->isModifier())
+            access.push_back((Fux::Type::Access) eat().type);
 
-    Fux::Type::AccessList access = { };
-    size_t pointerDepth = 0;
+        ret = Fux::Reference(ret, access);
+    } else
+        ret = parseArrayType();
 
-    Token &typeDenotion = eat(); // ':' or '->' for error tracking
-    bool reference;
-    switch (typeDenotion.type) {
-        case COLON:     reference = false; break;
-        case POINTER:   reference = true; break;
-        default:        
-            createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
-                typeDenotion, "Expected a COLON ':' or POINTER '->' here");
-            return Fux::Type();
-    }
+    ret.meta = meta;
+    ret.meta.copyEnd(peek(-1));
+    return ret;
+}
+
+Fux::Type Parser::parseArrayType() {
+    Fux::Type ret = parsePointerType();
+    Metadata meta = Metadata(fileName, *current);
+
+    Fux::Type::AccessList access = {};
 
     while (current->isModifier())
         access.push_back((Fux::Type::Access) eat().type);
-    
-    while (check(ASTERISK)) 
-        ++pointerDepth;
 
-    if (!current->isType()) {
-        // FIXME: if (pointerDepth > 0)
-        //     createError(Error::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
-        //         peek(-1), "Given pointer-depth will be ignored",
-        //         0, "", {}, true);
-        Fux::Type ret = Fux::Type(); // FIXME: Fux::Type::createStd(FuxType::AUTO, 0, reference, access);
-        meta.copyEnd(peek(-1));
-        ret.meta = meta;
-        return ret;
+    if (check(ARRAY_BRACKET))
+        ret = Fux::Array(ret);
+    else if (check(LBRACKET)) {
+        ret = Fux::Array(ret, parseExpr());
+        eat(RBRACKET, Error::MISSING_PAREN);
     }
 
-    const Fux::Type::Kind kind = (Fux::Type::Kind) current->type;
-    const string &value = eat().value;
-    Fux::Type ret;
-
-    if (check(ARRAY_BRACKET)) 
-        ret = Fux::Type(); // FIXME: Fux::Type::createArray(kind, pointerDepth, reference, access, value);
-    else if (check(LBRACKET)) {
-        Expr::Ptr size = parseExpr();
-        eat(RBRACKET, Error::MISSING_PAREN);
-        ret = Fux::Type(); // FIXME: Fux::Type::createArray(kind, pointerDepth, reference, access, value, size);
-    } else 
-        ret = Fux::Type(); // FIXME: Fux::Type::createStd(kind, pointerDepth, reference, access, value);
-    
-    meta.copyEnd(peek(-1));
     ret.meta = meta;
+    ret.meta.copyEnd(peek(-1));
     return ret;
 }
+
+Fux::Type Parser::parsePointerType() {
+    Fux::Type ret = Fux::Type();
+    Metadata meta = Metadata(fileName, *current);
+
+    Fux::Type::AccessList access = {};
+
+    while (current->isModifier())
+        access.push_back((Fux::Type::Access) eat().type);
+
+    if (check(ASTERISK))
+        ret = Fux::Pointer(parsePointerType());
+    else
+        ret = parsePrimaryType();
+
+    ret.meta = meta;
+    ret.meta.copyEnd(peek(-1));
+    return ret;
+}
+
+Fux::Type Parser::parsePrimaryType() {
+    Fux::Type ret = Fux::Type();
+    Metadata meta = Metadata(fileName, *current);
+
+    Fux::Type::AccessList access = {};
+
+    while (current->isModifier()) 
+        access.push_back((Fux::Type::Access) eat().type);
+
+    if (check(LPAREN)) {
+        ret = parseType();
+        eat(RPAREN, Error::MISSING_PAREN); // TODO: specific error
+    } else if (current->isType())
+        ret = Fux::Type((Fux::Type::Kind) current->type, access, eat().value);
+    else
+        createError(Error::UNEXPECTED_TOKEN, "expected typename here", *current, "TODO: write proper error");
+
+    ret.meta = meta;
+    ret.meta.copyEnd(peek(-1));
+    return ret;
+}
+
+// Fux::Type Parser::parseType(bool primitive, bool needColon) {
+//     Metadata meta = Metadata(fileName, *current);
+//     Fux::Type ret;
+
+//     Fux::Type::AccessList access = {};
+
+//     while (current->isModifier())
+//         access.push_back((Fux::Type::Access) eat().type);
+
+//     if (check(POINTER)) 
+//         ret = Fux::Reference(parseType(), access, meta);
+    
+//     else if (needColon && !check(COLON)) {
+//         createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
+//                 *current, "Expected a COLON ':' or POINTER '->' here");
+//         return Fux::Type(); // TODO: add explanation to error
+//     }
+
+//     else if (check(ASTERISK))
+//         ret = Fux::Pointer(parseType(), access, meta);
+    
+//     else
+//         ret = Fux::Type(current->isType() 
+//             ? (Fux::Type::Kind) current->type 
+//             : Fux::Type::AUTO, // no typename given, so automatic typing
+//             access, eat().value, meta);
+
+//     ret.meta.copyEnd(peek(-1));
+    
+//     return ret;
+// }
+
+
+// Fux::Type Parser::parseType(bool primitive) {
+//     Metadata meta = Metadata(fileName, *current);
+    
+    // TODO: if (primitive) {
+    //     bool reference = check(POINTER);
+
+    //     int64_t pointerDepth = 0;
+    //     while (check(ASTERISK)) 
+    //         ++pointerDepth;
+
+    //     if (!current->isType()) {
+    //         Fux::Type ret = Fux::Type(Fux::Type::NO_TYPE);
+    //         for (; pointerDepth > 0; pointerDepth--)
+    //             ret = ret.getPointerTo();
+    //         return ret;
+    //     }
+        
+    //     const Fux::Type::Kind kind = (Fux::Type::Kind) current->type;
+    //     const Token &value = eat();
+
+    //     Fux::Type ret = Fux::Type::create(kind, {}, value.value, pointerDepth, reference);
+    //     if (check(ARRAY_BRACKET)) 
+    //         ret = Fux::Array(ret);
+        
+    //     meta.copyEnd(value);
+    //     ret.meta = meta;
+    //     return ret;
+    // }
+
+//     Fux::Type::AccessList access = {};
+//     size_t pointerDepth = 0;
+
+//     Token &typeDenotion = eat(); // ':' or '->' for error tracking
+//     bool reference;
+//     switch (typeDenotion.type) {
+//         case COLON:     reference = false; break;
+//         case POINTER:   reference = true; break;
+//         default:        
+//             createError(Error::UNEXPECTED_TOKEN, "Unexpected Token while parsing a Type", 
+//                 typeDenotion, "Expected a COLON ':' or POINTER '->' here");
+//             return Fux::Type();
+//     }
+
+//     while (current->isModifier())
+//         access.push_back((Fux::Type::Access) eat().type);
+    
+//     while (check(ASTERISK)) 
+//         ++pointerDepth;
+
+//     if (!current->isType()) {
+//         // FIXME: if (pointerDepth > 0)
+//         //     createError(Error::ILLEGAL_TYPE, "Pointer-Depth on Automatic Type",
+//         //         peek(-1), "Given pointer-depth will be ignored",
+//         //         0, "", {}, true);
+//         Fux::Type ret = Fux::Type::create(Fux::Type::AUTO, access, "", 0, reference);
+//         meta.copyEnd(peek(-1));
+//         ret.meta = meta;
+//         return ret;
+//     }
+
+//     const Fux::Type::Kind kind = (Fux::Type::Kind) current->type;
+//     const string &value = eat().value;
+//     Fux::Type ret = Fux::Type::create(kind, access, value, pointerDepth, reference);
+
+//     if (check(ARRAY_BRACKET)) 
+//         ret = Fux::Array(ret);
+
+//     else if (check(LBRACKET)) {
+//         Expr::Ptr size = parseExpr();
+//         eat(RBRACKET, Error::MISSING_PAREN);
+//         ret = Fux::Array(ret, size); 
+//     } 
+    
+//     meta.copyEnd(peek(-1));
+//     ret.meta = meta;
+//     return ret;
+// }
 
 Expr::Ptr Parser::parseNumberExpr(Token &tok) {
     _u64 value;

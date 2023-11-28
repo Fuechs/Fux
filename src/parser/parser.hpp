@@ -117,9 +117,13 @@ private:
     // <identifier>, <value>, (<expr>)
     Expr::Ptr parsePrimaryExpr();
 
-    // parse : | -> + access + pointer depth + type name + array
-    // primitive: only parse pointer depth + type name + array
-    Fux::Type parseType(bool primitive = false);
+    // parse a type
+    // needColon: requires ':' or '->' before type
+    Fux::Type parseType(bool needColon = false);
+    Fux::Type parseReferenceType();
+    Fux::Type parseArrayType();
+    Fux::Type parsePointerType();
+    Fux::Type parsePrimaryType();
 
     // parse number with correct type
     Expr::Ptr parseNumberExpr(Token &tok);

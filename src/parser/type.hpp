@@ -66,12 +66,15 @@ public:
     using AccessList = vector<Access>;
     using Vec = vector<Type>;
 
-    Type(Kind kind = NO_TYPE, AccessList accessList = {}, string name = "");
+    Type(Kind kind = NO_TYPE, AccessList accessList = {}, string name = "", Metadata meta = Metadata());
     ~Type();
 
     Type &operator=(const Type &copy);
     bool operator==(const Type &comp) const;
     bool operator!() const;
+
+    // universal constructor for type, refernce and pointer
+    static Type create(Kind kind, AccessList accessList, string name, size_t pointerDepth, bool reference);
 
     Pointer getPointerTo();
 
@@ -102,7 +105,7 @@ public:
 
 class Pointer : public Type {
 public:
-    Pointer(Type &pointee) : pointee(pointee) {}
+    Pointer(Type pointee, AccessList access = {}, Metadata meta = Metadata());
 
     string mangled() override;
     void debugPrint(bool primitive = false) override;
@@ -112,6 +115,8 @@ public:
 
 class Reference : public Type {
 public:
+    Reference(Type reference, AccessList access = {}, Metadata meta = Metadata());
+
     string mangled() override;
     void debugPrint(bool primitive = false) override;
 
@@ -120,7 +125,7 @@ public:
 
 class Array : public Type {
 public:
-    Array(Type member = NO_TYPE, shared_ptr<Expr> size = nullptr);
+    Array(Type member = NO_TYPE, shared_ptr<Expr> size = nullptr, Metadata meta = Metadata());
 
     string mangled() override;
     void debugPrint(bool primitive = false) override;
