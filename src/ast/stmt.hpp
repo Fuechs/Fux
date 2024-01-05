@@ -51,6 +51,41 @@ enum class AST {
     Stmt,
 };
 
+static StringVec ASTString = {
+    // expressions
+    "VariadicExpr",
+    "NullExpr",
+    "BoolExpr",
+    "NumberExpr",
+    "CharExpr",
+    "StringExpr",
+    "RangeExpr",
+    "ArrayExpr",
+    "SymbolExpr",
+    "MemberExpr",
+    "CallExpr",
+    "UnaryExpr",
+    "BinaryExpr",
+    "TypeCastExpr",
+    "TernaryExpr",
+    "Expr",
+
+    // statements
+    "NoOperationStmt",
+    "VariableStmt",
+    "InbuiltCallStmt",
+    "IfElseStmt",
+    "BlockStmt",
+    "WhileStmt",
+    "ForStmt",
+    "PrototypeStmt",
+    "FunctionStmt",
+    "EnumStmt",
+    "MacroStmt",
+    "Root",
+    "Stmt",
+};
+
 class Stmt {
 public:
     using Ptr = shared_ptr<Stmt>;

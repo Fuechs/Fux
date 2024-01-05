@@ -119,7 +119,7 @@ private:
 
     // parse a type
     // needColon: requires ':' or '->' before type
-    Fux::Type parseType(bool needColon = false);
+    Fux::Type parseType(bool needColon = true);
     Fux::Type parseReferenceType();
     Fux::Type parseArrayType();
     Fux::Type parsePointerType();

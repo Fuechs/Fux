@@ -54,8 +54,9 @@ Stmt::Ptr Parser::parseStmt(bool expectSemicolon) {
     && stmt->getASTType() != AST::ForStmt
     && stmt->getASTType() != AST::EnumStmt
     && stmt->getASTType() != AST::MacroStmt) { // don't throw useless errors
+        std::cerr << ASTString[(size_t) stmt->getASTType()] << " at " << current->line << ":" << current->start << std::endl;
         if (!check(SEMICOLON)) {
-            if (stmt->meta.file.empty()) 
+            if (stmt->meta.file.empty())
                 assert(!"metadata not implemented for parsed kind of AST");
 
             // FIXME:
@@ -627,7 +628,7 @@ Expr::Ptr Parser::parseTypeCastExpr() {
 
     if (check(LPAREN)) {
         Token &open = peek(-1);
-        Fux::Type type = parseType(true); // analyser will check wether type is primitive or not
+        Fux::Type type = parseType(); // analyser will check wether type is primitive or not
         if (!type || *current != RPAREN) { // TODO: test more possible cases
             current = backToken; // get '*'s, identifier and '(' back
             return parseLogBitUnaryExpr();
@@ -906,7 +907,7 @@ Fux::Type Parser::parsePointerType() {
         access.push_back((Fux::Type::Access) eat().type);
 
     if (check(ASTERISK))
-        ret = Fux::Pointer(parsePointerType());
+        ret = Fux::Pointer(parsePointerType(), access);
     else
         ret = parsePrimaryType();
 
